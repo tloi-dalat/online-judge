@@ -258,19 +258,31 @@ noscript #noscript {
     position: fixed;
     left: 20px;
     top: 90%;
+    max-width: calc(100vw - 40px);
+    box-sizing: border-box;
     display: none;
 
     a {
-        height: 1.4em;
         padding: 0;
         margin: 0;
         color: white;
         display: block;
+        white-space: nowrap;
+    }
+
+    .contest-name, .contest-status {
+        display: inline-block;
+        max-width: min(280px, calc(100vw - 180px));
+        vertical-align: bottom;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 }
 
 #contest-time-remaining {
     display: inline-block;
+    white-space: nowrap;
 }
 
 #page-container {

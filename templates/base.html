@@ -124,35 +124,50 @@
             count_down($("#contest-time-remaining"));
 
             var selected = null,
-                x_pos = 0, y_pos = 0,
-                x_elem = 0, y_elem = 0;
+                x_elem = 0, y_elem = 0,
+                start_x = 0, start_y = 0,
+                dragging = false,
+                clicked_link = null,
+                is_meta = false;
 
-            $('#contest-info').mousedown(function () {
+            $('#contest-info').mousedown(function (e) {
+                if (e.which !== 1) return;
                 selected = $(this);
-                x_elem = x_pos - selected.offset().left;
-                y_elem = y_pos - (selected.offset().top - $(window).scrollTop());
+                var rect = this.getBoundingClientRect();
+                x_elem = e.clientX - rect.left;
+                y_elem = e.clientY - rect.top;
+                start_x = e.clientX;
+                start_y = e.clientY;
+                dragging = false;
+                clicked_link = $(e.target).closest('a')[0];
+                is_meta = e.metaKey || e.ctrlKey;
                 return false;
             });
 
-            if (localStorage.getItem("contest_timer_pos")) {
-                data = localStorage.getItem("contest_timer_pos").split(":");
-                $("#contest-info").css({
-                    left: data[0],
-                    top: data[1]
-                });
-            }
-
             $("#contest-info").show();
 
-            $(document).mousemove(function (e) {
-                x_pos = e.screenX;
-                y_pos = e.screenY;
-                x_pos = Math.max(Math.min(x_pos, window.innerWidth), 0);
-                y_pos = Math.max(Math.min(y_pos, window.innerHeight), 0);
+            if (localStorage.getItem("contest_timer_pos")) {
+                var data = localStorage.getItem("contest_timer_pos").split(":");
+                var left_val = parseFloat(data[0]);
+                var top_val = parseFloat(data[1]);
+                if (!isNaN(left_val) && !isNaN(top_val)) {
+                    var box = $("#contest-info");
+                    var left_max = Math.max(0, $(window).width() - box.outerWidth());
+                    var top_max = Math.max(0, $(window).height() - box.outerHeight());
+                    box.css({
+                        left: Math.max(0, Math.min(left_val, left_max)) + 'px',
+                        top: Math.max(0, Math.min(top_val, top_max)) + 'px'
+                    });
+                }
+            }
 
+            $(document).mousemove(function (e) {
                 if (selected !== null) {
-                    left_px = (x_pos - x_elem) + 'px';
-                    top_px = (y_pos - y_elem) + 'px';
+                    if (Math.abs(e.clientX - start_x) > 3 || Math.abs(e.clientY - start_y) > 3) {
+                        dragging = true;
+                    }
+                    var left_px = Math.max(Math.min(e.clientX - x_elem, $(window).width() - selected.outerWidth()), 0) + 'px';
+                    var top_px = Math.max(Math.min(e.clientY - y_elem, $(window).height() - selected.outerHeight()), 0) + 'px';
 
                     localStorage.setItem("contest_timer_pos", left_px + ":" + top_px);
 
@@ -163,9 +178,19 @@
                 }
             });
 
-            $(document).mouseup(function () {
-                selected = null;
-            })
+            $(document).mouseup(function (e) {
+                if (selected !== null) {
+                    if (!dragging && clicked_link && clicked_link === $(e.target).closest('a')[0]) {
+                        if (is_meta) {
+                            window.open(clicked_link.href, '_blank');
+                        } else {
+                            window.location = clicked_link.href;
+                        }
+                    }
+                    selected = null;
+                    clicked_link = null;
+                }
+            });
 
             {# Virtual = 0 is live participation, virtual = -1 is spectating #}
             {% if EVENT_LAST_MSG and request.participation.contest.push_announcements and request.participation.virtual <= 0 %}
@@ -174,7 +199,7 @@
                     event_dispatcher.on('contest_{{ request.participation.contest.id_secret }}', function (data) {
                         alert(data.title + '\n\n' + data.message);
                     });
-                })
+                });
             {% endif %}
         });
         </script>
@@ -347,16 +372,16 @@
 {% if request.in_contest %}
     {% set current_contest = request.participation.contest %}
     <div id="contest-info">
-        <a href="{{ url('contest_view', current_contest.key) }}">
-            {{ current_contest.name }} -
+        <a href="{{ url('contest_view', current_contest.key) }}" title="{{ current_contest.name }}">
+            <span class="contest-name">{{ current_contest.name }}</span> -
             {% if request.participation.spectate %}
-                {{ _('spectating') }}
-            {% elif request.participation.end_time %}
-                <div id="contest-time-remaining" data-secs="{{ request.participation.time_remaining|seconds }}">
+                <span class="contest-status">{{ _('spectating') }}</span>
+            {% elif request.participation.time_remaining %}
+                <span id="contest-time-remaining" data-secs="{{ request.participation.time_remaining|seconds }}">
                     {{ request.participation.time_remaining|timedelta("localized") }}
-                </div>
+                </span>
             {% else %}
-                {{ _('virtual') }}
+                <span class="contest-status">{{ _('Your time is up!') }}</span>
             {% endif %}
         </a>
         {% if current_contest.can_see_own_scoreboard(request.user) %}
