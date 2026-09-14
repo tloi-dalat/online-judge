@@ -5245,9 +5245,6 @@ msgstr "Các bài nộp"
 msgid "Users"
 msgstr "Thành viên"
 
-#: templates/base.html:286
-msgid "Toggle Dark/Light Mode"
-msgstr ""
 
 #: templates/base.html:297
 msgid "Report issue"
@@ -8581,6 +8578,10 @@ msgstr "Múi giờ:"
 #: templates/user/edit-profile.html:319
 msgid "Language:"
 msgstr "Ngôn ngữ:"
+
+#: templates/user/edit-profile.html:322
+msgid "Site theme:"
+msgstr "Giao diện trang web:"
 
 #: templates/user/edit-profile.html:324
 msgid "Editor theme:"
