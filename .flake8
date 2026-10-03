@@ -25,5 +25,7 @@ exclude =
     ./dmoj/local_urls.py,
     # is actually a fragment to be included by settings.py
     ./.ci.settings.py,
+    # is actually a fragment to be included by settings.py
+    ./.k8s.settings.py,
     fc_*
     _mytempfile/
