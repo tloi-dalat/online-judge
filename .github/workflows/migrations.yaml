@@ -1,4 +1,4 @@
-name: 'Migrations'
+name: 'migrations'
 on:
   pull_request:
     branches: [main]
