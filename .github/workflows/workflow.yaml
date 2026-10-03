@@ -1,9 +1,7 @@
-name: 'Workflow'
+name: 'workflow'
 on:
   workflow_dispatch:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
 
 concurrency:
@@ -15,7 +13,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: tloi-dalat/reuse-workflow/.github/workflows/build-push.yaml@main
+    uses: tloi-dalat/reusable-workflow/.github/workflows/build-push.yaml@main
     with:
       image: oj-site
       dockerfile: Dockerfile
@@ -26,7 +24,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: tloi-dalat/reuse-workflow/.github/workflows/build-push.yaml@main
+    uses: tloi-dalat/reusable-workflow/.github/workflows/build-push.yaml@main
     with:
       image: oj-wsevent
       dockerfile: websocket/Dockerfile
@@ -37,7 +35,7 @@ jobs:
     needs: [site, wsevent]
     permissions:
       contents: read
-    uses: tloi-dalat/reuse-workflow/.github/workflows/dispatch.yaml@main
+    uses: tloi-dalat/reusable-workflow/.github/workflows/dispatch.yaml@main
     with:
       apps: django,wsevent
       namespace: oj
