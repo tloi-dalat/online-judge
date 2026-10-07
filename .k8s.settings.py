@@ -46,6 +46,9 @@ SECRET_KEY = _env('DJANGO__SECRET_KEY', 'build-only-not-a-real-key', required=Tr
 DEBUG = _env('DJANGO__DEBUG', False, cast=bool)
 ALLOWED_HOSTS = _env('DJANGO__ALLOWED_HOSTS', [_DOMAIN], cast=list)
 
+# Sign-up form on/off (values.yaml sets it false on dev).
+REGISTRATION_OPEN = _env('DJANGO__REGISTRATION_OPEN', True, cast=bool)
+
 INSTALLED_APPS += (
 )
 
@@ -229,7 +232,11 @@ EVENT_DAEMON_POST = _env('EVENT__POST', 'ws://online-judge-wsevent:15101/')
 EVENT_DAEMON_GET = 'ws://%s/event/' % _DOMAIN
 EVENT_DAEMON_GET_SSL = 'wss://%s/event/' % _DOMAIN
 EVENT_DAEMON_POLL = '/channels/'
-EVENT_DAEMON_KEY = _env('EVENT__KEY')
+# VNOJ's websocket/daemon.js has no `auth` command: with any key set, the site
+# sends one, the daemon answers "bad-command" and every page 500s. The POST
+# port (15101) is cluster-internal only (no tunnel route; the judge's
+# NetworkPolicy blocks it), so no key is needed.
+EVENT_DAEMON_KEY = None
 
 # Never overridden before, so the site ran on the public literals hardcoded in
 # dmoj/settings.py. Required here: a pod without them refuses to start.
