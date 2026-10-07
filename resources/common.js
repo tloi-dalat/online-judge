@@ -170,7 +170,9 @@ if (!Date.now) {
 }
 
 function count_down(label) {
+    if (!label || !label.length) return;
     var initial = parseInt(label.attr('data-secs'));
+    if (isNaN(initial)) return;
     var start = Date.now();
 
     function format(num) {
