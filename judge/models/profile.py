@@ -293,7 +293,11 @@ class Profile(models.Model):
     def resolved_ace_theme(self):
         if self.ace_theme != 'auto':
             return self.ace_theme
-        # This must be resolved client-side using prefers-color-scheme and site theme toggle events.
+        if not self.user.has_perm('judge.test_site'):
+            return settings.DMOJ_THEME_DEFAULT_ACE_THEME.get('light')
+        if self.site_theme != 'auto':
+            return settings.DMOJ_THEME_DEFAULT_ACE_THEME.get(self.site_theme)
+        # This must be resolved client-side using prefers-color-scheme.
         return None
 
     @cached_property

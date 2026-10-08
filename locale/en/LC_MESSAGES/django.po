@@ -5160,9 +5160,6 @@ msgstr ""
 msgid "Users"
 msgstr ""
 
-#: templates/base.html:286
-msgid "Toggle Dark/Light Mode"
-msgstr ""
 
 #: templates/base.html:297
 msgid "Report issue"
@@ -8387,6 +8384,10 @@ msgstr ""
 
 #: templates/user/edit-profile.html:319
 msgid "Language:"
+msgstr ""
+
+#: templates/user/edit-profile.html:322
+msgid "Site theme:"
 msgstr ""
 
 #: templates/user/edit-profile.html:324
