@@ -9,13 +9,13 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  site:
+  core:
     permissions:
       contents: read
       packages: write
     uses: tloi-dalat/reusable-workflow/.github/workflows/build-push.yaml@main
     with:
-      image: oj-site
+      image: oj-core
       dockerfile: Dockerfile
       submodules: recursive
       push: ${{ github.event_name != 'pull_request' }}
@@ -32,14 +32,14 @@ jobs:
 
   deploy-dev:
     if: github.event_name != 'pull_request'
-    needs: [site, wsevent]
+    needs: [core, wsevent]
     permissions:
       contents: read
     uses: tloi-dalat/reusable-workflow/.github/workflows/dispatch.yaml@main
     with:
-      apps: django,wsevent
+      apps: core,wsevent
       namespace: online-judge
-      environment: dev
-      version: ${{ needs.site.outputs.version }}
+      environment: development
+      version: ${{ needs.core.outputs.version }}
     secrets:
       CONTROL_PLANE_TOKEN: ${{ secrets.CONTROL_PLANE_TOKEN }}
