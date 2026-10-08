@@ -1,0 +1,14 @@
+name: 'migrations'
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/django-migration-check.yaml@main
+    with:
+      python-version: '3.12'
+      requirements: requirements.txt
+      settings-file: .ci.settings.py

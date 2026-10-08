@@ -1,0 +1,45 @@
+name: 'workflow'
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+concurrency:
+  group: workflow-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  site:
+    permissions:
+      contents: read
+      packages: write
+    uses: tloi-dalat/reusable-workflow/.github/workflows/build-push.yaml@main
+    with:
+      image: oj-site
+      dockerfile: Dockerfile
+      submodules: recursive
+      push: ${{ github.event_name != 'pull_request' }}
+
+  wsevent:
+    permissions:
+      contents: read
+      packages: write
+    uses: tloi-dalat/reusable-workflow/.github/workflows/build-push.yaml@main
+    with:
+      image: oj-wsevent
+      dockerfile: websocket/Dockerfile
+      push: ${{ github.event_name != 'pull_request' }}
+
+  deploy-dev:
+    if: github.event_name != 'pull_request'
+    needs: [site, wsevent]
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/dispatch.yaml@main
+    with:
+      apps: django,wsevent
+      namespace: online-judge
+      environment: dev
+      version: ${{ needs.site.outputs.version }}
+    secrets:
+      CONTROL_PLANE_TOKEN: ${{ secrets.CONTROL_PLANE_TOKEN }}
