@@ -1,9 +1,5 @@
 from django.core.exceptions import ValidationError
 from django.db import connection
-from django.template.defaultfilters import floatformat
-from django.urls import reverse
-from django.utils.html import format_html
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _, gettext_lazy
 
 from judge.contest_format.default import DefaultContestFormat
@@ -82,56 +78,6 @@ class VOIContestFormat(DefaultContestFormat):
         participation.tiebreaker = 0
         participation.format_data = format_data
         participation.save()
-
-    def get_first_solves_and_total_ac(self, problems, participations, frozen=False):
-        first_solves = {}
-        total_ac = {}
-
-        for problem in problems:
-            problem_id = str(problem.id)
-            min_time = None
-            first_solves[problem_id] = None
-            total_ac[problem_id] = 0
-
-            for participation in participations:
-                format_data = (participation.format_data or {}).get(problem_id)
-                if format_data:
-                    pts = format_data['points']
-                    time = format_data['time']
-
-                    if pts == problem.points:
-                        total_ac[problem_id] += 1
-                        if participation.virtual == 0 and (min_time is None or min_time > time):
-                            min_time = time
-                            first_solves[problem_id] = participation.id
-
-        return first_solves, total_ac
-
-    def display_user_problem(self, participation, contest_problem, first_solves, frozen=False):
-        format_data = (participation.format_data or {}).get(str(contest_problem.id))
-        if format_data:
-            state = (
-                ('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '') +
-                ('first-solve ' if first_solves.get(str(contest_problem.id)) == participation.id else '') +
-                self.best_solution_state(format_data['points'], contest_problem.points)
-            )
-            url = reverse('contest_user_submissions',
-                          args=[self.contest.key, participation.user.user.username, contest_problem.problem.code])
-            return format_html(
-                '<td class="{state}"><a href="{url}">{points}</a></td>',
-                state=state,
-                url=url,
-                points=floatformat(format_data['points'], -self.contest.points_precision),
-            )
-        return mark_safe('<td></td>')
-
-    def display_participation_result(self, participation, frozen=False):
-        return format_html(
-            '<td class="user-points"><a href="{url}">{points}</a></td>',
-            url=reverse('contest_all_user_submissions',
-                        args=[self.contest.key, participation.user.user.username]),
-            points=floatformat(participation.score, -self.contest.points_precision),
-        )
 
     def get_short_form_display(self):
         yield _('The **last** submission for each problem will be used.')

@@ -1,17 +1,3 @@
-# syntax=docker/dockerfile:1
-#
-# TLOJ site image. One image, four roles, selected by the command the chart sets:
-#   site     gunicorn dmoj.wsgi:application   (default CMD)
-#   bridge   python manage.py runbridged
-#   celery   celery -A dmoj_celery worker
-#   migrate  python manage.py migrate         (ArgoCD PreSync Job)
-#
-# Build context: the repo root WITH submodules checked out (resources/libs,
-# resources/vnoj). In CI that's actions/checkout with `submodules: recursive`.
-#
-# Everything update_tloj.sh used to do on the VPS at deploy time happens here at
-# build time, except `migrate`, which needs the database.
-
 ARG PYTHON_IMAGE=python:3.12-slim-bookworm
 ARG NODE_IMAGE=node:24-bookworm-slim
 
