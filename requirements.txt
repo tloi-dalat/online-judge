@@ -45,3 +45,5 @@ icalendar
 django-chunked-upload @ git+https://github.com/juliomalegria/django-chunked-upload.git
 # This is a celery dependency whose latest major version is breaking everything.
 importlib-metadata<5
+django-storages[s3]
+django-oauth-toolkit

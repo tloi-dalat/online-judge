@@ -48,3 +48,4 @@ resources/blog-post.css
 resources/theme-toggle.css
 .DS_Store
 Claude outputs/
+.review/

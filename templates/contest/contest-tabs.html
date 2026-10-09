@@ -9,16 +9,16 @@
     {% if contest.start_time <= now or perms.judge.see_private_contest %}
         {% if contest.can_see_own_scoreboard(request.user) %}
             {{ make_tab('ranking', 'fa-bar-chart', url('contest_ranking', contest.key), _('Rankings')) }}
-            {% if contest.csv_ranking %}
+            {% if contest.csv_ranking and contest.csv_ranking != contest.HAS_GHOST_PARTICIPATION %}
                 {{ make_tab('official_ranking', 'fa-bar-chart', url('contest_official_ranking', contest.key), _('Official Rankings')) }}
-            {% endif %}
-            {% if request.user.is_authenticated %}
-                {{ make_tab('participation', 'fa-users', url('contest_participation_own', contest.key), _('Participation')) }}
             {% endif %}
         {% else %}
             {{ make_tab('ranking', 'fa-bar-chart', None, _('Hidden Rankings')) }}
         {% endif %}
         {{ make_tab('submissions', 'fa-bar-chart', url('contest_all_submissions', contest.key), _('Submissions')) }}
+    {% endif %}
+    {% if contest.format_name == 'icpc' and (can_edit or perms.judge.view_contest_balloons) %}
+        {{ make_tab('balloons', 'fa-bullseye', url('contest_balloons', contest.key), _('Balloons')) }}
     {% endif %}
     {% if can_edit %}
         {% if perms.judge.moss_contest and has_moss_api_key %}
