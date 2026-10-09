@@ -1,5 +1,2 @@
-# Extra dependencies for the container image only (see Dockerfile).
-# Kept separate from requirements.txt / additional_requirements.txt so upstream
-# merges never conflict with it.
 gunicorn>=23
 whitenoise>=6.7
