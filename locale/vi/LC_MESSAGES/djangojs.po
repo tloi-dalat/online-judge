@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
@@ -10,18 +11,19 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: dmoj\n"
-"X-Crowdin-Project-ID: 142963\n"
-"X-Crowdin-Language: vi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-File: djangojs.po\n"
 "X-Crowdin-File-ID: 12\n"
+"X-Crowdin-Language: vi\n"
+"X-Crowdin-Project: dmoj\n"
+"X-Crowdin-Project-ID: 142963\n"
 
 #: resources/common.js:212
 msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
 msgstr[0] "%d ngày %h:%m:%s"
+msgstr[1] "%d ngày %h:%m:%s"
 
 #: resources/common.js:215
 msgctxt "time format without day"
@@ -36,18 +38,22 @@ msgstr "năm qua"
 msgid "%(cnt)d total submission"
 msgid_plural "%(cnt)d total submissions"
 msgstr[0] "Tổng cộng %(cnt)d bài nộp"
+msgstr[1] "Tổng cộng %(cnt)d bài nộp"
 
 #: resources/user_profile.js:73
 msgid "%(cnt)d submission in the last year"
 msgid_plural "%(cnt)d submissions in the last year"
 msgstr[0] "%(cnt)d bài nộp trong năm qua"
+msgstr[1] "%(cnt)d bài nộp trong năm qua"
 
 #: resources/user_profile.js:78
 msgid "%(cnt)d submission in %(year)d"
 msgid_plural "%(cnt)d submissions in %(year)d"
 msgstr[0] "%(cnt)d bài nộp trong năm %(year)d"
+msgstr[1] "%(cnt)d bài nộp trong năm %(year)d"
 
 #: resources/user_profile.js:92
 msgid "%(cnt)d submission on %(date)s"
 msgid_plural "%(cnt)d submissions on %(date)s"
 msgstr[0] "%(cnt)d bài nộp vào %(date)s"
+msgstr[1] "%(cnt)d bài nộp vào %(date)s"

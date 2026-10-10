@@ -11,7 +11,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-File: django.po\n"
 "X-Crowdin-File-ID: 10\n"
 "X-Crowdin-Language: vi\n"
@@ -106,6 +106,7 @@ msgstr "Ẩn bình luận"
 msgid "%d comment successfully hidden."
 msgid_plural "%d comments successfully hidden."
 msgstr[0] "%d bình luận đã được ẩn."
+msgstr[1] "%d bình luận đã được ẩn."
 
 #: judge/admin/comments.py:48
 msgid "Unhide comments"
@@ -116,6 +117,7 @@ msgstr "Bỏ ẩn bình luận"
 msgid "%d comment successfully unhidden."
 msgid_plural "%d comments successfully unhidden."
 msgstr[0] "%d bình luận đã được hiện lại."
+msgstr[1] "%d bình luận đã được hiện lại."
 
 #: judge/admin/comments.py:56 judge/models/comment.py:31
 #: judge/models/comment.py:208
@@ -191,6 +193,7 @@ msgstr "Đánh dấu các kỳ thi là có thể thấy"
 msgid "%d contest successfully marked as visible."
 msgid_plural "%d contests successfully marked as visible."
 msgstr[0] "%d kỳ thi đã được đánh dấu là có thể thấy."
+msgstr[1] "%d kỳ thi đã được đánh dấu là có thể thấy."
 
 #: judge/admin/contest.py:261
 msgid "Mark contests as hidden"
@@ -201,6 +204,7 @@ msgstr "Đánh dấu các kỳ thi là ẩn"
 msgid "%d contest successfully marked as hidden."
 msgid_plural "%d contests successfully marked as hidden."
 msgstr[0] "%d kỳ thi đã được đánh dấu là ẩn."
+msgstr[1] "%d kỳ thi đã được đánh dấu là ẩn."
 
 #: judge/admin/contest.py:270
 msgid "Lock contest submissions"
@@ -211,6 +215,7 @@ msgstr "Khóa bài nộp của kỳ thi"
 msgid "%d contest successfully locked."
 msgid_plural "%d contests successfully locked."
 msgstr[0] "%d kỳ thi đã được khóa thành công."
+msgstr[1] "%d kỳ thi đã được khóa thành công."
 
 #: judge/admin/contest.py:279
 msgid "Unlock contest submissions"
@@ -221,12 +226,14 @@ msgstr "Mở khóa bài nộp của kỳ thi"
 msgid "%d contest successfully unlocked."
 msgid_plural "%d contests successfully unlocked."
 msgstr[0] "%d kỳ thi đã được mở khóa thành công."
+msgstr[1] "%d kỳ thi đã được mở khóa thành công."
 
 #: judge/admin/contest.py:325 judge/admin/submission.py:182
 #, python-format
 msgid "%d submission was successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
 msgstr[0] "%d bài nộp đã được lên lịch để chấm lại."
+msgstr[1] "%d bài nộp đã được lên lịch để chấm lại."
 
 #: judge/admin/contest.py:340 judge/admin/submission.py:211
 #: judge/views/problem_manage.py:131
@@ -234,6 +241,7 @@ msgstr[0] "%d bài nộp đã được lên lịch để chấm lại."
 msgid "%d submission was successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
 msgstr[0] "%d bài đã được tính điểm lại."
+msgstr[1] "%d bài đã được tính điểm lại."
 
 #: judge/admin/contest.py:416
 msgid "Recalculate results"
@@ -244,6 +252,7 @@ msgstr "Tính lại kết quả"
 msgid "%d participation recalculated."
 msgid_plural "%d participations recalculated."
 msgstr[0] "%d lượt tham gia đã được tính lại."
+msgstr[1] "%d lượt tham gia đã được tính lại."
 
 #: judge/admin/contest.py:426 judge/admin/organization.py:112
 msgid "username"
@@ -309,6 +318,7 @@ msgstr "Tính lại điểm"
 msgid "%d organization has scores recalculated."
 msgid_plural "%d organizations have scores recalculated."
 msgstr[0] "Đã tính lại điểm của %d tổ chức."
+msgstr[1] "Đã tính lại điểm của %d tổ chức."
 
 #: judge/admin/problem.py:24
 #, python-format
@@ -372,6 +382,7 @@ msgstr "Công bố bài và đặt ngày công bố là bây giờ"
 msgid "%d problem successfully marked as public."
 msgid_plural "%d problems successfully marked as public."
 msgstr[0] "%d bài tập đã được công bố."
+msgstr[1] "%d bài tập đã được công bố."
 
 #: judge/admin/problem.py:211
 msgid "Mark problems as private"
@@ -382,6 +393,7 @@ msgstr "Ẩn bài"
 msgid "%d problem successfully marked as private."
 msgid_plural "%d problems successfully marked as private."
 msgstr[0] "Đã ẩn %d bài."
+msgstr[1] "Đã ẩn %d bài."
 
 #: judge/admin/profile.py:40 judge/admin/profile.py:120
 msgid "timezone"
@@ -400,6 +412,7 @@ msgstr "ngày tham gia"
 msgid "%d user had scores recalculated."
 msgid_plural "%d users had scores recalculated."
 msgstr[0] "Đã tính lại điểm của %d người dùng."
+msgstr[1] "Đã tính lại điểm của %d người dùng."
 
 #: judge/admin/profile.py:138
 msgid "Recalulate contribution points"
@@ -410,6 +423,7 @@ msgstr "Tính lại điểm đóng góp"
 msgid "%d user has contribution scores recalculated."
 msgid_plural "%d users have contribution scores recalculated."
 msgstr[0] "Đã tính lại điểm đóng góp của %d người dùng."
+msgstr[1] "Đã tính lại điểm đóng góp của %d người dùng."
 
 #: judge/admin/runtime.py:62 templates/user/edit-profile.html:120
 #: templates/user/edit-profile.html:251 templates/user/edit-profile.html:400
@@ -592,6 +606,9 @@ msgid_plural ""
 msgstr[0] ""
 "Các lần nộp bài trước lần nộp bài có điểm lớn nhất sẽ tính **penalty %d "
 "phút**."
+msgstr[1] ""
+"Các lần nộp bài trước lần nộp bài có điểm lớn nhất sẽ tính **penalty %d "
+"phút**."
 
 #: judge/contest_format/atcoder.py:101 judge/contest_format/vnoj.py:191
 msgid ""
@@ -650,6 +667,9 @@ msgid_plural ""
 msgstr[0] ""
 "Bạn sẽ được thưởng **1** điểm với mỗi **%d phút** bạn nộp bài trước giờ kết "
 "thúc."
+msgstr[1] ""
+"Bạn sẽ được thưởng **1** điểm với mỗi **%d phút** bạn nộp bài trước giờ kết "
+"thúc."
 
 #: judge/contest_format/ecoo.py:112
 msgid ""
@@ -696,6 +716,7 @@ msgstr ""
 msgid "The scoreboard will be frozen in the **last %d minute**."
 msgid_plural "The scoreboard will be frozen in the **last %d minutes**."
 msgstr[0] "Bảng điểm sẽ được đóng băng trong **%d phút cuối**."
+msgstr[1] "Bảng điểm sẽ được đóng băng trong **%d phút cuối**."
 
 #: judge/contest_format/ioi.py:11
 msgid "IOI"
@@ -753,12 +774,14 @@ msgid_plural ""
 "This password is too short. It must contain at least %(min_length)d "
 "characters."
 msgstr[0] "Mật khẩu quá ngắn, mật khẩu cần có ít nhất %(min_length)d ký tự."
+msgstr[1] "Mật khẩu quá ngắn, mật khẩu cần có ít nhất %(min_length)d ký tự."
 
 #: judge/custom_translations.py:15
 #, python-format
 msgid "Your password must contain at least %(min_length)d character."
 msgid_plural "Your password must contain at least %(min_length)d characters."
 msgstr[0] "Mật khẩu cần có ít nhất %(min_length)d ký tự."
+msgstr[1] "Mật khẩu cần có ít nhất %(min_length)d ký tự."
 
 #: judge/custom_translations.py:18
 #, python-format
@@ -810,6 +833,7 @@ msgstr ""
 msgid "Two-factor authentication tokens must be {count} decimal digit."
 msgid_plural "Two-factor authentication tokens must be {count} decimal digits."
 msgstr[0] "Mã xác thực hai yếu tố phải có {count} chữ số thập phân."
+msgstr[1] "Mã xác thực hai yếu tố phải có {count} chữ số thập phân."
 
 #: judge/forms.py:43
 msgid "Invalid two-factor authentication token."
@@ -842,6 +866,8 @@ msgstr ""
 msgid "You may not be part of more than {count} public organization."
 msgid_plural "You may not be part of more than {count} public organizations."
 msgstr[0] ""
+"Bạn không thể là thành viên của nhiều hơn {count} tổ chức công khai."
+msgstr[1] ""
 "Bạn không thể là thành viên của nhiều hơn {count} tổ chức công khai."
 
 #: judge/forms.py:133
@@ -3973,6 +3999,7 @@ msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
 msgstr[0] "%d ngày %h:%m:%s"
+msgstr[1] "%d ngày %h:%m:%s"
 
 #: judge/utils/timedelta.py:53
 msgctxt "time format without day"
@@ -3984,12 +4011,14 @@ msgctxt "time format no seconds with day"
 msgid "%d day %h:%m"
 msgid_plural "%d days %h:%m"
 msgstr[0] "%d ngày, %h giờ, %m phút"
+msgstr[1] "%d ngày, %h giờ, %m phút"
 
 #: judge/utils/timedelta.py:61
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d ngày"
+msgstr[1] "%d ngày"
 
 #: judge/utils/timedelta.py:63
 msgctxt "hours and minutes"
@@ -4560,24 +4589,28 @@ msgstr "Quản lý các yêu cầu tham gia %s"
 msgid "Your organization can only receive %d more member."
 msgid_plural "Your organization can only receive %d more members."
 msgstr[0] "Tổ chức của bạn chỉ có thể nhận thêm %d thành viên."
+msgstr[1] "Tổ chức của bạn chỉ có thể nhận thêm %d thành viên."
 
 #: judge/views/organization.py:417
 #, python-format
 msgid "You cannot approve %d user."
 msgid_plural "You cannot approve %d users."
 msgstr[0] "Bạn không thể chấp nhận %d thành viên."
+msgstr[1] "Bạn không thể chấp nhận %d thành viên."
 
 #: judge/views/organization.py:430
 #, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
 msgstr[0] "Đã chấp nhận %d thành viên."
+msgstr[1] "Đã chấp nhận %d thành viên."
 
 #: judge/views/organization.py:431
 #, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
 msgstr[0] "Đã từ chối %d thành viên."
+msgstr[1] "Đã từ chối %d thành viên."
 
 #: judge/views/organization.py:461 templates/organization/list-tabs.html:12
 msgid "Create new organization"
@@ -4657,6 +4690,7 @@ msgstr "Không thể xóa quá %d bài tập cùng lúc."
 msgid "%d problem was skipped because you are not its author."
 msgid_plural "%d problems were skipped because you are not their author."
 msgstr[0] "%d bài tập đã bị bỏ qua vì bạn không phải tác giả."
+msgstr[1] "%d bài tập đã bị bỏ qua vì bạn không phải tác giả."
 
 #: judge/views/organization.py:908
 msgid "Bulk marked as deleted"
@@ -4667,6 +4701,7 @@ msgstr "Đã đánh dấu xóa hàng loạt"
 msgid "Successfully deleted %d problem."
 msgid_plural "Successfully deleted %d problems."
 msgstr[0] "Đã xóa thành công %d bài tập."
+msgstr[1] "Đã xóa thành công %d bài tập."
 
 #: judge/views/organization.py:917
 msgid "No valid problems could be deleted."
@@ -4987,6 +5022,7 @@ msgstr "Tính lại điểm cho %s..."
 msgid "Successfully scheduled %d submission for rejudging."
 msgid_plural "Successfully scheduled %d submissions for rejudging."
 msgstr[0] "Đã lên lịch chấm lại %d bài giải"
+msgstr[1] "Đã lên lịch chấm lại %d bài giải"
 
 #: judge/views/ranked_submission.py:67 judge/views/ranked_submission.py:70
 #, python-format
@@ -6100,6 +6136,7 @@ msgstr "Đã sao chép!"
 msgid "Contest"
 msgid_plural "Contests"
 msgstr[0] "Kỳ thi"
+msgstr[1] "Các kỳ thi"
 
 #: templates/contest/access_code.html:63
 msgid "Please enter your access code:"
@@ -6333,7 +6370,8 @@ msgstr "%(length)s tính từ %(start_time)s"
 #, python-format
 msgid "The author of this contest is %(link_authors)s."
 msgid_plural "The authors of this contest are %(link_authors)s."
-msgstr[0] "Các thành viên tổ chức kỳ thi: %(link_authors)s."
+msgstr[0] "Người tổ chức kỳ thi: %(link_authors)s."
+msgstr[1] "Các thành viên tổ chức kỳ thi: %(link_authors)s."
 
 #: templates/contest/contest.html:103
 #, python-format
@@ -6342,6 +6380,7 @@ msgid ""
 msgid_plural ""
 "Special thanks to %(link_testers)s for testing and feedback on the problems."
 msgstr[0] "Gửi ngàn lời cảm ơn đến với các tester %(link_testers)s."
+msgstr[1] "Gửi ngàn lời cảm ơn đến với các tester %(link_testers)s."
 
 #: templates/contest/contest.html:115
 #, python-format
@@ -6610,6 +6649,7 @@ msgstr "đã đánh giá"
 msgid "This contest has %(count)s virtual participation"
 msgid_plural "This contest has %(count)s virtual participations"
 msgstr[0] "Kỳ thi này có %(count)s lượt tham gia ảo"
+msgstr[1] "Kỳ thi này có %(count)s lượt tham gia ảo"
 
 #: templates/contest/list.html:149
 msgid "Spectate"
@@ -6695,6 +6735,7 @@ msgstr "Bạn có chắc muốn xóa kết quả MOSS?"
 msgid "%(count)s submission"
 msgid_plural "%(count)s submissions"
 msgstr[0] "%(count)s bài nộp"
+msgstr[1] "%(count)s bài nộp"
 
 #: templates/contest/moss.html:75
 msgid "Re-MOSS contest"
@@ -7857,6 +7898,7 @@ msgstr ""
 msgid "Author:"
 msgid_plural "Authors:"
 msgstr[0] "Tác giả:"
+msgstr[1] "Các tác giả:"
 
 #: templates/problem/import-polygon.html:14
 msgid "Uploading package..."
@@ -8002,12 +8044,14 @@ msgstr "Tính lại điểm của mọi bài nộp"
 msgid "This will rescore %(count)s submission."
 msgid_plural "This will rescore %(count)s submissions."
 msgstr[0] "Sẽ tính lại điểm của %(count)s bài nộp. "
+msgstr[1] "Sẽ tính lại điểm của %(count)s bài nộp. "
 
 #: templates/problem/manage_submission.html:182
 #, python-format
 msgid "Are you sure you want to rescore %(count)s submission?"
 msgid_plural "Are you sure you want to rescore %(count)s submissions?"
 msgstr[0] "Bạn có chắc bạn muốn tính lại điểm của %(count)s bài nộp?"
+msgstr[1] "Bạn có chắc bạn muốn tính lại điểm của %(count)s bài nộp?"
 
 #: templates/problem/manage_submission.html:187
 msgid "Rescore all submissions"
@@ -8055,6 +8099,7 @@ msgstr "Gửi bài giải"
 msgid "%(counter)s submission left"
 msgid_plural "%(counter)s submissions left"
 msgstr[0] "Còn %(counter)s lần nộp"
+msgstr[1] "Còn %(counter)s lần nộp"
 
 #: templates/problem/problem.html:231
 msgid "0 submissions left"
@@ -8121,6 +8166,7 @@ msgstr "Nguồn bài:"
 msgid "Problem type"
 msgid_plural "Problem types"
 msgstr[0] "Dạng bài"
+msgstr[1] "Dạng bài"
 
 #: templates/problem/problem.html:398
 msgid "Allowed languages"
@@ -8143,6 +8189,7 @@ msgstr " kỳ thi nữa"
 msgid "Judge:"
 msgid_plural "Judges:"
 msgstr[0] "Máy chấm"
+msgstr[1] "Các máy chấm"
 
 #: templates/problem/problem.html:483
 msgid "none available"
@@ -8256,6 +8303,7 @@ msgstr "Ngôn ngữ mặc định của bạn, %(language)s, không chấm đư�
 msgid "You have %(left)s submission left"
 msgid_plural "You have %(left)s submissions left"
 msgstr[0] "Bạn còn %(left)s lần nộp"
+msgstr[1] "Bạn còn %(left)s lần nộp"
 
 #: templates/problem/submit-form.html:32
 msgid "You have 0 submissions left"
@@ -9171,6 +9219,7 @@ msgstr "Người gửi"
 msgid "Assignee"
 msgid_plural "Assignees"
 msgstr[0] "Người được phân công"
+msgstr[1] "Những người được phân công"
 
 #: templates/ticket/list.html:201
 msgid "Assignees"
@@ -9589,6 +9638,7 @@ msgstr "Đóng góp:"
 msgid "%(counter)s contest written"
 msgid_plural "%(counter)s contests written"
 msgstr[0] "Đã tham gia %(counter)s kỳ thi"
+msgstr[1] "Đã tham gia %(counter)s kỳ thi"
 
 #: templates/user/user-base.html:57
 msgid "Rank by rating:"
