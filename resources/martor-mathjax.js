@@ -15,6 +15,7 @@ jQuery(function ($) {
                 if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
                     window.MathJax.startup.promise.then(update_math);
                 } else if (window.MathJax) {
+                    var tries = 0;
                     var interval = setInterval(function () {
                         if (window.MathJax.typesetPromise) {
                             clearInterval(interval);
@@ -22,6 +23,8 @@ jQuery(function ($) {
                         } else if (window.MathJax.startup && window.MathJax.startup.promise) {
                             clearInterval(interval);
                             window.MathJax.startup.promise.then(update_math);
+                        } else if (++tries > 200) {
+                            clearInterval(interval);
                         }
                     }, 50);
                 } else {
