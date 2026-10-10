@@ -319,11 +319,11 @@
                 </div>
                 <div class="info-box">
                     <div class="info-title">
-                        {% trans trimmed count=assignees|length %}
-                            Assignee
-                        {% pluralize %}
-                            Assignees
-                        {% endtrans %}
+                        {% if assignees|length == 1 %}
+                            {{ _('Assignee') }}
+                        {% else %}
+                            {{ _('Assignees') }}
+                        {% endif %}
                     </div>
                     <div class="info-data">
                         {% if assignees %}

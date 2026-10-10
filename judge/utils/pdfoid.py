@@ -13,8 +13,6 @@ PDF_RENDERING_ENABLED = PDFOID_URL is not None
 
 
 def get_contest_pdf_basename(contest_id: int, language: str) -> str:
-    # Keyed by id, not key: a renamed or re-used contest key must not serve an old PDF, and
-    # problem codes (^[a-z0-9_]+$) can never contain '-', so this cannot clash with '<code>.<lang>.pdf'.
     return 'contest-%d.%s.pdf' % (contest_id, language)
 
 

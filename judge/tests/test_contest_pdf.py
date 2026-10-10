@@ -33,7 +33,6 @@ class ContestPdfTestBase(TestCase):
 
         cls.group = ProblemGroup.objects.create(name='group', full_name='Group')
         now = timezone.now()
-        # A visible contest that has not started yet, with private problems.
         cls.contest = Contest.objects.create(key='upcoming', name='Upcoming Contest', is_visible=True,
                                              start_time=now + timedelta(days=1), end_time=now + timedelta(days=2))
         cls.first = cls.make_problem('secret_one', 'Secret One', 'FIRST SECRET STATEMENT')
