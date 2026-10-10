@@ -1,0 +1,83 @@
+name: 'checks'
+on:
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '17 2 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: checks-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  migrations:
+    name: check
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/django-migration-check.yaml@main
+    with:
+      python-version: '3.12'
+      requirements: requirements.txt
+      settings-file: .ci.settings.py
+
+  i18n:
+    name: check
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/django-i18n-check.yaml@main
+    with:
+      python-version: '3.12'
+      requirements: requirements.txt
+      settings-file: .ci.settings.py
+      settings-target: dmoj/local_settings.py
+      source-locale: en
+      compile: |
+        python manage.py compilemessages
+        python manage.py compilejsi18n
+      template-globs: 'templates/**/*.html templates/**/*.txt'
+      makemessages: |
+        -e py,html,txt -i node_modules -i static -i sass_processed -i resources/libs -i resources/vnoj
+        -d djangojs -i node_modules -i static -i sass_processed -i resources/libs -i resources/vnoj
+
+  templates:
+    name: check
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/django-template-check.yaml@main
+    with:
+      python-version: '3.12'
+      requirements: requirements.txt
+      settings-file: .ci.settings.py
+      settings-target: dmoj/local_settings.py
+
+  workflows:
+    name: check
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/workflow-lint.yaml@main
+
+  docker:
+    name: check
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/docker-build-check.yaml@main
+    with:
+      submodules: recursive
+      images: >-
+        [{"image": "oj-core", "dockerfile": "Dockerfile"},
+         {"image": "oj-wsevent", "dockerfile": "websocket/Dockerfile"}]
+
+  dependencies:
+    name: check
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/python-audit.yaml@main
+    with:
+      python-version: '3.12'
+      requirements: requirements.txt
