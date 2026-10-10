@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load static %}
+{% load i18n static %}
 
 {% block extrastyle %}
     {# Django >= 5 no longer pulls widgets.css in through forms.css, and wpadmin's templates don't link it. #}
@@ -9,9 +9,83 @@
 
 {% block wpadmin_extrastyle %}{{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "wpadmin/css/wpadmin.django6.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "wpadmin/css/wpadmin.preferences.css" %}">
+    {% if SITE_THEME_NAME != 'light' %}
+        {% if SITE_THEME_NAME == 'dark' %}{% firstof 'all' as dark_media %}{% else %}{% firstof '(prefers-color-scheme: dark)' as dark_media %}{% endif %}
+        <link rel="stylesheet" type="text/css" href="{% static "wpadmin/css/wpadmin.dark.css" %}" media="{{ dark_media }}">
+        <link rel="stylesheet" type="text/css" href="{% static "dark/select2-dmoj.css" %}" media="{{ dark_media }}">
+        <link rel="stylesheet" type="text/css" href="{% static "dark/martor-description.css" %}" media="{{ dark_media }}">
+        <link rel="stylesheet" type="text/css" href="{% static "dark/featherlight.css" %}" media="{{ dark_media }}">
+        <link rel="stylesheet" type="text/css" href="{% static "dark/ace-dmoj.css" %}" media="{{ dark_media }}">
+    {% endif %}
+{% endblock %}
+
+{% block wpadmin_extrahead %}{{ block.super }}
+    <script>document.documentElement.setAttribute('data-theme', '{{ SITE_THEME_NAME|escapejs }}');</script>
+{% endblock %}
+
+{% block adminbar %}{{ block.super }}
+    {% get_current_language as CURRENT_LANGUAGE %}
+    <div id="admin-preferences" data-theme="{{ SITE_THEME_NAME }}" hidden>
+        <a id="admin-theme-toggle" href="#" title="{% trans "Toggle dark mode" %}">
+            <img class="theme-icon-dark" src="{% static "icons/dark.svg" %}" alt="{% trans "Dark" %}" height="20" width="20">
+            <img class="theme-icon-light" src="{% static "icons/light.svg" %}" alt="{% trans "Light" %}" height="20" width="20">
+        </a>
+        {% if CURRENT_LANGUAGE == 'vi' %}
+            <a class="admin-language-toggle" href="#" data-language="en" title="English">
+                <img src="{% static "icons/gb_flag.svg" %}" alt="EN" height="20">
+            </a>
+        {% else %}
+            <a class="admin-language-toggle" href="#" data-language="vi" title="Tiếng Việt">
+                <img src="{% static "icons/vi_flag.svg" %}" alt="VI" height="20">
+            </a>
+        {% endif %}
+        <form id="admin-set-theme" action="{% url "set_theme" %}" method="post">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            <input name="theme" type="hidden" value="{{ SITE_THEME_NAME }}">
+        </form>
+        <form id="admin-set-language" action="{% url "set_language" %}" method="post">
+            {% csrf_token %}
+            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+            <input name="language" type="hidden" value="{{ CURRENT_LANGUAGE }}">
+        </form>
+    </div>
+    <script>
+        (function () {
+            var preferences = document.getElementById('admin-preferences');
+            var bar = document.getElementById('adminbar');
+            if (bar) {
+                var item = document.createElement('li');
+                item.className = 'admin-preferences-item';
+                item.appendChild(preferences);
+                bar.appendChild(item);
+            } else {
+                document.getElementById('adminbarwrap').appendChild(preferences);
+            }
+            preferences.hidden = false;
+        })();
+        document.getElementById('admin-theme-toggle').addEventListener('click', function (event) {
+            event.preventDefault();
+            var form = document.getElementById('admin-set-theme');
+            var current = form.elements.theme.value;
+            if (current !== 'light' && current !== 'dark') {
+                current = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            form.elements.theme.value = current === 'dark' ? 'light' : 'dark';
+            form.submit();
+        });
+        document.querySelector('#admin-preferences .admin-language-toggle').addEventListener('click', function (event) {
+            event.preventDefault();
+            var form = document.getElementById('admin-set-language');
+            form.elements.language.value = this.dataset.language;
+            form.submit();
+        });
+    </script>
 {% endblock %}
 
 {% block pretitle %}{{ block.super }}
+    <script>document.body.setAttribute('data-theme', '{{ SITE_THEME_NAME|escapejs }}');</script>
     <form style="display: none" id="empty-action-form" method="post">
         {% csrf_token %}
     </form>
@@ -19,7 +93,7 @@
         {# Plain JS: this block is on every admin page, and many of them (dashboard, history, delete) don't load jQuery. #}
         {# A delegated listener also lets per-page handlers (e.g. confirm dialogs) cancel the click by stopping propagation. #}
         document.addEventListener('click', function (event) {
-            var link = event.target.closest('.action-link');
+            var link = event.target.closest('.action-link, a[href="{% url 'admin:logout' %}"]');
             if (!link || event.defaultPrevented) {
                 return;
             }

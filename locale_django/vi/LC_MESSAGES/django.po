@@ -1,10 +1,3 @@
-# Vietnamese translations of Django admin and auth strings that Django's own
-# Vietnamese catalog doesn't cover yet (new or changed in Django 5.x/6.x).
-#
-# This directory is listed in LOCALE_PATHS after locale/, so the project's own
-# catalog still wins and Django's catalog is used for everything else.
-# makemessages doesn't manage it: after upgrading Django, run
-# `manage.py makedjangomessages`, then translate the empty and fuzzy entries.
 msgid ""
 msgstr ""
 "Project-Id-Version: Django overrides\n"

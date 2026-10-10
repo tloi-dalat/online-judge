@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 20:00+0000\n"
+"POT-Creation-Date: 2026-10-10 22:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,11 +47,11 @@ msgstr ""
 msgid "Teacher"
 msgstr ""
 
-#: dmoj/settings.py:666
+#: dmoj/settings.py:667
 msgid "English"
 msgstr ""
 
-#: dmoj/settings.py:667
+#: dmoj/settings.py:668
 msgid "Vietnamese"
 msgstr ""
 
@@ -462,6 +462,10 @@ msgstr ""
 msgid "Capabilities"
 msgstr ""
 
+#: judge/admin/submission.py:26 judge/models/submission.py:83
+msgid "status"
+msgstr ""
+
 #: judge/admin/submission.py:28 judge/admin/submission.py:48
 #: judge/admin/submission.py:239
 msgid "None"
@@ -473,6 +477,10 @@ msgstr ""
 
 #: judge/admin/submission.py:28
 msgid "Exceptional"
+msgstr ""
+
+#: judge/admin/submission.py:46 judge/models/submission.py:84
+msgid "result"
 msgstr ""
 
 #: judge/admin/submission.py:48
@@ -557,7 +565,7 @@ msgstr ""
 msgid "linked item"
 msgstr ""
 
-#: judge/apps.py:8 judge/models/tag.py:45
+#: judge/apps.py:23 judge/models/tag.py:45
 msgid "Online Judge"
 msgstr ""
 
@@ -1266,11 +1274,13 @@ msgstr ""
 msgid "Follow system default"
 msgstr ""
 
-#: judge/models/choices.py:71 templates/base.html:297
+#: judge/models/choices.py:71 templates/admin/base_site.html:32
+#: templates/base.html:297
 msgid "Light"
 msgstr ""
 
-#: judge/models/choices.py:72 templates/base.html:296
+#: judge/models/choices.py:72 templates/admin/base_site.html:31
+#: templates/base.html:296
 msgid "Dark"
 msgstr ""
 
@@ -1333,6 +1343,11 @@ msgstr ""
 
 #: judge/models/comment.py:197 judge/models/interface.py:154
 msgid "voter"
+msgstr ""
+
+#: judge/models/comment.py:199 judge/models/contest.py:692
+#: judge/models/interface.py:156
+msgid "score"
 msgstr ""
 
 #: judge/models/comment.py:203
@@ -1411,10 +1426,18 @@ msgstr ""
 msgid "These users will be able to edit the contest."
 msgstr ""
 
+#: judge/models/contest.py:84 judge/models/problem.py:186
+msgid "curators"
+msgstr ""
+
 #: judge/models/contest.py:85
 msgid ""
 "These users will be able to edit the contest, but will not be listed as "
 "authors."
+msgstr ""
+
+#: judge/models/contest.py:88 judge/models/problem.py:189
+msgid "testers"
 msgstr ""
 
 #: judge/models/contest.py:89
@@ -1864,11 +1887,6 @@ msgstr ""
 
 #: judge/models/contest.py:689
 msgid "associated contest"
-msgstr ""
-
-#: judge/models/comment.py:199 judge/models/contest.py:692
-#: judge/models/interface.py:156
-msgid "score"
 msgstr ""
 
 #: judge/models/contest.py:693
@@ -2385,17 +2403,9 @@ msgstr ""
 msgid "These users will be able to edit the problem, and be listed as authors."
 msgstr ""
 
-#: judge/models/contest.py:84 judge/models/problem.py:186
-msgid "curators"
-msgstr ""
-
 #: judge/models/problem.py:187
 msgid ""
 "These users will be able to edit the problem, but not be listed as authors."
-msgstr ""
-
-#: judge/models/contest.py:88 judge/models/problem.py:189
-msgid "testers"
 msgstr ""
 
 #: judge/models/problem.py:191
@@ -3081,6 +3091,10 @@ msgstr ""
 msgid "badge"
 msgstr ""
 
+#: judge/models/profile.py:250 judge/models/profile.py:274
+msgid "badges"
+msgstr ""
+
 #: judge/models/profile.py:257
 msgid "user associated"
 msgstr ""
@@ -3127,10 +3141,6 @@ msgstr ""
 
 #: judge/models/profile.py:272
 msgid "IP-based authentication"
-msgstr ""
-
-#: judge/models/profile.py:250 judge/models/profile.py:274
-msgid "badges"
 msgstr ""
 
 #: judge/models/profile.py:275
@@ -3679,14 +3689,6 @@ msgstr ""
 msgid "submission language"
 msgstr ""
 
-#: judge/admin/submission.py:26 judge/models/submission.py:83
-msgid "status"
-msgstr ""
-
-#: judge/admin/submission.py:46 judge/models/submission.py:84
-msgid "result"
-msgstr ""
-
 #: judge/models/submission.py:86
 msgid "compile errors"
 msgstr ""
@@ -3938,6 +3940,14 @@ msgstr ""
 msgid "is ticket open?"
 msgstr ""
 
+#: judge/models/ticket.py:41 judge/models/ticket.py:58
+msgid "ticket"
+msgstr ""
+
+#: judge/models/ticket.py:42
+msgid "tickets"
+msgstr ""
+
 #: judge/models/ticket.py:53
 msgid "opened"
 msgstr ""
@@ -3948,14 +3958,6 @@ msgstr ""
 
 #: judge/models/ticket.py:55
 msgid "message"
-msgstr ""
-
-#: judge/models/ticket.py:41 judge/models/ticket.py:58
-msgid "ticket"
-msgstr ""
-
-#: judge/models/ticket.py:42
-msgid "tickets"
 msgstr ""
 
 #: judge/models/ticket.py:62
@@ -4092,6 +4094,304 @@ msgstr ""
 #: judge/third_party_apps.py:48
 msgctxt "third-party field"
 msgid "Complete"
+msgstr ""
+
+#: judge/third_party_apps.py:53 templates/user/user-tabs.html:16
+msgid "Impersonate"
+msgstr ""
+
+#: judge/third_party_apps.py:58
+msgctxt "third-party model"
+msgid "impersonation log"
+msgstr ""
+
+#: judge/third_party_apps.py:59
+msgctxt "third-party model"
+msgid "impersonation logs"
+msgstr ""
+
+#: judge/third_party_apps.py:63 judge/third_party_apps.py:81
+msgctxt "third-party field"
+msgid "impersonator"
+msgstr ""
+
+#: judge/third_party_apps.py:64
+msgctxt "third-party field"
+msgid "impersonated user"
+msgstr ""
+
+#: judge/third_party_apps.py:65
+msgctxt "third-party field"
+msgid "session key"
+msgstr ""
+
+#: judge/third_party_apps.py:66
+msgctxt "third-party field"
+msgid "session started at"
+msgstr ""
+
+#: judge/third_party_apps.py:67
+msgctxt "third-party field"
+msgid "session ended at"
+msgstr ""
+
+#: judge/third_party_apps.py:75
+msgctxt "third-party admin"
+msgid "Incomplete"
+msgstr ""
+
+#: judge/third_party_apps.py:76
+msgctxt "third-party admin"
+msgid "Complete"
+msgstr ""
+
+#: judge/third_party_apps.py:79
+msgctxt "third-party admin"
+msgid "session state"
+msgstr ""
+
+#: judge/third_party_apps.py:85
+msgid "Django OAuth Toolkit"
+msgstr ""
+
+#: judge/third_party_apps.py:90
+msgctxt "third-party model"
+msgid "application"
+msgstr ""
+
+#: judge/third_party_apps.py:91
+msgctxt "third-party model"
+msgid "applications"
+msgstr ""
+
+#: judge/third_party_apps.py:92
+msgctxt "third-party model"
+msgid "grant"
+msgstr ""
+
+#: judge/third_party_apps.py:93
+msgctxt "third-party model"
+msgid "grants"
+msgstr ""
+
+#: judge/third_party_apps.py:94
+msgctxt "third-party model"
+msgid "access token"
+msgstr ""
+
+#: judge/third_party_apps.py:95
+msgctxt "third-party model"
+msgid "access tokens"
+msgstr ""
+
+#: judge/third_party_apps.py:96
+msgctxt "third-party model"
+msgid "refresh token"
+msgstr ""
+
+#: judge/third_party_apps.py:97
+msgctxt "third-party model"
+msgid "refresh tokens"
+msgstr ""
+
+#: judge/third_party_apps.py:98
+msgctxt "third-party model"
+msgid "id token"
+msgstr ""
+
+#: judge/third_party_apps.py:99
+msgctxt "third-party model"
+msgid "id tokens"
+msgstr ""
+
+#: judge/third_party_apps.py:100
+msgctxt "third-party model"
+msgid "device grant"
+msgstr ""
+
+#: judge/third_party_apps.py:101
+msgctxt "third-party model"
+msgid "device grants"
+msgstr ""
+
+#: judge/third_party_apps.py:107
+msgctxt "third-party admin"
+msgid "Revoke selected access tokens"
+msgstr ""
+
+#: judge/third_party_apps.py:109
+msgctxt "third-party admin"
+msgid "Revoke selected refresh tokens"
+msgstr ""
+
+#: judge/third_party_apps.py:110 judge/third_party_apps.py:111
+#: judge/third_party_apps.py:173
+msgctxt "third-party field"
+msgid "token"
+msgstr ""
+
+#: judge/third_party_apps.py:112 judge/third_party_apps.py:168
+msgctxt "third-party field"
+msgid "code"
+msgstr ""
+
+#: judge/third_party_apps.py:116
+msgid "Registration"
+msgstr ""
+
+#: judge/third_party_apps.py:121 judge/third_party_apps.py:122
+msgctxt "third-party field"
+msgid "activated"
+msgstr ""
+
+#: judge/third_party_apps.py:127
+msgid "Python Social Auth"
+msgstr ""
+
+#: judge/third_party_apps.py:132
+msgctxt "third-party model"
+msgid "user social auth"
+msgstr ""
+
+#: judge/third_party_apps.py:133
+msgctxt "third-party model"
+msgid "user social auths"
+msgstr ""
+
+#: judge/third_party_apps.py:134
+msgctxt "third-party model"
+msgid "nonce"
+msgstr ""
+
+#: judge/third_party_apps.py:135
+msgctxt "third-party model"
+msgid "nonces"
+msgstr ""
+
+#: judge/third_party_apps.py:136
+msgctxt "third-party model"
+msgid "association"
+msgstr ""
+
+#: judge/third_party_apps.py:137
+msgctxt "third-party model"
+msgid "associations"
+msgstr ""
+
+#: judge/third_party_apps.py:138
+msgctxt "third-party model"
+msgid "code"
+msgstr ""
+
+#: judge/third_party_apps.py:139
+msgctxt "third-party model"
+msgid "codes"
+msgstr ""
+
+#: judge/third_party_apps.py:140
+msgctxt "third-party model"
+msgid "partial"
+msgstr ""
+
+#: judge/third_party_apps.py:141
+msgctxt "third-party model"
+msgid "partials"
+msgstr ""
+
+#: judge/third_party_apps.py:146
+msgctxt "third-party field"
+msgid "provider"
+msgstr ""
+
+#: judge/third_party_apps.py:147
+msgctxt "third-party field"
+msgid "ID key"
+msgstr ""
+
+#: judge/third_party_apps.py:148
+msgctxt "third-party field"
+msgid "UID"
+msgstr ""
+
+#: judge/third_party_apps.py:149
+msgctxt "third-party field"
+msgid "extra data"
+msgstr ""
+
+#: judge/third_party_apps.py:150
+msgctxt "third-party field"
+msgid "created"
+msgstr ""
+
+#: judge/third_party_apps.py:151
+msgctxt "third-party field"
+msgid "modified"
+msgstr ""
+
+#: judge/third_party_apps.py:154 judge/third_party_apps.py:159
+msgctxt "third-party field"
+msgid "server URL"
+msgstr ""
+
+#: judge/third_party_apps.py:155 judge/third_party_apps.py:170
+#: judge/third_party_apps.py:177
+msgctxt "third-party field"
+msgid "timestamp"
+msgstr ""
+
+#: judge/third_party_apps.py:156
+msgctxt "third-party field"
+msgid "salt"
+msgstr ""
+
+#: judge/third_party_apps.py:160
+msgctxt "third-party field"
+msgid "handle"
+msgstr ""
+
+#: judge/third_party_apps.py:161
+msgctxt "third-party field"
+msgid "secret"
+msgstr ""
+
+#: judge/third_party_apps.py:162
+msgctxt "third-party field"
+msgid "issued"
+msgstr ""
+
+#: judge/third_party_apps.py:163
+msgctxt "third-party field"
+msgid "lifetime"
+msgstr ""
+
+#: judge/third_party_apps.py:164
+msgctxt "third-party field"
+msgid "association type"
+msgstr ""
+
+#: judge/third_party_apps.py:167
+msgctxt "third-party field"
+msgid "email"
+msgstr ""
+
+#: judge/third_party_apps.py:169
+msgctxt "third-party field"
+msgid "verified"
+msgstr ""
+
+#: judge/third_party_apps.py:174
+msgctxt "third-party field"
+msgid "next step"
+msgstr ""
+
+#: judge/third_party_apps.py:175
+msgctxt "third-party field"
+msgid "backend"
+msgstr ""
+
+#: judge/third_party_apps.py:176
+msgctxt "third-party field"
+msgid "data"
 msgstr ""
 
 #: judge/utils/organization.py:21
@@ -5760,6 +6060,10 @@ msgstr ""
 msgid "Validation Failed for field `username`"
 msgstr ""
 
+#: templates/admin/base_site.html:30 templates/base.html:295
+msgid "Toggle dark mode"
+msgstr ""
+
 #: templates/admin/judge/app_index.html:8
 #, python-format
 msgid "Models in the %(name)s application"
@@ -5886,10 +6190,6 @@ msgstr ""
 
 #: templates/base.html:285
 msgid "Report an issue"
-msgstr ""
-
-#: templates/base.html:295
-msgid "Toggle dark mode"
 msgstr ""
 
 #: templates/base.html:318 templates/notification/list.html:55
@@ -9964,304 +10264,6 @@ msgstr ""
 
 #: templates/user/user-tabs.html:5
 msgid "Create new blog post"
-msgstr ""
-
-#: judge/third_party_apps.py:53 templates/user/user-tabs.html:16
-msgid "Impersonate"
-msgstr ""
-
-#: judge/third_party_apps.py:58
-msgctxt "third-party model"
-msgid "impersonation log"
-msgstr ""
-
-#: judge/third_party_apps.py:59
-msgctxt "third-party model"
-msgid "impersonation logs"
-msgstr ""
-
-#: judge/third_party_apps.py:63 judge/third_party_apps.py:81
-msgctxt "third-party field"
-msgid "impersonator"
-msgstr ""
-
-#: judge/third_party_apps.py:64
-msgctxt "third-party field"
-msgid "impersonated user"
-msgstr ""
-
-#: judge/third_party_apps.py:65
-msgctxt "third-party field"
-msgid "session key"
-msgstr ""
-
-#: judge/third_party_apps.py:66
-msgctxt "third-party field"
-msgid "session started at"
-msgstr ""
-
-#: judge/third_party_apps.py:67
-msgctxt "third-party field"
-msgid "session ended at"
-msgstr ""
-
-#: judge/third_party_apps.py:75
-msgctxt "third-party admin"
-msgid "Incomplete"
-msgstr ""
-
-#: judge/third_party_apps.py:76
-msgctxt "third-party admin"
-msgid "Complete"
-msgstr ""
-
-#: judge/third_party_apps.py:79
-msgctxt "third-party admin"
-msgid "session state"
-msgstr ""
-
-#: judge/third_party_apps.py:85
-msgid "Django OAuth Toolkit"
-msgstr ""
-
-#: judge/third_party_apps.py:90
-msgctxt "third-party model"
-msgid "application"
-msgstr ""
-
-#: judge/third_party_apps.py:91
-msgctxt "third-party model"
-msgid "applications"
-msgstr ""
-
-#: judge/third_party_apps.py:92
-msgctxt "third-party model"
-msgid "grant"
-msgstr ""
-
-#: judge/third_party_apps.py:93
-msgctxt "third-party model"
-msgid "grants"
-msgstr ""
-
-#: judge/third_party_apps.py:94
-msgctxt "third-party model"
-msgid "access token"
-msgstr ""
-
-#: judge/third_party_apps.py:95
-msgctxt "third-party model"
-msgid "access tokens"
-msgstr ""
-
-#: judge/third_party_apps.py:96
-msgctxt "third-party model"
-msgid "refresh token"
-msgstr ""
-
-#: judge/third_party_apps.py:97
-msgctxt "third-party model"
-msgid "refresh tokens"
-msgstr ""
-
-#: judge/third_party_apps.py:98
-msgctxt "third-party model"
-msgid "id token"
-msgstr ""
-
-#: judge/third_party_apps.py:99
-msgctxt "third-party model"
-msgid "id tokens"
-msgstr ""
-
-#: judge/third_party_apps.py:100
-msgctxt "third-party model"
-msgid "device grant"
-msgstr ""
-
-#: judge/third_party_apps.py:101
-msgctxt "third-party model"
-msgid "device grants"
-msgstr ""
-
-#: judge/third_party_apps.py:107
-msgctxt "third-party admin"
-msgid "Revoke selected access tokens"
-msgstr ""
-
-#: judge/third_party_apps.py:109
-msgctxt "third-party admin"
-msgid "Revoke selected refresh tokens"
-msgstr ""
-
-#: judge/third_party_apps.py:110 judge/third_party_apps.py:111
-#: judge/third_party_apps.py:173
-msgctxt "third-party field"
-msgid "token"
-msgstr ""
-
-#: judge/third_party_apps.py:112 judge/third_party_apps.py:168
-msgctxt "third-party field"
-msgid "code"
-msgstr ""
-
-#: judge/third_party_apps.py:116
-msgid "Registration"
-msgstr ""
-
-#: judge/third_party_apps.py:121 judge/third_party_apps.py:122
-msgctxt "third-party field"
-msgid "activated"
-msgstr ""
-
-#: judge/third_party_apps.py:127
-msgid "Python Social Auth"
-msgstr ""
-
-#: judge/third_party_apps.py:132
-msgctxt "third-party model"
-msgid "user social auth"
-msgstr ""
-
-#: judge/third_party_apps.py:133
-msgctxt "third-party model"
-msgid "user social auths"
-msgstr ""
-
-#: judge/third_party_apps.py:134
-msgctxt "third-party model"
-msgid "nonce"
-msgstr ""
-
-#: judge/third_party_apps.py:135
-msgctxt "third-party model"
-msgid "nonces"
-msgstr ""
-
-#: judge/third_party_apps.py:136
-msgctxt "third-party model"
-msgid "association"
-msgstr ""
-
-#: judge/third_party_apps.py:137
-msgctxt "third-party model"
-msgid "associations"
-msgstr ""
-
-#: judge/third_party_apps.py:138
-msgctxt "third-party model"
-msgid "code"
-msgstr ""
-
-#: judge/third_party_apps.py:139
-msgctxt "third-party model"
-msgid "codes"
-msgstr ""
-
-#: judge/third_party_apps.py:140
-msgctxt "third-party model"
-msgid "partial"
-msgstr ""
-
-#: judge/third_party_apps.py:141
-msgctxt "third-party model"
-msgid "partials"
-msgstr ""
-
-#: judge/third_party_apps.py:146
-msgctxt "third-party field"
-msgid "provider"
-msgstr ""
-
-#: judge/third_party_apps.py:147
-msgctxt "third-party field"
-msgid "ID key"
-msgstr ""
-
-#: judge/third_party_apps.py:148
-msgctxt "third-party field"
-msgid "UID"
-msgstr ""
-
-#: judge/third_party_apps.py:149
-msgctxt "third-party field"
-msgid "extra data"
-msgstr ""
-
-#: judge/third_party_apps.py:150
-msgctxt "third-party field"
-msgid "created"
-msgstr ""
-
-#: judge/third_party_apps.py:151
-msgctxt "third-party field"
-msgid "modified"
-msgstr ""
-
-#: judge/third_party_apps.py:154 judge/third_party_apps.py:159
-msgctxt "third-party field"
-msgid "server URL"
-msgstr ""
-
-#: judge/third_party_apps.py:155 judge/third_party_apps.py:170
-#: judge/third_party_apps.py:177
-msgctxt "third-party field"
-msgid "timestamp"
-msgstr ""
-
-#: judge/third_party_apps.py:156
-msgctxt "third-party field"
-msgid "salt"
-msgstr ""
-
-#: judge/third_party_apps.py:160
-msgctxt "third-party field"
-msgid "handle"
-msgstr ""
-
-#: judge/third_party_apps.py:161
-msgctxt "third-party field"
-msgid "secret"
-msgstr ""
-
-#: judge/third_party_apps.py:162
-msgctxt "third-party field"
-msgid "issued"
-msgstr ""
-
-#: judge/third_party_apps.py:163
-msgctxt "third-party field"
-msgid "lifetime"
-msgstr ""
-
-#: judge/third_party_apps.py:164
-msgctxt "third-party field"
-msgid "association type"
-msgstr ""
-
-#: judge/third_party_apps.py:167
-msgctxt "third-party field"
-msgid "email"
-msgstr ""
-
-#: judge/third_party_apps.py:169
-msgctxt "third-party field"
-msgid "verified"
-msgstr ""
-
-#: judge/third_party_apps.py:174
-msgctxt "third-party field"
-msgid "next step"
-msgstr ""
-
-#: judge/third_party_apps.py:175
-msgctxt "third-party field"
-msgid "backend"
-msgstr ""
-
-#: judge/third_party_apps.py:176
-msgctxt "third-party field"
-msgid "data"
 msgstr ""
 
 #: templates/user/user-tabs.html:20

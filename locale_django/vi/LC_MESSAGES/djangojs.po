@@ -1,9 +1,3 @@
-# Vietnamese translations of Django admin JavaScript strings that Django's own
-# Vietnamese catalog doesn't cover yet. See django.po in this directory.
-#
-# Plural-Forms must match locale/vi/LC_MESSAGES/djangojs.po: the JavaScript
-# catalog uses that rule for every string, so an entry with one form only (as in
-# Django's own catalog) renders as an empty string whenever n != 1.
 msgid ""
 msgstr ""
 "Project-Id-Version: Django overrides\n"

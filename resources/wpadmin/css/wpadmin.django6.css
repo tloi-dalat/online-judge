@@ -8,7 +8,8 @@
  */
 
 /* Theme colours that Django 5 changed. */
-:root {
+:root,
+html[data-theme] {
     --breadcrumbs-bg: var(--primary);
     --link-selected-fg: #5b80b2;
     --button-bg: var(--primary);

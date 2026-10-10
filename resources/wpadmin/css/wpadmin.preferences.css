@@ -1,0 +1,55 @@
+#admin-preferences {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 34px;
+    padding: 0 8px;
+}
+
+#admin-preferences[hidden],
+#admin-preferences form {
+    display: none;
+}
+
+#adminbarwrap > #admin-preferences {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#adminbarwrap #adminbar .admin-preferences-item {
+    float: right;
+    height: 34px;
+}
+
+#admin-preferences a {
+    display: inline-flex;
+    padding: 4px;
+}
+
+#admin-theme-toggle img {
+    filter: invert(80%);
+}
+
+#admin-theme-toggle:hover img {
+    filter: invert(100%);
+}
+
+#admin-preferences .theme-icon-light,
+#admin-preferences[data-theme="dark"] .theme-icon-dark {
+    display: none;
+}
+
+#admin-preferences[data-theme="dark"] .theme-icon-light {
+    display: inline-block;
+}
+
+@media (prefers-color-scheme: dark) {
+    #admin-preferences[data-theme="auto"] .theme-icon-dark {
+        display: none;
+    }
+
+    #admin-preferences[data-theme="auto"] .theme-icon-light {
+        display: inline-block;
+    }
+}
