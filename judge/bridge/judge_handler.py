@@ -13,7 +13,7 @@ from django.utils import timezone
 from judge import event_poster as event
 from judge.bridge.base_handler import ZlibPacketHandler, proxy_list
 from judge.caching import finished_submission
-from judge.models import Judge, Language, LanguageLimit, Problem, Profile, \
+from judge.models import Judge, Language, LanguageLimit, Profile, \
     RuntimeVersion, Submission, SubmissionTestCase
 from judge.models.problem import ProblemTestcaseResultAccess
 from judge.utils.url import get_absolute_submission_file_url
@@ -33,10 +33,14 @@ def _ensure_connection():
     db.connection.close_if_unusable_or_obsolete()
 
 
+class SubmissionUnavailable(Exception):
+    """Raised when a submission cannot be prepared for dispatch, in which case no judge is at fault."""
+
+
 class JudgeHandler(ZlibPacketHandler):
     proxies = proxy_list(settings.BRIDGED_JUDGE_PROXIES or [])
 
-    def __init__(self, request, client_address, server, judges, ignore_problems_packet=True):
+    def __init__(self, request, client_address, server, judges):
         super().__init__(request, client_address, server)
 
         self.judges = judges
@@ -52,14 +56,13 @@ class JudgeHandler(ZlibPacketHandler):
             'submission-terminated': self.on_submission_terminated,
             'submission-acknowledged': self.on_submission_acknowledged,
             'ping-response': self.on_ping_response,
-            'supported-problems': self.on_supported_problems,
             'executors': self.on_executors,
             'handshake': self.on_handshake,
         }
         self._working = False
         self._no_response_job = None
         self.executors = {}
-        self.problems = {}
+        self.storages = set()
         self.latency = None
         self.time_delta = None
         self.load = 1e100
@@ -76,7 +79,6 @@ class JudgeHandler(ZlibPacketHandler):
         self.update_counter = {}
         self.judge = None
         self.judge_address = None
-        self.ignore_problems_packet = ignore_problems_packet
 
         self._submission_cache_id = None
         self._submission_cache = {}
@@ -127,11 +129,7 @@ class JudgeHandler(ZlibPacketHandler):
 
         self.update_runtimes()
 
-        if self.ignore_problems_packet:
-            self.problems = self.judges.problems
-            judge.problems.set(self.judges.problem_ids)
-        else:
-            judge.problems.set(Problem.objects.filter(code__in=list(self.problems)).values_list('id', flat=True))
+        judge.storages = list(self.storages)
 
         # Cache is_disabled for faster access
         self.is_disabled = judge.is_disabled
@@ -163,12 +161,17 @@ class JudgeHandler(ZlibPacketHandler):
             self.close()
             return
 
+        if packet.get('version', 1) == 1:
+            logger.warning('Rejected old judge protocol (version 1): %s', packet.get('id'))
+            self.close()
+            return
+
         if not self._authenticate(packet['id'], packet['key']):
             self.close()
             return
 
         self.timeout = 60
-        self.problems = set(p[0] for p in packet['problems'])
+        self.storages = {s['id'] for s in packet.get('storages', [])}
         self.executors = packet['executors']
         self.name = packet['id']
 
@@ -178,8 +181,8 @@ class JudgeHandler(ZlibPacketHandler):
         threading.Thread(target=self._ping_thread).start()
         self._connected()
 
-    def can_judge(self, problem, executor, judge_id=None):
-        return problem in self.problems and executor in self.executors and  \
+    def can_judge(self, storage, executor, judge_id=None):
+        return storage in self.storages and executor in self.executors and \
             ((not judge_id and not self.is_disabled) or self.name == judge_id)
 
     @property
@@ -235,6 +238,9 @@ class JudgeHandler(ZlibPacketHandler):
 
     def submit(self, id, problem, language, source):
         data = self.get_related_submission_data(id)
+        if data is None:
+            raise SubmissionUnavailable('submission %s vanished before it could be dispatched' % id)
+
         self._working = id
         self._no_response_job = threading.Timer(20, self._kill_if_no_response)
         self.send({
@@ -326,37 +332,6 @@ class JudgeHandler(ZlibPacketHandler):
         if not Submission.objects.filter(id=id).update(batch=True):
             logger.warning('Unknown submission: %s', id)
 
-    def replace_problems(self, problems, problem_ids):
-        logger.info('%s: Replacing problem list', self.name)
-        self.problems = problems
-        self.judge.problems.set(problem_ids)
-        logger.info('%s: Replaced %d problems', self.name, len(self.problems))
-        json_log.info(self._make_json_log(action='update-problems', count=len(self.problems)))
-
-    def update_problems(
-        self,
-        new_problems,
-        new_problem_ids,
-        deleted_problems,
-        deleted_problem_ids,
-    ):
-        logger.info('%s: Updating problem list', self.name)
-        self.problems = (new_problems | self.problems) - deleted_problems
-        if new_problem_ids:
-            self.judge.problems.add(*new_problem_ids)
-        if deleted_problem_ids:
-            self.judge.problems.remove(*deleted_problem_ids)
-        logger.info('%s: Updated %d problems', self.name, len(self.problems))
-        json_log.info(self._make_json_log(action='update-problems', count=len(self.problems)))
-
-    def on_supported_problems(self, packet):
-        if self.ignore_problems_packet:
-            return
-
-        problems = set(p[0] for p in packet['problems'])
-        problem_ids = list(Problem.objects.filter(code__in=list(problems)).values_list('id', flat=True))
-        self.judges.update_problems(self, problems, problem_ids)
-
     def update_runtimes(self):
         self.judge.runtimes.set(
             Language.objects.filter(key__in=list(self.executors.keys())).values_list('id', flat=True),
@@ -412,7 +387,7 @@ class JudgeHandler(ZlibPacketHandler):
         points = 0.0
         total = 0
         status = 0
-        status_codes = ['SC', 'AC', 'WA', 'MLE', 'TLE', 'IR', 'RTE', 'OLE']
+        status_codes = ['SC', 'AC', 'PAC', 'WA', 'MLE', 'TLE', 'IR', 'RTE', 'OLE']
         batches = {}  # batch number: (points, total)
 
         for case in SubmissionTestCase.objects.filter(submission=submission):
@@ -579,7 +554,10 @@ class JudgeHandler(ZlibPacketHandler):
             elif status & 32:
                 test_case.status = 'SC'
             else:
-                test_case.status = 'AC'
+                if result['points'] < result['total-points']:
+                    test_case.status = 'PAC'
+                else:
+                    test_case.status = 'AC'
             test_case.time = result['time']
             test_case.memory = result['memory']
             test_case.points = result['points']
