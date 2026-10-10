@@ -1,14 +1,25 @@
-name: 'i18n'
+name: 'django'
 on:
   pull_request:
     branches: [main]
 
 concurrency:
-  group: i18n-${{ github.head_ref }}
+  group: django-${{ github.head_ref }}
   cancel-in-progress: true
 
 jobs:
-  check:
+  migrations:
+    name: check
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/django-migration-check.yaml@main
+    with:
+      python-version: '3.12'
+      requirements: requirements.txt
+      settings-file: .ci.settings.py
+
+  i18n:
+    name: check
     permissions:
       contents: read
     uses: tloi-dalat/reusable-workflow/.github/workflows/django-i18n-check.yaml@main
