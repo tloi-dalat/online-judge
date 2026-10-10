@@ -97,6 +97,10 @@ class ProblemData(models.Model):
     archived_size = models.BigIntegerField(verbose_name=_('archived test data storage size'), default=0,
                                            help_text=_('Size of the test data zip file in bytes when archived.'))
 
+    class Meta:
+        verbose_name = _('problem data')
+        verbose_name_plural = _('problem data')
+
     def has_yml(self):
         return problem_data_storage.exists('%s/init.yml' % self.problem.code)
 
@@ -155,3 +159,7 @@ class ProblemTestCase(models.Model):
     checker = models.CharField(max_length=10, verbose_name=_('checker'), choices=CHECKERS, blank=True)
     checker_args = models.TextField(verbose_name=_('checker arguments'), blank=True,
                                     help_text=_('Checker arguments as a JSON object.'))
+
+    class Meta:
+        verbose_name = _('problem test case')
+        verbose_name_plural = _('problem test cases')

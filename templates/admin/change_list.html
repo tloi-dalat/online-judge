@@ -1,0 +1,22 @@
+{% extends "admin/change_list.html" %}
+{% load admin_list %}
+
+{% block extrahead %}
+    {# Replaces wpadmin's block, which also called the old `$.fn.actions` jQuery plugin that Django no longer has #}
+    {# (its actions.js sets itself up now). The base templates' extrahead blocks are empty, so nothing else is lost. #}
+    {{ media.js }}
+{% endblock %}
+
+{% block result_list %}
+    {# wpadmin keys these off `cl.full_result_count`, which is None when `show_full_result_count = False` #}
+    {# (AdminFastPaginationMixin), so those changelists lost their actions bar and bottom paginator. #}
+    <div class="actions-and-paginator actions-and-paginator-top {% if not cl.result_count %}no-objects{% endif %}">
+        {% if action_form and cl.result_count %}{% admin_actions %}{% endif %}
+        {% pagination cl %}
+    </div>
+    {% result_list cl %}
+    <div class="actions-and-paginator actions-and-paginator-bottom {% if not cl.result_count %}no-objects{% endif %}">
+        {% if action_form and cl.result_count %}{% admin_actions %}{% endif %}
+        {% if cl.result_count %}{% pagination cl %}{% endif %}
+    </div>
+{% endblock %}

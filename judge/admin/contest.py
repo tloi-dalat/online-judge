@@ -1,9 +1,10 @@
+import django
 from adminsortable2.admin import SortableAdminBase, SortableInlineAdminMixin
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.db import connection, transaction
 from django.db.models import F, Q, TextField
-from django.forms import ModelForm, ModelMultipleChoiceField
+from django.forms import Media, ModelForm, ModelMultipleChoiceField
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import path, reverse, reverse_lazy
@@ -174,6 +175,13 @@ class ContestAdmin(AdminFastPaginationMixin, NoBatchDeleteMixin, SortableAdminBa
     change_list_template = 'admin/judge/contest/change_list.html'
     filter_horizontal = ['rate_exclude']
     date_hierarchy = 'start_time'
+
+    @property
+    def media(self):
+        media = super().media
+        sortable_actions = 'adminsortable2/js/actions-{0}.{1}.js'.format(*django.VERSION)
+        js = ['admin/js/actions.js' if path == sortable_actions else path for path in media._js]
+        return Media(css=media._css, js=js)
 
     def get_actions(self, request):
         actions = super(ContestAdmin, self).get_actions(request)

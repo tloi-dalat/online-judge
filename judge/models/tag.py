@@ -11,6 +11,10 @@ class TagGroup(models.Model):
     code = models.CharField(max_length=30, verbose_name=_('Tag group ID'), unique=True)
     name = models.CharField(max_length=100, verbose_name=_('Tag group name'))
 
+    class Meta:
+        verbose_name = _('tag group')
+        verbose_name_plural = _('tag groups')
+
     def __str__(self):
         return self.name
 
@@ -19,6 +23,10 @@ class Tag(models.Model):
     code = models.CharField(max_length=30, verbose_name=_('Tag ID'), unique=True, db_index=True)
     name = models.CharField(max_length=100, verbose_name=_('Tag name'), db_index=True)
     group = models.ForeignKey(TagGroup, related_name='tags', verbose_name=_('Parent tag group'), on_delete=CASCADE)
+
+    class Meta:
+        verbose_name = _('tag')
+        verbose_name_plural = _('tags')
 
     def __str__(self):
         return self.name
@@ -39,6 +47,10 @@ class TagProblem(models.Model):
 
     tag = models.ManyToManyField(Tag, through='TagData', related_name='tags', verbose_name=_('Tag'))
 
+    class Meta:
+        verbose_name = _('tag problem')
+        verbose_name_plural = _('tag problems')
+
     def __str__(self):
         return self.name
 
@@ -49,9 +61,11 @@ class TagProblem(models.Model):
 class TagData(models.Model):
     assigner = models.ForeignKey(Profile, verbose_name=_('Assigner'), on_delete=CASCADE)
     tag = models.ForeignKey(Tag, verbose_name=_('Tag'), on_delete=CASCADE)
-    problem = models.ForeignKey(TagProblem, on_delete=CASCADE)
+    problem = models.ForeignKey(TagProblem, verbose_name=_('problem'), on_delete=CASCADE)
 
     class Meta:
+        verbose_name = _('tag data')
+        verbose_name_plural = _('tag data')
         unique_together = ('tag', 'problem')
 
     def __str__(self):
