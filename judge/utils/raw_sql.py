@@ -17,13 +17,24 @@ class RawSQLJoin(Join):
         return sql, self.subquery_params + params
 
 
+def _field_by_column(model, column):
+    return next(field for field in model._meta.concrete_fields if field.column == column)
+
+
 class FakeJoinField:
-    def __init__(self, joining_columns, related_model):
+    def __init__(self, joining_columns, related_model, parent_model):
         self.joining_columns = joining_columns
         self.related_model = related_model
+        self.parent_model = parent_model
 
     def get_joining_columns(self):
         return self.joining_columns
+
+    def get_joining_fields(self):
+        return tuple(
+            (_field_by_column(self.parent_model, lhs), _field_by_column(self.related_model, rhs))
+            for lhs, rhs in self.joining_columns
+        )
 
     def get_extra_restriction(self, alias, remote_alias):
         pass
@@ -39,8 +50,8 @@ def join_sql_subquery(
         queryset.query.external_aliases[alias] = True
     else:
         queryset.query.external_aliases.add(alias)
-    join = RawSQLJoin(subquery, params, parent_alias, alias, join_type, FakeJoinField(join_fields, related_model),
-                      join_type == LOUTER)
+    join_field = FakeJoinField(join_fields, related_model, parent_model or queryset.model)
+    join = RawSQLJoin(subquery, params, parent_alias, alias, join_type, join_field, join_type == LOUTER)
     queryset.query.join(join)
     join.table_alias = alias
 

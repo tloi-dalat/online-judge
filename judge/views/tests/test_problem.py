@@ -125,11 +125,14 @@ class ProblemSubmitLanguageMemoryTestCase(CommonDataMixin, TestCase):
 
         # Setup problem_b so that it only allows CPP17 language and has an online judge
         self.problem_b.allowed_languages.add(self.cpp_lang)
+        # The submit form (and its language warning) is only shown for problems with test data.
+        self.problem_b.is_manually_managed = True
+        self.problem_b.save()
         judge = Judge.objects.create(
             name='test_judge',
             online=True,
+            storages=[self.problem_b.effective_storage],
         )
-        judge.problems.add(self.problem_b)
         judge.runtimes.add(self.cpp_lang)
 
         # Query submit page for problem_b
