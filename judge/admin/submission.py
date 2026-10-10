@@ -87,7 +87,9 @@ class ContestSubmissionInline(admin.StackedInline):
                     if obj.spectate:
                         return gettext('%s (spectating)') % obj.contest.name
                     if obj.virtual:
-                        return gettext('%s (virtual %d)') % (obj.contest.name, obj.virtual)
+                        return gettext('%(contest)s (virtual %(virtual)d)') % {
+                            'contest': obj.contest.name, 'virtual': obj.virtual,
+                        }
                     return obj.contest.name
                 label = _label
             elif db_field.name == 'problem':

@@ -19,9 +19,12 @@ def archived_problems_queryset(organization):
 def quota_error_response(request, organization):
     return render(request, 'organization/quota-error.html', {
         'title': _('Problem limit reached'),
-        'message': _('This organization has reached its maximum number of problems (%d) and/or storage (%s). '
-                     'Please delete some problems or free up storage before creating new ones.')
-        % (organization.max_problems, filesizeformat(organization.max_storage)),
+        'message': _('This organization has reached its maximum number of problems (%(max_problems)d) and/or '
+                     'storage (%(max_storage)s). Please delete some problems or free up storage before creating '
+                     'new ones.') % {
+            'max_problems': organization.max_problems,
+            'max_storage': filesizeformat(organization.max_storage),
+        },
         'quota_warning_suffix': settings.VNOJ_QUOTA_WARNING_SUFFIX,
     })
 

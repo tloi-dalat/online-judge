@@ -12,6 +12,10 @@ PDFOID_URL = settings.DMOJ_PDF_PDFOID_URL
 PDF_RENDERING_ENABLED = PDFOID_URL is not None
 
 
+def get_contest_pdf_basename(contest_id: int, language: str) -> str:
+    return 'contest-%d.%s.pdf' % (contest_id, language)
+
+
 def render_pdf(*, title: str, html: str, footer: bool = False) -> bytes:
     if not PDF_RENDERING_ENABLED:
         raise RuntimeError("pdfoid is not configured, can't render PDFs")
