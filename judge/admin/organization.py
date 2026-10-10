@@ -1,12 +1,14 @@
 from django.contrib import admin
-from django.forms import ModelForm
+from django.forms import DecimalField, ModelForm
 from django.urls import reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from reversion.admin import VersionAdmin
 
-from judge.models import Organization
+from judge.models import Organization, OrganizationQuota
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminMartorWidget
+
+_GB = 1024 ** 3
 
 
 class OrganizationForm(ModelForm):
@@ -14,19 +16,58 @@ class OrganizationForm(ModelForm):
         widgets = {
             'admins': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
             'about': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('organization_preview')}),
+            'notice': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('organization_preview')}),
         }
+
+
+class OrganizationQuotaForm(ModelForm):
+    added_storage_gb = DecimalField(
+        min_value=0,
+        required=False,
+        label=_('Additional storage (GB)'),
+        help_text=_('Decimal values allowed, e.g. 1.5. Leave blank for no additional storage.'),
+    )
+
+    class Meta:
+        model = OrganizationQuota
+        fields = ('start_date', 'end_date', 'added_problems', 'added_storage_gb')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            self.initial['added_storage_gb'] = round(self.instance.added_storage / _GB, 10)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        gb = cleaned_data.get('added_storage_gb') or 0
+        cleaned_data['added_storage'] = round(float(gb) * _GB)
+        return cleaned_data
+
+    def save(self, commit=True):
+        self.instance.added_storage = self.cleaned_data['added_storage']
+        return super().save(commit=commit)
+
+
+class OrganizationQuotaInline(admin.TabularInline):
+    model = OrganizationQuota
+    form = OrganizationQuotaForm
+    fields = ('start_date', 'end_date', 'added_problems', 'added_storage_gb')
+    extra = 0
+    verbose_name = _('Quota Grant')
+    verbose_name_plural = _('Quota Grants')
 
 
 class OrganizationAdmin(VersionAdmin):
     readonly_fields = ('creation_date', 'current_consumed_credit')
     fields = ('name', 'slug', 'short_name', 'is_open', 'is_unlisted', 'paid_credit', 'current_consumed_credit',
-              'about', 'logo_override_image', 'slots', 'creation_date', 'admins')
+              'about', 'notice', 'logo_override_image', 'slots', 'creation_date', 'admins')
     list_display = ('name', 'short_name', 'is_open', 'is_unlisted', 'slots', 'show_public')
     prepopulated_fields = {'slug': ('name',)}
     actions = ('recalculate_points',)
     actions_on_top = True
     actions_on_bottom = True
     form = OrganizationForm
+    inlines = (OrganizationQuotaInline,)
 
     @admin.display(description='')
     def show_public(self, obj):
@@ -36,7 +77,7 @@ class OrganizationAdmin(VersionAdmin):
     def get_readonly_fields(self, request, obj=None):
         fields = self.readonly_fields
         if not request.user.has_perm('judge.organization_admin'):
-            return fields + ('admins', 'is_open', 'slots')
+            return fields + ('admins', 'is_open', 'slots', 'notice')
         return fields
 
     def get_queryset(self, request):

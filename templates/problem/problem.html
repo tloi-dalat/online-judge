@@ -39,7 +39,7 @@
             min-width: 12.5em;
         }
 
-        #problem-types, #allowed-langs, #available-judges, #from-contests {
+        #problem-types, #allowed-langs, #available-judges, #from-contests, #contest-problems-list {
             padding-top: 1em;
         }
 
@@ -55,100 +55,29 @@
             left: -999em;
         }
 
-        /* Tab Styles */
-        .problem-tabs {
-            margin-top: 2em;
-            border-bottom: 2px solid #ddd;
+        .button.clarify {
+            background: orange;
+            align-self: center;
+        }
+        
+        .highlighted {
+            background: #f7ef81;
         }
 
-        .problem-tabs ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-        }
-
-        .problem-tabs li {
-            margin-right: 5px;
-        }
-
-        .problem-tabs a {
+        td a {
             display: block;
-            padding: 12px 24px;
-            text-decoration: none;
-            color: #333;
-            background: #f5f5f5;
-            border: 1px solid #ddd;
-            border-bottom: none;
-            border-radius: 5px 5px 0 0;
-            transition: all 0.3s ease;
+            width: 100%;
         }
-
-        .problem-tabs a:hover {
-            background: #e8e8e8;
-        }
-
-        .problem-tabs a.active {
-            background: #fff;
-            color: #007bff;
-            font-weight: bold;
-            border-color: #ddd;
-            border-bottom: 2px solid #fff;
-            margin-bottom: -2px;
-        }
-
-        .tab-content {
-            display: none;
-            padding: 20px 0;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        {% if request.user.is_authenticated %}
-        .submit-tab-content {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-        {% endif %}
-
-        body[data-theme="dark"] .problem-tabs {
-            border-bottom-color: #444;
-        }
-
-        body[data-theme="dark"] .problem-tabs a {
-            background: #2a2a2a;
-            color: #ccc;
-            border-color: #444;
-        }
-
-        body[data-theme="dark"] .problem-tabs a:hover {
-            background: #3a3a3a;
-        }
-
-        body[data-theme="dark"] .problem-tabs a.active {
-            background: #1e1e1e;
-            color: #4da3ff;
-            border-color: #444;
-            border-bottom-color: #1e1e1e;
-        }
-
-        {% if request.user.is_authenticated %}
-        body[data-theme="dark"] .submit-tab-content {
-            background: #1e1e1e;
-            border: 1px solid #444;
-        }
-        {% endif %}
     </style>
 {% endblock %}
 
 {% block content_js_media %}
-    {% if not comment_lock %}
+    {% if comment_form and comment_form.errors %}
+        {# comments/list.html is SSR'd directly below (not via the AJAX fragment) in
+           this case, so it needs its own media JS (martor editor, vote/hide/edit). #}
         {% include "comments/media-js.html" %}
     {% endif %}
+    {% include "comments/lazy-load-js.html" %}
     {% if request.user.is_authenticated and form %}
         {% include "problem/submit-js.html" %}
     {% endif %}
@@ -181,6 +110,11 @@
                 $('.tab-content').removeClass('active');
                 $(target).addClass('active');
 
+                if (target === '#comments') {
+                    var loadComments = $('#comments').data('load-comments');
+                    if (loadComments) loadComments();
+                }
+
                 // Update URL hash without scrolling
                 if (history.pushState) {
                     history.pushState(null, null, target);
@@ -189,13 +123,19 @@
                 }
             });
 
-            // Handle initial hash in URL
+            // Handle initial hash in URL. A #comment-<id> permalink (e.g. from the
+            // recent-comments widget) isn't a tab id, so it needs its own handling:
+            // open the comments tab and let lazy-load-js.html scroll to it once loaded.
             var hash = window.location.hash;
-            if (hash && $(hash).length) {
+            if (/^#comment-\d+$/.test(hash)) {
+                var setPendingScroll = $('#comments').data('set-pending-scroll');
+                if (setPendingScroll) setPendingScroll(hash);
+                $('.problem-tabs a[href="#comments"]').click();
+            } else if (hash && $(hash).length) {
                 var tabLink = $('.problem-tabs a[href="' + hash + '"]');
                 if (tabLink.length) {
                     tabLink.click();
-                } 
+                }
                 else {
                     var tabContent = $(hash).closest('.tab-content');
                     if (tabContent.length) {
@@ -206,6 +146,13 @@
                         }, 50);
                     }
                 }
+            } else if ($('#comments').hasClass('active')) {
+                // No hash-driven tab switch happened, but the comments tab is
+                // already the default active tab (anonymous users have no
+                // "Submit Solution" tab) - load it now instead of waiting for a
+                // click that will never come.
+                var loadComments = $('#comments').data('load-comments');
+                if (loadComments) loadComments();
             }
         });
     </script>
@@ -258,6 +205,11 @@
             </span>
             {{ _('View as PDF') }}
         </a>
+        {% if request.user.is_authenticated and not request.profile.mute %}
+            <a href="{{ url('new_problem_ticket', problem.code) }}" class="button clarify" style="vertical-align: middle; margin-left: 0.5em;">
+                {{ _('Request clarification') }}
+            </a>
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -414,13 +366,6 @@
                         <div class="pi-value authors-value">{{ link_users(authors) }}</div>
                     </div>
                 {% endif %}
-                {% if problem.suggester %}
-                <div class="problem-info-entry">
-                    <i class="fa fa-pencil-square-o fa-fw"></i><span
-                        class="pi-name">{{ _("Suggester:") }}</span>
-                        <div class="pi-value authors-value">{{ link_user(problem.suggester) }}</div>
-                    </div>
-                {% endif %}
             {% endwith %}
         {% endcache %}
     {% endif %}
@@ -470,11 +415,8 @@
     {% if from_contests %}
         <div id="from-contests">
             <div class="toggle open unselectable">
-                <i class="fa fa-chevron-right fa-fw"></i>{% trans trimmed count=from_contests|length %}
-                Contest
-                {% pluralize count %}
-                Contests
-                {% endtrans %}
+                <i class="fa fa-chevron-right fa-fw"></i>
+                {%- if from_contests|length == 1 %}{{ _('Contest') }}{% else %}{{ _('Contests') }}{% endif %}
             </div>
             <div class="toggled">
                 {% for contest in from_contests %}
@@ -485,6 +427,34 @@
                 {% endif %}
             </div>
         </div>
+    {% endif %}
+
+    {% set contest = contest_problem.contest %}
+    {% if contest_problems %}
+    <div id="contest-problems-list">
+        <div class="toggle open unselectable">
+            <i class="fa fa-chevron-right fa-fw"></i>{{ _('Problems') }}
+        </div>
+        <div class="toggled">
+            <table class="table striped">
+                <tbody>
+                    {% for contest_problem in contest_problems %}
+                        <tr>
+                            {% if problem.code == contest_problem.code %}
+                            <td class="highlighted" style="text-align: center">
+                            {% else %}
+                            <td style="text-align: center">
+                            {% endif %}
+                            <a href="{{ url('problem_detail', contest_problem.code) }}">
+                                {{contest.get_label_for_problem(loop.index0)}}
+                            </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     {% endif %}
 
     {% if problem.is_editable_by(request.user) %}
@@ -516,68 +486,52 @@
 
 {% block description %}
     <iframe name="raw_problem" id="raw_problem"></iframe>
-    {% if problem.is_suggesting %}
-        <div class="alert alert-warning alert-dismissable">
-            <a class="close">x</a>
-            <b>{{ _('This problem is only a suggestion!') }}</b>
-            <br>
-            {{ _('This problem cannot be accessed by normal users until it is approved by an admin or staff. Please make sure that all the data for this problem is correct.') }}
-        </div>
-    {% endif %}
     {% include "problem/problem-detail.html" %}
 {% endblock %}
 
 {% block post_description_end %}
     {% if request.user.is_authenticated and not request.profile.mute %}
         <a href="{{ url('new_problem_ticket', problem.code) }}" class="button clarify">
-            {%- if comment_lock and request.profile.current_contest.live -%}
-                {{ _('Request clarification') }}
-            {%- else -%}
-                {{ _('Report an issue') }}
-            {%- endif -%}
+            {{ _('Request clarification') }}
         </a>
     {% endif %}
 {% endblock %}
 
 {% block comments %}
+    {# A failed comment submission must land on the Comments tab so the error is
+       actually visible, even for authenticated users (whose default tab is
+       otherwise Submit Solution). #}
+    {% set comments_tab_active = not request.user.is_authenticated or (comment_form and comment_form.errors) %}
     <div class="problem-tabs">
         <ul>
             {% if request.user.is_authenticated %}
-                <li><a href="#submit" class="active">{{ _('Submit Solution') }}</a></li>
+                <li><a href="#submit" {% if not comments_tab_active %}class="active"{% endif %}>{{ _('Submit Solution') }}</a></li>
             {% endif %}
-            <li><a href="#comments" {% if not request.user.is_authenticated %}class="active"{% endif %}>{{ _('Comments') }}</a></li>
+            <li><a href="#comments" {% if comments_tab_active %}class="active"{% endif %}>{{ _('Comments') }}</a></li>
         </ul>
     </div>
 
     {% if request.user.is_authenticated %}
-        <div id="submit" class="tab-content active">
+        <div id="submit" class="tab-content {% if not comments_tab_active %}active{% endif %}">
             <div class="submit-tab-content">
                 {% include "problem/submit-form.html" %}
             </div>
         </div>
     {% endif %}
 
-    <div id="comments" class="tab-content {% if not request.user.is_authenticated %}active{% endif %}">
-        {% if comment_lock %}
-            <div class="clarifications-area">
-                <h2><i class="fa fa-question-circle"></i> {{ _('Clarifications') }}</h2>
-                {% if has_clarifications %}
-                    {% for clarification in clarifications %}
-                        <div class="problem-clarification">
-                            <div class="time">{{ relative_time(clarification.date) }}</div>
-                            <span class="body">
-                                {{ clarification.description|markdown('problem', MATH_ENGINE)|reference }}
-                            </span>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <p class="no-comments-message">{{ _('No clarifications have been made at this time.') }}</p>
-                {% endif %}
-            </div>
-        {% else %}
+    <div id="comments" class="tab-content {% if comments_tab_active %}active{% endif %}"
+         data-comments-url="{{ url('problem_comments', problem.code) }}" data-comments-trigger="tab"
+         data-comments-preloaded="{{ 'true' if comment_form and comment_form.errors else 'false' }}">
+        {% if comment_form and comment_form.errors %}
+            {# A failed comment submission needs its error shown; render the full list
+               instead of the placeholder so comment_form.errors is actually visible.
+               data-comments-preloaded above tells lazy-load-js.html not to clobber
+               this with an AJAX fetch (which would build a fresh, error-free form). #}
             {% with comment_warn_code=true %}
                 {% include "comments/list.html" %}
             {% endwith %}
+        {% else %}
+            <div class="comments-loading">{{ _('Loading...') }}</div>
         {% endif %}
     </div>
 {% endblock %}

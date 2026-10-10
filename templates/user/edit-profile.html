@@ -34,6 +34,14 @@
             margin: 0.5em 0 0.8em;
         }
 
+        .two-factor-disabled {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5em;
+            margin-top: 0.6em;
+        }
+
         .fullwidth {
             display: block;
             overflow: hidden;
@@ -316,7 +324,6 @@
             });
         });
     </script>
-
 {% endblock %}
 
 {% block title_ruler %}{% endblock %}
@@ -378,7 +385,10 @@
                             <td><label class="inline-header grayed">{{ _('Language:') }}</label></td>
                             <td><span class="fullwidth">{{ form.language }}</span></td>
                         </tr>
-
+                        <tr>
+                            <td><label class="inline-header grayed">{{ _('Site theme:') }}</label></td>
+                            <td><span class="fullwidth">{{ form.site_theme }}</span></td>
+                        </tr>
                         <tr>
                             <td><label class="inline-header grayed">{{ _('Editor theme:') }}</label></td>
                             <td><span class="fullwidth">{{ form.ace_theme }}</span></td>
@@ -475,10 +485,10 @@
                                 </div>
                             </div>
                         {% else %}
-                            <span class="inline-header grayed">
-                                {{ _('Two-factor Authentication is disabled:') }}
+                            <div class="two-factor-disabled">
+                                <div class="block-header grayed">{{ _('Two-factor Authentication is disabled:') }}</div>
                                 <a href="{{ url('enable_2fa') }}" class="button inline-button">{{ _('Enable') }}</a>
-                            </span>
+                            </div>
                         {% endif %}
                     </div>
                     <span class="grayed">
