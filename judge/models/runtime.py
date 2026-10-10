@@ -128,6 +128,10 @@ class RuntimeVersion(models.Model):
     version = models.CharField(max_length=64, verbose_name=_('runtime version'), blank=True)
     priority = models.IntegerField(verbose_name=_('order in which to display this runtime'), default=0)
 
+    class Meta:
+        verbose_name = _('runtime version')
+        verbose_name_plural = _('runtime versions')
+
 
 class Judge(models.Model):
     name = models.CharField(max_length=50, verbose_name=_('judge name'), help_text=_('Server name, hostname-style.'),

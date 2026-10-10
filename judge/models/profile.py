@@ -69,16 +69,20 @@ class Organization(models.Model):
                                            blank=True,
                                            help_text=_('This image will replace the default site logo for users '
                                                        'viewing the organization.'))
-    performance_points = models.FloatField(default=0)
-    member_count = models.IntegerField(default=0)
-    current_consumed_credit = models.FloatField(default=0, help_text=_('Total used credit this month'))
-    paid_credit = models.FloatField(default=0, help_text=_('Remaining purchased credits'), db_column='available_credit')
+    performance_points = models.FloatField(verbose_name=_('performance points'), default=0)
+    member_count = models.IntegerField(verbose_name=_('member count'), default=0)
+    current_consumed_credit = models.FloatField(verbose_name=_('current consumed credit'), default=0,
+                                                help_text=_('Total used credit this month'))
+    paid_credit = models.FloatField(verbose_name=_('paid credit'), default=0,
+                                    help_text=_('Remaining purchased credits'), db_column='available_credit')
     free_credit = models.FloatField(
+        verbose_name=_('free credit'),
         default=0,
         help_text=_('Remaining free credits for the current month'),
         db_column='monthly_credit',
     )
     monthly_free_credit_limit = models.FloatField(
+        verbose_name=_('monthly free credit limit'),
         default=settings.VNOJ_MONTHLY_FREE_CREDIT,
         help_text=_('Amount of free credits allocated each month'),
     )
@@ -241,6 +245,10 @@ class Badge(models.Model):
     mini = models.URLField(verbose_name=_('mini badge URL'), blank=True)
     full_size = models.URLField(verbose_name=_('full size badge URL'), blank=True)
 
+    class Meta:
+        verbose_name = _('badge')
+        verbose_name_plural = _('badges')
+
     def __str__(self):
         return self.name
 
@@ -252,11 +260,11 @@ class Profile(models.Model):
                                 default=settings.DEFAULT_USER_TIME_ZONE)
     language = models.ForeignKey('Language', verbose_name=_('preferred language'), on_delete=models.SET_DEFAULT,
                                  default=Language.get_default_language_pk)
-    points = models.FloatField(default=0)
-    performance_points = models.FloatField(default=0)
-    contribution_points = models.IntegerField(default=0)
-    vnoj_points = models.IntegerField(default=0)
-    problem_count = models.IntegerField(default=0)
+    points = models.FloatField(verbose_name=_('points'), default=0)
+    performance_points = models.FloatField(verbose_name=_('performance points'), default=0)
+    contribution_points = models.IntegerField(verbose_name=_('contribution points'), default=0)
+    vnoj_points = models.IntegerField(verbose_name=_('VNOJ points'), default=0)
+    problem_count = models.IntegerField(verbose_name=_('problem count'), default=0)
     ace_theme = models.CharField(max_length=30, verbose_name=_('Ace theme'), choices=ACE_THEMES, default='auto')
     site_theme = models.CharField(max_length=10, verbose_name=_('site theme'), choices=SITE_THEMES, default='light')
     last_access = models.DateTimeField(verbose_name=_('last access time'), default=now)
@@ -273,12 +281,12 @@ class Profile(models.Model):
                                default=False)
     is_unlisted = models.BooleanField(verbose_name=_('unlisted user'), help_text=_('User will not be ranked.'),
                                       default=False)
-    ban_reason = models.TextField(null=True, blank=True,
+    ban_reason = models.TextField(verbose_name=_('ban reason'), null=True, blank=True,
                                   help_text=_('Show to banned user in login page.'))
     allow_tagging = models.BooleanField(verbose_name=_('Allow tagging'),
                                         help_text=_('User will be allowed to tag problems.'),
                                         default=True)
-    rating = models.IntegerField(null=True, default=None)
+    rating = models.IntegerField(verbose_name=_('rating'), null=True, default=None)
     user_script = models.TextField(verbose_name=_('user script'), default='', blank=True, max_length=65536,
                                    help_text=_('User-defined JavaScript for site customization.'))
     current_contest = models.OneToOneField('ContestParticipation', verbose_name=_('current contest'),
@@ -606,3 +614,6 @@ class OrganizationRequest(models.Model):
     class Meta:
         verbose_name = _('organization join request')
         verbose_name_plural = _('organization join requests')
+
+    def __str__(self):
+        return '%s - %s' % (self.user, self.organization)

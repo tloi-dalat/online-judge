@@ -151,9 +151,9 @@ class BlogPost(models.Model):
 
 
 class BlogVote(models.Model):
-    voter = models.ForeignKey(Profile, related_name='voted_blogs', on_delete=CASCADE)
-    blog = models.ForeignKey(BlogPost, related_name='votes', on_delete=CASCADE)
-    score = models.IntegerField()
+    voter = models.ForeignKey(Profile, verbose_name=_('voter'), related_name='voted_blogs', on_delete=CASCADE)
+    blog = models.ForeignKey(BlogPost, verbose_name=_('blog'), related_name='votes', on_delete=CASCADE)
+    score = models.IntegerField(verbose_name=_('score'))
 
     class Meta:
         unique_together = ['voter', 'blog']

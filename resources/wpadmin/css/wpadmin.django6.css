@@ -1,0 +1,449 @@
+/*
+ * Compatibility layer between the dmoj-wpadmin theme and Django 6 admin CSS/markup.
+ *
+ * dmoj-wpadmin was written against Django <= 4.2 admin CSS. Django 5/6 changed the admin markup and
+ * stylesheets (underlined links, <ol> breadcrumbs, label-above-field form rows, help text before the
+ * field, <details> collapsible fieldsets, <button> widget controls, ...). The rules below restore the
+ * wpadmin look on top of Django 6's stylesheets.
+ */
+
+/* Theme colours that Django 5 changed. */
+:root {
+    --breadcrumbs-bg: var(--primary);
+    --link-selected-fg: #5b80b2;
+    --button-bg: var(--primary);
+    --button-hover-bg: #609ab6;
+    --default-button-bg: var(--secondary);
+    --default-button-hover-bg: #205067;
+}
+
+/* LINKS: Django 6 underlines every link that isn't in Django's own header/sidebar. */
+a:not([role="button"], #header a, #nav-sidebar a, #content-main.app-list a, .object-tools a) {
+    text-decoration: none;
+}
+
+a:focus {
+    text-decoration: underline;
+}
+
+/* BREADCRUMBS: wpadmin renders <div class="breadcrumbs">, Django 6 only styles <ol class="breadcrumbs">. */
+div.breadcrumbs {
+    background: var(--breadcrumbs-bg);
+    padding: 10px 40px;
+    border: none;
+    color: var(--breadcrumbs-fg);
+    text-align: left;
+}
+
+div.breadcrumbs a {
+    color: var(--breadcrumbs-link-fg);
+}
+
+div.breadcrumbs a:focus,
+div.breadcrumbs a:hover {
+    color: var(--breadcrumbs-fg);
+}
+
+/* OBJECT TOOLS (History / View on site): float them next to the title again. */
+.object-tools {
+    font-size: 0.625rem;
+    font-weight: bold;
+    padding-left: 0;
+    float: right;
+    position: relative;
+    margin-top: -48px;
+}
+
+.object-tools li {
+    display: block;
+    float: left;
+    margin-left: 5px;
+    height: 1rem;
+}
+
+.object-tools li + li {
+    margin-left: 5px;
+}
+
+/*
+ * FORM ROWS
+ * Django 6 lays a row out as a column (label, then help text, then the field). wpadmin expects the
+ * Django 4.2 layout: a fixed-width label to the left of the field, and the help text underneath.
+ */
+#content .form-row > .flex-container,
+#content .form-row > fieldset {
+    margin-top: 8px;
+}
+
+.aligned .form-row > .flex-container,
+.aligned .form-multiline > .fieldBox {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0;
+}
+
+.aligned .flex-container > .errorlist {
+    order: -1;
+    flex-basis: 100%;
+}
+
+.aligned .flex-container > .help {
+    order: 1;
+    flex-basis: 100%;
+}
+
+/* Don't let a long help text widen its field box and push the next field of the line onto a new row. */
+.aligned .form-multiline > .fieldBox > .help {
+    contain: inline-size;
+}
+
+.aligned label {
+    display: block;
+    padding: 4px 10px 0 0;
+    min-width: 160px;
+    width: 160px;
+    word-wrap: break-word;
+    line-height: 1;
+}
+
+.aligned label:not(.vCheckboxLabel):after {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    height: 1.625rem;
+}
+
+.required label,
+label.required,
+.required legend,
+legend.required {
+    color: var(--body-fg);
+}
+
+#content .aligned .vCheckboxLabel,
+.aligned .vCheckboxLabel {
+    float: none;
+    width: auto;
+    min-width: 0;
+    display: inline-block;
+    vertical-align: -3px;
+    padding: 0 0 5px 5px;
+}
+
+.aligned .flex-container div.checkbox {
+    display: block;
+}
+
+fieldset .fieldBox {
+    margin-right: 20px;
+}
+
+/*
+ * Fields rendered as a group (date/time, filter_horizontal, checkbox lists) use <fieldset><legend>.
+ * A legend can't be a flex item, so float it into the label column; the flex container next to it
+ * starts a new formatting context and takes the remaining width.
+ */
+.aligned .form-row > fieldset {
+    display: block;
+    border: none;
+    padding: 0;
+    min-width: 0;
+}
+
+.aligned .form-row > fieldset > legend {
+    float: left;
+    display: block;
+    padding: 4px 10px 0 0;
+    min-width: 160px;
+    width: 160px;
+    line-height: 1;
+    word-wrap: break-word;
+    font-size: 0.8125rem;
+}
+
+.aligned .form-row > fieldset > legend:after {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    height: 1.625rem;
+}
+
+.aligned .form-row > fieldset > .flex-container {
+    /* A one-column grid rather than a flex column: same `order` support, but children are laid out at
+       the real width (a flex column measures `flex: 100%` wrappers at min-content width). */
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: stretch;
+    gap: 0;
+    width: auto;
+    min-width: 0;
+}
+
+/* Date/time inputs: labels inside p.datetime should stay inline. */
+.aligned p.datetime label {
+    display: inline;
+    padding: 0;
+    width: auto;
+    min-width: 0;
+    font-size: inherit;
+    color: inherit;
+}
+
+.aligned p.datetime label:after {
+    content: none;
+}
+
+.datetimeshortcuts button {
+    vertical-align: middle;
+}
+
+.datetimeshortcuts .clock-icon,
+.datetimeshortcuts .date-icon {
+    width: 16px;
+    height: 16px;
+    background-size: 16px auto;
+}
+
+.datetimeshortcuts button:focus .clock-icon,
+.datetimeshortcuts button:hover .clock-icon,
+.datetimeshortcuts button:focus .date-icon,
+.datetimeshortcuts button:hover .date-icon {
+    background-position: 0 -16px;
+    background-size: 16px auto;
+}
+
+/* COLLAPSIBLE FIELDSETS: Django 6 uses <details>/<summary> instead of the collapse.js toggle. */
+#content fieldset.collapse summary {
+    display: list-item;
+    cursor: pointer;
+    background: transparent;
+    color: inherit;
+    border: none;
+    border-bottom: 1px solid #eee;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+#content fieldset.collapse details:not([open]) summary {
+    border-bottom: none;
+}
+
+#content fieldset.collapse summary .fieldset-heading {
+    display: inline;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+}
+
+/*
+ * FILTER_HORIZONTAL / FILTER_VERTICAL (SelectFilter2)
+ * Django 6 renders titles as div > label + p.helptext and the controls as <button>s.
+ */
+#content .selector {
+    display: flex;
+    flex: none;
+    gap: 0 10px;
+    align-items: flex-start;
+    width: auto;
+    max-width: 580px;
+}
+
+#content .selector .selector-available,
+#content .selector .selector-chosen {
+    flex: 0 0 260px;
+    width: 260px;
+    text-align: center;
+}
+
+#content .selector .selector-available-title,
+#content .selector .selector-chosen-title {
+    background: none;
+    border: none;
+    padding: 0 0 6px;
+    text-align: left;
+}
+
+#content .selector .selector-available-title label,
+#content .selector .selector-chosen-title label {
+    display: inline;
+    width: auto;
+    min-width: 0;
+    padding: 0;
+    font-weight: bold;
+    color: var(--body-fg);
+    line-height: 1.4;
+}
+
+#content .selector .selector-available-title label:after,
+#content .selector .selector-chosen-title label:after {
+    content: none;
+}
+
+/* The help paragraphs stay available to screen readers (aria-describedby) but are hidden visually. */
+#content .selector .helptext {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+#content .selector .selector-filter {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    text-align: left;
+}
+
+#content .selector .selector-filter label {
+    width: auto;
+    min-width: 0;
+}
+
+#content .selector .selector-filter label:after {
+    content: none;
+}
+
+#content .selector .selector-filter input {
+    flex: 1;
+    width: auto;
+}
+
+#content .selector .selector-available select,
+#content .selector .selector-chosen select {
+    width: 100%;
+    box-sizing: border-box;
+    height: 17.2em;
+    overflow: auto;
+}
+
+#content .selector ul.selector-chooser {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-self: center;
+    width: 22px;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+}
+
+#content .selector ul.selector-chooser li {
+    margin: 0;
+    padding: 2px 0;
+    list-style: none;
+}
+
+#content .selector ul.selector-chooser .selector-add,
+#content .selector ul.selector-chooser .selector-remove {
+    display: block;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    border: none;
+    cursor: default;
+}
+
+#content .selector ul.selector-chooser .selector-add,
+#content .selector ul.selector-chooser .selector-remove,
+#content .selector .selector-chooseall,
+#content .selector .selector-clearall {
+    color: var(--link-fg);
+}
+
+#content .selector ul.selector-chooser .selector-add:enabled,
+#content .selector ul.selector-chooser .selector-remove:enabled {
+    opacity: 1;
+    cursor: pointer;
+}
+
+#content .selector .selector-chooseall,
+#content .selector .selector-clearall {
+    display: inline-block;
+    margin: 3px auto;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: none;
+    color: var(--link-fg);
+    font-size: 12px;
+    font-weight: bold;
+    opacity: .5;
+    cursor: default;
+}
+
+#content .selector .selector-chooseall:enabled,
+#content .selector .selector-clearall:enabled {
+    opacity: 1;
+    cursor: pointer;
+}
+
+#content .selector .selector-chooseall:after,
+#content .selector .selector-clearall:before {
+    display: inline-block;
+    font-family: FontAwesome;
+    font-size: 16px;
+    font-weight: 400;
+    position: relative;
+    top: 1px;
+    margin-left: .4em;
+    margin-right: .4em;
+}
+
+#content .selector .selector-chooseall:after {
+    content: "\f101";
+}
+
+#content .selector .selector-clearall:before {
+    content: "\f100";
+}
+
+#content .selector .list-footer-display {
+    text-align: left;
+}
+
+/* RELATED OBJECT LINKS (change / add / delete / view next to a select): back to the small, pale icons. */
+.related-widget-wrapper-link {
+    opacity: 0.3;
+    filter: none;
+}
+
+.related-widget-wrapper-link:link {
+    opacity: .8;
+}
+
+.related-widget-wrapper-link:link:focus,
+.related-widget-wrapper-link:link:hover {
+    opacity: 1;
+}
+
+.related-widget-wrapper-link img {
+    width: 13px;
+    height: 13px;
+}
+
+select + .related-widget-wrapper-link,
+.related-widget-wrapper-link + .related-widget-wrapper-link {
+    margin-left: 7px;
+}
+
+/* CheckboxSelectMultipleWithSelectAll (e.g. a problem's allowed languages) spans the whole row. */
+.related-widget-wrapper > .checkbox-select-all {
+    flex: 1 1 100%;
+}
+
+/* INLINES: the delete icon grew to 1.5rem in Django 5. */
+.inline-deletelink {
+    width: 16px;
+    height: 16px;
+    margin-bottom: 0;
+}

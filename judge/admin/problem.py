@@ -27,7 +27,7 @@ def _storage_choices():
 
 
 class ProblemForm(ModelForm):
-    change_message = forms.CharField(max_length=256, label='Edit reason', required=False)
+    change_message = forms.CharField(max_length=256, label=_('Edit reason'), required=False)
 
     def __init__(self, *args, **kwargs):
         super(ProblemForm, self).__init__(*args, **kwargs)
@@ -60,7 +60,8 @@ class ProblemForm(ModelForm):
 
 
 class ProblemCreatorListFilter(admin.SimpleListFilter):
-    title = parameter_name = 'creator'
+    title = _('creator')
+    parameter_name = 'creator'
 
     def lookups(self, request, model_admin):
         queryset = Profile.objects.exclude(authored_problems=None).values_list('user__username', flat=True)

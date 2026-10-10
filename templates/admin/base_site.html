@@ -1,15 +1,32 @@
 {% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+    {# Django >= 5 no longer pulls widgets.css in through forms.css, and wpadmin's templates don't link it. #}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/widgets.css" %}">
+    {{ block.super }}
+{% endblock %}
+
+{% block wpadmin_extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "wpadmin/css/wpadmin.django6.css" %}">
+{% endblock %}
 
 {% block pretitle %}{{ block.super }}
     <form style="display: none" id="empty-action-form" method="post">
         {% csrf_token %}
     </form>
     <script>
-        django.jQuery(function ($) {
-            $('.action-link').on('click', function () {
-                $('#empty-action-form').attr('action', this.href).trigger('submit');
-                return false;
-            });
+        {# Plain JS: this block is on every admin page, and many of them (dashboard, history, delete) don't load jQuery. #}
+        {# A delegated listener also lets per-page handlers (e.g. confirm dialogs) cancel the click by stopping propagation. #}
+        document.addEventListener('click', function (event) {
+            var link = event.target.closest('.action-link');
+            if (!link || event.defaultPrevented) {
+                return;
+            }
+            event.preventDefault();
+            var form = document.getElementById('empty-action-form');
+            form.action = link.href;
+            form.submit();
         });
     </script>
 {% endblock %}

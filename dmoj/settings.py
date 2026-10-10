@@ -431,7 +431,7 @@ else:
             'title': 'DMOJ Admin',
             'menu': {
                 'top': 'wpadmin.menu.menus.BasicTopMenu',
-                'left': 'wpadmin.menu.custom.CustomModelLeftMenuWithDashboard',
+                'left': 'judge.admin.menu.CustomModelLeftMenuWithDashboard',
             },
             'custom_menu': [
                 {
@@ -529,22 +529,22 @@ INSTALLED_APPS += (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
-    'registration',
+    'judge.third_party_apps.RegistrationAppConfig',
     'mptt',
     'reversion',
     'django_social_share',
-    'social_django',
+    'judge.third_party_apps.SocialAuthConfig',
     'compressor',
     'django_ace',
     'sortedm2m',
     'statici18n',
-    'impersonate',
+    'judge.third_party_apps.ImpersonateConfig',
     'django_jinja',
     'martor',
     'adminsortable2',
-    'chunked_upload',
+    'judge.third_party_apps.ChunkedUploadConfig',
     'django_cleanup.apps.CleanupConfig',
-    'oauth2_provider',
+    'judge.third_party_apps.OAuth2ProviderConfig',
 )
 
 MIDDLEWARE = (
@@ -659,6 +659,7 @@ TEMPLATES = [
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
+    os.path.join(BASE_DIR, 'locale_django'),
 ]
 
 LANGUAGES = [

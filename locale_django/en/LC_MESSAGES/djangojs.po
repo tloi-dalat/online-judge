@@ -1,0 +1,198 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Django overrides\n"
+"PO-Revision-Date: 2026-10-11 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: django/contrib/admin/static/admin/js/SelectFilter2.js
+#, javascript-format
+msgid ""
+"Choose %s by selecting them and then select the \"Choose\" arrow button."
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/SelectFilter2.js
+#, javascript-format
+msgid "Choose all %s"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/SelectFilter2.js
+#, javascript-format
+msgid "Choose selected %s"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/SelectFilter2.js
+#, javascript-format
+msgid "Remove selected %s"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/SelectFilter2.js
+#, javascript-format
+msgid ""
+"Remove %s by selecting them and then select the \"Remove\" arrow button."
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/SelectFilter2.js
+#, javascript-format
+msgid "Type into this box to filter down the list of selected %s."
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/SelectFilter2.js
+msgid "(click to clear)"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/SelectFilter2.js
+#, javascript-format
+msgid "Remove all %s"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/SelectFilter2.js
+#, javascript-format
+msgid "%s selected option not visible"
+msgid_plural "%s selected options not visible"
+msgstr[0] ""
+msgstr[1] ""
+
+#: django/contrib/admin/static/admin/js/actions.js
+msgid "%(sel)s of %(cnt)s selected"
+msgid_plural "%(sel)s of %(cnt)s selected"
+msgstr[0] ""
+msgstr[1] ""
+
+#: django/contrib/admin/static/admin/js/actions.js
+msgid ""
+"You have selected an action, and you haven’t made any changes on individual "
+"fields. You’re probably looking for the Run button rather than the Save "
+"button."
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/admin/DateTimeShortcuts.js
+msgid "server"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/admin/DateTimeShortcuts.js
+msgid ""
+"Note: Enter times in the %(timezone)s timezone. (You are %(offset)s hour "
+"ahead.)"
+msgid_plural ""
+"Note: Enter times in the %(timezone)s timezone. (You are %(offset)s hours "
+"ahead.)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: django/contrib/admin/static/admin/js/admin/DateTimeShortcuts.js
+msgid ""
+"Note: Enter times in the %(timezone)s timezone. (You are %(offset)s hour "
+"behind.)"
+msgid_plural ""
+"Note: Enter times in the %(timezone)s timezone. (You are %(offset)s hours "
+"behind.)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: django/contrib/admin/static/admin/js/admin/DateTimeShortcuts.js
+msgid "Today (%(date)s)"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/admin/DateTimeShortcuts.js
+msgid "Yesterday (%(date)s)"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/admin/DateTimeShortcuts.js
+msgid "Tomorrow (%(date)s)"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/admin/DateTimeShortcuts.js
+msgid "Previous (%(month)s %(year)s)"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/admin/DateTimeShortcuts.js
+msgid "Next (%(month)s %(year)s)"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgid "Sunday"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgid "Monday"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgid "Tuesday"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgid "Wednesday"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgid "Thursday"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgid "Friday"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgid "Saturday"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgctxt "abbrev. day Sunday"
+msgid "Sun"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgctxt "abbrev. day Monday"
+msgid "Mon"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgctxt "abbrev. day Tuesday"
+msgid "Tue"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgctxt "abbrev. day Wednesday"
+msgid "Wed"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgctxt "abbrev. day Thursday"
+msgid "Thur"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgctxt "abbrev. day Friday"
+msgid "Fri"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgctxt "abbrev. day Saturday"
+msgid "Sat"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+msgid "%(month)s %(day)s, %(year)s"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+#, javascript-format
+msgid "%s (today, current selection)"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+#, javascript-format
+msgid "%s (today)"
+msgstr ""
+
+#: django/contrib/admin/static/admin/js/calendar.js
+#, javascript-format
+msgid "%s (current selection)"
+msgstr ""
