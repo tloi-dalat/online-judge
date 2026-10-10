@@ -155,6 +155,24 @@ $(function () {
         $nav_list.removeClass('show-list');
     });
 
+    var $nav = $('#navigation');
+    var $userLinks = $('#user-links');
+    function updateNavOverflow() {
+        if (window.innerWidth <= 760) {
+            $nav.removeClass('nav-overflow');
+            return;
+        }
+        // Strip the class first so items are visible and measurable
+        $nav.removeClass('nav-overflow');
+        var lastItem = $nav_list[0].querySelector(':scope > li:last-child');
+        if (!lastItem) return;
+        var overflows = lastItem.getBoundingClientRect().right >= $userLinks[0].getBoundingClientRect().left - 8;
+        $nav.toggleClass('nav-overflow', overflows);
+        if (!overflows) $nav_list.removeClass('show-list');
+    }
+    updateNavOverflow();
+    $(window).on('resize', updateNavOverflow);
+
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
             if (!(/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) && !this.crossDomain)
@@ -323,45 +341,4 @@ $(function () {
         $(this).addClass("is-visible");
         e.stopPropagation();
     } );
-});
-
-$(function() {
-    var $themeToggle = $('#theme-toggle');
-    var $themeIcon = $('#theme-icon');
-    var $darkStyle = $('#dark-theme-style');
-
-    if ($themeToggle.length) {
-        function updateThemeDisplay(theme) {
-            if (theme === 'dark') {
-                $darkStyle.attr('media', 'all');
-                $themeIcon.removeClass('fa-moon-o').addClass('fa-sun-o');
-            } else {
-                $darkStyle.attr('media', 'not all');
-                $themeIcon.removeClass('fa-sun-o').addClass('fa-moon-o');
-            }
-            $('body').attr('data-theme', theme);
-            window.dispatchEvent(new CustomEvent('theme-change', { detail: { theme: theme } }));
-        }
-
-        var currentTheme = localStorage.getItem('theme') || document.body.getAttribute('data-theme');
-        if (currentTheme === 'auto') {
-            currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        }
-        updateThemeDisplay(currentTheme);
-
-        $themeToggle.click(function() {
-            var theme = localStorage.getItem('theme') || document.body.getAttribute('data-theme');
-            if (theme === 'auto') {
-                theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
-            
-            var newTheme = (theme === 'dark') ? 'light' : 'dark';
-            localStorage.setItem('theme', newTheme);
-            updateThemeDisplay(newTheme);
-
-            if (window.user && window.user.id) {
-                $.post('/edit/profile/theme/', { theme: newTheme });
-            }
-        });
-    }
 });

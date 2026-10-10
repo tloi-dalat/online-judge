@@ -1,4 +1,17 @@
-{% if not no_judges %}
+{% if problem.is_archived %}
+    <div class="alert alert-warning">
+        <b>{{ _('Archived problem') }}</b> </br>
+        {{ _('This problem has been archived because it has had no submissions in the past 6 months.') }}
+        {% if problem.organization and (problem.organization.is_admin(request.profile) or request.user.has_perm('judge.edit_all_organization')) %}
+            {{ _('You can restore it') }}
+            <a href="{{ url('organization_archived_problems', problem.organization.slug) }}?problem={{ problem.code }}">{{ _('here') }}</a>.
+        {% else %}
+            {{ _('Please contact your organization admin to restore it.') }}
+        {% endif %}
+    </div>
+{% endif %}
+
+{% if not no_judges and has_test_data %}
     {% if default_lang not in form.fields.language.queryset %}
         <div class="alert alert-warning alert-dismissable">
             <a class="close">x</a>
@@ -81,7 +94,7 @@
             <label for="file_upload" id="file_drag"></label>
         </div>
         <hr>
-        {% if not no_judges %}
+        {% if not no_judges and has_test_data %}
             <div id="language">
                 {{ form.language.errors }}
                 <div id="language-select">
@@ -109,7 +122,9 @@
 
     <hr>
 
-    {% if no_judges %}
+    {% if not has_test_data %}
+        <span style="color: red">{{ _('This problem does not have test data.') }}</span>
+    {% elif no_judges %}
         <span style="color: red">{{ _('No judge is available for this problem.') }}</span>
     {% else %}
         <div class="submit-bar">
