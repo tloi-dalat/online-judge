@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from judge.models import ProblemData
+from judge.models import ProblemData, problem_data_storage
 
 
 class Command(BaseCommand):
@@ -19,33 +19,46 @@ class Command(BaseCommand):
         if dry_run:
             self.stdout.write(self.style.WARNING('DRY RUN MODE - No changes will be saved'))
 
-        problem_data_list = ProblemData.objects.select_related('problem').all()
-        total_count = problem_data_list.count()
+        problem_data_list = ProblemData.objects.all().iterator(chunk_size=5000)
+        total_count = ProblemData.objects.count()
         updated_count = 0
+        batch_size = 1000
+        batch = []
 
         self.stdout.write(f'Processing {total_count} problems...\n')
 
         for problem_data in problem_data_list:
-            problem_code = problem_data.problem.code
             old_zipfile_size = problem_data.zipfile_size
+            total_size = 0
 
-            # Calculate new sizes
-            problem_data.update_zipfile_size()
+            for field in ['zipfile', 'generator', 'custom_checker', 'custom_grader', 'custom_header']:
+                val = getattr(problem_data, field)
+                if val and val.name:
+                    try:
+                        total_size += problem_data_storage.size(val.name)
+                    except (OSError, FileNotFoundError):
+                        pass
 
-            new_zipfile_size = problem_data.zipfile_size
+            new_zipfile_size = total_size
 
             # Check if anything changed
             if old_zipfile_size != new_zipfile_size:
+                problem_data.zipfile_size = new_zipfile_size
+                batch.append(problem_data)
                 updated_count += 1
 
                 self.stdout.write(
-                    f'Problem: {problem_code}\n'
-                    f'  Test data: {self._format_size(old_zipfile_size)} -> {self._format_size(new_zipfile_size)}\n',
+                    f'Problem: {problem_data.problem_id}\n'
+                    f'  Total Storage: {self._format_size(old_zipfile_size)} '
+                    f'-> {self._format_size(new_zipfile_size)}\n',
                 )
 
-                if not dry_run:
-                    # Use update_fields to avoid triggering save hooks again
-                    problem_data.save(update_fields=['zipfile_size'])
+                if len(batch) >= batch_size and not dry_run:
+                    ProblemData.objects.bulk_update(batch, ['zipfile_size'])
+                    batch = []
+
+        if batch and not dry_run:
+            ProblemData.objects.bulk_update(batch, ['zipfile_size'])
 
         if dry_run:
             self.stdout.write(self.style.WARNING(f'\nDRY RUN: Would update {updated_count}/{total_count} problems'))

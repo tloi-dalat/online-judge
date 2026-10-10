@@ -1,11 +1,9 @@
-import errno
 import os
 
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from judge.utils import cache_helper
 from judge.utils.problem_data import ProblemDataStorage
 
 __all__ = ['problem_data_storage', 'problem_directory_file', 'ProblemData', 'ProblemTestCase', 'CHECKERS']
@@ -94,36 +92,35 @@ class ProblemData(models.Model):
                                    help_text=_('grader arguments as a JSON object'))
     zipfile_size = models.BigIntegerField(verbose_name=_('test data storage size'), default=0,
                                           help_text=_('Size of the test data zip file in bytes.'))
+    # the logic to set this field is outside of this codebase,
+    # it will be set by our archive service when the problem is archived
+    archived_size = models.BigIntegerField(verbose_name=_('archived test data storage size'), default=0,
+                                           help_text=_('Size of the test data zip file in bytes when archived.'))
 
     def has_yml(self):
         return problem_data_storage.exists('%s/init.yml' % self.problem.code)
 
     def update_zipfile_size(self):
-        """Update the zipfile_size field based on the actual file size."""
-        if self.zipfile:
-            try:
-                self.zipfile_size = self.zipfile.size
-            except (OSError, IOError):
-                # If file doesn't exist or can't be accessed, set size to 0
-                self.zipfile_size = 0
-        else:
-            self.zipfile_size = 0
+        """Update the zipfile_size field based on the actual size of all attached files."""
+        if self.archived_size > 0:
+            self.zipfile_size = self.archived_size
+            return
+        total_size = 0
+        for field in [self.zipfile, self.generator, self.custom_checker, self.custom_grader, self.custom_header]:
+            if field:
+                try:
+                    total_size += field.size
+                except Exception:
+                    pass
+        self.zipfile_size = total_size
 
     def save(self, *args, **kwargs):
         # Update zipfile size before saving
         self.update_zipfile_size()
         super(ProblemData, self).save(*args, **kwargs)
 
-        # Invalidate organization storage cache when size changes
-        if self.problem.organization:
-            cache_helper.organization_storage_cache_factory(self.problem.organization.id).delete_cache()
-
     def _update_code(self, original, new):
-        try:
-            problem_data_storage.rename(original, new)
-        except OSError as e:
-            if e.errno != errno.ENOENT:
-                raise
+        problem_data_storage.rename(original, new)
         if self.zipfile:
             self.zipfile.name = _problem_directory_file(new, self.zipfile.name)
         if self.generator:

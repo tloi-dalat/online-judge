@@ -1,0 +1,15 @@
+name: 'checks'
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, edited, synchronize, reopened]
+
+concurrency:
+  group: pr-title-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  title:
+    name: check
+    permissions: {}
+    uses: tloi-dalat/reusable-workflow/.github/workflows/pr-title-check.yaml@main

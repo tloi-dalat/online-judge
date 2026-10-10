@@ -1,8 +1,9 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-01 23:12+0000\n"
+"POT-Creation-Date: 2026-10-10 13:42+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -10,45 +11,113 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: dmoj\n"
-"X-Crowdin-Project-ID: 142963\n"
-"X-Crowdin-Language: vi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-File: djangojs.po\n"
 "X-Crowdin-File-ID: 12\n"
+"X-Crowdin-Language: vi\n"
+"X-Crowdin-Project: dmoj\n"
+"X-Crowdin-Project-ID: 142963\n"
 
-#: resources/common.js:207
+#: resources/blog-toc.js:82
+msgid "Table of Contents"
+msgstr "Mục lục"
+
+#: resources/common.js:212
 msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
 msgstr[0] "%d ngày %h:%m:%s"
+msgstr[1] "%d ngày %h:%m:%s"
 
-#: resources/common.js:210
+#: resources/common.js:215
 msgctxt "time format without day"
 msgid "%h:%m:%s"
 msgstr "%h:%m:%s"
 
-#: resources/user_profile.js
+#: resources/contest-ranking.js:251
+msgid "%(count)s try"
+msgid_plural "%(count)s tries"
+msgstr[0] "%(count)s lần thử"
+msgstr[1] "%(count)s lần thử"
+
+#: resources/contest-ranking.js:397
+msgid "Rank"
+msgstr "Hạng"
+
+#: resources/contest-ranking.js:398
+msgid "Username"
+msgstr "Tên truy cập"
+
+#: resources/contest-ranking.js:399
+msgid "Points"
+msgstr "Điểm"
+
+#: resources/contest-ranking.js:400
+msgid "Penalty"
+msgstr "Penalty"
+
+#: resources/contest-ranking.js:413
+msgid "Rating"
+msgstr "Rating"
+
+#: resources/contest-ranking.js:422
+msgid "Un-Disqualify"
+msgstr "Hủy truất quyền"
+
+#: resources/contest-ranking.js:422
+msgid "Disqualify"
+msgstr "Truất quyền thi đấu"
+
+#: resources/contest-ranking.js:434
+msgid "Admin"
+msgstr "Quản trị"
+
+#: resources/contest-ranking.js:493 resources/contest-replay.js:409
+msgid "Live"
+msgstr "Trực tiếp"
+
+#: resources/contest-ranking.js:516
+msgid "%(count)s virtual participation of this user"
+msgid_plural "%(count)s virtual participations of this user"
+msgstr[0] "Lần tham gia ảo thứ %(count)s của người dùng này"
+msgstr[1] "Lần tham gia ảo thứ %(count)s của người dùng này"
+
+#: resources/contest-ranking.js:587
+msgid "Total AC"
+msgstr "Tổng AC"
+
+#: resources/contest-replay.js:409
+msgid "End"
+msgstr "Kết thúc"
+
+#: resources/contest-replay.js:411
+msgid "Freeze min"
+msgstr "Phút đóng băng"
+
+#: resources/user_profile.js:49
 msgid "past year"
 msgstr "năm qua"
 
-#: resources/user_profile.js
+#: resources/user_profile.js:68
 msgid "%(cnt)d total submission"
 msgid_plural "%(cnt)d total submissions"
 msgstr[0] "Tổng cộng %(cnt)d bài nộp"
+msgstr[1] "Tổng cộng %(cnt)d bài nộp"
 
-#: resources/user_profile.js
+#: resources/user_profile.js:73
 msgid "%(cnt)d submission in the last year"
 msgid_plural "%(cnt)d submissions in the last year"
 msgstr[0] "%(cnt)d bài nộp trong năm qua"
+msgstr[1] "%(cnt)d bài nộp trong năm qua"
 
-#: resources/user_profile.js
+#: resources/user_profile.js:78
 msgid "%(cnt)d submission in %(year)d"
 msgid_plural "%(cnt)d submissions in %(year)d"
 msgstr[0] "%(cnt)d bài nộp trong năm %(year)d"
+msgstr[1] "%(cnt)d bài nộp trong năm %(year)d"
 
-#: resources/user_profile.js
+#: resources/user_profile.js:92
 msgid "%(cnt)d submission on %(date)s"
 msgid_plural "%(cnt)d submissions on %(date)s"
 msgstr[0] "%(cnt)d bài nộp vào %(date)s"
-
+msgstr[1] "%(cnt)d bài nộp vào %(date)s"
