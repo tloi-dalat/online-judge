@@ -40,7 +40,7 @@
                     <tr id="request-{{ form.instance.id }}">
                         <td>{{ form.id }}{{ link_user(form.instance.user) }}</td>
                         <td><a href="{{ url('request_organization_detail', object.slug, form.instance.id) }}">
-                            {{ form.instance.time|date(_("N j, Y, H:i")) }}
+                            {% set date_format = _("N j, Y, H:i") %}{{ form.instance.time|date(date_format) }}
                         </a></td>
                         <td>{{ form.state }}</td>
                         <td class="reason">{{ form.instance.reason }}</td>
