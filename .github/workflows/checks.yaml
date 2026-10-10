@@ -40,8 +40,8 @@ jobs:
         python manage.py compilejsi18n
       template-globs: 'templates/**/*.html templates/**/*.txt'
       makemessages: |
-        -e py,html,txt -i node_modules -i static -i sass_processed -i resources/libs -i resources/vnoj
-        -d djangojs -i node_modules -i static -i sass_processed -i resources/libs -i resources/vnoj
+        -e py,html,txt -i node_modules -i static -i sass_processed -i resources/libs -i resources/vnoj -i resources/mathjax
+        -d djangojs -i node_modules -i static -i sass_processed -i resources/libs -i resources/vnoj -i resources/mathjax
 
   templates:
     name: check
