@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.utils.encoding import force_bytes
 
 from judge.models import Profile
-from judge.models.tests.util import CommonDataMixin, create_contest, create_contest_participation
+from judge.models.tests.util import CommonDataMixin, create_contest, create_contest_participation, create_user
 
 
 class OrganizationTestCase(CommonDataMixin, TestCase):
@@ -126,3 +126,22 @@ class ProfileTestCase(CommonDataMixin, TestCase):
             Profile.get_user_css_class(display_rank='random', rating=1299, rating_colors=False),
             'random',
         )
+
+
+class ResolvedAceThemeTestCase(TestCase):
+    def resolve(self, ace_theme, site_theme):
+        profile = create_user(username='ace_%s_%s' % (ace_theme, site_theme)).profile
+        profile.ace_theme = ace_theme
+        profile.site_theme = site_theme
+        return profile.resolved_ace_theme
+
+    def test_explicit_theme_is_used(self):
+        self.assertEqual(self.resolve('monokai', 'dark'), 'monokai')
+        self.assertEqual(self.resolve('monokai', 'auto'), 'monokai')
+
+    def test_follow_site_theme_without_experimental_features(self):
+        self.assertEqual(self.resolve('auto', 'dark'), settings.DMOJ_THEME_DEFAULT_ACE_THEME['dark'])
+        self.assertEqual(self.resolve('auto', 'light'), settings.DMOJ_THEME_DEFAULT_ACE_THEME['light'])
+
+    def test_follow_system_theme_is_resolved_client_side(self):
+        self.assertIsNone(self.resolve('auto', 'auto'))

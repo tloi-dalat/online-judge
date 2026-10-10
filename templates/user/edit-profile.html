@@ -65,6 +65,10 @@
             width: 340px;
         }
 
+        .editor-theme-preview-row td {
+            padding-top: 0.4em;
+        }
+
         .api-token {
             padding-top: 5px;
             font-family: Consolas, Liberation Mono, Monaco, Courier New, monospace;
@@ -95,17 +99,75 @@
             padding-top: 5px;
             font-size: 12px;
         }
+
+        #ace-theme-preview {
+            width: 100%;
+            height: 200px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
     </style>
 {% endblock %}
 
 {% block js_media %}
     {% include "timezone/media-js.html" %}
+    <script type="text/javascript" src="{{ ACE_URL }}/ace.js"></script>
     {{ form.media.js }}
     <script type="text/javascript">
         $(function () {
             $('#ace_user_script').on('ace_load', function (e, editor) {
                 editor.getSession().setMode("ace/mode/javascript");
             });
+
+            ace.config.set('basePath', '{{ ACE_URL }}');
+            ace.config.set('modePath', '{{ ACE_URL }}');
+            ace.config.set('themePath', '{{ ACE_URL }}');
+
+            var aceThemePreview = ace.edit('ace-theme-preview');
+            var aceThemeSelect = $('#id_ace_theme');
+            var languageSelect = $('#id_language');
+            var aceDefaultThemes = {
+                light: $('#ace-theme-preview').data('light-theme'),
+                dark: $('#ace-theme-preview').data('dark-theme'),
+            };
+            var previewLanguages = {{ preview_languages|tojson }};
+            var darkSchemeQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+            function resolvedAcePreviewTheme() {
+                var theme = aceThemeSelect.val();
+                if (theme && theme !== 'auto')
+                    return theme;
+                var siteTheme = document.body.getAttribute('data-theme');
+                if (siteTheme !== 'light' && siteTheme !== 'dark')
+                    siteTheme = darkSchemeQuery && darkSchemeQuery.matches ? 'dark' : 'light';
+                return aceDefaultThemes[siteTheme];
+            }
+
+            function updateAceThemePreview() {
+                aceThemePreview.setTheme('ace/theme/' + resolvedAcePreviewTheme());
+            }
+
+            function loadAcePreviewSample() {
+                var language = previewLanguages[languageSelect.val()] || {};
+                aceThemePreview.getSession().setMode('ace/mode/' + (language.ace || 'text'));
+                aceThemePreview.setValue(language.template || '', -1);
+            }
+
+            aceThemePreview.getSession().setUseWrapMode(true);
+            aceThemePreview.setShowPrintMargin(false);
+            aceThemePreview.renderer.setScrollMargin(8, 8);
+            loadAcePreviewSample();
+            updateAceThemePreview();
+
+            aceThemeSelect.change(updateAceThemePreview);
+            languageSelect.change(loadAcePreviewSample);
+            if (darkSchemeQuery) {
+                if (darkSchemeQuery.addEventListener)
+                    darkSchemeQuery.addEventListener('change', updateAceThemePreview);
+                else
+                    darkSchemeQuery.addListener(updateAceThemePreview);
+            }
 
             $('#disable-2fa-button').click(function () {
                 alert({{ _('The administrators for this site require all the staff to have Two-factor Authentication enabled, so it may not be disabled at this time.')|htmltojs }});
@@ -327,12 +389,14 @@
                             <td><span class="fullwidth">{{ form.language }}</span></td>
                         </tr>
                         <tr>
-                            <td><label class="inline-header grayed">{{ _('Site theme:') }}</label></td>
-                            <td><span class="fullwidth">{{ form.site_theme }}</span></td>
-                        </tr>
-                        <tr>
                             <td><label class="inline-header grayed">{{ _('Editor theme:') }}</label></td>
                             <td><span class="fullwidth">{{ form.ace_theme }}</span></td>
+                        </tr>
+                        <tr class="editor-theme-preview-row">
+                            <td colspan="2">
+                                <div id="ace-theme-preview" data-light-theme="{{ ace_default_themes.light }}"
+                                     data-dark-theme="{{ ace_default_themes.dark }}"></div>
+                            </td>
                         </tr>
                         {% if has_math_config %}
                             <tr>
