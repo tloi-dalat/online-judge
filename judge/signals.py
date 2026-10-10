@@ -14,10 +14,11 @@ from registration.signals import user_registered
 
 from judge.caching import finished_submission
 from judge.models import BlogPost, Comment, Contest, ContestAnnouncement, ContestProblem, ContestSubmission, \
-    EFFECTIVE_MATH_ENGINES, Judge, Language, License, MiscConfig, Organization, Problem, Profile, Submission, \
-    WebAuthnCredential
+    EFFECTIVE_MATH_ENGINES, Judge, Language, License, MiscConfig, Organization, Problem, ProblemTranslation, Profile, \
+    Submission, WebAuthnCredential
 from judge.models.problem_data import problem_data_storage
 from judge.tasks import on_new_comment
+from judge.utils.pdfoid import get_contest_pdf_basename
 from judge.views.register import RegistrationView
 
 
@@ -34,6 +35,22 @@ def unlink_if_exists(file):
     except OSError as e:
         if e.errno != errno.ENOENT:
             raise
+
+
+def delete_contest_pdfs(contest_ids):
+    if not settings.DMOJ_PDF_PROBLEM_CACHE:
+        return
+
+    for contest_id in contest_ids:
+        for lang, _ in settings.LANGUAGES:
+            unlink_if_exists(get_pdf_path(get_contest_pdf_basename(contest_id, lang)))
+
+
+def delete_contest_pdfs_for_problem(problem_id):
+    if not settings.DMOJ_PDF_PROBLEM_CACHE:
+        return
+
+    delete_contest_pdfs(ContestProblem.objects.filter(problem_id=problem_id).values_list('contest_id', flat=True))
 
 
 @receiver(post_save, sender=Problem)
@@ -56,6 +73,14 @@ def problem_update(sender, instance, **kwargs):
         cached_pdf_filename = get_pdf_path('%s.%s.pdf' % (instance.code, lang))
         if cached_pdf_filename is not None:
             unlink_if_exists(cached_pdf_filename)
+
+    delete_contest_pdfs_for_problem(instance.id)
+
+
+@receiver(post_save, sender=ProblemTranslation)
+@receiver(post_delete, sender=ProblemTranslation)
+def problem_translation_update(sender, instance, **kwargs):
+    delete_contest_pdfs_for_problem(instance.problem_id)
 
 
 @receiver(post_delete, sender=Problem)
@@ -88,10 +113,17 @@ def contest_update(sender, instance, **kwargs):
     cache.delete_many(['generated-meta-contest:%d' % instance.id] +
                       [make_template_fragment_key('contest_html', (instance.id, engine))
                        for engine in EFFECTIVE_MATH_ENGINES])
+    delete_contest_pdfs([instance.id])
+
+
+@receiver(post_save, sender=ContestProblem)
+def contest_problem_update(sender, instance, **kwargs):
+    delete_contest_pdfs([instance.contest_id])
 
 
 @receiver(post_delete, sender=ContestProblem)
 def contest_problem_delete(sender, instance, **kwargs):
+    delete_contest_pdfs([instance.contest_id])
     # `contest_object` is the `Contest` object indirectly associated with the `Submission` object
     # `contest` is the `ContestSubmission` object associated with the `Submission` object
     Submission.objects.filter(contest_object=instance.contest, contest__isnull=True).update(contest_object=None)

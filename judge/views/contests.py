@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 from calendar import Calendar, SUNDAY
 from collections import defaultdict, namedtuple
@@ -24,7 +25,7 @@ from django.shortcuts import redirect, render
 from django.template.defaultfilters import date as date_filter, floatformat
 from django.template.loader import get_template
 from django.urls import reverse
-from django.utils import timezone
+from django.utils import timezone, translation
 from django.utils.functional import cached_property
 from django.utils.html import _json_script_escapes, escape, format_html
 from django.utils.safestring import mark_safe
@@ -50,6 +51,7 @@ from judge.utils.celery import redirect_to_task_status, task_status_by_id, task_
 from judge.utils.cms import parse_csv_ranking
 from judge.utils.infinite_paginator import InfinitePaginationMixin
 from judge.utils.opengraph import generate_opengraph
+from judge.utils.pdfoid import PDF_RENDERING_ENABLED, get_contest_pdf_basename, render_pdf
 from judge.utils.problems import _get_result_data, user_attempted_ids, user_completed_ids
 from judge.utils.raw_sql import use_straight_join
 from judge.utils.stats import get_bar_chart, get_pie_chart, get_stacked_bar_chart
@@ -436,10 +438,21 @@ class ContestAllProblems(ContestMixin, TitleMixin, DetailView):
         context['attempted_problem_ids'] = user_attempted_ids(self.request.profile) if authenticated else []
         context['result_hidden'] = self.object.should_hide_result(self.request.user, self.request.participation)
 
-        from judge.utils.pdfoid import PDF_RENDERING_ENABLED
         context['has_pdf_render'] = PDF_RENDERING_ENABLED
 
         return context
+
+
+def get_contest_problems_for_print(contest, language):
+    problems = Problem.objects.filter(contests__contest=contest) \
+        .order_by('contests__order') \
+        .add_i18n_name(language) \
+        .add_i18n_description(language)
+    return [{
+        'problem': problem,
+        'problem_name': problem.i18n_name,
+        'description': problem.i18n_description,
+    } for problem in problems]
 
 
 class ContestAllProblemsRaw(ContestMixin, TitleMixin, DetailView):
@@ -454,30 +467,12 @@ class ContestAllProblemsRaw(ContestMixin, TitleMixin, DetailView):
         if not self.can_view_all_problems:
             raise Http404()
 
-        context_problems = Problem.objects.filter(contests__contest=self.object) \
-            .order_by('contests__order') \
-            .add_i18n_name(self.request.LANGUAGE_CODE) \
-            .add_i18n_description(self.request.LANGUAGE_CODE)
-
-        problems_data = []
-        for problem in context_problems:
-            try:
-                trans = problem.translations.get(language=self.request.LANGUAGE_CODE)
-            except ObjectDoesNotExist:
-                trans = None
-            problems_data.append({
-                'problem': problem,
-                'problem_name': trans.name if trans else problem.name,
-                'description': trans.description if trans else problem.description,
-            })
-
-        context['problems_data'] = problems_data
+        context['problems_data'] = get_contest_problems_for_print(self.object, self.request.LANGUAGE_CODE)
         context['url'] = self.request.build_absolute_uri()
         return context
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        from django.utils import translation
         with translation.override(settings.LANGUAGE_CODE):
             return self.render_to_response(self.get_context_data(
                 object=self.object,
@@ -485,10 +480,10 @@ class ContestAllProblemsRaw(ContestMixin, TitleMixin, DetailView):
 
 
 class ContestAllProblemsPdf(ContestMixin, SingleObjectMixin, View):
+    logger = logging.getLogger('judge.problem.pdf')
     languages = set(map(itemgetter(0), settings.LANGUAGES))
 
     def get(self, request, *args, **kwargs):
-        from judge.utils.pdfoid import PDF_RENDERING_ENABLED
         if not PDF_RENDERING_ENABLED:
             raise Http404()
 
@@ -496,51 +491,30 @@ class ContestAllProblemsPdf(ContestMixin, SingleObjectMixin, View):
         if language not in self.languages:
             raise Http404()
 
-        contest = self.get_object()
-        pdf_basename = '%s.%s.pdf' % (contest.key, language)
+        self.object = contest = self.get_object()
+        if not self.can_view_all_problems:
+            raise Http404()
+
+        pdf_basename = get_contest_pdf_basename(contest.id, language)
 
         def render_contest_pdf():
-            import logging
-            from django.utils import translation
-            from judge.utils.pdfoid import render_pdf
-            logger = logging.getLogger('judge.problem.pdf')
-            logger.info('Rendering contest PDF in %s: %s', language, contest.key)
+            self.logger.info('Rendering contest PDF in %s: %s', language, contest.key)
 
             with translation.override(language):
-                contest_problems = Problem.objects.filter(contests__contest=contest) \
-                    .order_by('contests__order') \
-                    .add_i18n_name(language) \
-                    .add_i18n_description(language)
-
-                problems_data = []
-                for problem in contest_problems:
-                    try:
-                        trans = problem.translations.get(language=language)
-                    except ObjectDoesNotExist:
-                        trans = None
-                    problems_data.append({
-                        'problem': problem,
-                        'problem_name': trans.name if trans else problem.name,
-                        'description': trans.description if trans else problem.description,
-                    })
-
-                html = get_template('contest/all-problems-raw.html').render({
-                    'contest': contest,
-                    'problems_data': problems_data,
-                    'url': request.build_absolute_uri(),
-                }).replace('"//', '"https://').replace("'//", "'https://")
-
                 return render_pdf(
-                    html=html,
+                    html=get_template('contest/all-problems-raw.html').render({
+                        'contest': contest,
+                        'problems_data': get_contest_problems_for_print(contest, language),
+                        'url': request.build_absolute_uri(),
+                    }).replace('"//', '"https://').replace("'//", "'https://"),
                     title=contest.name,
                 )
 
         response = HttpResponse()
         response['Content-Type'] = 'application/pdf'
-        response['Content-Disposition'] = f'inline; filename={pdf_basename}'
+        response['Content-Disposition'] = f'inline; filename={contest.key}.{language}.pdf'
 
         if settings.DMOJ_PDF_PROBLEM_CACHE:
-            import os
             pdf_filename = os.path.join(settings.DMOJ_PDF_PROBLEM_CACHE, pdf_basename)
             if not os.path.exists(pdf_filename):
                 with open(pdf_filename, 'wb') as f:

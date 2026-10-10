@@ -100,22 +100,4 @@
             });
         </script>
     {% endif %}
-    <script type="text/javascript">
-        $(function() {
-            $(window).keydown(function(e) {
-                if ((e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P' || e.keyCode === 80)) {
-                    e.preventDefault();
-                    var pdfBtn = $('#pdf_button');
-                    if (pdfBtn.length) {
-                        pdfBtn.click();
-                    } else {
-                        var pdfLinkAll = $('#pdf_link_all');
-                        if (pdfLinkAll.length) {
-                            window.location.href = pdfLinkAll.attr('href');
-                        }
-                    }
-                }
-            });
-        });
-    </script>
 {% endblock %}
