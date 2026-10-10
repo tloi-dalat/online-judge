@@ -248,7 +248,7 @@
             var isFirst = firstSolves[pid] === participationId;
             var url = makeSubmissionUrl(meta, problem.code);
 
-            var triesText = tries + ' ' + (tries === 1 ? 'try' : 'tries');
+            var triesText = interpolate(ngettext('%(count)s try', '%(count)s tries', tries), {count: tries}, true);
             var extraPrefix = entry.is_frozen ? 'pending ' : '';
             var state = problemStateClass(entry, problem, isFirst, meta, extraPrefix);
 
@@ -394,10 +394,10 @@
     function buildHeader(contest, problems, renderer) {
         var isICPC = contest.format === 'icpc';
         var html = '<thead><tr>';
-        html += '<th class="header rank">' + escapeHtml(contest.rank_header || 'Rank') + '</th>';
-        html += '<th class="header username">Username</th>';
-        html += '<th class="header points">Points</th>';
-        html += renderer.extraHeaderCols({ contest: contest, penaltyLabel: 'Penalty' });
+        html += '<th class="header rank">' + escapeHtml(contest.rank_header || gettext('Rank')) + '</th>';
+        html += '<th class="header username">' + escapeHtml(gettext('Username')) + '</th>';
+        html += '<th class="header points">' + escapeHtml(gettext('Points')) + '</th>';
+        html += renderer.extraHeaderCols({ contest: contest, penaltyLabel: gettext('Penalty') });
         for (var i = 0; i < problems.length; i++) {
             var prob = problems[i];
             html += '<th class="points header">' +
@@ -410,7 +410,7 @@
             html += '</a></th>';
         }
         if (contest.has_rating) {
-            html += '<th class="rating-column">Rating</th>';
+            html += '<th class="rating-column">' + escapeHtml(gettext('Rating')) + '</th>';
         }
         html += '</tr></thead>';
         return html;
@@ -419,7 +419,7 @@
     function buildAdminOps(participation, contest) {
         if (!contest.can_edit) return '';
         var p = participation;
-        var disqLabel = p.is_disqualified ? 'Un-Disqualify' : 'Disqualify';
+        var disqLabel = p.is_disqualified ? gettext('Un-Disqualify') : gettext('Disqualify');
         var disqClass = p.is_disqualified ? 'un-disqualify-participation' : 'disqualify-participation';
         var disqIcon  = p.is_disqualified ? 'fa-undo' : 'fa-trash';
 
@@ -431,7 +431,7 @@
 
         if (contest.can_change_participation) {
             var adminUrl = contest.admin_url_template.replace('__ID__', p.id);
-            html += '<a href="' + escapeHtml(adminUrl) + '" title="Admin" class="edit-participation">' +
+            html += '<a href="' + escapeHtml(adminUrl) + '" title="' + escapeHtml(gettext('Admin')) + '" class="edit-participation">' +
                 '<i class="fa fa-cog fa-fw"></i></a>';
         }
         html += '</span>';
@@ -490,7 +490,7 @@
         if (contest.mode === 'participation') {
             if (p.virtual === 0) {
                 var liveUrl = escapeHtml(contest.ranking_url + '#!' + u.username);
-                rankDisplay = '<a href="' + liveUrl + '">Live</a>';
+                rankDisplay = '<a href="' + liveUrl + '">' + escapeHtml(gettext('Live')) + '</a>';
             } else {
                 rankDisplay = escapeHtml(String(p.virtual));
             }
@@ -513,7 +513,8 @@
         html += buildUserLink(u, p.ghost, !badgeBesideOrg);
 
         if (p.virtual > 0) {
-            var virtualTitle = p.virtual + ' virtual participation' + (p.virtual > 1 ? 's' : '') + ' of this user';
+            var virtualTitle = interpolate(ngettext('%(count)s virtual participation of this user',
+                '%(count)s virtual participations of this user', p.virtual), {count: p.virtual}, true);
             html += '<sup class="virtual-participation" title="' + escapeHtml(virtualTitle) + '">' +
                 '[' + p.virtual + ']</sup>';
         }
@@ -583,7 +584,7 @@
     }
 
     function buildTotalACRow(problems, totalAC, colspan, hasRating, resultHidden) {
-        var html = '<tr><td colspan="' + colspan + '">Total AC</td>';
+        var html = '<tr><td colspan="' + colspan + '">' + escapeHtml(gettext('Total AC')) + '</td>';
         for (var i = 0; i < problems.length; i++) {
             var prob = problems[i];
             var pid = String(prob.id);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 07:34+0000\n"
+"POT-Creation-Date: 2026-10-10 13:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: resources/blog-toc.js:82
+msgid "Table of Contents"
+msgstr ""
 
 #: resources/common.js:212
 msgctxt "time format with day"
@@ -28,6 +32,66 @@ msgstr[1] ""
 #: resources/common.js:215
 msgctxt "time format without day"
 msgid "%h:%m:%s"
+msgstr ""
+
+#: resources/contest-ranking.js:251
+msgid "%(count)s try"
+msgid_plural "%(count)s tries"
+msgstr[0] ""
+msgstr[1] ""
+
+#: resources/contest-ranking.js:397
+msgid "Rank"
+msgstr ""
+
+#: resources/contest-ranking.js:398
+msgid "Username"
+msgstr ""
+
+#: resources/contest-ranking.js:399
+msgid "Points"
+msgstr ""
+
+#: resources/contest-ranking.js:400
+msgid "Penalty"
+msgstr ""
+
+#: resources/contest-ranking.js:413
+msgid "Rating"
+msgstr ""
+
+#: resources/contest-ranking.js:422
+msgid "Un-Disqualify"
+msgstr ""
+
+#: resources/contest-ranking.js:422
+msgid "Disqualify"
+msgstr ""
+
+#: resources/contest-ranking.js:434
+msgid "Admin"
+msgstr ""
+
+#: resources/contest-ranking.js:493 resources/contest-replay.js:409
+msgid "Live"
+msgstr ""
+
+#: resources/contest-ranking.js:516
+msgid "%(count)s virtual participation of this user"
+msgid_plural "%(count)s virtual participations of this user"
+msgstr[0] ""
+msgstr[1] ""
+
+#: resources/contest-ranking.js:587
+msgid "Total AC"
+msgstr ""
+
+#: resources/contest-replay.js:409
+msgid "End"
+msgstr ""
+
+#: resources/contest-replay.js:411
+msgid "Freeze min"
 msgstr ""
 
 #: resources/user_profile.js:49

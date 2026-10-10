@@ -406,9 +406,9 @@
             $slider = $('<input>').attr({ type: 'range', min: 0, max: Math.floor(duration), step: 1 })
                 .css({ flex: '1', cursor: 'pointer' });
             $timeLabel = $('<span>').css({ minWidth: '110px', fontFamily: 'monospace' });
-            var $endBtn = $('<button>').text(isVirtual ? 'Live' : 'End').css({ fontSize: '12px', padding: '2px 8px' });
+            var $endBtn = $('<button>').text(isVirtual ? gettext('Live') : gettext('End')).css({ fontSize: '12px', padding: '2px 8px' });
             if (supportsFrozen) {
-                $freezeInput = $('<input>').attr({ type: 'number', min: 0, placeholder: 'Freeze min' })
+                $freezeInput = $('<input>').attr({ type: 'number', min: 0, placeholder: gettext('Freeze min') })
                     .css({ width: '90px', fontSize: '12px' });
                 if (frozenOverride !== null) $freezeInput.val(frozenOverride);
             }
