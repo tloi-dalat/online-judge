@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-09 17:13+0000\n"
+"POT-Creation-Date: 2026-10-10 07:34+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -4987,7 +4987,6 @@ msgstr "Tính lại điểm cho %s..."
 msgid "Successfully scheduled %d submission for rejudging."
 msgid_plural "Successfully scheduled %d submissions for rejudging."
 msgstr[0] "Đã lên lịch chấm lại %d bài giải"
-msgstr[1] "Đã lên lịch chấm lại %d bài giải"
 
 #: judge/views/ranked_submission.py:67 judge/views/ranked_submission.py:70
 #, python-format
@@ -5646,7 +5645,7 @@ msgstr "Không có thông báo nào."
 
 #: templates/base.html:269 templates/contest/contest-tabs.html:18
 #: templates/contest/prepare-data.html:97 templates/organization/tabs.html:19
-#: templates/organization/user-solved.html:130
+#: templates/organization/user-solved.html:129
 #: templates/user/prepare-data.html:104
 msgid "Submissions"
 msgstr "Các bài nộp"
@@ -5858,6 +5857,15 @@ msgstr "Dòng bình luận"
 #: templates/blog/list.html:196 templates/organization/home.html:169
 msgid "New problems"
 msgstr "Bài mới"
+
+#: templates/blog/modern-content.html:67
+msgid "F j, Y"
+msgstr "j F, Y"
+
+#: templates/blog/modern-content.html:67
+#, python-format
+msgid "%(count)d min read"
+msgstr "%(count)d phút đọc"
 
 #: templates/blog/modern-content.html:126
 msgid "Share"
@@ -6495,6 +6503,10 @@ msgstr "Thời gian"
 #: templates/contest/contest.html:297 templates/ticket/list.html:199
 msgid "Title"
 msgstr "Tiêu đề"
+
+#: templates/contest/contest.html:304 templates/contest/contest.html:338
+msgid "F j, Y, G:i"
+msgstr "j F, Y, G:i"
 
 #: templates/contest/contest.html:316
 msgid "Add an announcement"
@@ -7291,6 +7303,11 @@ msgstr "Trạng thái"
 msgid "Reason"
 msgstr "Lý do"
 
+#: templates/organization/requests/log.html:19
+#: templates/organization/requests/pending.html:43
+msgid "N j, Y, H:i"
+msgstr "j N, Y, H:i"
+
 #: templates/organization/requests/log.html:28
 #: templates/organization/requests/pending.html:56
 msgid "There are no requests to approve."
@@ -7526,12 +7543,17 @@ msgstr "Chi phí chấm bài hàng tháng"
 msgid "Organization Monthly Credit usage"
 msgstr "Số giờ chấm bài hàng tháng"
 
-#: templates/organization/user-solved.html:117
+#: templates/organization/user-solved.html:109
+#, python-format
+msgid "%(user)s has solved %(solved)d problems in this organization."
+msgstr "%(user)s đã giải %(solved)d bài tập trong tổ chức này."
+
+#: templates/organization/user-solved.html:116
 #, python-format
 msgid "%(count)d solved"
 msgstr "Đã giải %(count)d bài"
 
-#: templates/organization/user-solved.html:139
+#: templates/organization/user-solved.html:138
 msgid "This user hasn't solved any problems in this organization yet."
 msgstr "Người dùng này chưa giải bài tập nào trong tổ chức này."
 
@@ -7835,7 +7857,6 @@ msgstr ""
 msgid "Author:"
 msgid_plural "Authors:"
 msgstr[0] "Tác giả:"
-msgstr[1] "Các tác giả:"
 
 #: templates/problem/import-polygon.html:14
 msgid "Uploading package..."
@@ -8034,7 +8055,6 @@ msgstr "Gửi bài giải"
 msgid "%(counter)s submission left"
 msgid_plural "%(counter)s submissions left"
 msgstr[0] "Còn %(counter)s lần nộp"
-msgstr[1] "Còn %(counter)s lần nộp"
 
 #: templates/problem/problem.html:231
 msgid "0 submissions left"
@@ -8101,7 +8121,6 @@ msgstr "Nguồn bài:"
 msgid "Problem type"
 msgid_plural "Problem types"
 msgstr[0] "Dạng bài"
-msgstr[1] "Dạng bài"
 
 #: templates/problem/problem.html:398
 msgid "Allowed languages"
@@ -8124,7 +8143,6 @@ msgstr " kỳ thi nữa"
 msgid "Judge:"
 msgid_plural "Judges:"
 msgstr[0] "Máy chấm"
-msgstr[1] "Các máy chấm"
 
 #: templates/problem/problem.html:483
 msgid "none available"
@@ -9708,154 +9726,3 @@ msgstr "Không tìm thấy URL rút gọn."
 #: urlshortener/views.py:97
 msgid "This shortened URL is not active."
 msgstr "URL rút gọn này không hoạt động."
-
-#~ msgid "Theme"
-#~ msgstr "Giao diện"
-
-#~ msgid "Report issue"
-#~ msgstr "Báo cáo vấn đề"
-
-#~ msgid "The site logo e.g. the image in the top left corner."
-#~ msgstr "Logo của trang web, ví dụ như hình ảnh ở góc trên bên trái."
-
-#~ msgid "The site favicon"
-#~ msgstr "Favicon của trang web"
-
-#, python-format
-#~ msgid "Your participation in %(contest)s"
-#~ msgstr "Các lần tham gia %(contest)s của bạn"
-
-#, python-format
-#~ msgid "%(user)s's participation in %(contest)s"
-#~ msgstr "Các lần tham gia %(contest)s của %(user)s"
-
-#~ msgid "Participation"
-#~ msgstr "Tham gia"
-
-#~ msgid "Invalid comment body."
-#~ msgstr "Bình luận không hợp lệ."
-
-#~ msgid "View user participation"
-#~ msgstr "Xem thành viên tham gia"
-
-#~ msgid "Suggest new problem"
-#~ msgstr "Đề xuất bài mới"
-
-#~ msgid "Suggested problem list"
-#~ msgstr "Danh sách các bài được đề xuất"
-
-#~ msgid "Suggesting new problem"
-#~ msgstr "Đề xuất bài tập"
-
-#~ msgid "Suggest"
-#~ msgstr "Đề xuất"
-
-#~ msgid "Suggester:"
-#~ msgstr "Người đăng:"
-
-#~ msgid "This problem is only a suggestion!"
-#~ msgstr "Bài tập này đang được đề xuất!"
-
-#~ msgid ""
-#~ "This problem cannot be accessed by normal users until it is approved by "
-#~ "an admin or staff. Please make sure that all the data for this problem is "
-#~ "correct."
-#~ msgstr ""
-#~ "Người dùng chưa thể truy cập bài tập này đến khi nó được thông qua bởi "
-#~ "admin. Hãy đảm bảo các dữ liệu của đề bài này là chính xác."
-
-#~ msgid "Thanks for suggesting problem!"
-#~ msgstr "Cảm ơn bạn đã đề xuất!"
-
-#~ msgid ""
-#~ "Please keep in mind that this form is only for creating new problems. "
-#~ "Spamming and using for wrong purposes is not allowed."
-#~ msgstr ""
-#~ "Hãy lưu ý rằng form này chỉ dùng để đề xuất bài tập mới. Spam hoặc dùng "
-#~ "nó không đúng mục đích là không được cho phép."
-
-#~ msgid "If you don't know how to suggest a problem, please read [guide][0]."
-#~ msgstr ""
-#~ "Nếu bạn không biết cách đề xuất bài tập mới, hãy tham khảo [hướng dẫn][0]."
-
-#, python-format
-#~ msgid "%(months)d+ months ago"
-#~ msgstr "%(months)d+ tháng trước"
-
-#, python-format
-#~ msgid "%(from)d-%(to)d months ago"
-#~ msgstr "%(from)d-%(to)d tháng trước"
-
-#, python-format
-#~ msgid "< %(months)d months ago"
-#~ msgstr "< %(months)d tháng trước"
-
-#~ msgid "You have a new ticket: "
-#~ msgstr "Bạn có một ticket mới: "
-
-#~ msgid "Access ticket"
-#~ msgstr "Xem ticket"
-
-#~ msgid "???"
-#~ msgstr "???"
-
-#~ msgid "Live"
-#~ msgstr "Trực tuyến"
-
-#, python-format
-#~ msgid "Storage Dashboard - %s"
-#~ msgstr "Bảng điều khiển lưu trữ - %s"
-
-#~ msgid "Discussed"
-#~ msgstr "Đã thảo luận"
-
-#~ msgid "Total score:"
-#~ msgstr "Tổng điểm:"
-
-#~ msgid "up"
-#~ msgstr "lên"
-
-#~ msgid "down"
-#~ msgstr "xuống"
-
-#, python-format
-#~ msgid "%(cnt)s virtual participation of this user"
-#~ msgstr "Lần tham gia ảo thứ %(cnt)s của người dùng"
-
-#~ msgid "Un-Disqualify"
-#~ msgstr "Hủy truất quyền"
-
-#~ msgid "Disqualify"
-#~ msgstr "Truất quyền thi đấu"
-
-#, python-brace-format
-#~ msgid "Started on {time}"
-#~ msgstr "Bắt đầu vào {time}"
-
-#, python-brace-format
-#~ msgid "Started {time}"
-#~ msgstr "Bắt đầu {time}"
-
-#~ msgid "Participation ended."
-#~ msgstr "Thời gian tham gia đã kết thúc."
-
-#~ msgid "Penalty"
-#~ msgstr "Penalty"
-
-#~ msgid "Storage Summary"
-#~ msgstr "Tóm tắt lưu trữ"
-
-#~ msgid "Test data:"
-#~ msgstr "Dữ liệu test:"
-
-#~ msgid "Test Data"
-#~ msgstr "Dữ liệu test"
-
-#~ msgid "AC"
-#~ msgstr "AC"
-
-#~ msgid "Please press this button if you have just updated the zip data"
-#~ msgstr "Nhấn nút này nếu bạn mới thay đổi file test"
-
-#~ msgid "Apply!"
-#~ msgstr "Áp dụng!"

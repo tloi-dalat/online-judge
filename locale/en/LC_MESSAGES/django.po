@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-09 17:13+0000\n"
+"POT-Creation-Date: 2026-10-10 07:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5548,7 +5548,7 @@ msgstr ""
 
 #: templates/base.html:269 templates/contest/contest-tabs.html:18
 #: templates/contest/prepare-data.html:97 templates/organization/tabs.html:19
-#: templates/organization/user-solved.html:130
+#: templates/organization/user-solved.html:129
 #: templates/user/prepare-data.html:104
 msgid "Submissions"
 msgstr ""
@@ -5759,6 +5759,15 @@ msgstr ""
 
 #: templates/blog/list.html:196 templates/organization/home.html:169
 msgid "New problems"
+msgstr ""
+
+#: templates/blog/modern-content.html:67
+msgid "F j, Y"
+msgstr ""
+
+#: templates/blog/modern-content.html:67
+#, python-format
+msgid "%(count)d min read"
 msgstr ""
 
 #: templates/blog/modern-content.html:126
@@ -6374,6 +6383,10 @@ msgstr ""
 
 #: templates/contest/contest.html:297 templates/ticket/list.html:199
 msgid "Title"
+msgstr ""
+
+#: templates/contest/contest.html:304 templates/contest/contest.html:338
+msgid "F j, Y, G:i"
 msgstr ""
 
 #: templates/contest/contest.html:316
@@ -7145,6 +7158,11 @@ msgstr ""
 msgid "Reason"
 msgstr ""
 
+#: templates/organization/requests/log.html:19
+#: templates/organization/requests/pending.html:43
+msgid "N j, Y, H:i"
+msgstr ""
+
 #: templates/organization/requests/log.html:28
 #: templates/organization/requests/pending.html:56
 msgid "There are no requests to approve."
@@ -7378,12 +7396,17 @@ msgstr ""
 msgid "Organization Monthly Credit usage"
 msgstr ""
 
-#: templates/organization/user-solved.html:117
+#: templates/organization/user-solved.html:109
+#, python-format
+msgid "%(user)s has solved %(solved)d problems in this organization."
+msgstr ""
+
+#: templates/organization/user-solved.html:116
 #, python-format
 msgid "%(count)d solved"
 msgstr ""
 
-#: templates/organization/user-solved.html:139
+#: templates/organization/user-solved.html:138
 msgid "This user hasn't solved any problems in this organization yet."
 msgstr ""
 

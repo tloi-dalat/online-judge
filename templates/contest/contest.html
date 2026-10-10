@@ -301,7 +301,7 @@
                 <tbody>
                 {% for announcement in announcements %}
                     <tr>
-                        <td style="width: 15%;">{{ announcement.date|date(_("F j, Y, G:i")) }}</td>
+                        <td style="width: 15%;">{% set date_format = _("F j, Y, G:i") %}{{ announcement.date|date(date_format) }}</td>
                         <td style="width: 20%; text-align: left; padding-left: 2em;">
                             {{ announcement.title }}
                         </td>
@@ -335,7 +335,7 @@
                 <tbody>
                 {% for clarification in clarifications %}
                     <tr>
-                        <td style="width: 15%;">{{ clarification.date|date(_("F j, Y, G:i")) }}</td>
+                        <td style="width: 15%;">{% set date_format = _("F j, Y, G:i") %}{{ clarification.date|date(date_format) }}</td>
                         <td style="width: 20%; text-align: left; padding-left: 2em;">
                             <a href="{{ url('problem_detail', clarification.problem.code) }}"
                                 class="problem">

@@ -1,0 +1,24 @@
+name: 'i18n'
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: i18n-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/django-i18n-check.yaml@main
+    with:
+      python-version: '3.12'
+      requirements: requirements.txt
+      settings-file: .ci.settings.py
+      settings-target: dmoj/local_settings.py
+      source-locale: en
+      template-globs: 'templates/**/*.html templates/**/*.txt'
+      makemessages: |
+        -e py,html,txt -i node_modules -i static -i sass_processed -i resources/libs -i resources/vnoj
+        -d djangojs -i node_modules -i static -i sass_processed -i resources/libs -i resources/vnoj
