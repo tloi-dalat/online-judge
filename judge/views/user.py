@@ -556,6 +556,11 @@ def edit_profile(request):
         'has_math_config': bool(settings.MATHOID_URL),
         'ignore_user_script': True,
         'ACE_URL': settings.ACE_URL,
+        'ace_default_themes': settings.DMOJ_THEME_DEFAULT_ACE_THEME,
+        'preview_languages': {
+            language_id: {'ace': ace, 'template': template}
+            for language_id, ace, template in form.fields['language'].queryset.values_list('id', 'ace', 'template')
+        },
         'TIMEZONE_MAP': settings.TIMEZONE_MAP,
     })
 

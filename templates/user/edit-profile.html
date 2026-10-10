@@ -102,8 +102,7 @@
 
         #ace-theme-preview {
             width: 100%;
-            max-width: 320px;
-            height: 150px;
+            height: 200px;
             border: 1px solid #ccc;
             border-radius: 3px;
             box-sizing: border-box;
@@ -127,44 +126,48 @@
 
             var aceThemePreview = ace.edit('ace-theme-preview');
             var aceThemeSelect = $('#id_ace_theme');
-            var aceThemeSample = [
-                '#include <bits/stdc++.h>',
-                '',
-                'using namespace std;',
-                '',
-                'int main() {',
-                '    ios_base::sync_with_stdio(false);',
-                '    cin.tie(NULL);',
-                '',
-                '    return 0;',
-                '}'
-            ].join('\n');
-            var currentSiteTheme = document.body.getAttribute('data-theme');
+            var languageSelect = $('#id_language');
+            var aceDefaultThemes = {
+                light: $('#ace-theme-preview').data('light-theme'),
+                dark: $('#ace-theme-preview').data('dark-theme'),
+            };
+            var previewLanguages = {{ preview_languages|tojson }};
+            var darkSchemeQuery = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 
             function resolvedAcePreviewTheme() {
                 var theme = aceThemeSelect.val();
-                if (theme != 'auto')
+                if (theme && theme !== 'auto')
                     return theme;
-                return currentSiteTheme == 'dark' ? 'tomorrow_night' : 'github';
+                var siteTheme = document.body.getAttribute('data-theme');
+                if (siteTheme !== 'light' && siteTheme !== 'dark')
+                    siteTheme = darkSchemeQuery && darkSchemeQuery.matches ? 'dark' : 'light';
+                return aceDefaultThemes[siteTheme];
             }
 
             function updateAceThemePreview() {
                 aceThemePreview.setTheme('ace/theme/' + resolvedAcePreviewTheme());
             }
 
-            aceThemePreview.getSession().setMode('ace/mode/python');
+            function loadAcePreviewSample() {
+                var language = previewLanguages[languageSelect.val()] || {};
+                aceThemePreview.getSession().setMode('ace/mode/' + (language.ace || 'text'));
+                aceThemePreview.setValue(language.template || '', -1);
+            }
+
             aceThemePreview.getSession().setUseWrapMode(true);
-            aceThemePreview.setValue(aceThemeSample, -1);
-            aceThemePreview.setReadOnly(true);
             aceThemePreview.setShowPrintMargin(false);
             aceThemePreview.renderer.setScrollMargin(8, 8);
+            loadAcePreviewSample();
             updateAceThemePreview();
 
             aceThemeSelect.change(updateAceThemePreview);
-            window.addEventListener('theme-change', function(e) {
-                currentSiteTheme = e.detail.theme;
-                updateAceThemePreview();
-            });
+            languageSelect.change(loadAcePreviewSample);
+            if (darkSchemeQuery) {
+                if (darkSchemeQuery.addEventListener)
+                    darkSchemeQuery.addEventListener('change', updateAceThemePreview);
+                else
+                    darkSchemeQuery.addListener(updateAceThemePreview);
+            }
 
             $('#disable-2fa-button').click(function () {
                 alert({{ _('The administrators for this site require all the staff to have Two-factor Authentication enabled, so it may not be disabled at this time.')|htmltojs }});
@@ -386,15 +389,14 @@
                             <td><span class="fullwidth">{{ form.language }}</span></td>
                         </tr>
                         <tr>
-                            <td><label class="inline-header grayed">{{ _('Site theme:') }}</label></td>
-                            <td><span class="fullwidth">{{ form.site_theme }}</span></td>
-                        </tr>
-                        <tr>
                             <td><label class="inline-header grayed">{{ _('Editor theme:') }}</label></td>
                             <td><span class="fullwidth">{{ form.ace_theme }}</span></td>
                         </tr>
                         <tr class="editor-theme-preview-row">
-                            <td colspan="2"><div id="ace-theme-preview"></div></td>
+                            <td colspan="2">
+                                <div id="ace-theme-preview" data-light-theme="{{ ace_default_themes.light }}"
+                                     data-dark-theme="{{ ace_default_themes.dark }}"></div>
+                            </td>
                         </tr>
                         {% if has_math_config %}
                             <tr>
