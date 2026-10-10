@@ -21,6 +21,7 @@ jobs:
       python-version: '3.12'
       requirements: requirements.txt
       settings-file: .ci.settings.py
+      mysql-image: mariadb:10.11
 
   i18n:
     name: check
