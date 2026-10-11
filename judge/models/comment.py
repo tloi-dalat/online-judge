@@ -194,9 +194,9 @@ class Comment(MPTTModel):
 
 
 class CommentVote(models.Model):
-    voter = models.ForeignKey(Profile, related_name='voted_comments', on_delete=CASCADE)
-    comment = models.ForeignKey(Comment, related_name='votes', on_delete=CASCADE)
-    score = models.IntegerField()
+    voter = models.ForeignKey(Profile, verbose_name=_('voter'), related_name='voted_comments', on_delete=CASCADE)
+    comment = models.ForeignKey(Comment, verbose_name=_('comment'), related_name='votes', on_delete=CASCADE)
+    score = models.IntegerField(verbose_name=_('score'))
 
     class Meta:
         unique_together = ['voter', 'comment']
@@ -209,6 +209,8 @@ class CommentLock(models.Model):
                             validators=[comment_validator])
 
     class Meta:
+        verbose_name = _('comment lock')
+        verbose_name_plural = _('comment locks')
         permissions = (
             ('override_comment_lock', _('Override comment lock')),
         )

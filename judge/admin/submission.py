@@ -15,6 +15,7 @@ from django.utils.translation import gettext, gettext_lazy as _, ngettext, pgett
 from django.views.decorators.http import require_POST
 from reversion.admin import VersionAdmin
 
+from judge.admin.utils import AdminFastPaginationMixin
 from judge.models import ContestParticipation, ContestProblem, ContestSubmission, Profile, Submission, \
     SubmissionSource, SubmissionTestCase
 from judge.utils.raw_sql import use_straight_join
@@ -22,7 +23,8 @@ from judge.widgets import AdminAceWidget
 
 
 class SubmissionStatusFilter(admin.SimpleListFilter):
-    parameter_name = title = 'status'
+    title = _('status')
+    parameter_name = 'status'
     __lookups = (('None', _('None')), ('NotDone', _('Not done')), ('EX', _('Exceptional'))) + Submission.STATUS
     __handles = set(map(itemgetter(0), Submission.STATUS))
 
@@ -41,7 +43,8 @@ class SubmissionStatusFilter(admin.SimpleListFilter):
 
 
 class SubmissionResultFilter(admin.SimpleListFilter):
-    parameter_name = title = 'result'
+    title = _('result')
+    parameter_name = 'result'
     __lookups = (('None', _('None')), ('BAD', _('Unaccepted'))) + Submission.RESULT
     __handles = set(map(itemgetter(0), Submission.RESULT))
 
@@ -86,7 +89,9 @@ class ContestSubmissionInline(admin.StackedInline):
                     if obj.spectate:
                         return gettext('%s (spectating)') % obj.contest.name
                     if obj.virtual:
-                        return gettext('%s (virtual %d)') % (obj.contest.name, obj.virtual)
+                        return gettext('%(contest)s (virtual %(virtual)d)') % {
+                            'contest': obj.contest.name, 'virtual': obj.virtual,
+                        }
                     return obj.contest.name
                 label = _label
             elif db_field.name == 'problem':
@@ -117,7 +122,7 @@ class SubmissionSourceInline(admin.StackedInline):
         return super().get_formset(request, obj, **kwargs)
 
 
-class SubmissionAdmin(VersionAdmin):
+class SubmissionAdmin(AdminFastPaginationMixin, VersionAdmin):
     readonly_fields = ('user', 'problem', 'date', 'judged_date')
     fields = ('user', 'problem', 'date', 'judged_date', 'locked_after', 'time', 'memory', 'points', 'language',
               'status', 'result', 'case_points', 'case_total', 'judged_on', 'error')
@@ -139,7 +144,7 @@ class SubmissionAdmin(VersionAdmin):
     def get_queryset(self, request):
         queryset = Submission.objects.select_related('problem', 'user__user', 'language').only(
             'problem__code', 'problem__name', 'user__user__username', 'language__name',
-            'time', 'memory', 'points', 'status', 'result',
+            'time', 'memory', 'points', 'status', 'result', 'locked_after',
         )
         use_straight_join(queryset)
         if not request.user.has_perm('judge.edit_all_problem'):
