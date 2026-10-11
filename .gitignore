@@ -49,3 +49,4 @@ resources/theme-toggle.css
 .DS_Store
 Claude outputs/
 .review/
+.venv/

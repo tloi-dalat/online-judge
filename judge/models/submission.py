@@ -72,8 +72,8 @@ class Submission(models.Model):
         'AB': _('Aborted'),
     }
 
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, db_index=False)
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, db_index=False)
+    user = models.ForeignKey(Profile, verbose_name=_('user'), on_delete=models.CASCADE, db_index=False)
+    problem = models.ForeignKey(Problem, verbose_name=_('problem'), on_delete=models.CASCADE, db_index=False)
     date = models.DateTimeField(verbose_name=_('submission time'), auto_now_add=True, db_index=True)
     time = models.FloatField(verbose_name=_('execution time'), null=True)
     memory = models.FloatField(verbose_name=_('memory usage'), null=True)
@@ -84,7 +84,7 @@ class Submission(models.Model):
     result = models.CharField(verbose_name=_('result'), max_length=3, choices=SUBMISSION_RESULT,
                               default=None, null=True, blank=True)
     error = models.TextField(verbose_name=_('compile errors'), null=True, blank=True)
-    current_testcase = models.IntegerField(default=0)
+    current_testcase = models.IntegerField(verbose_name=_('current testcase'), default=0)
     batch = models.BooleanField(verbose_name=_('batched cases'), default=False)
     case_points = models.FloatField(verbose_name=_('test case points'), default=0)
     case_total = models.FloatField(verbose_name=_('test case total points'), default=0)
@@ -299,6 +299,10 @@ class SubmissionSource(models.Model):
                                       related_name='source')
     source = models.TextField(verbose_name=_('source code'), max_length=65536)
 
+    class Meta:
+        verbose_name = _('submission source')
+        verbose_name_plural = _('submission sources')
+
     def __str__(self):
         return _('Source of %(submission)s') % {'submission': self.submission}
 
@@ -319,6 +323,9 @@ class SubmissionTestCase(models.Model):
     feedback = models.CharField(max_length=50, verbose_name=_('judging feedback'), blank=True)
     extended_feedback = models.TextField(verbose_name=_('extended judging feedback'), blank=True)
     output = models.TextField(verbose_name=_('program output'), blank=True)
+
+    def __str__(self):
+        return '#%d' % self.case
 
     @property
     def long_status(self):

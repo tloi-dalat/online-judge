@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.utils.text import Truncator
 from django.utils.translation import gettext_lazy as _
 
 from judge.models.profile import Profile
@@ -8,6 +9,10 @@ from judge.models.profile import Profile
 
 class GeneralIssue(models.Model):
     issue_url = models.URLField(max_length=200, verbose_name=_('Link to the issue'))
+
+    class Meta:
+        verbose_name = _('general issue')
+        verbose_name_plural = _('general issues')
 
     def get_absolute_url(self):
         return self.issue_url
@@ -32,6 +37,13 @@ class Ticket(models.Model):
     is_contributive = models.BooleanField(verbose_name=_('is ticket contributive?'), default=False)
     is_open = models.BooleanField(verbose_name=_('is ticket open?'), default=True)
 
+    class Meta:
+        verbose_name = _('ticket')
+        verbose_name_plural = _('tickets')
+
+    def __str__(self):
+        return self.title
+
 
 class TicketMessage(models.Model):
     OPEN = 'open'
@@ -51,3 +63,10 @@ class TicketMessage(models.Model):
     action = models.CharField(verbose_name=_('action'), max_length=10, default=MESSAGE,
                               choices=ACTION_CHOICES)
     time = models.DateTimeField(verbose_name=_('message time'), auto_now_add=True)
+
+    class Meta:
+        verbose_name = _('ticket message')
+        verbose_name_plural = _('ticket messages')
+
+    def __str__(self):
+        return Truncator(self.body).chars(50)

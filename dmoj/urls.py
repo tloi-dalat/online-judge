@@ -1,5 +1,6 @@
 import os
 
+from django.apps import apps
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
@@ -497,7 +498,7 @@ handler500 = 'judge.views.error.error500'
 
 if 'newsletter' in settings.INSTALLED_APPS:
     urlpatterns.append(path('newsletter/', include('newsletter.urls')))
-if 'impersonate' in settings.INSTALLED_APPS:
+if apps.is_installed('impersonate'):
     urlpatterns.append(path('impersonate/', include('impersonate.urls')))
 
 if settings.VNOJ_ENABLE_SYNC_API:

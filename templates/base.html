@@ -435,8 +435,8 @@
 
             |
 
-            {% set github_link = safe('<a style="color: #808080" href="https://github.com/tloi-dalat"><b>GitHub</b></a>') %}
-            {% set facebook_link = safe('<a style="color: #808080" href="https://fb.com/tloi.dl"><b>Facebook</b></a>') %}
+            {% set github_link %}<a style="color: #808080" href="{{ misc_config.github_link }}"><b>GitHub</b></a>{% endset %}
+            {% set facebook_link %}<a style="color: #808080" href="{{ misc_config.facebook_link }}"><b>Facebook</b></a>{% endset %}
             {{ _('follow us on %(github)s and %(facebook)s', github=github_link, facebook=facebook_link) }}
 
             {% if misc_config.footer %}

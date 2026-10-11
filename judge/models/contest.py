@@ -78,13 +78,16 @@ class Contest(models.Model):
     key = models.CharField(max_length=32, verbose_name=_('contest id'), unique=True,
                            validators=[RegexValidator('^[a-z0-9_]+$', _('Contest id must be ^[a-z0-9_]+$'))])
     name = models.CharField(max_length=100, verbose_name=_('contest name'), db_index=True)
-    authors = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest.'),
+    authors = models.ManyToManyField(Profile, verbose_name=_('authors'),
+                                     help_text=_('These users will be able to edit the contest.'),
                                      related_name='authors+')
-    curators = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest, '
-                                                           'but will not be listed as authors.'),
+    curators = models.ManyToManyField(Profile, verbose_name=_('curators'),
+                                      help_text=_('These users will be able to edit the contest, '
+                                                  'but will not be listed as authors.'),
                                       related_name='curators+', blank=True)
-    testers = models.ManyToManyField(Profile, help_text=_('These users will be able to view the contest, '
-                                                          'but not edit it.'),
+    testers = models.ManyToManyField(Profile, verbose_name=_('testers'),
+                                     help_text=_('These users will be able to view the contest, '
+                                                 'but not edit it.'),
                                      blank=True, related_name='testers+')
     description = models.TextField(verbose_name=_('description'), blank=True)
     terms = models.TextField(verbose_name=_('terms'), blank=True)
@@ -116,10 +119,10 @@ class Contest(models.Model):
     scoreboard_visibility = models.CharField(verbose_name=_('scoreboard visibility'), default=SCOREBOARD_VISIBLE,
                                              help_text=_('Scoreboard visibility through the duration of the contest'),
                                              max_length=1, choices=SCOREBOARD_VISIBILITY)
-    scoreboard_cache_timeout = models.PositiveIntegerField(verbose_name=('scoreboard cache timeout'), default=3,
+    scoreboard_cache_timeout = models.PositiveIntegerField(verbose_name=_('scoreboard cache timeout'), default=3,
                                                            help_text=_('How long should the scoreboard be cached. '
                                                                        'Set to 0 to disable caching.'))
-    show_submission_list = models.BooleanField(default=False,
+    show_submission_list = models.BooleanField(verbose_name=_('show submission list'), default=False,
                                                help_text=_('Allow contestants to view submission list '
                                                            'of others in contest time'))
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
@@ -207,7 +210,7 @@ class Contest(models.Model):
                                            help_text=_('An optional code to view the contest ranking. '
                                                        'Leave it blank to disable.'),
                                            blank=True, default='', max_length=255)
-    replay_version = models.PositiveIntegerField(default=0)
+    replay_version = models.PositiveIntegerField(verbose_name=_('replay version'), default=0)
 
     @property
     def can_replay(self):
@@ -665,6 +668,13 @@ class ContestAnnouncement(models.Model):
     description = models.TextField(verbose_name=_('announcement body'))
     date = models.DateTimeField(verbose_name=_('announcement timestamp'), auto_now_add=True)
 
+    class Meta:
+        verbose_name = _('contest announcement')
+        verbose_name_plural = _('contest announcements')
+
+    def __str__(self):
+        return self.title
+
     def send(self):
         if not self.contest.push_announcements:
             return
@@ -815,7 +825,8 @@ class ContestProblem(models.Model):
     order = models.PositiveIntegerField(db_index=True, verbose_name=_('order'))
     output_prefix_override = models.IntegerField(verbose_name=_('output prefix length override'),
                                                  default=0, null=True, blank=True)
-    max_submissions = models.IntegerField(help_text=_('Maximum number of submissions for this problem, '
+    max_submissions = models.IntegerField(verbose_name=_('max submissions'),
+                                          help_text=_('Maximum number of submissions for this problem, '
                                                       'or leave blank for no limit.'),
                                           default=None, null=True, blank=True,
                                           validators=[MinValueOrNoneValidator(1, _('Why include a problem you '
@@ -826,6 +837,9 @@ class ContestProblem(models.Model):
         verbose_name = _('contest problem')
         verbose_name_plural = _('contest problems')
         ordering = ('order',)
+
+    def __str__(self):
+        return str(self.problem)
 
 
 class ContestSubmission(models.Model):
@@ -843,6 +857,9 @@ class ContestSubmission(models.Model):
     class Meta:
         verbose_name = _('contest submission')
         verbose_name_plural = _('contest submissions')
+
+    def __str__(self):
+        return str(self.submission)
 
 
 class Rating(models.Model):
@@ -873,9 +890,9 @@ class ContestMoss(models.Model):
 
     contest = models.ForeignKey(Contest, verbose_name=_('contest'), related_name='moss', on_delete=CASCADE)
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='moss', on_delete=CASCADE)
-    language = models.CharField(max_length=10)
-    submission_count = models.PositiveIntegerField(default=0)
-    url = models.URLField(null=True, blank=True)
+    language = models.CharField(verbose_name=_('language'), max_length=10)
+    submission_count = models.PositiveIntegerField(verbose_name=_('submission count'), default=0)
+    url = models.URLField(verbose_name=_('URL'), null=True, blank=True)
 
     class Meta:
         unique_together = ('contest', 'problem', 'language')
