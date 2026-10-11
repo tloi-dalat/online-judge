@@ -10,6 +10,6 @@ concurrency:
 
 jobs:
   title:
-    name: check
+    name: check-title
     permissions: {}
     uses: tloi-dalat/reusable-workflow/.github/workflows/pr-title-check.yaml@main
