@@ -100,13 +100,13 @@ class ContestListFilterTestCase(TestCase):
         self.assertNotIn('training_past', self._contest_keys(response, 'past_contests'))
         self.assertNotIn('untagged_past', self._contest_keys(response, 'past_contests'))
 
-    def test_filters_current_and_future_contests_by_tag(self):
+    def test_tag_filter_leaves_current_and_future_contests(self):
         response = self.client.get(self._get_url(), {'tag': 'algorithms'})
 
         self.assertIn('algorithm_current', self._contest_keys(response, 'current_contests'))
         self.assertIn('algorithm_future', self._contest_keys(response, 'future_contests'))
-        self.assertNotIn('training_current', self._contest_keys(response, 'current_contests'))
-        self.assertNotIn('training_future', self._contest_keys(response, 'future_contests'))
+        self.assertIn('training_current', self._contest_keys(response, 'current_contests'))
+        self.assertIn('training_future', self._contest_keys(response, 'future_contests'))
 
     def test_filters_by_any_selected_tag(self):
         response = self.client.get(self._get_url(), {'tag': ['algorithms', 'training']})
@@ -120,13 +120,16 @@ class ContestListFilterTestCase(TestCase):
         response = self.client.get(self._get_url(), {'search': 'Training', 'tag': 'algorithms'})
 
         self.assertEqual(self._contest_keys(response, 'past_contests'), [])
-        self.assertEqual(self._contest_keys(response, 'current_contests'), [])
-        self.assertEqual(self._contest_keys(response, 'future_contests'), [])
 
     def test_tag_filter_uses_visible_contests(self):
         response = self.client.get(self._get_url(), {'tag': 'hidden'})
 
         self.assertNotIn('hidden_past', self._contest_keys(response, 'past_contests'))
+
+    def test_tag_choices_come_from_visible_contests(self):
+        response = self.client.get(self._get_url())
+
+        self.assertEqual([tag.name for tag in response.context['contest_tags']], ['algorithms', 'training'])
 
 
 class ContestProblemMakePublicTestCase(TestCase):

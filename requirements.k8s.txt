@@ -1,0 +1,2 @@
+gunicorn>=23
+whitenoise>=6.7

@@ -1,12 +1,14 @@
 import bisect
 from datetime import datetime, timedelta
 from io import BytesIO
+from typing import Dict
 
 import pytz
 from celery import shared_task
 from discord_webhook import DiscordEmbed, DiscordWebhook
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
 from django.db.models import F, FloatField
 from django.db.models.functions import Cast
 
@@ -40,10 +42,13 @@ def send_webhook(webhook_config, title, description, author, color='03b2f8', **k
     )
 
     if author is not None:
+        icon_url = gravatar(author)
+        if icon_url.startswith('/'):
+            icon_url = settings.SITE_FULL_URL + icon_url
         embed.set_author(
             name=author.user.username,
             url=settings.SITE_FULL_URL + '/user/' + author.user.username,
-            icon_url=gravatar(author),
+            icon_url=icon_url,
         )
 
     webhook.add_embed(embed)
@@ -97,17 +102,17 @@ def on_new_comment(comment_id):
 
 
 @shared_task
-def on_new_problem(problem_code, is_suggested=False):
-    event_name = 'on_new_suggested_problem' if is_suggested else 'on_new_problem'
+def on_new_problem(problem_code):
+    event_name = 'on_new_problem'
     webhook_config = get_webhook_config(event_name)
     if webhook_config is None or settings.SITE_FULL_URL is None:
         return
 
     problem = Problem.objects.get(code=problem_code)
-    author = problem.suggester or problem.authors.first()
+    author = problem.authors.first()
 
     url = settings.SITE_FULL_URL + problem.get_absolute_url()
-    title = f'New {"suggested" if is_suggested else "organization"} problem {url}'
+    title = f'New organization problem {url}'
 
     description = [
         ('Title', problem.name),
@@ -205,12 +210,19 @@ def on_new_blogpost(blog_id):
 
 
 @shared_task
-def on_long_queue():
+def on_long_queue(queue_counts: Dict[int, int]):
     webhook_config = get_webhook_config('on_long_queue')
     if webhook_config is None or settings.SITE_FULL_URL is None:
         return
 
-    send_webhook(webhook_config, 'Long queue alert', None, None, url=f'{settings.SITE_FULL_URL}/submissions/?status=QU')
+    # Prevent sending multiple long queue alerts within 5 minutes
+    if not cache.add('webhook:on_long_queue', True, timeout=5 * 60):
+        return
+
+    description = f'Queue counts: {queue_counts}'
+    total_queue_count = sum(queue_counts.values())
+    send_webhook(webhook_config, f'Long queue alert ({total_queue_count})', description, None,
+                 url=f'{settings.SITE_FULL_URL}/submissions/?status=QU')
 
 
 @shared_task

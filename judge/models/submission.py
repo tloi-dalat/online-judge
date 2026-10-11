@@ -20,6 +20,7 @@ __all__ = ['SUBMISSION_RESULT', 'Submission', 'SubmissionSource', 'SubmissionTes
 
 SUBMISSION_RESULT = (
     ('AC', _('Accepted')),
+    ('PAC', _('Partially Accepted')),
     ('WA', _('Wrong Answer')),
     ('TLE', _('Time Limit Exceeded')),
     ('MLE', _('Memory Limit Exceeded')),
@@ -54,6 +55,7 @@ class Submission(models.Model):
     IN_PROGRESS_GRADING_STATUS = ('QU', 'P', 'G')
     USER_DISPLAY_CODES = {
         'AC': _('Accepted'),
+        'PAC': _('Partially Accepted'),
         'WA': _('Wrong Answer'),
         'SC': _('Short Circuited'),
         'TLE': _('Time Limit Exceeded'),
@@ -70,8 +72,8 @@ class Submission(models.Model):
         'AB': _('Aborted'),
     }
 
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, db_index=False)
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, db_index=False)
+    user = models.ForeignKey(Profile, verbose_name=_('user'), on_delete=models.CASCADE, db_index=False)
+    problem = models.ForeignKey(Problem, verbose_name=_('problem'), on_delete=models.CASCADE, db_index=False)
     date = models.DateTimeField(verbose_name=_('submission time'), auto_now_add=True, db_index=True)
     time = models.FloatField(verbose_name=_('execution time'), null=True)
     memory = models.FloatField(verbose_name=_('memory usage'), null=True)
@@ -82,7 +84,7 @@ class Submission(models.Model):
     result = models.CharField(verbose_name=_('result'), max_length=3, choices=SUBMISSION_RESULT,
                               default=None, null=True, blank=True)
     error = models.TextField(verbose_name=_('compile errors'), null=True, blank=True)
-    current_testcase = models.IntegerField(default=0)
+    current_testcase = models.IntegerField(verbose_name=_('current testcase'), default=0)
     batch = models.BooleanField(verbose_name=_('batched cases'), default=False)
     case_points = models.FloatField(verbose_name=_('test case points'), default=0)
     case_total = models.FloatField(verbose_name=_('test case total points'), default=0)
@@ -96,10 +98,8 @@ class Submission(models.Model):
     locked_after = models.DateTimeField(verbose_name=_('submission lock'), null=True, blank=True)
 
     @classmethod
-    def result_class_from_code(cls, result, case_points, case_total):
-        if result == 'AC':
-            if case_points == case_total:
-                return 'AC'
+    def result_class_from_code(cls, result):
+        if result == 'PAC':
             return '_AC'
         return result
 
@@ -108,7 +108,7 @@ class Submission(models.Model):
         # This exists to save all these conditionals from being executed (slowly) in each row.html template
         if self.status in ('IE', 'CE'):
             return self.status
-        return Submission.result_class_from_code(self.result, self.case_points, self.case_total)
+        return Submission.result_class_from_code(self.result)
 
     @property
     def memory_bytes(self):
@@ -151,8 +151,6 @@ class Submission(models.Model):
         if self.problem.is_editable_by(user):
             return True
         elif user.has_perm('judge.view_all_submission'):
-            return True
-        elif not self.problem.is_public and user.has_perm('judge.suggest_new_problem') and self.problem.is_suggesting:
             return True
         elif self.user_id == profile.id:
             return True
@@ -287,6 +285,12 @@ class Submission(models.Model):
 
             # For user submissions page
             models.Index(fields=['user', '-id']),
+
+            # For submission heat map
+            models.Index(fields=['user', 'date']),
+
+            # For organization problem list: last submission time filter
+            models.Index(fields=['problem', '-date']),
         ]
 
 
@@ -294,6 +298,10 @@ class SubmissionSource(models.Model):
     submission = models.OneToOneField(Submission, on_delete=models.CASCADE, verbose_name=_('associated submission'),
                                       related_name='source')
     source = models.TextField(verbose_name=_('source code'), max_length=65536)
+
+    class Meta:
+        verbose_name = _('submission source')
+        verbose_name_plural = _('submission sources')
 
     def __str__(self):
         return _('Source of %(submission)s') % {'submission': self.submission}
@@ -316,6 +324,9 @@ class SubmissionTestCase(models.Model):
     extended_feedback = models.TextField(verbose_name=_('extended judging feedback'), blank=True)
     output = models.TextField(verbose_name=_('program output'), blank=True)
 
+    def __str__(self):
+        return '#%d' % self.case
+
     @property
     def long_status(self):
         return Submission.USER_DISPLAY_CODES.get(self.status, '')
@@ -324,7 +335,7 @@ class SubmissionTestCase(models.Model):
     def result_class(self):
         if self.status in ('IE', 'CE'):
             return self.status
-        return Submission.result_class_from_code(self.status, self.points, self.total)
+        return Submission.result_class_from_code(self.status)
 
     class Meta:
         unique_together = ('submission', 'case')

@@ -1,10 +1,12 @@
 import json
 import mimetypes
 import os
+import posixpath
 from itertools import chain
 from zipfile import BadZipfile, ZipFile
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ValidationError
@@ -14,6 +16,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.html import escape, format_html
+from django.utils.http import urlencode
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.generic import DetailView
@@ -21,6 +24,7 @@ from django.views.generic import DetailView
 from judge.highlight_code import highlight_code
 from judge.models import Problem, ProblemData, ProblemTestCase, Submission, problem_data_storage
 from judge.models.problem_data import CUSTOM_CHECKERS, IO_METHODS
+from judge.utils.organization import add_quota_context
 from judge.utils.problem_data import ProblemDataCompiler
 from judge.utils.unicode import utf8text
 from judge.utils.views import TitleMixin, add_file_response, generic_message
@@ -63,8 +67,9 @@ class ProblemDataForm(ModelForm):
     checker_type = ChoiceField(choices=CUSTOM_CHECKERS, widget=Select2Widget(attrs={'style': 'width: 200px'}))
 
     def clean_zipfile(self):
-        if hasattr(self, 'zip_valid') and not self.zip_valid:
-            raise ValidationError(_('Your zip file is invalid!'))
+        if hasattr(self, 'zip_valid_err'):
+            err_str = str(self.zip_valid_err)
+            raise ValidationError(_('Your zip file is invalid!') + ' Error: ' + err_str)
         return self.cleaned_data['zipfile']
 
     clean_checker_args = checker_args_cleaner
@@ -183,8 +188,47 @@ class ProblemSubmissionDiff(TitleMixin, ProblemMixin, DetailView):
             return generic_message(self.request, _('No such submissions'), _('Could not find any submissions.'))
 
 
+class ProblemArchived(Exception):
+    def __init__(self, problem):
+        self.problem = problem
+
+
 class ProblemDataView(TitleMixin, ProblemManagerMixin):
     template_name = 'problem/data.html'
+
+    def get_object(self, queryset=None):
+        problem = super().get_object(queryset)
+        # There is nothing left on disk to edit once the data has gone to cold storage.
+        if problem.is_archived:
+            raise ProblemArchived(problem)
+        return problem
+
+    def dispatch(self, request, *args, **kwargs):
+        # Mirrors how ProblemMixin handles ProblemDeleted: raise from get_object and handle it here,
+        # so the login and permission checks below still run first.
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except ProblemArchived as e:
+            return self.archived_response(e.problem)
+
+    def archived_response(self, problem):
+        request = self.request
+        message = _('Problem %s has been archived, so it can no longer be edited. '
+                    'Restore it from the archive if needed.') % problem.code
+
+        organization = problem.organization
+        if organization is not None and request.profile is not None and (
+                organization.is_admin(request.profile) or
+                request.user.has_perm('judge.edit_all_organization')):
+            messages.error(request, message)
+            return HttpResponseRedirect('%s?%s' % (
+                reverse('organization_archived_problems', args=[organization.slug]),
+                urlencode({'problem': problem.code})))
+
+        # The archived list is org-admin only and problem editors are not necessarily org admins,
+        # so anyone else would land on a 403. No other page renders `messages` either, so the
+        # explanation has to be a page of its own.
+        return generic_message(request, _('Problem data archived'), message)
 
     def get_title(self):
         return _('Editing data for {0}').format(self.object.name)
@@ -203,15 +247,21 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         return ProblemCaseFormSet(data=self.request.POST if post else None, prefix='cases', valid_files=files,
                                   queryset=ProblemTestCase.objects.filter(dataset_id=self.object.pk).order_by('order'))
 
-    def get_valid_files(self, data, post=False):
+    def get_valid_files(self, data_form, post=False):
+        data = data_form.instance
         try:
             if post and 'problem-data-zipfile-clear' in self.request.POST:
                 return []
             elif post and 'problem-data-zipfile' in self.request.FILES:
-                return ZipFile(self.request.FILES['problem-data-zipfile']).namelist()
+                zipfile = ZipFile(self.request.FILES['problem-data-zipfile'])
+                invalid_file = zipfile.testzip()
+                if invalid_file:
+                    raise BadZipfile(invalid_file)
+                return [f for f in zipfile.namelist() if not f.endswith('/')]
             elif data.zipfile:
-                return ZipFile(data.zipfile.path).namelist()
-        except (BadZipfile, FileNotFoundError):
+                return problem_data_storage.get_problem_metadata(self.object)['files']
+        except Exception as e:  # ZipFile could throw a lot of different errors, using BadZipfile is not enough
+            data_form.zip_valid_err = e
             return []
         return []
 
@@ -219,8 +269,7 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         context = super(ProblemDataView, self).get_context_data(**kwargs)
         if 'data_form' not in context:
             context['data_form'] = self.get_data_form()
-            valid_files = context['valid_files'] = self.get_valid_files(context['data_form'].instance)
-            context['data_form'].zip_valid = valid_files is not False
+            valid_files = context['valid_files'] = self.get_valid_files(context['data_form'])
             context['cases_formset'] = self.get_case_formset(valid_files)
         context['chunk_size'] = settings.VNOJ_PROBLEM_DATA_CHUNK_SIZE
         context['max_bytes'] = settings.CHUNKED_UPLOAD_MAX_BYTES
@@ -234,6 +283,12 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         else:
             context['testcase_limit'] = settings.VNOJ_TESTCASE_HARD_LIMIT
             context['testcase_soft_limit'] = settings.VNOJ_TESTCASE_SOFT_LIMIT
+
+        problem = self.object
+        if problem.is_organization_private and problem.organization:
+            add_quota_context(problem.organization, context)
+
+        context['quota_warning_suffix'] = settings.VNOJ_QUOTA_WARNING_SUFFIX
         return context
 
     def check_valid(self, data_form, cases_formset):
@@ -248,13 +303,27 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
             )
             cases_formset._non_form_errors.append(error)
             return False
+
+        # Storage quota check for organization problems
+        problem = self.object
+        if problem.is_organization_private and problem.organization:
+            org = problem.organization
+            if settings.VNOJ_QUOTA_ENFORCEMENT_ENABLED and not org.can_upload_data():
+                error = ValidationError(
+                    _('Storage limit exceeded for organization "%(org)s". '
+                      'Please delete some test data before uploading more.'),
+                    code='storage_exceeded',
+                    params={'org': org.name},
+                )
+                data_form.add_error(None, error)
+                return False
+
         return True
 
     def post(self, request, *args, **kwargs):
         self.object = problem = self.get_object()
         data_form = self.get_data_form(post=True)
-        valid_files = self.get_valid_files(data_form.instance, post=True)
-        data_form.zip_valid = valid_files is not False
+        valid_files = self.get_valid_files(data_form, post=True)
         cases_formset = self.get_case_formset(valid_files, post=True)
         if self.check_valid(data_form, cases_formset):
             data = data_form.save()
@@ -277,9 +346,14 @@ def problem_data_file(request, problem, path):
     if not object.is_editable_by(request.user):
         raise Http404()
 
-    problem_dir = problem_data_storage.path(problem)
-    if os.path.commonpath((problem_data_storage.path(os.path.join(problem, path)), problem_dir)) != problem_dir:
+    if not posixpath.normpath(problem + '/' + path).startswith(problem + '/'):
         raise Http404()
+
+    full_path = os.path.join(problem, path)
+
+    presigned = problem_data_storage.presigned_url(full_path)
+    if presigned:
+        return HttpResponseRedirect(presigned)
 
     response = HttpResponse()
 
@@ -289,7 +363,7 @@ def problem_data_file(request, problem, path):
         url_path = None
 
     try:
-        add_file_response(request, response, url_path, os.path.join(problem, path), problem_data_storage)
+        add_file_response(request, response, url_path, full_path, problem_data_storage)
     except IOError:
         raise Http404()
 
