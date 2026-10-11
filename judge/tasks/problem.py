@@ -51,6 +51,9 @@ def reassemble_problem_data_zip(upload_id, problem_code):
 
     data.zipfile.name = saved_name
     data.save()
+    # The data form is submitted after this task, without the file; it must not validate against
+    # the cached file list of the previous archive.
+    problem_data_storage.invalidate_problem_metadata(problem)
 
     chunked_upload.delete()
     return {'zipfile': saved_name}
