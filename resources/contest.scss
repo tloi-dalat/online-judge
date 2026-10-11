@@ -396,3 +396,13 @@ form.contest-join-pseudotab {
         width: 260px !important;
     }
 }
+
+#contest-search {
+    align-self: stretch;
+    border-radius: 4px;
+
+    &:not(:hover):not(:focus) {
+        border-color: $color_primary33;
+        box-shadow: none;
+    }
+}
