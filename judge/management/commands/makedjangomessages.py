@@ -4,6 +4,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from datetime import datetime
 
 import django
 import polib
@@ -184,11 +185,18 @@ class Command(BaseCommand):
         pot = polib.POFile(wrapwidth=79)
         pot.metadata = {
             'Project-Id-Version': 'Django',
+            'POT-Creation-Date': datetime.now().astimezone().strftime('%Y-%m-%d %H:%M%z'),
             'MIME-Version': '1.0',
             'Content-Type': 'text/plain; charset=UTF-8',
             'Content-Transfer-Encoding': '8bit',
         }
-        pot.extend(entry for key, entry in source.items() if key in keys)
+        plurals = {key[:2] for key in keys if key[2]}
+        for key in sorted((key for key in keys if not key[2] and key[:2] in plurals), key=lambda key: key[1]):
+            self.stderr.write(self.style.WARNING(
+                '%s: skipped "%s" from %s, because it is also a plural message and a catalog cannot hold both.' % (
+                    os.path.relpath(path, settings.BASE_DIR), key[1],
+                    ', '.join(source_path for source_path, line in source[key].occurrences))))
+        pot.extend(entry for key, entry in source.items() if key in keys and (key[2] or key[:2] not in plurals))
 
         os.makedirs(os.path.dirname(path), exist_ok=True)
         if os.path.exists(path):

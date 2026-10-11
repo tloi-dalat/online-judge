@@ -4981,14 +4981,30 @@ msgid "Shield.io badge URL shown alongside the Discord invite link."
 msgstr ""
 
 #: judge/views/misc_config.py:82
+msgid "Facebook link"
+msgstr ""
+
+#: judge/views/misc_config.py:83
+msgid "Facebook page URL."
+msgstr ""
+
+#: judge/views/misc_config.py:87
+msgid "GitHub link"
+msgstr ""
+
+#: judge/views/misc_config.py:88
+msgid "GitHub page URL."
+msgstr ""
+
+#: judge/views/misc_config.py:92
 msgid "Description example"
 msgstr ""
 
-#: judge/views/misc_config.py:84
+#: judge/views/misc_config.py:94
 msgid "Example problem description pre-filled when creating new problems."
 msgstr ""
 
-#: judge/views/misc_config.py:91 templates/base.html:290
+#: judge/views/misc_config.py:101 templates/base.html:290
 msgid "Site settings"
 msgstr ""
 
@@ -6325,7 +6341,7 @@ msgid "Please read the [guidelines][0] before creating a new blog post."
 msgstr ""
 
 #: templates/blog/edit.html:56 templates/contest/edit.html:412
-#: templates/misc_config/edit.html:126 templates/organization/edit.html:48
+#: templates/misc_config/edit.html:128 templates/organization/edit.html:48
 #: templates/organization/requests/pending.html:53
 #: templates/problem/editor.html:264
 #: templates/problem/type-group-editor.html:21
@@ -7426,7 +7442,7 @@ msgstr ""
 msgid "Community"
 msgstr ""
 
-#: templates/misc_config/edit.html:119
+#: templates/misc_config/edit.html:121
 msgid "Problem editor"
 msgstr ""
 

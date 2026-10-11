@@ -5108,14 +5108,30 @@ msgid "Shield.io badge URL shown alongside the Discord invite link."
 msgstr "URL badge Shield.io hiển thị cùng liên kết mời Discord."
 
 #: judge/views/misc_config.py:82
+msgid "Facebook link"
+msgstr "Liên kết Facebook"
+
+#: judge/views/misc_config.py:83
+msgid "Facebook page URL."
+msgstr "URL trang Facebook."
+
+#: judge/views/misc_config.py:87
+msgid "GitHub link"
+msgstr "Liên kết GitHub"
+
+#: judge/views/misc_config.py:88
+msgid "GitHub page URL."
+msgstr "URL trang GitHub."
+
+#: judge/views/misc_config.py:92
 msgid "Description example"
 msgstr "Mô tả mẫu"
 
-#: judge/views/misc_config.py:84
+#: judge/views/misc_config.py:94
 msgid "Example problem description pre-filled when creating new problems."
 msgstr "Mô tả bài tập mẫu được điền sẵn khi tạo bài mới."
 
-#: judge/views/misc_config.py:91 templates/base.html:290
+#: judge/views/misc_config.py:101 templates/base.html:290
 msgid "Site settings"
 msgstr "Cài đặt trang web"
 
@@ -6470,7 +6486,7 @@ msgid "Please read the [guidelines][0] before creating a new blog post."
 msgstr "Hãy đọc [nội quy blog][0] trước khi tạo blog mới."
 
 #: templates/blog/edit.html:56 templates/contest/edit.html:412
-#: templates/misc_config/edit.html:126 templates/organization/edit.html:48
+#: templates/misc_config/edit.html:128 templates/organization/edit.html:48
 #: templates/organization/requests/pending.html:53
 #: templates/problem/editor.html:264
 #: templates/problem/type-group-editor.html:21
@@ -7620,7 +7636,7 @@ msgstr "SEO"
 msgid "Community"
 msgstr "Cộng đồng"
 
-#: templates/misc_config/edit.html:119
+#: templates/misc_config/edit.html:121
 msgid "Problem editor"
 msgstr "Trình soạn đề"
 
