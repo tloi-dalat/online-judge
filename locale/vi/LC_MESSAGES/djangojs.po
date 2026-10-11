@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 13:42+0000\n"
+"POT-Creation-Date: 2026-10-11 16:13+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -22,14 +22,14 @@ msgstr ""
 msgid "Table of Contents"
 msgstr "Mục lục"
 
-#: resources/common.js:212
+#: resources/common.js:214
 msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
 msgstr[0] "%d ngày %h:%m:%s"
 msgstr[1] "%d ngày %h:%m:%s"
 
-#: resources/common.js:215
+#: resources/common.js:217
 msgctxt "time format without day"
 msgid "%h:%m:%s"
 msgstr "%h:%m:%s"

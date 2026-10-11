@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 22:39+0000\n"
+"POT-Creation-Date: 2026-10-11 16:12+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -38,7 +38,7 @@ msgstr "Nhân viên"
 msgid "Banned User"
 msgstr "Người dùng bị cấm"
 
-#: dmoj/settings.py:107 templates/base.html:341
+#: dmoj/settings.py:107 templates/base.html:363
 #: templates/comments/list.html:102 templates/contest/contest-list-tabs.html:34
 #: templates/problem/problem-list-tabs.html:9
 #: templates/submission/info-base.html:15
@@ -88,7 +88,7 @@ msgstr "Đặt lại mật khẩu thành công"
 msgid "Password reset sent"
 msgstr "Đã gửi email đặt lại mật khẩu"
 
-#: dmoj/urls.py:108 templates/base.html:243 templates/organization/tabs.html:15
+#: dmoj/urls.py:108 templates/base.html:265 templates/organization/tabs.html:15
 msgid "Home"
 msgstr "Trang chủ"
 
@@ -270,7 +270,7 @@ msgstr[1] "%d lượt tham gia đã được tính lại."
 msgid "username"
 msgstr "tên người dùng"
 
-#: judge/admin/contest.py:438 templates/base.html:382
+#: judge/admin/contest.py:438
 msgid "virtual"
 msgstr "ảo"
 
@@ -839,7 +839,7 @@ msgstr "Mật khẩu này chỉ toàn các số."
 msgid "Your password can't be entirely numeric."
 msgstr "Mật khẩu không được hoàn toàn bằng số."
 
-#: judge/custom_translations.py:24 templates/base.html:268
+#: judge/custom_translations.py:24 templates/base.html:290
 msgid "PRoblems"
 msgstr "Danh sách bài"
 
@@ -1240,12 +1240,12 @@ msgstr ""
 msgid "N j, Y, g:i a"
 msgstr "j, M, Y, G:i"
 
-#: judge/jinja2/datetime.py:31 templates/ticket/action.html:17
+#: templates/ticket/action.html:17
 #, python-brace-format
 msgid "{time}"
 msgstr "{time}"
 
-#: judge/jinja2/datetime.py:32 templates/blog/modern-list.html:91
+#: templates/blog/modern-list.html:91
 #, python-brace-format
 msgid "on {time}"
 msgstr "vào lúc {time}"
@@ -1339,12 +1339,12 @@ msgid "Follow system default"
 msgstr "Theo mặc định hệ thống"
 
 #: judge/models/choices.py:71 templates/admin/base_site.html:32
-#: templates/base.html:297
+#: templates/base.html:319
 msgid "Light"
 msgstr "Sáng"
 
 #: judge/models/choices.py:72 templates/admin/base_site.html:31
-#: templates/base.html:296
+#: templates/base.html:318
 msgid "Dark"
 msgstr "Tối"
 
@@ -4693,23 +4693,23 @@ msgstr "Blog - Trang %d"
 msgid "Blog"
 msgstr "Blog"
 
-#: judge/views/blog.py:358 judge/views/blog.py:361
+#: judge/views/blog.py:359 judge/views/blog.py:362
 msgid "Creating new blog post"
 msgstr "Tạo blog mới"
 
-#: judge/views/blog.py:379 judge/views/contests.py:1674
+#: judge/views/blog.py:380 judge/views/contests.py:1674
 #: judge/views/organization.py:470 judge/views/organization.py:995
 #: judge/views/organization.py:1019 judge/views/problem.py:993
 #: judge/views/tag.py:182
 msgid "Created on site"
 msgstr "Tạo trên trang web"
 
-#: judge/views/blog.py:393 judge/views/blog.py:432 judge/views/contests.py:300
+#: judge/views/blog.py:394 judge/views/blog.py:433 judge/views/contests.py:300
 #: judge/views/contests.py:1685
 msgid "Permission denied"
 msgstr "Từ chối quyền"
 
-#: judge/views/blog.py:394
+#: judge/views/blog.py:395
 #, python-format
 msgid ""
 "You cannot create blog post.\n"
@@ -4718,17 +4718,17 @@ msgstr ""
 "Không thể tạo blog.\n"
 "Lưu ý: Bạn cần giải ít nhất %d bài để có thể tạo blog."
 
-#: judge/views/blog.py:408 judge/views/blog.py:411
+#: judge/views/blog.py:409 judge/views/blog.py:412
 msgid "Updating blog post"
 msgstr "Cập nhật blog"
 
-#: judge/views/blog.py:426 judge/views/comment.py:142
+#: judge/views/blog.py:427 judge/views/comment.py:142
 #: judge/views/contests.py:1744 judge/views/organization.py:519
 #: judge/views/problem.py:1177
 msgid "Edited from site"
 msgstr "Chỉnh sửa từ trang web"
 
-#: judge/views/blog.py:433
+#: judge/views/blog.py:434
 msgid "You cannot edit blog post."
 msgstr "Bạn không thể chỉnh sửa blog."
 
@@ -4762,7 +4762,7 @@ msgstr "Kỳ thi không tồn tại"
 msgid "Could not find a contest with the key \"%s\"."
 msgstr "Không thể tìm thấy kỳ thi với khóa \"%s\"."
 
-#: judge/views/contests.py:106 templates/base.html:270
+#: judge/views/contests.py:106 templates/base.html:292
 #: templates/problem/problem.html:419
 msgid "Contests"
 msgstr "Các kỳ thi"
@@ -5131,11 +5131,11 @@ msgstr "Mô tả mẫu"
 msgid "Example problem description pre-filled when creating new problems."
 msgstr "Mô tả bài tập mẫu được điền sẵn khi tạo bài mới."
 
-#: judge/views/misc_config.py:101 templates/base.html:290
+#: judge/views/misc_config.py:101 templates/base.html:312
 msgid "Site settings"
 msgstr "Cài đặt trang web"
 
-#: judge/views/notification.py:43 templates/base.html:312
+#: judge/views/notification.py:43 templates/base.html:334
 #: templates/misc_config/edit.html:97
 msgid "Notifications"
 msgstr "Thông báo"
@@ -6040,7 +6040,7 @@ msgid "Updated on site"
 msgstr "Cập nhật trên trang web"
 
 #: judge/views/user.py:554 templates/admin/auth/user/change_form.html:14
-#: templates/admin/auth/user/change_form.html:17 templates/base.html:343
+#: templates/admin/auth/user/change_form.html:17 templates/base.html:365
 #: templates/user/user-tabs.html:32
 msgid "Edit profile"
 msgstr "Chỉnh sửa hồ sơ"
@@ -6221,7 +6221,7 @@ msgstr ""
 msgid "Validation Failed for field `username`"
 msgstr "Xác thực thất bại cho trường `username`"
 
-#: templates/admin/base_site.html:30 templates/base.html:295
+#: templates/admin/base_site.html:30 templates/base.html:317
 msgid "Toggle dark mode"
 msgstr "Bật/tắt chế độ tối"
 
@@ -6321,7 +6321,7 @@ msgstr "Xem các bài nộp"
 msgid "Edit user"
 msgstr "Cập nhật người dùng"
 
-#: templates/base.html:102 templates/base.html:405
+#: templates/base.html:102 templates/base.html:427
 #: templates/blog/modern-list.html:155
 #: templates/organization/users-table.html:29
 #: templates/urlshortener/list.html:67
@@ -6332,87 +6332,91 @@ msgstr "Xem"
 msgid "Close"
 msgstr "Đóng"
 
-#: templates/base.html:104 templates/base.html:323
+#: templates/base.html:104 templates/base.html:345
 msgid "No notifications."
 msgstr "Không có thông báo nào."
 
-#: templates/base.html:269 templates/contest/contest-tabs.html:18
+#: templates/base.html:291 templates/contest/contest-tabs.html:18
 #: templates/contest/prepare-data.html:97 templates/organization/tabs.html:19
 #: templates/organization/user-solved.html:129
 #: templates/user/prepare-data.html:104
 msgid "Submissions"
 msgstr "Các bài nộp"
 
-#: templates/base.html:271 templates/contest/list.html:198
+#: templates/base.html:293 templates/contest/list.html:198
 #: templates/contest/list.html:238 templates/contest/list.html:328
 #: templates/organization/tabs.html:16
 msgid "Users"
 msgstr "Thành viên"
 
-#: templates/base.html:285
+#: templates/base.html:307
 msgid "Report an issue"
 msgstr "Báo cáo vấn đề"
 
-#: templates/base.html:318 templates/notification/list.html:55
+#: templates/base.html:340 templates/notification/list.html:55
 msgid "Unread"
 msgstr "Chưa đọc"
 
-#: templates/base.html:319
+#: templates/base.html:341
 msgid "Mark all read"
 msgstr "Đánh dấu tất cả đã đọc"
 
-#: templates/base.html:326
+#: templates/base.html:348
 msgid "See all notifications"
 msgstr "Xem tất cả thông báo"
 
-#: templates/base.html:336
+#: templates/base.html:358
 #, python-format
 msgid "Hello, %(username)s."
 msgstr "Xin chào, %(username)s."
 
-#: templates/base.html:345
+#: templates/base.html:367
 msgid "Stop impersonating"
 msgstr "Ngừng mạo danh"
 
-#: templates/base.html:350
+#: templates/base.html:372
 msgid "Log out"
 msgstr "Đăng xuất"
 
-#: templates/base.html:359
+#: templates/base.html:381
 #: templates/registration/password_reset_complete.html:4
 msgid "Log in"
 msgstr "Đăng nhập"
 
-#: templates/base.html:361 templates/registration/registration_form.html:207
+#: templates/base.html:383 templates/registration/registration_form.html:207
 msgid "or"
 msgstr "hoặc"
 
-#: templates/base.html:362
+#: templates/base.html:384
 msgid "Sign up"
 msgstr "Đăng ký"
 
-#: templates/base.html:376
+#: templates/base.html:398
 msgid "spectating"
 msgstr "đang theo dõi"
 
-#: templates/base.html:387
+#: templates/base.html:404
+msgid "Your time is up!"
+msgstr "Thời gian làm bài của bạn đã hết!"
+
+#: templates/base.html:409
 msgid "Go to Rankings"
 msgstr "Tới bảng xếp hạng"
 
-#: templates/base.html:394
+#: templates/base.html:416
 msgid "This site works best with JavaScript enabled."
 msgstr "Trang web này hoạt động tốt nhất khi JavaScript được cho phép."
 
-#: templates/base.html:404
+#: templates/base.html:426
 msgid "You have unread notifications."
 msgstr "Bạn có thông báo chưa đọc."
 
-#: templates/base.html:434
+#: templates/base.html:456
 #, python-format
 msgid "proudly powered by %(vnoj)s (based on %(dmoj)s)"
 msgstr "được phát triển bởi %(vnoj)s (dựa trên %(dmoj)s)"
 
-#: templates/base.html:440
+#: templates/base.html:462
 #, python-format
 msgid "follow us on %(github)s and %(facebook)s"
 msgstr "theo dõi bọn mình trên %(github)s và %(facebook)s"
