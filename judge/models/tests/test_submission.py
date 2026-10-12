@@ -9,10 +9,10 @@ from judge.models.tests.util import CommonDataMixin, create_contest, create_cont
 
 class SubmissionTestCase(CommonDataMixin, TestCase):
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
         super().setUpTestData()
 
-        self.users.update({
+        cls.users.update({
             'staff_submission_view_all': create_user(
                 username='staff_submission_view_all',
                 is_staff=True,
@@ -20,8 +20,8 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
             ),
         })
 
-        self.basic_submission = Submission.objects.create(
-            user=self.users['normal'].profile,
+        cls.basic_submission = Submission.objects.create(
+            user=cls.users['normal'].profile,
             problem=create_problem(code='basic'),
             language=Language.get_python3(),
             result='PAC',
@@ -32,8 +32,8 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
             locked_after=None,
         )
 
-        self.full_ac_submission = Submission.objects.create(
-            user=self.users['normal'].profile,
+        cls.full_ac_submission = Submission.objects.create(
+            user=cls.users['normal'].profile,
             problem=create_problem(code='full_ac'),
             language=Language.get_python3(),
             result='AC',
@@ -41,13 +41,13 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
             case_points=1,
             case_total=1,
         )
-        self.full_ac_submission_source = SubmissionSource.objects.create(
-            submission=self.full_ac_submission,
+        cls.full_ac_submission_source = SubmissionSource.objects.create(
+            submission=cls.full_ac_submission,
             source='',
         )
 
-        self.locked_submission = Submission.objects.create(
-            user=self.users['normal'].profile,
+        cls.locked_submission = Submission.objects.create(
+            user=cls.users['normal'].profile,
             problem=create_problem(code='locked'),
             language=Language.get_python3(),
             result='WA',
@@ -57,8 +57,8 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
             locked_after=timezone.now() - timezone.timedelta(days=100),
         )
 
-        self.future_locked_submission = Submission.objects.create(
-            user=self.users['normal'].profile,
+        cls.future_locked_submission = Submission.objects.create(
+            user=cls.users['normal'].profile,
             problem=create_problem(code='future_locked'),
             language=Language.get_python3(),
             result='WA',
@@ -68,8 +68,8 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
             locked_after=timezone.now() + timezone.timedelta(days=100),
         )
 
-        self.ie_submission = Submission.objects.create(
-            user=self.users['superuser'].profile,
+        cls.ie_submission = Submission.objects.create(
+            user=cls.users['superuser'].profile,
             problem=create_problem(
                 code='ie',
                 is_public=True,
@@ -83,16 +83,16 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
         # jump down the rabbit hole to attach a contest submission
         problem = create_problem(code='queued')
         contest = create_contest(key='queued')
-        self.queued_submission = Submission.objects.create(
-            user=self.users['superuser'].profile,
+        cls.queued_submission = Submission.objects.create(
+            user=cls.users['superuser'].profile,
             problem=problem,
             language=Language.get_python3(),
             contest_object=contest,
             case_points=50,
             case_total=100,
         )
-        self.queued_contest_submission = ContestSubmission.objects.create(
-            submission=self.queued_submission,
+        cls.queued_contest_submission = ContestSubmission.objects.create(
+            submission=cls.queued_submission,
             problem=create_contest_problem(problem=problem, contest=contest, partial=False),
             participation=create_contest_participation(contest=contest, user='superuser'),
         )

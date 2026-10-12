@@ -12,43 +12,43 @@ from judge.models.tests.util import CommonDataMixin, create_contest, create_cont
 
 class CodeforcesContestFormatTestCase(CommonDataMixin, TestCase):
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
         super().setUpTestData()
 
         # Create Codeforces contest: duration 200 minutes
-        self.contest_start = timezone.now() - timedelta(minutes=100)
-        self.contest_end = self.contest_start + timedelta(minutes=200)
+        cls.contest_start = timezone.now() - timedelta(minutes=100)
+        cls.contest_end = cls.contest_start + timedelta(minutes=200)
 
-        self.cf_contest = create_contest(
+        cls.cf_contest = create_contest(
             key='cf_contest',
             name='Codeforces Test Contest',
             format_name='codeforces',
-            start_time=self.contest_start,
-            end_time=self.contest_end,
+            start_time=cls.contest_start,
+            end_time=cls.contest_end,
         )
 
         # Create two problems
-        self.problem_a = create_problem(code='prob_a')
-        self.problem_b = create_problem(code='prob_b')
+        cls.problem_a = create_problem(code='prob_a')
+        cls.problem_b = create_problem(code='prob_b')
 
-        self.cp_a = create_contest_problem(
-            contest=self.cf_contest,
-            problem=self.problem_a,
+        cls.cp_a = create_contest_problem(
+            contest=cls.cf_contest,
+            problem=cls.problem_a,
             points=500,
             order=1,
         )
-        self.cp_b = create_contest_problem(
-            contest=self.cf_contest,
-            problem=self.problem_b,
+        cls.cp_b = create_contest_problem(
+            contest=cls.cf_contest,
+            problem=cls.problem_b,
             points=1000,
             order=2,
         )
 
         # Create participation starting at contest start
-        self.participation = create_contest_participation(
-            contest=self.cf_contest,
+        cls.participation = create_contest_participation(
+            contest=cls.cf_contest,
             user='normal',
-            real_start=self.contest_start,
+            real_start=cls.contest_start,
         )
 
     def test_codeforces_scoring(self):

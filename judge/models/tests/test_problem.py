@@ -11,11 +11,11 @@ from judge.models.tests.util import CommonDataMixin, create_contest, create_cont
 
 class ProblemTestCase(CommonDataMixin, TestCase):
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
         super().setUpTestData()
         _now = timezone.now()
 
-        self.users.update({
+        cls.users.update({
             'staff_problem_edit_only_all': create_user(
                 username='staff_problem_edit_only_all',
                 is_staff=True,
@@ -28,7 +28,7 @@ class ProblemTestCase(CommonDataMixin, TestCase):
 
         create_problem_type(name='type')
 
-        self.basic_problem = create_problem(
+        cls.basic_problem = create_problem(
             code='basic',
             allowed_languages=Language.objects.values_list('key', flat=True),
             types=('type',),
@@ -36,7 +36,7 @@ class ProblemTestCase(CommonDataMixin, TestCase):
             testers=('staff_problem_edit_public',),
         )
 
-        self.testcase_allow_all = create_problem(
+        cls.testcase_allow_all = create_problem(
             code='allow_all',
             allowed_languages=Language.objects.values_list('key', flat=True),
             types=('type',),
@@ -45,7 +45,7 @@ class ProblemTestCase(CommonDataMixin, TestCase):
             testcase_visibility_mode=ProblemTestcaseAccess.ALWAYS,
         )
 
-        self.testcase_allow_out_contest = create_problem(
+        cls.testcase_allow_out_contest = create_problem(
             code='allow_out_contest',
             allowed_languages=Language.objects.values_list('key', flat=True),
             types=('type',),
@@ -54,7 +54,7 @@ class ProblemTestCase(CommonDataMixin, TestCase):
             testcase_visibility_mode=ProblemTestcaseAccess.OUT_CONTEST,
         )
 
-        self.basic_contest = create_contest(
+        cls.basic_contest = create_contest(
             key='basic',
             start_time=_now - timezone.timedelta(days=1),
             end_time=_now + timezone.timedelta(days=100),
@@ -62,26 +62,26 @@ class ProblemTestCase(CommonDataMixin, TestCase):
         )
 
         create_contest_problem(
-            problem=self.testcase_allow_out_contest,
-            contest=self.basic_contest,
+            problem=cls.testcase_allow_out_contest,
+            contest=cls.basic_contest,
         )
 
         for user in (
             'normal_in_contest', 'superuser', 'staff_problem_edit_own',
                 'staff_problem_see_all', 'staff_problem_edit_all'):
-            self.users[user].profile.current_contest = create_contest_participation(
+            cls.users[user].profile.current_contest = create_contest_participation(
                 contest='basic',
                 user=user,
                 real_start=_now - timezone.timedelta(hours=1),
                 virtual=ContestParticipation.LIVE,
             )
-            self.users[user].profile.save()
+            cls.users[user].profile.save()
 
         limits = []
         for lang in Language.objects.filter(common_name=Language.get_python3().common_name):
             limits.append(
                 LanguageLimit(
-                    problem=self.basic_problem,
+                    problem=cls.basic_problem,
                     language=lang,
                     time_limit=100,
                     memory_limit=131072,
@@ -89,7 +89,7 @@ class ProblemTestCase(CommonDataMixin, TestCase):
             )
         LanguageLimit.objects.bulk_create(limits)
 
-        self.organization_private_problem = create_problem(
+        cls.organization_private_problem = create_problem(
             code='organization_private',
             time_limit=2,
             is_public=True,
@@ -97,18 +97,18 @@ class ProblemTestCase(CommonDataMixin, TestCase):
             curators=('staff_problem_edit_own', 'staff_problem_edit_own_no_staff'),
         )
 
-        self.problem_organization = create_organization(
+        cls.problem_organization = create_organization(
             name='problem organization',
             admins=('normal', 'staff_problem_edit_public'),
         )
-        self.organization_admin_private_problem = create_problem(
+        cls.organization_admin_private_problem = create_problem(
             code='org_admin_private',
             is_organization_private=True,
-            organization=self.problem_organization,
+            organization=cls.problem_organization,
         )
-        self.organization_admin_problem = create_problem(
+        cls.organization_admin_problem = create_problem(
             code='organization_admin',
-            organization=self.problem_organization,
+            organization=cls.problem_organization,
         )
 
     def test_basic_problem(self):
@@ -393,9 +393,9 @@ class ProblemTestCase(CommonDataMixin, TestCase):
 @override_settings(LANGUAGE_CODE='en-US', LANGUAGES=(('en', 'English'),))
 class SolutionTestCase(CommonDataMixin, TestCase):
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
         super().setUpTestData()
-        self.users.update({
+        cls.users.update({
             'staff_solution_see_all': create_user(
                 username='staff_solution_see_all',
                 user_permissions=('see_private_solution',),
@@ -404,21 +404,21 @@ class SolutionTestCase(CommonDataMixin, TestCase):
 
         _now = timezone.now()
 
-        self.basic_solution = create_solution(problem='basic')
+        cls.basic_solution = create_solution(problem='basic')
 
-        self.private_solution = create_solution(
+        cls.private_solution = create_solution(
             problem='private',
             is_public=False,
             publish_on=_now - timezone.timedelta(days=100),
         )
 
-        self.unpublished_problem = create_problem(
+        cls.unpublished_problem = create_problem(
             code='unpublished',
             name='Unpublished',
             authors=('staff_problem_edit_own',),
         )
-        self.unpublished_solution = create_solution(
-            problem=self.unpublished_problem,
+        cls.unpublished_solution = create_solution(
+            problem=cls.unpublished_problem,
             is_public=False,
             publish_on=_now + timezone.timedelta(days=100),
             authors=('normal',),

@@ -251,8 +251,8 @@ class CommonDataMixin:
     fixtures = ['language_all.json']
 
     @classmethod
-    def setUpTestData(self):
-        self.users = {
+    def setUpTestData(cls):
+        cls.users = {
             'superuser': create_user(
                 username='superuser',
                 is_superuser=True,
@@ -301,7 +301,7 @@ class CommonDataMixin:
             'anonymous': AnonymousUser(),
         }
 
-        self.organizations = {
+        cls.organizations = {
             'open': create_organization(
                 name='open',
                 is_unlisted=False,
