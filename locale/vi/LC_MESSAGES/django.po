@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-17 18:03+0000\n"
+"POT-Creation-Date: 2026-10-12 14:24+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -5291,12 +5291,20 @@ msgstr "Tới bảng xếp hạng"
 msgid "This site works best with JavaScript enabled."
 msgstr "Trang web này hoạt động tốt nhất khi JavaScript được cho phép."
 
-#: templates/base.html:404
+#: templates/base.html:377
+msgid ""
+"The system will undergo maintenance from 00:00 on October 17 to 23:59 on "
+"October 18 (UTC+7). We apologize for the inconvenience."
+msgstr ""
+"Hệ thống sẽ bảo trì từ 00:00 ngày 17/10 đến 23:59 ngày 18/10 (UTC+7). Mong "
+"mọi người thông cảm vì sự bất tiện này."
+
+#: templates/base.html:415
 #, python-format
 msgid "proudly powered by %(vnoj)s (based on %(dmoj)s)"
 msgstr "được phát triển bởi %(vnoj)s (dựa trên %(dmoj)s)"
 
-#: templates/base.html:410
+#: templates/base.html:421
 #, python-format
 msgid "follow us on %(github)s and %(facebook)s"
 msgstr "theo dõi bọn mình trên %(github)s và %(facebook)s"

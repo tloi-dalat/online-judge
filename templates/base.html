@@ -372,6 +372,17 @@
     </noscript>
     <br>
     <main id="content">
+        <div class="alert alert-warning alert-dismissable" id="maintenance-notice" style="text-align: center;">
+            <a class="close" id="maintenance-notice-dismiss" href="javascript:void(0)" onclick="$('#maintenance-notice').slideUp(); try { localStorage.setItem('maintenance-notice-dismissed', '1'); } catch (e) {}" style="cursor: pointer; text-decoration: none;"><i class="fa fa-times"></i></a>
+            <span>{{ _('The system will undergo maintenance from 00:00 on October 17 to 23:59 on October 18 (UTC+7). We apologize for the inconvenience.') }}</span>
+        </div>
+        <script>
+            try {
+                if (localStorage.getItem('maintenance-notice-dismissed') === '1') {
+                    document.getElementById('maintenance-notice').style.display = 'none';
+                }
+            } catch (e) {}
+        </script>
         {% if misc_config.top_notification %}
             {{ render_django(misc_config.top_notification) }}
         {% endif %}

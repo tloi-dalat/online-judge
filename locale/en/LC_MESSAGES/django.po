@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-17 18:03+0000\n"
+"POT-Creation-Date: 2026-10-12 14:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5206,12 +5206,18 @@ msgstr ""
 msgid "This site works best with JavaScript enabled."
 msgstr ""
 
-#: templates/base.html:404
+#: templates/base.html:377
+msgid ""
+"The system will undergo maintenance from 00:00 on October 17 to 23:59 on "
+"October 18 (UTC+7). We apologize for the inconvenience."
+msgstr ""
+
+#: templates/base.html:415
 #, python-format
 msgid "proudly powered by %(vnoj)s (based on %(dmoj)s)"
 msgstr ""
 
-#: templates/base.html:410
+#: templates/base.html:421
 #, python-format
 msgid "follow us on %(github)s and %(facebook)s"
 msgstr ""
