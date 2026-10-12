@@ -854,6 +854,15 @@ class ContestSubmission(models.Model):
                                      help_text=_('Whether this submission was ran only on pretests.'),
                                      default=False)
 
+    @cached_property
+    def contest_points_breakdown(self):
+        return self.participation.contest.format.get_submission_breakdown(self)
+
+    @property
+    def contest_points(self):
+        breakdown = self.contest_points_breakdown
+        return self.points if breakdown is None else breakdown['points_gained']
+
     class Meta:
         verbose_name = _('contest submission')
         verbose_name_plural = _('contest submissions')

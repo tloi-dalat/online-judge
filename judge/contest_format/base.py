@@ -47,6 +47,9 @@ class BaseContestFormat(metaclass=ABCMeta):
         """
         raise NotImplementedError()
 
+    def get_submission_breakdown(self, contest_submission):
+        return None
+
     def get_format_data_for_api(self, entry, problem_points, frozen=False):
         """
         Returns a sanitized copy of a single problem's format_data entry safe to expose via the ranking JSON API.

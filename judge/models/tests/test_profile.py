@@ -13,10 +13,10 @@ from judge.models.tests.util import CommonDataMixin, create_contest, create_cont
 
 class OrganizationTestCase(CommonDataMixin, TestCase):
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
         super().setUpTestData()
-        self.profile = self.users['normal'].profile
-        self.profile.organizations.add(self.organizations['open'])
+        cls.profile = cls.users['normal'].profile
+        cls.profile.organizations.add(cls.organizations['open'])
 
     def test_contains(self):
         self.assertIn(self.profile, self.organizations['open'])
@@ -34,10 +34,10 @@ class OrganizationTestCase(CommonDataMixin, TestCase):
 
 class ProfileTestCase(CommonDataMixin, TestCase):
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
         super().setUpTestData()
-        self.profile = self.users['normal'].profile
-        self.profile.organizations.add(self.organizations['open'])
+        cls.profile = cls.users['normal'].profile
+        cls.profile.organizations.add(cls.organizations['open'])
 
     def setUp(self):
         # We are doing a LOT of field modifications in this test case.

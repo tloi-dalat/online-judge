@@ -17,6 +17,9 @@
 {% endblock %}
 
 {% block content_js_media %}
+    {% if contest.format_name == 'codeforces' and is_in_contest and not request.participation.ended %}
+        {% include "contest/codeforces-points-js.html" %}
+    {% endif %}
     <script type="text/javascript">
         $(document).ready(function () {
             $('.time-remaining').each(function () {
@@ -270,7 +273,11 @@
                         <td> {{ problem.time_limit }} </td>
                         <td> {{ problem.memory_limit|kbsimpleformat }} </td>
                         {% if not is_ICPC_format %}
-                            <td>{{ problem.points|floatformat(-2) }}</td>
+                            {% if contest.format_name == 'codeforces' and is_in_contest and not request.participation.ended %}
+                                <td class="codeforces-dynamic-points" data-max-points="{{ problem.points }}">{{ problem.points|floatformat(-2) }}</td>
+                            {% else %}
+                                <td>{{ problem.points|floatformat(-2) }}</td>
+                            {% endif %}
                         {% endif %}
                         {% if metadata.has_public_editorials %}
                             <td>

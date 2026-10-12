@@ -9,9 +9,9 @@ from judge.models.tests.util import CommonDataMixin, create_contest, create_cont
 
 class ContestTestCase(CommonDataMixin, TestCase):
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
         super().setUpTestData()
-        self.users.update({
+        cls.users.update({
             'staff_contest_edit_own': create_user(
                 username='staff_contest_edit_own',
                 is_staff=True,
@@ -47,7 +47,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
 
         _now = timezone.now()
 
-        self.basic_contest = create_contest(
+        cls.basic_contest = create_contest(
             key='basic',
             start_time=_now - timezone.timedelta(days=1),
             end_time=_now + timezone.timedelta(days=100),
@@ -55,7 +55,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             testers=('non_staff_tester',),
         )
 
-        self.hidden_scoreboard_contest = create_contest(
+        cls.hidden_scoreboard_contest = create_contest(
             key='hidden_scoreboard',
             start_time=_now - timezone.timedelta(days=1),
             end_time=_now + timezone.timedelta(days=100),
@@ -68,7 +68,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             """,
         )
 
-        self.hidden_scoreboard_non_staff_author = create_contest(
+        cls.hidden_scoreboard_non_staff_author = create_contest(
             key='non_staff_author',
             start_time=_now - timezone.timedelta(days=1),
             end_time=_now + timezone.timedelta(days=100),
@@ -78,7 +78,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             curators=('staff_contest_edit_own',),
         )
 
-        self.contest_hidden_scoreboard_contest = create_contest(
+        cls.contest_hidden_scoreboard_contest = create_contest(
             key='contest_scoreboard',
             start_time=_now - timezone.timedelta(days=10),
             end_time=_now + timezone.timedelta(days=100),
@@ -88,7 +88,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             testers=('non_staff_tester',),
         )
 
-        self.particip_hidden_scoreboard_contest = create_contest(
+        cls.particip_hidden_scoreboard_contest = create_contest(
             key='particip_scoreboard',
             start_time=_now - timezone.timedelta(days=10),
             end_time=_now + timezone.timedelta(days=100),
@@ -98,7 +98,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             testers=('non_staff_tester',),
         )
 
-        self.visible_scoreboard_contest = create_contest(
+        cls.visible_scoreboard_contest = create_contest(
             key='visible_scoreboard',
             start_time=_now - timezone.timedelta(days=10),
             end_time=_now + timezone.timedelta(days=100),
@@ -137,15 +137,15 @@ class ContestTestCase(CommonDataMixin, TestCase):
             virtual=ContestParticipation.SPECTATE,
         )
 
-        self.users['normal'].profile.current_contest = create_contest_participation(
+        cls.users['normal'].profile.current_contest = create_contest_participation(
             contest='hidden_scoreboard',
             user='normal',
         )
-        self.users['normal'].profile.save()
+        cls.users['normal'].profile.save()
 
-        self.hidden_scoreboard_contest.update_user_count()
+        cls.hidden_scoreboard_contest.update_user_count()
 
-        self.private_contest = create_contest(
+        cls.private_contest = create_contest(
             key='private',
             start_time=_now - timezone.timedelta(days=5),
             end_time=_now - timezone.timedelta(days=3),
@@ -156,29 +156,29 @@ class ContestTestCase(CommonDataMixin, TestCase):
             testers=('non_staff_tester',),
         )
 
-        self.organization_private_contest = create_contest(
+        cls.organization_private_contest = create_contest(
             key='organization_private',
             start_time=_now - timezone.timedelta(days=5),
             end_time=_now + timezone.timedelta(days=6),
             is_visible=True,
             is_organization_private=True,
-            organization=self.organizations['open'],
+            organization=cls.organizations['open'],
             view_contest_scoreboard=('normal',),
             testers=('non_staff_tester',),
         )
 
-        self.future_organization_private_contest = create_contest(
+        cls.future_organization_private_contest = create_contest(
             key='future_org_private',
             start_time=_now + timezone.timedelta(days=3),
             end_time=_now + timezone.timedelta(days=6),
             is_visible=True,
             is_organization_private=True,
-            organization=self.organizations['open'],
+            organization=cls.organizations['open'],
             view_contest_scoreboard=('normal',),
             testers=('non_staff_tester',),
         )
 
-        self.private_user_contest = create_contest(
+        cls.private_user_contest = create_contest(
             key='private_user',
             start_time=_now - timezone.timedelta(days=3),
             end_time=_now + timezone.timedelta(days=6),
@@ -187,14 +187,14 @@ class ContestTestCase(CommonDataMixin, TestCase):
             testers=('non_staff_tester',),
         )
 
-        self.non_visible_contest = create_contest(
+        cls.non_visible_contest = create_contest(
             key='non_visible_contest',
             start_time=_now - timezone.timedelta(days=3),
             end_time=_now + timezone.timedelta(days=6),
             is_visible=False,
         )
 
-        self.non_visible_contest_with_tester = create_contest(
+        cls.non_visible_contest_with_tester = create_contest(
             key='non_visible_w_tester',
             start_time=_now - timezone.timedelta(days=3),
             end_time=_now + timezone.timedelta(days=6),
@@ -836,12 +836,12 @@ class ContestTestCase(CommonDataMixin, TestCase):
 
 class ContestTagTestCase(TestCase):
     @classmethod
-    def setUpTestData(self):
-        self.basic_tag = ContestTag.objects.create(
+    def setUpTestData(cls):
+        cls.basic_tag = ContestTag.objects.create(
             name='basic',
             color='#fff',
         )
-        self.dark_tag = ContestTag.objects.create(
+        cls.dark_tag = ContestTag.objects.create(
             name='dark',
             color='#010001',
         )

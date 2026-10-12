@@ -72,6 +72,11 @@
 {% endblock %}
 
 {% block content_js_media %}
+    {% if contest_problem and contest_problem.contest.format_name == 'codeforces' and request.in_contest and not request.participation.ended %}
+        {% with contest=contest_problem.contest %}
+            {% include "contest/codeforces-points-js.html" %}
+        {% endwith %}
+    {% endif %}
     {% if comment_form and comment_form.errors %}
         {# comments/list.html is SSR'd directly below (not via the AJAX fragment) in
            this case, so it needs its own media JS (martor editor, vote/hide/edit). #}
@@ -300,7 +305,12 @@
         <i class="fa fa-check fa-fw"></i><span class="pi-name">{{ _('Points:') }}</span>
         <span class="pi-value">
             {% if contest_problem %}
-                {{ contest_problem.points }}{% if contest_problem.partial %} {{ _('(partial)') }}{% endif %}
+                {% if contest_problem.contest.format_name == 'codeforces' and request.in_contest and not request.participation.ended %}
+                    <span class="codeforces-dynamic-points" data-max-points="{{ contest_problem.points }}">{{ contest_problem.points }}</span>
+                {% else %}
+                    {{ contest_problem.points }}
+                {% endif %}
+                {% if contest_problem.partial %} {{ _('(partial)') }}{% endif %}
             {% else %}
                 {{ problem.points|floatformat(2) }}{% if problem.partial %} {{ _('(partial)') }}{% endif %}
             {% endif %}

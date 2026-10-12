@@ -1,0 +1,26 @@
+<script>
+    $(function () {
+        var decay_rate = {{ contest.format.config.decay_rate }};
+        var min_points_ratio = {{ contest.format.config.min_points_ratio }};
+        var total_duration = {{ (request.participation.end_time - request.participation.start).total_seconds()|default(0) }};
+        var initial_remaining = {{ request.participation.time_remaining|seconds|default(0) }};
+        var points_precision = {{ contest.points_precision }};
+        var page_load_time = Date.now();
+
+        function update_codeforces_points() {
+            var elapsed_seconds = Math.min(total_duration,
+                (total_duration - initial_remaining) + (Date.now() - page_load_time) / 1000);
+            var minutes = Math.floor(elapsed_seconds / 60);
+
+            $('.codeforces-dynamic-points').each(function () {
+                var max_points = parseFloat($(this).attr('data-max-points'));
+                if (isNaN(max_points)) return;
+                var points = Math.max(max_points * min_points_ratio, max_points - minutes * decay_rate * max_points);
+                $(this).text(parseFloat(points.toFixed(points_precision)));
+            });
+        }
+
+        update_codeforces_points();
+        setInterval(update_codeforces_points, 1000);
+    });
+</script>

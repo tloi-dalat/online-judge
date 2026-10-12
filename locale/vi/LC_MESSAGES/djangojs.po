@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-11 16:13+0000\n"
+"POT-Creation-Date: 2026-10-12 09:04+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -34,63 +34,63 @@ msgctxt "time format without day"
 msgid "%h:%m:%s"
 msgstr "%h:%m:%s"
 
-#: resources/contest-ranking.js:251
+#: resources/contest-ranking.js:252
 msgid "%(count)s try"
 msgid_plural "%(count)s tries"
 msgstr[0] "%(count)s lần thử"
 msgstr[1] "%(count)s lần thử"
 
-#: resources/contest-ranking.js:397
+#: resources/contest-ranking.js:411
 msgid "Rank"
 msgstr "Hạng"
 
-#: resources/contest-ranking.js:398
+#: resources/contest-ranking.js:412
 msgid "Username"
 msgstr "Tên truy cập"
 
-#: resources/contest-ranking.js:399
+#: resources/contest-ranking.js:413
 msgid "Points"
 msgstr "Điểm"
 
-#: resources/contest-ranking.js:400
+#: resources/contest-ranking.js:414
 msgid "Penalty"
 msgstr "Penalty"
 
-#: resources/contest-ranking.js:413
+#: resources/contest-ranking.js:427
 msgid "Rating"
 msgstr "Rating"
 
-#: resources/contest-ranking.js:422
+#: resources/contest-ranking.js:436
 msgid "Un-Disqualify"
 msgstr "Hủy truất quyền"
 
-#: resources/contest-ranking.js:422
+#: resources/contest-ranking.js:436
 msgid "Disqualify"
 msgstr "Truất quyền thi đấu"
 
-#: resources/contest-ranking.js:434
+#: resources/contest-ranking.js:448
 msgid "Admin"
 msgstr "Quản trị"
 
-#: resources/contest-ranking.js:493 resources/contest-replay.js:409
+#: resources/contest-ranking.js:507 resources/contest-replay.js:436
 msgid "Live"
 msgstr "Trực tiếp"
 
-#: resources/contest-ranking.js:516
+#: resources/contest-ranking.js:530
 msgid "%(count)s virtual participation of this user"
 msgid_plural "%(count)s virtual participations of this user"
 msgstr[0] "Lần tham gia ảo thứ %(count)s của người dùng này"
 msgstr[1] "Lần tham gia ảo thứ %(count)s của người dùng này"
 
-#: resources/contest-ranking.js:587
+#: resources/contest-ranking.js:601
 msgid "Total AC"
 msgstr "Tổng AC"
 
-#: resources/contest-replay.js:409
+#: resources/contest-replay.js:436
 msgid "End"
 msgstr "Kết thúc"
 
-#: resources/contest-replay.js:411
+#: resources/contest-replay.js:438
 msgid "Freeze min"
 msgstr "Phút đóng băng"
 

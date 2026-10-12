@@ -183,14 +183,37 @@
                     <b>{{ _('Final score:') }}</b>
                 {% endif %}
                 {{ submission.case_points|floatformat(-3) }}/{{ submission.case_total|floatformat(0) }}
-                {% if request.in_contest and submission.contest_or_none %}
-                    {% with contest=submission.contest_or_none %}
-                        {% set points=contest.points|roundfloat(3) %}
-                        {% set total=contest.problem.points|floatformat(-1) %}
-                        ({{ _('%(points)s/%(total)s points', points=points, total=total) }})
-                    {% endwith %}
+                {% set contest = submission.contest_or_none %}
+                {% set breakdown = contest.contest_points_breakdown if contest else None %}
+                {% if contest and (request.in_contest or breakdown) %}
+                    {% set points = contest.contest_points|floatformat(-3) %}
+                    {% set total = contest.problem.points|floatformat(-1) %}
+                    ({{ _('%(points)s/%(total)s points', points=points, total=total) }})
+                    {% if breakdown and breakdown.is_ac %}
+                        {% set reasons = [] %}
+                        {% if breakdown.score_decay > 0 %}
+                            {% set decay = breakdown.score_decay|floatformat(-3) %}
+                            {% do reasons.append(_('minute %(min)s (-%(decay)s)', min=breakdown.time_minutes, decay=decay)) %}
+                        {% endif %}
+                        {% if breakdown.wrong_submissions > 0 %}
+                            {% set penalty = breakdown.penalty_points|floatformat(-3) %}
+                            {% do reasons.append(_('%(count)s wrong (-%(penalty)s)', count=breakdown.wrong_submissions, penalty=penalty)) %}
+                        {% endif %}
+                        {% if breakdown.max_points > breakdown.points_original %}
+                            {% set passed = breakdown.points_original|floatformat(-3) %}
+                            {% set maximum = breakdown.max_points|floatformat(-3) %}
+                            {% do reasons.append(_('partial AC %(passed)s/%(max)s', passed=passed, max=maximum)) %}
+                        {% endif %}
+                        {% if breakdown.is_minimum %}
+                            {% set minimum = breakdown.minimum_points|floatformat(-3) %}
+                            {% do reasons.append(_('minimum %(points)s', points=minimum)) %}
+                        {% endif %}
+                        {% if reasons %}
+                            <div class="contest-points-breakdown">{{ _('Reduced due to:') }} {{ reasons|join(', ') }}</div>
+                        {% endif %}
+                    {% endif %}
                 {% else %}
-                    {% with points=submission.points|floatformat(3), total=submission.problem.points|floatformat(3) %}
+                    {% with points=submission.points|floatformat(-3), total=submission.problem.points|floatformat(-3) %}
                         ({{ _('%(points)s/%(total)s points', points=points, total=total) }})
                     {% endwith %}
                 {% endif %}

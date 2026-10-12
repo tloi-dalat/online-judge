@@ -5,9 +5,9 @@ from judge.models.tests.util import CommonDataMixin, create_blogpost, create_use
 
 class BlogPostTestCase(CommonDataMixin, TestCase):
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
         super().setUpTestData()
-        self.users.update({
+        cls.users.update({
             'staff_blogpost_edit_own': create_user(
                 username='staff_blogpost_edit_own',
                 is_staff=True,
@@ -23,32 +23,32 @@ class BlogPostTestCase(CommonDataMixin, TestCase):
             ),
         })
 
-        self.users['staff_organization_admin'].profile.organizations.add(self.organizations['open'])
-        self.users['org_member'].profile.organizations.add(self.organizations['open'])
+        cls.users['staff_organization_admin'].profile.organizations.add(cls.organizations['open'])
+        cls.users['org_member'].profile.organizations.add(cls.organizations['open'])
 
-        self.basic_blogpost = create_blogpost(
+        cls.basic_blogpost = create_blogpost(
             title='basic',
             authors=('staff_blogpost_edit_own',),
         )
 
-        self.visible_blogpost = create_blogpost(
+        cls.visible_blogpost = create_blogpost(
             title='visible',
             visible=True,
         )
 
-        self.visible_blogpost_in_org = create_blogpost(
+        cls.visible_blogpost_in_org = create_blogpost(
             title='visible_org',
             visible=True,
             global_post=False,
-            organization=self.organizations['open'],
+            organization=cls.organizations['open'],
             authors=('staff_organization_admin',),
         )
 
-        self.non_visible_blogpost_in_org = create_blogpost(
+        cls.non_visible_blogpost_in_org = create_blogpost(
             title='non_visible_org',
             visible=False,
             global_post=False,
-            organization=self.organizations['open'],
+            organization=cls.organizations['open'],
             authors=('staff_organization_admin',),
         )
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-11 16:13+0000\n"
+"POT-Creation-Date: 2026-10-12 09:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,63 +34,63 @@ msgctxt "time format without day"
 msgid "%h:%m:%s"
 msgstr ""
 
-#: resources/contest-ranking.js:251
+#: resources/contest-ranking.js:252
 msgid "%(count)s try"
 msgid_plural "%(count)s tries"
 msgstr[0] ""
 msgstr[1] ""
 
-#: resources/contest-ranking.js:397
+#: resources/contest-ranking.js:411
 msgid "Rank"
 msgstr ""
 
-#: resources/contest-ranking.js:398
+#: resources/contest-ranking.js:412
 msgid "Username"
 msgstr ""
 
-#: resources/contest-ranking.js:399
+#: resources/contest-ranking.js:413
 msgid "Points"
 msgstr ""
 
-#: resources/contest-ranking.js:400
+#: resources/contest-ranking.js:414
 msgid "Penalty"
 msgstr ""
 
-#: resources/contest-ranking.js:413
+#: resources/contest-ranking.js:427
 msgid "Rating"
 msgstr ""
 
-#: resources/contest-ranking.js:422
+#: resources/contest-ranking.js:436
 msgid "Un-Disqualify"
 msgstr ""
 
-#: resources/contest-ranking.js:422
+#: resources/contest-ranking.js:436
 msgid "Disqualify"
 msgstr ""
 
-#: resources/contest-ranking.js:434
+#: resources/contest-ranking.js:448
 msgid "Admin"
 msgstr ""
 
-#: resources/contest-ranking.js:493 resources/contest-replay.js:409
+#: resources/contest-ranking.js:507 resources/contest-replay.js:436
 msgid "Live"
 msgstr ""
 
-#: resources/contest-ranking.js:516
+#: resources/contest-ranking.js:530
 msgid "%(count)s virtual participation of this user"
 msgid_plural "%(count)s virtual participations of this user"
 msgstr[0] ""
 msgstr[1] ""
 
-#: resources/contest-ranking.js:587
+#: resources/contest-ranking.js:601
 msgid "Total AC"
 msgstr ""
 
-#: resources/contest-replay.js:409
+#: resources/contest-replay.js:436
 msgid "End"
 msgstr ""
 
-#: resources/contest-replay.js:411
+#: resources/contest-replay.js:438
 msgid "Freeze min"
 msgstr ""
 

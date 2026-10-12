@@ -112,7 +112,7 @@
                 var entry = (p.format_data || {})[pid];
                 if (!entry) continue;
 
-                var pts = entry.points || 0;
+                var pts = entry.raw_points !== undefined ? entry.raw_points : (entry.points || 0);
                 var t   = entry.time   || 0;
 
                 if (pts === problem.points) {
@@ -187,13 +187,14 @@
         var showTime = !(opts && opts.showTime === false);
         var timeHtml = showTime ? escapeHtml(fmtTime(entry.time)) : '';
         var wrapDiv = opts && opts.wrapDiv;
+        var stateEntry = (opts && opts.stateEntry) || entry;
 
         var inner = wrapDiv
             ? '<div>' + pointsHtml + extraHtml + '</div>'
             : pointsHtml + extraHtml;
         inner += '<div class="solving-time">' + timeHtml + '</div>';
 
-        var state = problemStateClass(entry, problem, isFirst, meta);
+        var state = problemStateClass(stateEntry, problem, isFirst, meta);
         return wrapProblemCell(state, url, inner);
     }
 
@@ -338,6 +339,18 @@
         renderResultCell: defaultRenderer.renderResultCell,
     };
 
+    var codeforcesRenderer = {
+        renderProblemCell: function (entry, problem, participationId, firstSolves, meta) {
+            if (!entry) return '<td></td>';
+            return standardProblemCell(entry, problem, participationId, firstSolves, meta, {
+                extraHtml: penaltyHtml(entry.penalty),
+                wrapDiv: true,
+                stateEntry: { points: entry.raw_points || 0 },
+            });
+        },
+        renderResultCell: defaultRenderer.renderResultCell,
+    };
+
     // ── ECOO ──────────────────────────────────────────────────────────────────
     var ecooRenderer = {
         renderProblemCell: function (entry, problem, participationId, firstSolves, meta) {
@@ -373,6 +386,7 @@
         'ioi16':      ioiRenderer,
         'atcoder':    atcoderRenderer,
         'vnoj':       vnojRenderer,
+        'codeforces': codeforcesRenderer,
         'ecoo':       ecooRenderer,
         'voi':        voiRenderer,
     };

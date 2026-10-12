@@ -111,6 +111,33 @@
             };
         },
 
+        codeforces: function (cfg) {
+            function points(st, prob) {
+                if (!st.bestPts || !prob.points) return 0;
+                var ratio = st.bestPts / prob.points;
+                var minutes = Math.floor(st.bestSubTime / 60);
+                var decayed = ratio * (prob.points - minutes * cfg.decay_rate * prob.points);
+                return Math.max(ratio * prob.points * cfg.min_points_ratio,
+                                decayed - cfg.penalty_per_wrong_points * (st.triesUpToAc - 1));
+            }
+            return {
+                probScore:      points,
+                probTime:       function (st)       { return Math.floor(st.bestSubTime / 60) * 60; },
+                probPenalty:    function (st)       { return (st.triesUpToAc - 1) * cfg.penalty_per_wrong_time * 60; },
+                probTiebreaker: function ()         { return 0; },
+                timeReducer: 'sum', tiebreakerReducer: 'none',
+
+                buildEntry: function (st, prob, scored) {
+                    return {
+                        points: scored ? points(st, prob) : 0,
+                        raw_points: st.bestPts,
+                        time: st.bestSubTime,
+                        penalty: scored ? st.triesUpToAc - 1 : st.totalTries,
+                    };
+                },
+            };
+        },
+
         // AtCoder: score = max score per problem; partial scores count.
         // cumtime = max AC time across all problems + total penalty (wrong tries × default 5 min).
         // No tiebreaker beyond cumtime.
