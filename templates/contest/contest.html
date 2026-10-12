@@ -267,7 +267,7 @@
                                 {{ problem.i18n_name or problem.name }}
                             {% endif %}
                         </td>
-                        <td> {{ problem.time_limit }} </td>
+                        <td> {{ problem.time_limit }}s </td>
                         <td> {{ problem.memory_limit|kbsimpleformat }} </td>
                         {% if not is_ICPC_format %}
                             <td>{{ problem.points|floatformat(-2) }}</td>
