@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-11 17:45+0000\n"
+"POT-Creation-Date: 2026-10-12 17:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -992,7 +992,6 @@ msgid "Append main solution to tutorial"
 msgstr ""
 
 #: judge/forms.py:295
-#, python-brace-format
 msgid "Please share the problem to user <strong>{}</strong> first"
 msgstr ""
 
@@ -1176,12 +1175,12 @@ msgstr ""
 msgid "N j, Y, g:i a"
 msgstr ""
 
-#: templates/ticket/action.html:17
+#: judge/jinja2/datetime.py:31 templates/ticket/action.html:17
 #, python-brace-format
 msgid "{time}"
 msgstr ""
 
-#: templates/blog/modern-list.html:91
+#: judge/jinja2/datetime.py:32 templates/blog/modern-list.html:91
 #, python-brace-format
 msgid "on {time}"
 msgstr ""
@@ -7009,6 +7008,14 @@ msgstr ""
 msgid "Download data"
 msgstr ""
 
+#: templates/contest/contest.html:212 templates/problem/submit-form.html:53
+msgid "Time limit"
+msgstr ""
+
+#: templates/contest/contest.html:213 templates/problem/submit-form.html:63
+msgid "Memory limit"
+msgstr ""
+
 #: templates/contest/contest.html:218
 msgid "Editorials"
 msgstr ""
@@ -7198,6 +7205,12 @@ msgstr ""
 
 #: templates/contest/list.html:343
 msgid "Search contest..."
+msgstr ""
+
+#: templates/contest/list.html:351 templates/problem/search-form.html:80
+#: templates/submission/list.html:362 templates/tag/search-form.html:21
+#: templates/ticket/list.html:187
+msgid "Go"
 msgstr ""
 
 #: templates/contest/list.html:398
@@ -8878,12 +8891,6 @@ msgstr ""
 msgid "Point range"
 msgstr ""
 
-#: templates/contest/list.html:351 templates/problem/search-form.html:80
-#: templates/submission/list.html:362 templates/tag/search-form.html:21
-#: templates/ticket/list.html:187
-msgid "Go"
-msgstr ""
-
 #: templates/problem/search-form.html:81 templates/tag/search-form.html:22
 msgid "Random"
 msgstr ""
@@ -8958,14 +8965,6 @@ msgstr ""
 
 #: templates/problem/submit-form.html:49
 msgid "Output"
-msgstr ""
-
-#: templates/problem/submit-form.html:53
-msgid "Time limit"
-msgstr ""
-
-#: templates/problem/submit-form.html:63
-msgid "Memory limit"
 msgstr ""
 
 #: templates/problem/submit-form.html:77
