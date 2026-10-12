@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-11 17:45+0000\n"
+"POT-Creation-Date: 2026-10-12 17:24+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -1048,7 +1048,6 @@ msgid "Append main solution to tutorial"
 msgstr "Thêm lời giải vào hướng dẫn"
 
 #: judge/forms.py:295
-#, python-brace-format
 msgid "Please share the problem to user <strong>{}</strong> first"
 msgstr "Vui lòng chia sẻ bài cho người dùng <strong>{}</strong> trước"
 
@@ -1240,12 +1239,12 @@ msgstr ""
 msgid "N j, Y, g:i a"
 msgstr "j, M, Y, G:i"
 
-#: templates/ticket/action.html:17
+#: judge/jinja2/datetime.py:31 templates/ticket/action.html:17
 #, python-brace-format
 msgid "{time}"
 msgstr "{time}"
 
-#: templates/blog/modern-list.html:91
+#: judge/jinja2/datetime.py:32 templates/blog/modern-list.html:91
 #, python-brace-format
 msgid "on {time}"
 msgstr "vào lúc {time}"
@@ -7188,6 +7187,14 @@ msgstr "Công khai tất cả bài tập"
 msgid "Download data"
 msgstr "Tải dữ liệu"
 
+#: templates/contest/contest.html:212 templates/problem/submit-form.html:53
+msgid "Time limit"
+msgstr "Giới hạn thời gian"
+
+#: templates/contest/contest.html:213 templates/problem/submit-form.html:63
+msgid "Memory limit"
+msgstr "Giới hạn bộ nhớ"
+
 #: templates/contest/contest.html:218
 msgid "Editorials"
 msgstr "Lời giải"
@@ -7380,6 +7387,12 @@ msgstr "Các kỳ thi đã qua"
 #: templates/contest/list.html:343
 msgid "Search contest..."
 msgstr "Tìm kỳ thi..."
+
+#: templates/contest/list.html:351 templates/problem/search-form.html:80
+#: templates/submission/list.html:362 templates/tag/search-form.html:21
+#: templates/ticket/list.html:187
+msgid "Go"
+msgstr "Tìm"
 
 #: templates/contest/list.html:398
 msgid "There are no past contests."
@@ -9110,12 +9123,6 @@ msgstr "Dạng bài"
 msgid "Point range"
 msgstr "Khoảng điểm"
 
-#: templates/contest/list.html:351 templates/problem/search-form.html:80
-#: templates/submission/list.html:362 templates/tag/search-form.html:21
-#: templates/ticket/list.html:187
-msgid "Go"
-msgstr "Tìm"
-
 #: templates/problem/search-form.html:81 templates/tag/search-form.html:22
 msgid "Random"
 msgstr "Ngẫu nhiên"
@@ -9194,14 +9201,6 @@ msgstr "Dữ liệu đầu vào"
 #: templates/problem/submit-form.html:49
 msgid "Output"
 msgstr "Kết quả đầu ra"
-
-#: templates/problem/submit-form.html:53
-msgid "Time limit"
-msgstr "Giới hạn thời gian"
-
-#: templates/problem/submit-form.html:63
-msgid "Memory limit"
-msgstr "Giới hạn bộ nhớ"
 
 #: templates/problem/submit-form.html:77
 msgid "Paste your source code here or load it from a file:"
