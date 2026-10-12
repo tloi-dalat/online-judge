@@ -11,7 +11,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import F, Max, Sum
+from django.db.models import Max, Sum
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.encoding import force_bytes
@@ -25,11 +25,13 @@ from sortedm2m.fields import SortedManyToManyField
 from judge.models.choices import ACE_THEMES, MATH_ENGINES_CHOICES, SITE_THEMES, TIMEZONE
 from judge.models.runtime import Language
 from judge.ratings import rating_class
+from judge.utils.cache_helper import unread_notification_count_cache_factory
 from judge.utils.float_compare import float_compare_equal
 from judge.utils.two_factor import webauthn_decode
 from judge.utils.unicode import utf8bytes
 
-__all__ = ['Organization', 'OrganizationMonthlyUsage', 'Profile', 'OrganizationRequest', 'WebAuthnCredential']
+__all__ = ['Organization', 'OrganizationQuota', 'OrganizationMonthlyUsage', 'Profile', 'OrganizationRequest',
+           'WebAuthnCredential']
 
 
 class EncryptedNullCharField(EncryptedCharField):
@@ -49,6 +51,8 @@ class Organization(models.Model):
     short_name = models.CharField(max_length=20, verbose_name=_('short name'),
                                   help_text=_('Displayed beside user name during contests.'))
     about = models.TextField(verbose_name=_('organization description'))
+    notice = models.TextField(verbose_name=_('organization notice'), blank=True, default='',
+                              help_text=_('Warning banner shown to the administrators of this organization.'))
     admins = models.ManyToManyField('Profile', verbose_name=_('administrators'), related_name='admin_of',
                                     help_text=_('Those who can edit this organization.'))
     creation_date = models.DateTimeField(verbose_name=_('creation date'), auto_now_add=True)
@@ -65,20 +69,23 @@ class Organization(models.Model):
                                            blank=True,
                                            help_text=_('This image will replace the default site logo for users '
                                                        'viewing the organization.'))
-    performance_points = models.FloatField(default=0)
-    member_count = models.IntegerField(default=0)
-    current_consumed_credit = models.FloatField(default=0, help_text='Total used credit this month')
-    paid_credit = models.FloatField(default=0, help_text=_('Remaining purchased credits'), db_column='available_credit')
+    performance_points = models.FloatField(verbose_name=_('performance points'), default=0)
+    member_count = models.IntegerField(verbose_name=_('member count'), default=0)
+    current_consumed_credit = models.FloatField(verbose_name=_('current consumed credit'), default=0,
+                                                help_text=_('Total used credit this month'))
+    paid_credit = models.FloatField(verbose_name=_('paid credit'), default=0,
+                                    help_text=_('Remaining purchased credits'), db_column='available_credit')
     free_credit = models.FloatField(
+        verbose_name=_('free credit'),
         default=0,
         help_text=_('Remaining free credits for the current month'),
         db_column='monthly_credit',
     )
     monthly_free_credit_limit = models.FloatField(
+        verbose_name=_('monthly free credit limit'),
         default=settings.VNOJ_MONTHLY_FREE_CREDIT,
         help_text=_('Amount of free credits allocated each month'),
     )
-
     _pp_table = [pow(settings.VNOJ_ORG_PP_STEP, i) for i in range(settings.VNOJ_ORG_PP_ENTRIES)]
 
     def calculate_points(self, table=_pp_table):
@@ -103,6 +110,10 @@ class Organization(models.Model):
 
     def is_admin(self, user):
         return user in self.admins_list
+
+    @cached_property
+    def notice_hash(self):
+        return hashlib.sha256(utf8bytes(self.notice)).hexdigest()[:16]
 
     def __contains__(self, item):
         if item is None:
@@ -140,6 +151,42 @@ class Organization(models.Model):
         self.current_consumed_credit += consumed
         self.save(update_fields=['free_credit', 'paid_credit', 'current_consumed_credit'])
 
+    @cached_property
+    def _active_quota_agg(self):
+        today = timezone.now().date()
+        return self.quotas.filter(
+            start_date__lte=today,
+            end_date__gte=today,
+        ).aggregate(total_problems=Sum('added_problems'), total_storage=Sum('added_storage'))
+
+    @cached_property
+    def max_problems(self):
+        return settings.VNOJ_ORGANIZATION_DEFAULT_MAX_PROBLEMS + (self._active_quota_agg['total_problems'] or 0)
+
+    @cached_property
+    def max_storage(self):
+        return settings.VNOJ_ORGANIZATION_DEFAULT_MAX_STORAGE + (self._active_quota_agg['total_storage'] or 0)
+
+    @cached_property
+    def current_problem_count(self):
+        return self.problem_set(manager='available').count()
+
+    @cached_property
+    def current_storage(self):
+        from django.apps import apps
+        ProblemData = apps.get_model('judge', 'ProblemData')
+        result = ProblemData.objects.filter(
+            problem__organization=self,
+            problem__deleted_at__isnull=True,
+        ).aggregate(total=Sum('zipfile_size'))
+        return result['total'] or 0
+
+    def can_create_problem(self):
+        return self.current_problem_count < self.max_problems and self.current_storage < self.max_storage
+
+    def can_upload_data(self):
+        return self.current_storage < self.max_storage
+
     class Meta:
         ordering = ['name']
         permissions = (
@@ -150,6 +197,35 @@ class Organization(models.Model):
         )
         verbose_name = _('organization')
         verbose_name_plural = _('organizations')
+
+
+class OrganizationQuota(models.Model):
+    organization = models.ForeignKey(
+        Organization,
+        verbose_name=_('organization'),
+        related_name='quotas',
+        on_delete=models.CASCADE,
+    )
+    start_date = models.DateField(verbose_name=_('start date'))
+    end_date = models.DateField(verbose_name=_('end date'))
+    added_problems = models.IntegerField(
+        verbose_name=_('additional problems'),
+        default=0,
+        help_text=_('Number of additional problems allowed above the default limit.'),
+    )
+    added_storage = models.BigIntegerField(
+        verbose_name=_('additional storage (bytes)'),
+        default=0,
+        help_text=_('Additional storage allowed above the default limit, in bytes.'),
+    )
+
+    class Meta:
+        verbose_name = _('organization quota')
+        verbose_name_plural = _('organization quotas')
+        ordering = ['start_date']
+
+    def __str__(self):
+        return '%s [%s – %s]' % (self.organization, self.start_date, self.end_date)
 
 
 class OrganizationMonthlyUsage(models.Model):
@@ -169,6 +245,10 @@ class Badge(models.Model):
     mini = models.URLField(verbose_name=_('mini badge URL'), blank=True)
     full_size = models.URLField(verbose_name=_('full size badge URL'), blank=True)
 
+    class Meta:
+        verbose_name = _('badge')
+        verbose_name_plural = _('badges')
+
     def __str__(self):
         return self.name
 
@@ -180,11 +260,11 @@ class Profile(models.Model):
                                 default=settings.DEFAULT_USER_TIME_ZONE)
     language = models.ForeignKey('Language', verbose_name=_('preferred language'), on_delete=models.SET_DEFAULT,
                                  default=Language.get_default_language_pk)
-    points = models.FloatField(default=0)
-    performance_points = models.FloatField(default=0)
-    contribution_points = models.IntegerField(default=0)
-    vnoj_points = models.IntegerField(default=0)
-    problem_count = models.IntegerField(default=0)
+    points = models.FloatField(verbose_name=_('points'), default=0)
+    performance_points = models.FloatField(verbose_name=_('performance points'), default=0)
+    contribution_points = models.IntegerField(verbose_name=_('contribution points'), default=0)
+    vnoj_points = models.IntegerField(verbose_name=_('VNOJ points'), default=0)
+    problem_count = models.IntegerField(verbose_name=_('problem count'), default=0)
     ace_theme = models.CharField(max_length=30, verbose_name=_('Ace theme'), choices=ACE_THEMES, default='auto')
     site_theme = models.CharField(max_length=10, verbose_name=_('site theme'), choices=SITE_THEMES, default='light')
     last_access = models.DateTimeField(verbose_name=_('last access time'), default=now)
@@ -201,12 +281,12 @@ class Profile(models.Model):
                                default=False)
     is_unlisted = models.BooleanField(verbose_name=_('unlisted user'), help_text=_('User will not be ranked.'),
                                       default=False)
-    ban_reason = models.TextField(null=True, blank=True,
+    ban_reason = models.TextField(verbose_name=_('ban reason'), null=True, blank=True,
                                   help_text=_('Show to banned user in login page.'))
     allow_tagging = models.BooleanField(verbose_name=_('Allow tagging'),
                                         help_text=_('User will be allowed to tag problems.'),
                                         default=True)
-    rating = models.IntegerField(null=True, default=None)
+    rating = models.IntegerField(verbose_name=_('rating'), null=True, default=None)
     user_script = models.TextField(verbose_name=_('user script'), default='', blank=True, max_length=65536,
                                    help_text=_('User-defined JavaScript for site customization.'))
     current_contest = models.OneToOneField('ContestParticipation', verbose_name=_('current contest'),
@@ -248,6 +328,24 @@ class Profile(models.Model):
     @cached_property
     def ticket_secret(self):
         return self.get_ticket_secret(self.id)
+
+    @classmethod
+    def get_notification_secret(cls, profile_id):
+        return (hmac.new(utf8bytes(settings.EVENT_DAEMON_NOTIFICATION_KEY), b'%d' % profile_id, hashlib.sha512)
+                    .hexdigest()[:16] + '%08x' % profile_id)
+
+    @cached_property
+    def notification_secret(self):
+        return self.get_notification_secret(self.id)
+
+    @property
+    def unread_notification_count(self):
+        factory = unread_notification_count_cache_factory(self.id)
+        count = factory.get_cache()
+        if count is None:
+            count = self.notifications.filter(read=False).count()
+            factory.set_cache(count)
+        return count
 
     @cached_property
     def organization(self):
@@ -293,7 +391,9 @@ class Profile(models.Model):
     def resolved_ace_theme(self):
         if self.ace_theme != 'auto':
             return self.ace_theme
-        # This must be resolved client-side using prefers-color-scheme and site theme toggle events.
+        if self.site_theme != 'auto':
+            return settings.DMOJ_THEME_DEFAULT_ACE_THEME.get(self.site_theme)
+        # This must be resolved client-side using prefers-color-scheme.
         return None
 
     @cached_property
@@ -313,8 +413,7 @@ class Profile(models.Model):
         bonus_function = settings.DMOJ_PP_BONUS_FUNCTION
         points = sum(data)
         problems = (
-            public_problems.filter(submission__user=self, submission__result='AC',
-                                   submission__case_points__gte=F('submission__case_total'))
+            public_problems.filter(submission__user=self, submission__result='AC')
             .values('id').distinct().count()
         )
         pp = sum(x * y for x, y in zip(table, data)) + bonus_function(problems)
@@ -343,10 +442,8 @@ class Profile(models.Model):
             .aggregate(sum=Sum('score'))['sum'] or 0
         count_good_tickets = Ticket.objects.filter(user=self.id, is_contributive=True) \
             .count()
-        count_suggested_problem = self.suggested_problems.filter(is_public=True).count()
         new_pp = (total_comment_scores + total_blog_scores) * settings.VNOJ_CP_COMMENT + \
-            count_good_tickets * settings.VNOJ_CP_TICKET + \
-            count_suggested_problem * settings.VNOJ_CP_PROBLEM
+            count_good_tickets * settings.VNOJ_CP_TICKET
         if new_pp != old_pp:
             self.contribution_points = new_pp
             self.save(update_fields=['contribution_points'])
@@ -517,3 +614,6 @@ class OrganizationRequest(models.Model):
     class Meta:
         verbose_name = _('organization join request')
         verbose_name_plural = _('organization join requests')
+
+    def __str__(self):
+        return '%s - %s' % (self.user, self.organization)

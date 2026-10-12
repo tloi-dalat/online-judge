@@ -288,6 +288,12 @@ label[for="language"], label[for="status"], label[for="organization"] {
         width: 50%;
     }
 
+    .contest-points-breakdown {
+        font-size: 0.85em;
+        color: $color_primary66;
+        margin-top: 4px;
+    }
+
     .case-output {
         word-wrap: anywhere;
     }

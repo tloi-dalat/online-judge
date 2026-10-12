@@ -1,0 +1,20 @@
+# Keep the build context small and free of local state.
+.git
+.github
+.idea
+.vscode
+**/__pycache__
+**/*.py[co]
+node_modules
+sass_processed
+static
+media
+# Local, hand-written settings must never reach an image; the Dockerfile
+# installs .k8s.settings.py in its place.
+dmoj/local_settings.py
+websocket/config.js
+bridge_log.txt
+*.sql
+backup*.json
+db.json
+tmp.json

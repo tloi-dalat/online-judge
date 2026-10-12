@@ -21,3 +21,10 @@ DATABASES = {
         },
     },
 }
+
+# Model defaults read this (Profile.timezone) and migration 0220 froze
+# 'Asia/Ho_Chi_Minh'. Without it CI falls back to settings.py's
+# 'America/Toronto' and makemigrations --check reports a phantom migration.
+DEFAULT_USER_TIME_ZONE = 'Asia/Ho_Chi_Minh'
+VNOJ_ENABLE_SYNC_API = True
+DMOJ_PROBLEM_DATA_ROOT = os.path.join(BASE_DIR, 'problem_data')

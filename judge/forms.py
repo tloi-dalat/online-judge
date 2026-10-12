@@ -17,14 +17,17 @@ from django.forms import BooleanField, CharField, ChoiceField, DateInput, Form, 
 from django.forms.widgets import DateTimeInput
 from django.template.defaultfilters import filesizeformat
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
+from django.utils.html import format_html
 from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _, ngettext_lazy
 
 from judge.models import BlogPost, Contest, ContestAnnouncement, ContestParticipation, ContestProblem, Language, \
-    LanguageLimit, Organization, Problem, Profile, Solution, Submission, Tag, WebAuthnCredential
+    LanguageLimit, Organization, OrganizationProblemTag, Problem, Profile, Solution, Submission, Tag, \
+    WebAuthnCredential
 from judge.utils.subscription import newsletter_id
-from judge.widgets import AceWidget, HeavySelect2MultipleWidget, HeavySelect2Widget, MartorWidget, \
-    Select2MultipleWidget, Select2Widget
+from judge.widgets import AceWidget, ChunkedFileUploadWidget, HeavySelect2MultipleWidget, HeavySelect2Widget, \
+    MartorWidget, Select2MultipleWidget, Select2Widget
 
 TOTP_CODE_LENGTH = 6
 
@@ -54,8 +57,7 @@ class ProfileForm(ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['about', 'display_badge', 'organizations', 'timezone', 'language', 'ace_theme',
-                  'user_script']
+        fields = ['about', 'display_badge', 'organizations', 'timezone', 'language', 'ace_theme', 'user_script']
         widgets = {
             'display_badge': Select2Widget(attrs={'style': 'width:200px'}),
             'timezone': Select2Widget(attrs={'style': 'width:200px'}),
@@ -63,10 +65,13 @@ class ProfileForm(ModelForm):
             'ace_theme': Select2Widget(attrs={'style': 'width:200px'}),
         }
 
-        # Make sure that users cannot change their `about` in contest mode
-        # because the user can put the solution in that profile
         if settings.VNOJ_OFFICIAL_CONTEST_MODE:
+            # Make sure that users cannot change their `about` in contest mode
+            # because the user can put the solution in that profile
             fields.remove('about')
+            # Organizations and badges are managed by admins in contest mode
+            fields.remove('display_badge')
+            fields.remove('organizations')
 
         has_math_config = bool(settings.MATHOID_URL)
         if has_math_config:
@@ -96,17 +101,19 @@ class ProfileForm(ModelForm):
         user = kwargs.pop('user', None)
         super(ProfileForm, self).__init__(*args, **kwargs)
 
-        self.fields['display_badge'].required = False
-        self.fields['display_badge'].queryset = self.instance.badges.all()
-        if not self.fields['display_badge'].queryset:
-            self.fields.pop('display_badge')
+        if 'display_badge' in self.fields:
+            self.fields['display_badge'].required = False
+            self.fields['display_badge'].queryset = self.instance.badges.all()
+            if not self.fields['display_badge'].queryset:
+                self.fields.pop('display_badge')
 
-        if not user.has_perm('judge.edit_all_organization'):
-            self.fields['organizations'].queryset = Organization.objects.filter(
-                Q(is_open=True, is_unlisted=False) | Q(id__in=user.profile.organizations.all()),
-            )
-        if not self.fields['organizations'].queryset:
-            self.fields.pop('organizations')
+        if 'organizations' in self.fields:
+            if not user.has_perm('judge.edit_all_organization'):
+                self.fields['organizations'].queryset = Organization.objects.filter(
+                    Q(is_open=True, is_unlisted=False) | Q(id__in=user.profile.organizations.all()),
+                )
+            if not self.fields['organizations'].queryset:
+                self.fields.pop('organizations')
 
 
 class UserForm(ModelForm):
@@ -176,7 +183,11 @@ class ProblemEditForm(ModelForm):
         # Only allow to public/private problem in organization
         if org_pk is None:
             self.fields.pop('is_public')
+            self.fields.pop('tags')
         else:
+            self.fields['tags'].queryset = OrganizationProblemTag.objects.filter(organization_id=org_pk)
+            self.fields.pop('types')
+            self.fields['group'].widget = forms.HiddenInput()
             self.fields['testers'].label = _('Private users')
             self.fields['testers'].help_text = _('If private, only these users may see the problem.')
             self.fields['testers'].widget.data_view = None
@@ -223,10 +234,11 @@ class ProblemEditForm(ModelForm):
     class Meta:
         model = Problem
         fields = ['is_public', 'code', 'name', 'time_limit', 'memory_limit', 'points', 'partial',
-                  'statement_file', 'source', 'types', 'group', 'submission_source_visibility_mode',
+                  'statement_file', 'source', 'types', 'group', 'tags', 'submission_source_visibility_mode',
                   'testcase_visibility_mode', 'description', 'testers']
         widgets = {
             'types': Select2MultipleWidget,
+            'tags': Select2MultipleWidget(),
             'group': Select2Widget,
             'submission_source_visibility_mode': Select2Widget,
             'testcase_visibility_mode': Select2Widget,
@@ -267,10 +279,9 @@ class ProblemEditTypeGroupForm(ModelForm):
 
 class ProblemImportPolygonForm(Form):
     code = CharField(max_length=32, validators=[RegexValidator('^[a-z0-9_]+$', _('Problem code must be ^[a-z0-9_]+$'))])
-    package = forms.FileField(
-        label=_('Package'),
-        widget=forms.FileInput(attrs={'accept': 'application/zip'}),
-    )
+    package = forms.FileField(label=_('Package'), required=False, widget=ChunkedFileUploadWidget)
+    upload_id = forms.CharField(required=False, widget=forms.HiddenInput(attrs={'data-chunked-upload-id': ''}))
+    problem_id = forms.IntegerField(required=False, min_value=1, label=_('Problem ID'))
     ignore_zero_point_batches = forms.BooleanField(required=False, label=_('Ignore zero-point batches'))
     ignore_zero_point_cases = forms.BooleanField(required=False, label=_('Ignore zero-point cases'))
     append_main_solution_to_tutorial = forms.BooleanField(required=False, initial=True,
@@ -280,6 +291,10 @@ class ProblemImportPolygonForm(Form):
 
     def __init__(self, code=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['problem_id'].help_text = format_html(
+            _('Please share the problem to user <strong>{}</strong> first'),
+            settings.VNOJ_POLYGON_API_USERNAME,
+        )
         if code is not None:
             self.fields['code'].initial = code
             self.fields['code'].disabled = True
@@ -431,8 +446,8 @@ class ProblemSubmitForm(ModelForm):
 class TagProblemCreateForm(Form):
     problem_url = forms.URLField(max_length=200,
                                  label=_('Problem URL'),
-                                 help_text=_('Full URL to the problem, '
-                                             'e.g. https://oj.vnoi.info/problem/post'),
+                                 help_text=format_lazy(_('Full URL to the problem, e.g. {url}'),
+                                                       url='https://oj.tloi.vn/problem/post'),
                                  widget=forms.TextInput(attrs={'style': 'width:100%'}))
 
     def __init__(self, problem_url=None, *args, **kwargs):
@@ -498,6 +513,41 @@ class OrganizationForm(ModelForm):
             self.fields.pop('admins')
             self.fields.pop('paid_credit')
             self.fields.pop('monthly_free_credit_limit')
+
+
+class OrganizationProblemTagForm(ModelForm):
+    class Meta:
+        model = OrganizationProblemTag
+        fields = ['name']
+
+
+class QuotaGrantForm(Form):
+    start_date = forms.DateField(
+        widget=DateInput(attrs={'type': 'date'}),
+        label=_('Start date'),
+        initial=lambda: timezone.now().date(),
+    )
+    packages = forms.IntegerField(
+        min_value=1,
+        initial=1,
+        label=_('Number of packages'),
+        help_text=_('Each package adds %(storage)s and %(problems)d problems.') % {
+            'storage': filesizeformat(settings.VNOJ_QUOTA_PACKAGE_STORAGE),
+            'problems': settings.VNOJ_QUOTA_PACKAGE_PROBLEMS,
+        },
+    )
+    end_date = forms.DateField(
+        widget=DateInput(attrs={'type': 'date'}),
+        label=_('End date'),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start = cleaned_data.get('start_date')
+        end = cleaned_data.get('end_date')
+        if start and end and end <= start:
+            raise ValidationError(_('End date must be after start date.'))
+        return cleaned_data
 
 
 class SocialAuthMixin:

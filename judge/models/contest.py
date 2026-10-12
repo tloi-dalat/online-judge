@@ -1,8 +1,9 @@
 import hashlib
 import hmac
-from datetime import date, timedelta
+from datetime import date, timedelta, timezone as dt_timezone
 
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models, transaction
@@ -15,7 +16,7 @@ from jsonfield import JSONField
 from lupa import LuaRuntime
 from moss import MOSS_LANG_C, MOSS_LANG_CC, MOSS_LANG_JAVA, MOSS_LANG_PASCAL, MOSS_LANG_PYTHON
 
-from judge import contest_format, event_poster as event
+from judge import contest_format
 from judge.models.problem import Problem
 from judge.models.profile import Organization, Profile
 from judge.models.submission import Submission
@@ -71,16 +72,22 @@ class Contest(models.Model):
         (SCOREBOARD_AFTER_CONTEST, _('Hidden for duration of contest')),
         (SCOREBOARD_AFTER_PARTICIPATION, _('Hidden for duration of participation')),
     )
+    # Sentinel stored in csv_ranking to flag that the replay data has ghost participations
+    # merged in (set by the merge_replay_data command), rather than real CSV ranking data.
+    HAS_GHOST_PARTICIPATION = 'ghost'
     key = models.CharField(max_length=32, verbose_name=_('contest id'), unique=True,
                            validators=[RegexValidator('^[a-z0-9_]+$', _('Contest id must be ^[a-z0-9_]+$'))])
     name = models.CharField(max_length=100, verbose_name=_('contest name'), db_index=True)
-    authors = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest.'),
+    authors = models.ManyToManyField(Profile, verbose_name=_('authors'),
+                                     help_text=_('These users will be able to edit the contest.'),
                                      related_name='authors+')
-    curators = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest, '
-                                                           'but will not be listed as authors.'),
+    curators = models.ManyToManyField(Profile, verbose_name=_('curators'),
+                                      help_text=_('These users will be able to edit the contest, '
+                                                  'but will not be listed as authors.'),
                                       related_name='curators+', blank=True)
-    testers = models.ManyToManyField(Profile, help_text=_('These users will be able to view the contest, '
-                                                          'but not edit it.'),
+    testers = models.ManyToManyField(Profile, verbose_name=_('testers'),
+                                     help_text=_('These users will be able to view the contest, '
+                                                 'but not edit it.'),
                                      blank=True, related_name='testers+')
     description = models.TextField(verbose_name=_('description'), blank=True)
     terms = models.TextField(verbose_name=_('terms'), blank=True)
@@ -112,10 +119,10 @@ class Contest(models.Model):
     scoreboard_visibility = models.CharField(verbose_name=_('scoreboard visibility'), default=SCOREBOARD_VISIBLE,
                                              help_text=_('Scoreboard visibility through the duration of the contest'),
                                              max_length=1, choices=SCOREBOARD_VISIBILITY)
-    scoreboard_cache_timeout = models.PositiveIntegerField(verbose_name=('scoreboard cache timeout'), default=0,
+    scoreboard_cache_timeout = models.PositiveIntegerField(verbose_name=_('scoreboard cache timeout'), default=3,
                                                            help_text=_('How long should the scoreboard be cached. '
                                                                        'Set to 0 to disable caching.'))
-    show_submission_list = models.BooleanField(default=False,
+    show_submission_list = models.BooleanField(verbose_name=_('show submission list'), default=False,
                                                help_text=_('Allow contestants to view submission list '
                                                            'of others in contest time'))
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
@@ -142,10 +149,10 @@ class Contest(models.Model):
                                                  related_name='private_contestants+')
     hide_problem_tags = models.BooleanField(verbose_name=_('hide problem tags'),
                                             help_text=_('Whether problem tags should be hidden by default.'),
-                                            default=False)
+                                            default=True)
     hide_problem_authors = models.BooleanField(verbose_name=_('hide problem authors'),
                                                help_text=_('Whether problem authors should be hidden by default.'),
-                                               default=False)
+                                               default=True)
     run_pretests_only = models.BooleanField(verbose_name=_('run pretests only'),
                                             help_text=_('Whether judges should grade pretests only, versus all '
                                                         'testcases. Commonly set during a contest, then unset '
@@ -203,6 +210,32 @@ class Contest(models.Model):
                                            help_text=_('An optional code to view the contest ranking. '
                                                        'Leave it blank to disable.'),
                                            blank=True, default='', max_length=255)
+    replay_version = models.PositiveIntegerField(verbose_name=_('replay version'), default=0)
+
+    @property
+    def can_replay(self):
+        """
+        Determine if the contest can be replayed.
+
+        If a contest is replayable, **the ranking will be leaked**, regardless of whether the contest is private or not.
+
+        `can_replay` is independent of users, so we need to be very strict about **what contests can be replayed**,
+        otherwise, the ranking information will be leaked to all users.
+
+        1. The contest must be visible to all users.
+        2. The contest must be ended and not frozen.
+        3. Ranking must be visible.
+        4. The contest format must support replay (the new IOI format is not replayable).
+        5. Results must not be hidden (formats that hide results, e.g. VOI, are never replayable).
+        """
+        try:
+            self.access_check(AnonymousUser())
+        except Exception:
+            return False
+        return self.ended and self.frozen_last_minutes == 0 and self.show_scoreboard and \
+            self.format.name != contest_format.IOIContestFormat.name and \
+            not getattr(self.format, 'hides_results_before_unfreeze', False) and \
+            not self.should_hide_result(AnonymousUser())
 
     @cached_property
     def format_class(self):
@@ -273,6 +306,8 @@ class Contest(models.Model):
         if not user.is_authenticated:
             return False
         if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
+            return True
+        if getattr(self, 'has_author', False) or getattr(self, 'has_curator', False):
             return True
         if user.profile.id in self.editor_ids:
             return True
@@ -386,16 +421,15 @@ class Contest(models.Model):
 
     @cached_property
     def author_ids(self):
-        return Contest.authors.through.objects.filter(contest=self).values_list('profile_id', flat=True)
+        return [profile.id for profile in self.authors.all()]
 
     @cached_property
     def editor_ids(self):
-        return self.author_ids.union(
-            Contest.curators.through.objects.filter(contest=self).values_list('profile_id', flat=True))
+        return set(self.author_ids) | set(profile.id for profile in self.curators.all())
 
     @cached_property
     def tester_ids(self):
-        return Contest.testers.through.objects.filter(contest=self).values_list('profile_id', flat=True)
+        return [profile.id for profile in self.testers.all()]
 
     @classmethod
     def get_id_secret(cls, contest_id):
@@ -619,6 +653,7 @@ class Contest(models.Model):
             ('change_contest_visibility', _('Change contest visibility')),
             ('contest_problem_label', _('Edit contest problem label script')),
             ('lock_contest', _('Change lock status of contest')),
+            ('view_contest_balloons', _('View contest balloons')),
         )
         verbose_name = _('contest')
         verbose_name_plural = _('contests')
@@ -633,12 +668,18 @@ class ContestAnnouncement(models.Model):
     description = models.TextField(verbose_name=_('announcement body'))
     date = models.DateTimeField(verbose_name=_('announcement timestamp'), auto_now_add=True)
 
+    class Meta:
+        verbose_name = _('contest announcement')
+        verbose_name_plural = _('contest announcements')
+
+    def __str__(self):
+        return self.title
+
     def send(self):
-        if self.contest.push_announcements:
-            event.post(f'contest_{self.contest.id_secret}', {
-                'title': self.title,
-                'message': self.description,
-            })
+        if not self.contest.push_announcements:
+            return
+        from judge.tasks import send_contest_announcement
+        send_contest_announcement.delay(self.id)
 
 
 class ContestParticipation(models.Model):
@@ -718,7 +759,7 @@ class ContestParticipation(models.Model):
 
     @cached_property
     def pre_registered(self):
-        return self.real_start.astimezone(timezone.utc).date() == date(1970, 1, 1)
+        return self.real_start.astimezone(dt_timezone.utc).date() == date(1970, 1, 1)
 
     @cached_property
     def start(self):
@@ -784,7 +825,8 @@ class ContestProblem(models.Model):
     order = models.PositiveIntegerField(db_index=True, verbose_name=_('order'))
     output_prefix_override = models.IntegerField(verbose_name=_('output prefix length override'),
                                                  default=0, null=True, blank=True)
-    max_submissions = models.IntegerField(help_text=_('Maximum number of submissions for this problem, '
+    max_submissions = models.IntegerField(verbose_name=_('max submissions'),
+                                          help_text=_('Maximum number of submissions for this problem, '
                                                       'or leave blank for no limit.'),
                                           default=None, null=True, blank=True,
                                           validators=[MinValueOrNoneValidator(1, _('Why include a problem you '
@@ -795,6 +837,9 @@ class ContestProblem(models.Model):
         verbose_name = _('contest problem')
         verbose_name_plural = _('contest problems')
         ordering = ('order',)
+
+    def __str__(self):
+        return str(self.problem)
 
 
 class ContestSubmission(models.Model):
@@ -809,70 +854,21 @@ class ContestSubmission(models.Model):
                                      help_text=_('Whether this submission was ran only on pretests.'),
                                      default=False)
 
+    @cached_property
+    def contest_points_breakdown(self):
+        return self.participation.contest.format.get_submission_breakdown(self)
+
     @property
     def contest_points(self):
-        format_data = self.participation.format_data
-        if not format_data:
-            return self.points
-
-        prob_data = format_data.get(str(self.problem_id))
-        if not prob_data or 'points' not in prob_data:
-            return self.points
-
-        if self.points == 0:
-            return 0.0
-
-        return prob_data['points']
-
-    @property
-    def contest_points_breakdown(self):
-        participation = self.participation
-        contest = participation.contest
-        if contest.format_name != 'codeforces':
-            return None
-
-        config = contest.format.config
-        min_points_ratio = config.get('min_points_ratio', 0.3)
-        penalty_per_wrong_points = config.get('penalty_per_wrong_points', 50.0)
-        decay_rate = config.get('decay_rate', 0.004)
-
-        max_points = self.problem.points
-        if self.points == 0:
-            return {
-                'is_ac': False,
-                'max_points': max_points,
-                'points_gained': 0.0,
-            }
-
-        dt_seconds = (self.submission.date - participation.start).total_seconds()
-        dt_minutes = int(dt_seconds // 60)
-
-        problem_subs = participation.submissions.exclude(submission__result__isnull=True) \
-                                                .exclude(submission__result__in=['IE', 'CE']) \
-                                                .filter(problem_id=self.problem_id)
-        subs_before_ac = problem_subs.filter(submission__date__lt=self.submission.date)
-        wrong_submissions = subs_before_ac.count()
-
-        score_decay = dt_minutes * decay_rate * max_points
-        base_score = max(max_points * min_points_ratio, max_points - score_decay)
-        penalty_points = penalty_per_wrong_points * wrong_submissions
-        points_gained = max(0.0, (self.points / max_points) * base_score - penalty_points)
-
-        return {
-            'is_ac': True,
-            'max_points': max_points,
-            'points_original': self.points,
-            'time_minutes': dt_minutes,
-            'score_decay': round(score_decay, 1),
-            'base_score': round(base_score, 1),
-            'wrong_submissions': wrong_submissions,
-            'penalty_points': round(penalty_points, 1),
-            'points_gained': round(points_gained, 3),
-        }
+        breakdown = self.contest_points_breakdown
+        return self.points if breakdown is None else breakdown['points_gained']
 
     class Meta:
         verbose_name = _('contest submission')
         verbose_name_plural = _('contest submissions')
+
+    def __str__(self):
+        return str(self.submission)
 
 
 class Rating(models.Model):
@@ -903,9 +899,9 @@ class ContestMoss(models.Model):
 
     contest = models.ForeignKey(Contest, verbose_name=_('contest'), related_name='moss', on_delete=CASCADE)
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='moss', on_delete=CASCADE)
-    language = models.CharField(max_length=10)
-    submission_count = models.PositiveIntegerField(default=0)
-    url = models.URLField(null=True, blank=True)
+    language = models.CharField(verbose_name=_('language'), max_length=10)
+    submission_count = models.PositiveIntegerField(verbose_name=_('submission count'), default=0)
+    url = models.URLField(verbose_name=_('URL'), null=True, blank=True)
 
     class Meta:
         unique_together = ('contest', 'problem', 'language')

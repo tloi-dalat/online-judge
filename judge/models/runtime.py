@@ -128,6 +128,10 @@ class RuntimeVersion(models.Model):
     version = models.CharField(max_length=64, verbose_name=_('runtime version'), blank=True)
     priority = models.IntegerField(verbose_name=_('order in which to display this runtime'), default=0)
 
+    class Meta:
+        verbose_name = _('runtime version')
+        verbose_name_plural = _('runtime versions')
+
 
 class Judge(models.Model):
     name = models.CharField(max_length=50, verbose_name=_('judge name'), help_text=_('Server name, hostname-style.'),
@@ -150,7 +154,7 @@ class Judge(models.Model):
                              help_text=_('Load for the last minute, divided by processors to be fair.'))
     description = models.TextField(blank=True, verbose_name=_('description'))
     last_ip = models.GenericIPAddressField(verbose_name=_('last connected IP'), blank=True, null=True)
-    problems = models.ManyToManyField('Problem', verbose_name=_('problems'), related_name='judges')
+    storages = models.JSONField(default=list, blank=True, verbose_name=_('storage backends'))
     runtimes = models.ManyToManyField(Language, verbose_name=_('judges'), related_name='judges')
 
     def __str__(self):

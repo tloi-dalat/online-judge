@@ -6,8 +6,8 @@
     {% set tab = 'detail' %}
     {% include "contest/contest-tabs.html" %}
     {% if contest.is_organization_private and contest.organization %}
-        <span class="organization-tags">
-            <span class="organization-tag">
+        <span class="organization-tags" style="display: block; margin: 10px 0 15px 0;">
+            <span class="organization-tag" style="transform: none; margin: 0;">
                 <a href="{{ contest.organization.get_absolute_url() }}">
                     <i class="fa fa-lock"></i> {{ contest.organization.name }}
                 </a>
@@ -18,36 +18,7 @@
 
 {% block content_js_media %}
     {% if contest.format_name == 'codeforces' and is_in_contest and not request.participation.ended %}
-        <script>
-            $(function() {
-                var decay_rate = {{ contest.format.config.decay_rate|default(0.004) }};
-                var min_points_ratio = {{ contest.format.config.min_points_ratio|default(0.3) }};
-                var total_duration = {{ (request.participation.end_time - request.participation.start).total_seconds()|default(0) }};
-                var initial_remaining = {{ request.participation.time_remaining|seconds|default(0) }};
-                var points_precision = {{ contest.points_precision|default(0) }};
-                var page_load_time = Date.now();
-
-                function update_codeforces_points() {
-                    var elapsed_seconds = (total_duration - initial_remaining) + (Date.now() - page_load_time) / 1000;
-                    if (elapsed_seconds > total_duration) {
-                        elapsed_seconds = total_duration;
-                    }
-                    var dt_minutes = Math.floor(elapsed_seconds / 60);
-
-                    $('.codeforces-dynamic-points').each(function() {
-                        var max_points = parseFloat($(this).attr('data-max-points'));
-                        if (isNaN(max_points)) return;
-                        var score_decay = dt_minutes * decay_rate * max_points;
-                        var current_points = Math.max(max_points * min_points_ratio, max_points - score_decay);
-                        var formatted_points = parseFloat(current_points.toFixed(points_precision));
-                        $(this).text(formatted_points);
-                    });
-                }
-
-                update_codeforces_points();
-                setInterval(update_codeforces_points, 1000);
-            });
-        </script>
+        {% include "contest/codeforces-points-js.html" %}
     {% endif %}
     <script type="text/javascript">
         $(document).ready(function () {
@@ -58,7 +29,12 @@
     </script>
     {% include "contest/media-js.html" %}
     {% if not comment_lock %}
-        {% include "comments/media-js.html" %}
+        {% if comment_form and comment_form.errors %}
+            {# comments/list.html is SSR'd directly below (not via the AJAX fragment) in
+               this case, so it needs its own media JS (martor editor, vote/hide/edit). #}
+            {% include "comments/media-js.html" %}
+        {% endif %}
+        {% include "comments/lazy-load-js.html" %}
     {% endif %}
 {% endblock %}
 
@@ -113,7 +89,7 @@
         {% if contest.show_short_display %}
             <div id="details">
                 <ul>
-                    {% with authors=contest.authors.all() %}
+                    {% with authors=contest.authors.all().prefetch_related('user') %}
                         {% if not contest.hide_problem_authors and authors %}
                             <li>
                                 {% trans trimmed count=authors|length, link_authors=link_users(authors) %}
@@ -124,7 +100,7 @@
                             </li>
                         {% endif %}
                     {% endwith %}
-                    {% with testers=contest.testers.all() %}
+                    {% with testers=contest.testers.all().prefetch_related('user') %}
                         {% if not contest.hide_problem_authors and testers %}
                             <li>
                                 {% trans trimmed count=testers|length, link_testers=link_users(testers) %}
@@ -236,6 +212,8 @@
                         <th><i class="fa fa-check"></i></th>
                     {% endif %}
                     <th>{{ _('Problem') }}</th>
+                    <th>Time limit</th>
+                    <th>Memory limit</th>
                     {% if not is_ICPC_format %}
                         <th>{{ _('Points') }}</th>
                     {% endif %}
@@ -292,6 +270,8 @@
                                 {{ problem.i18n_name or problem.name }}
                             {% endif %}
                         </td>
+                        <td> {{ problem.time_limit }} </td>
+                        <td> {{ problem.memory_limit|kbsimpleformat }} </td>
                         {% if not is_ICPC_format %}
                             {% if contest.format_name == 'codeforces' and is_in_contest and not request.participation.ended %}
                                 <td class="codeforces-dynamic-points" data-max-points="{{ problem.points }}">{{ problem.points|floatformat(-2) }}</td>
@@ -328,7 +308,7 @@
                 <tbody>
                 {% for announcement in announcements %}
                     <tr>
-                        <td style="width: 15%;">{{ announcement.date|date(_("F j, Y, G:i")) }}</td>
+                        <td style="width: 15%;">{% set date_format = _("F j, Y, G:i") %}{{ announcement.date|date(date_format) }}</td>
                         <td style="width: 20%; text-align: left; padding-left: 2em;">
                             {{ announcement.title }}
                         </td>
@@ -362,7 +342,7 @@
                 <tbody>
                 {% for clarification in clarifications %}
                     <tr>
-                        <td style="width: 15%;">{{ clarification.date|date(_("F j, Y, G:i")) }}</td>
+                        <td style="width: 15%;">{% set date_format = _("F j, Y, G:i") %}{{ clarification.date|date(date_format) }}</td>
                         <td style="width: 20%; text-align: left; padding-left: 2em;">
                             <a href="{{ url('problem_detail', clarification.problem.code) }}"
                                 class="problem">
@@ -394,7 +374,15 @@
 
 
     {% if not comment_lock %}
-        {% include "comments/list.html" %}
+        <div id="comments" data-comments-url="{{ url('contest_comments', contest.key) }}"
+             data-comments-trigger="auto"
+             data-comments-preloaded="{{ 'true' if comment_form and comment_form.errors else 'false' }}">
+            {% if comment_form and comment_form.errors %}
+                {% include "comments/list.html" %}
+            {% else %}
+                <div class="comments-loading">{{ _('Loading...') }}</div>
+            {% endif %}
+        </div>
     {% endif %}
 
     <div style="clear: both;"></div>

@@ -1,0 +1,345 @@
+:root,
+html[data-theme] {
+    --primary: #264b5d;
+    --secondary: #1d3a48;
+    --primary-fg: #f7f7f7;
+
+    --body-fg: #ddd;
+    --body-bg: #222;
+    --body-quiet-color: #aaa;
+    --body-medium-color: #ccc;
+    --body-loud-color: #fff;
+
+    --header-color: #ddd;
+    --header-bg: #1d3a48;
+    --header-link-color: #f7f7f7;
+
+    --breadcrumbs-fg: #aaa;
+    --breadcrumbs-link-fg: #e0e0e0;
+    --breadcrumbs-bg: #264b5d;
+
+    --link-fg: #6bf;
+    --link-hover-color: #49e;
+    --link-selected-fg: #6f94c6;
+
+    --hairline-color: #333;
+    --border-color: #444;
+
+    --error-fg: #f77;
+
+    --message-debug-bg: #4e4e4e;
+    --message-debug-icon: url(../../admin/img/icon-debug-dark.svg);
+    --message-info-bg: #265895;
+    --message-info-icon: url(../../admin/img/icon-info-dark.svg);
+    --message-success-bg: #006b1b;
+    --message-success-icon: url(../../admin/img/icon-yes-dark.svg);
+    --message-warning-bg: #583305;
+    --message-warning-icon: url(../../admin/img/icon-alert-dark.svg);
+    --message-error-bg: #570808;
+    --message-error-icon: url(../../admin/img/icon-no-dark.svg);
+
+    --darkened-bg: #1b1b1b;
+    --selected-bg: #2a2a2a;
+    --selected-row: #00363a;
+
+    --button-fg: #fff;
+    --button-bg: #2f5f75;
+    --button-hover-bg: #264b5d;
+    --default-button-bg: #0074a2;
+    --default-button-hover-bg: #005f85;
+    --close-button-bg: #444;
+    --close-button-hover-bg: #666;
+    --delete-button-bg: #a32020;
+    --delete-button-hover-bg: #8a1515;
+
+    --object-tools-fg: var(--button-fg);
+    --object-tools-bg: var(--close-button-bg);
+    --object-tools-hover-bg: var(--close-button-hover-bg);
+
+    color-scheme: dark;
+}
+
+body,
+body.login {
+    background-color: #181818;
+    color: #ddd;
+}
+
+#adminmenu .wp-menu-top.wp-menu-open > a:after,
+#adminmenu .wp-menu-top.wp-menu-open .wp-menu-image a:after {
+    border-right-color: #181818;
+}
+
+#container ul.messagelist li {
+    background: #222;
+    color: #ddd;
+}
+
+#content a {
+    color: #6bf;
+}
+
+#content a:hover,
+#content a:active,
+#content a:focus {
+    color: #49e;
+}
+
+#content .actionlink {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+#content textarea,
+#content input[type="text"],
+#content input[type="password"],
+#content input[type="email"],
+#content input[type="number"],
+#content input[type="search"],
+#content input[type="tel"],
+#content input[type="url"],
+#content input[type="file"],
+#content input[type="date"],
+#content input[type="time"],
+#content input[type="datetime-local"],
+#content select {
+    border-color: #444;
+    background-color: #111;
+    color: #eee;
+}
+
+#content textarea:focus,
+#content input[type="text"]:focus,
+#content input[type="password"]:focus,
+#content input[type="email"]:focus,
+#content input[type="number"]:focus,
+#content input[type="search"]:focus,
+#content input[type="tel"]:focus,
+#content input[type="url"]:focus,
+#content input[type="file"]:focus,
+#content select:focus {
+    border-color: #777;
+}
+
+#content input[type="file"] {
+    background-color: transparent;
+}
+
+#content form .form-row p {
+    color: #ddd;
+}
+
+#content .button,
+#content input[type="submit"],
+#content input[type="button"],
+#content button[type="submit"],
+#content .submit-row input {
+    background-color: #333;
+    border-color: #555;
+    color: #ddd;
+}
+
+#content .button:hover,
+#content input[type="submit"]:hover,
+#content input[type="button"]:hover,
+#content button[type="submit"]:hover,
+#content .submit-row input:hover,
+#content .button:focus,
+#content input[type="submit"]:focus,
+#content input[type="button"]:focus,
+#content button[type="submit"]:focus,
+#content .submit-row input:focus {
+    background-color: #3d3d3d;
+    border-color: #777;
+    color: #fff;
+}
+
+#content .button.default,
+#content input.default[type="submit"],
+#content input.default[type="button"],
+#content button.default[type="submit"],
+#content .submit-row input.default {
+    background-color: rgba(0, 116, 162, 0.8);
+    border-color: #0074a2;
+    color: #fff;
+}
+
+#content .button.default:hover,
+#content input.default[type="submit"]:hover,
+#content input.default[type="button"]:hover,
+#content button.default[type="submit"]:hover,
+#content .submit-row input.default:hover,
+#content .button.default:focus,
+#content input.default[type="submit"]:focus,
+#content input.default[type="button"]:focus,
+#content button.default[type="submit"]:focus,
+#content .submit-row input.default:focus {
+    background-color: #0074a2;
+    border-color: #2ea2cc;
+    color: #fff;
+}
+
+#content .errornote,
+#content .errorlist li {
+    background-color: #222;
+}
+
+#content h1,
+#content h2,
+#content h3 {
+    color: #eee;
+}
+
+#content table {
+    background: #222;
+    border-color: #3b3b3b;
+}
+
+#content table thead th,
+#content table thead td,
+#content table tfoot th,
+#content table tfoot td {
+    color: #ddd;
+    border-color: #3b3b3b;
+}
+
+#content table thead th.sortable .text a,
+#content table tfoot th.sortable .text a {
+    color: #ddd;
+}
+
+#content table tbody tr.row1 {
+    background: #262626;
+}
+
+#content table tbody tr.row2 {
+    background: #222;
+}
+
+#content table tbody tr.selected {
+    background: var(--selected-row);
+}
+
+#content td,
+#content th {
+    border-color: #333;
+}
+
+#content #changelist .actions-and-paginator .paginator span.this-page,
+#content #changelist .actions-and-paginator .paginator a {
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+#content #changelist .actions-and-paginator .actions select {
+    border-color: #444;
+}
+
+#content #changelist #changelist-filter ul {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+#content #changelist #changelist-filter ul li.selected a {
+    color: #6bf !important;
+}
+
+#content .module {
+    background: #222;
+    border-color: #3b3b3b;
+}
+
+#content .module h2,
+#content .module caption,
+#content .inline-group h2 {
+    background: #222;
+    color: #eee;
+    border-color: #333;
+}
+
+#content .form-row {
+    border-color: #333;
+}
+
+#content .object-tools li a,
+#content .list-tools li a {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+#content .inline-group {
+    background-color: #222;
+    border-color: #3b3b3b;
+}
+
+#content .inline-group h3,
+#content .inline-group fieldset .form-row:last-of-type,
+#content .inline-group table thead td,
+#content .inline-group table tfoot td,
+#content .inline-group table thead th,
+#content .inline-group table tfoot th,
+#content .inline-group div.add-row,
+#content .inline-group .tabular tr.add-row td {
+    border-color: #333;
+}
+
+#content .selector .selector-filter,
+#content .selector select:focus {
+    border-color: #444;
+}
+
+#content .help,
+#content p.help,
+#content .timezonewarning {
+    color: #999 !important;
+}
+
+#content .description {
+    border-color: #333;
+}
+
+#content fieldset.collapse summary {
+    border-bottom-color: #333;
+}
+
+.calendarbox,
+.clockbox {
+    background: #222;
+    color: #ddd;
+}
+
+.calendarbox caption,
+.clockbox caption,
+.calendarbox h2,
+.clockbox h2 {
+    background: #111 !important;
+    color: #eee;
+}
+
+.clockbox .timelist li,
+.calendarbox .calendar th,
+.calendarbox .calendar td,
+.calendarbox .calendar-shortcuts {
+    border-color: #3b3b3b;
+}
+
+body.dashboard #content .module table tr th,
+body.dashboard #content .module table tr td {
+    border-color: #333;
+}
+
+#content input.select2-search__field {
+    background-color: transparent;
+}
+
+#content .selector .search-label-icon {
+    filter: invert(1);
+}
+
+.tree-node.children {
+    background-image: url(../../mptt/disclosure-down-white.png);
+}
+
+.tree-node.closed {
+    background-image: url(../../mptt/disclosure-right-white.png);
+}
+
+.drag-handle {
+    background-image: url(../../mptt/arrow-move-white.png);
+}

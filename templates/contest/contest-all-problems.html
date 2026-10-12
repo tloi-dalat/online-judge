@@ -1,13 +1,19 @@
 {% extends "common-content.html" %}
 
+{% block content_js_media %}
+    {% if contest.format_name == 'codeforces' and is_in_contest and not request.participation.ended %}
+        {% include "contest/codeforces-points-js.html" %}
+    {% endif %}
+{% endblock %}
+
 {% block title_ruler %}{% endblock %}
 
 {% block title_row %}
     {% set tab = '' %}
     {% include "contest/contest-tabs.html" %}
     {% if contest.is_organization_private and contest.organization %}
-        <span class="organization-tags">
-            <span class="organization-tag">
+        <span class="organization-tags" style="display: block; margin: 10px 0 15px 0;">
+            <span class="organization-tag" style="transform: none; margin: 0;">
                 <a href="{{ contest.organization.get_absolute_url() }}">
                     <i class="fa fa-lock"></i> {{ contest.organization.name }}
                 </a>
@@ -41,6 +47,19 @@
                         <a href="{{ url('problem_submit', problem.code) }}" class="button" style="display: inline; margin: auto 0;">
                             {{ _('Submit') }}
                         </a>
+                        {% if loop.first %}
+                            {% if has_pdf_render %}
+                                <a id="pdf_link_all" href="{{ url('contest_all_problems_pdf', contest.key) }}" class="view-pdf" style="margin-left: auto; align-self: center; padding-top: 0;">
+                            {% else %}
+                                <a id="pdf_button" class="view-pdf" href="#" style="margin-left: auto; align-self: center; padding-top: 0;">
+                            {% endif %}
+                                <span class="pdf-icon">
+                                    <span class="fa fa-file-pdf-o pdf-icon-logo"></span>
+                                    <span class="pdf-icon-bar"></span>
+                                </span>
+                                {{ _('View as PDF') }}
+                            </a>
+                        {% endif %}
                     </div>
 
                     <div>
@@ -67,4 +86,31 @@
 
 {% block bodyend %}
     {{ super() }}
+    {% if not has_pdf_render %}
+        <style>
+            #raw_problems {
+                visibility: hidden;
+                width: 0;
+                height: 0;
+                position: absolute;
+                left: -999em;
+            }
+        </style>
+        <iframe name="raw_problems" id="raw_problems"></iframe>
+        <script type="text/javascript">
+            $(function() {
+                $('#pdf_button').click(async function(e) {
+                    e.preventDefault();
+                    if (!$('#raw_problems').attr("src")) {
+                        $('#raw_problems').attr("src", "{{ url('contest_all_problems_raw', contest.key) }}");
+                    }
+
+                    while(!$('.math-loaded', frames['raw_problems'].document).length) {
+                        await new Promise(r => setTimeout(r, 200));
+                    }
+                    frames['raw_problems'].print();
+                });
+            });
+        </script>
+    {% endif %}
 {% endblock %}

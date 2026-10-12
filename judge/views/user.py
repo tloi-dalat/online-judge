@@ -210,7 +210,7 @@ class UserAboutPage(UserPage):
         timezone_offset = pytz.timezone(user_timezone).utcoffset(datetime.datetime.utcnow()).seconds
 
         submissions_count = self.object.submission_set.count()
-        if submissions_count > settings.VNOJ_LOW_POWER_MODE_CONFIG['heat_map_limit']:
+        if settings.VNOJ_LOW_POWER_MODE and submissions_count > settings.VNOJ_LOW_POWER_MODE_CONFIG['heat_map_limit']:
             submissions = []
         else:
             submissions = (
@@ -555,6 +555,12 @@ def edit_profile(request):
         'can_download_data': bool(settings.DMOJ_USER_DATA_DOWNLOAD),
         'has_math_config': bool(settings.MATHOID_URL),
         'ignore_user_script': True,
+        'ACE_URL': settings.ACE_URL,
+        'ace_default_themes': settings.DMOJ_THEME_DEFAULT_ACE_THEME,
+        'preview_languages': {
+            language_id: {'ace': ace, 'template': template}
+            for language_id, ace, template in form.fields['language'].queryset.values_list('id', 'ace', 'template')
+        },
         'TIMEZONE_MAP': settings.TIMEZONE_MAP,
     })
 
@@ -567,6 +573,20 @@ def generate_api_token(request):
         revisions.set_user(request.user)
         revisions.set_comment(_('Generated API token for user'))
         return JsonResponse({'data': {'token': profile.generate_api_token()}})
+
+
+@require_POST
+def set_theme(request):
+    theme = request.POST.get('theme', 'light')
+    if theme not in ('light', 'dark', 'auto'):
+        theme = 'light'
+    response = HttpResponseRedirect(request.POST.get('next', '/'))
+    if request.user.is_authenticated:
+        request.profile.site_theme = theme
+        request.profile.save(update_fields=['site_theme'])
+    else:
+        response.set_cookie(settings.SITE_THEME_COOKIE_NAME, theme, max_age=settings.SITE_THEME_COOKIE_AGE)
+    return response
 
 
 @require_POST
@@ -626,7 +646,7 @@ class UserList(QueryStringSortMixin, InfinitePaginationMixin, DiggPaginatorMixin
 user_list_view = UserList.as_view()
 
 
-class ContribList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
+class ContribList(QueryStringSortMixin, InfinitePaginationMixin, DiggPaginatorMixin, TitleMixin, ListView):
     model = Profile
     title = gettext_lazy('Contributors')
     context_object_name = 'users'
@@ -733,24 +753,3 @@ class CustomPasswordResetView(PasswordResetView):
         }
 
         return super().post(request, *args, **kwargs)
-
-
-@require_POST
-def update_theme_api(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'status': 'unauthorized'}, status=401)
-
-    import json
-    try:
-        data = json.loads(request.body)
-        theme = data.get('theme')
-    except (json.JSONDecodeError, TypeError):
-        theme = request.POST.get('theme')
-
-    if theme in ['light', 'dark', 'auto']:
-        profile = request.profile
-        profile.site_theme = theme
-        profile.save(update_fields=['site_theme'])
-        return JsonResponse({'status': 'success'})
-
-    return JsonResponse({'status': 'invalid_theme'}, status=400)
