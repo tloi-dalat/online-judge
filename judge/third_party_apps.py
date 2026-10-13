@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.core.exceptions import FieldDoesNotExist
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from impersonate.apps import AccountsConfig
 from oauth2_provider.apps import DOTConfig
@@ -17,7 +18,10 @@ def label_fields(app_config, labels):
     for model_name, fields in labels.items():
         meta = app_config.get_model(model_name)._meta
         for field_name, label in fields.items():
-            meta.get_field(field_name).verbose_name = label
+            try:
+                meta.get_field(field_name).verbose_name = label
+            except FieldDoesNotExist:
+                pass
 
 
 class ChunkedUploadConfig(AppConfig):

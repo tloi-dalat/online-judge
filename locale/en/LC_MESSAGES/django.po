@@ -6772,7 +6772,7 @@ msgstr ""
 msgid "Calendar"
 msgstr ""
 
-#: templates/contest/contest-tabs.html:4
+#: judge/models/interface.py:164 templates/contest/contest-tabs.html:4
 msgid "Info"
 msgstr ""
 
@@ -10372,3 +10372,97 @@ msgstr ""
 #: urlshortener/views.py:97
 msgid "This shortened URL is not active."
 msgstr ""
+
+#: judge/models/interface.py:165
+msgid "Warning"
+msgstr ""
+
+#: judge/models/interface.py:166
+msgid "Danger"
+msgstr ""
+
+#: judge/models/interface.py:167
+msgid "Success"
+msgstr ""
+
+#: judge/models/interface.py:173
+msgid "English message"
+msgstr ""
+
+#: judge/models/interface.py:175
+msgid "Announcement message in English."
+msgstr ""
+
+#: judge/models/interface.py:178
+msgid "Vietnamese message"
+msgstr ""
+
+#: judge/models/interface.py:180
+msgid "Announcement message in Vietnamese."
+msgstr ""
+
+#: judge/models/interface.py:195
+msgid "At least one message (English or Vietnamese) must be provided."
+msgstr ""
+
+#: judge/models/interface.py:175
+msgid "alert type"
+msgstr ""
+
+#: judge/models/interface.py:176
+msgid "Bootstrap alert style class."
+msgstr ""
+
+#: judge/models/interface.py:180
+msgid "enabled"
+msgstr ""
+
+#: judge/models/interface.py:181
+msgid "Whether this announcement is actively displayed on the site."
+msgstr ""
+
+#: judge/models/interface.py:183
+msgid "created at"
+msgstr ""
+
+#: judge/models/interface.py:186
+msgid "global announcement"
+msgstr ""
+
+#: judge/models/interface.py:187
+msgid "global announcements"
+msgstr ""
+
+msgid "announcement"
+msgstr ""
+
+msgid "announcements"
+msgstr ""
+
+msgid "dismissible"
+msgstr ""
+
+msgid "Whether users can dismiss this announcement."
+msgstr ""
+
+msgid "dismissal version"
+msgstr ""
+
+msgid "Incrementing this will re-display the announcement to users who previously dismissed it."
+msgstr ""
+
+msgid "valid from"
+msgstr ""
+
+msgid "Announcement visible from this time (optional)."
+msgstr ""
+
+msgid "valid until"
+msgstr ""
+
+msgid "Announcement visible until this time (optional)."
+msgstr ""
+
+msgid "Valid until must be after valid from."
+msgstr ""
+

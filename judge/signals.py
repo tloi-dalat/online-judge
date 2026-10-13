@@ -14,8 +14,8 @@ from registration.signals import user_registered
 
 from judge.caching import finished_submission
 from judge.models import BlogPost, Comment, Contest, ContestAnnouncement, ContestProblem, ContestSubmission, \
-    EFFECTIVE_MATH_ENGINES, Judge, Language, License, MiscConfig, Organization, Problem, ProblemTranslation, Profile, \
-    Submission, WebAuthnCredential
+    EFFECTIVE_MATH_ENGINES, GlobalAnnouncement, Judge, Language, License, MiscConfig, Organization, Problem, \
+    ProblemTranslation, Profile, Submission, WebAuthnCredential
 from judge.models.problem_data import problem_data_storage
 from judge.tasks import on_new_comment
 from judge.utils.pdfoid import get_contest_pdf_basename
@@ -202,6 +202,16 @@ def misc_config_update(sender, instance, **kwargs):
 @receiver(post_delete, sender=MiscConfig)
 def misc_config_delete(sender, instance, **kwargs):
     cache.delete('misc_config')
+
+
+@receiver(post_save, sender=GlobalAnnouncement)
+def global_announcement_update(sender, instance, **kwargs):
+    cache.delete('global_announcements')
+
+
+@receiver(post_delete, sender=GlobalAnnouncement)
+def global_announcement_delete(sender, instance, **kwargs):
+    cache.delete('global_announcements')
 
 
 @receiver(post_save, sender=ContestSubmission)

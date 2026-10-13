@@ -348,6 +348,12 @@ ul.pagination {
     border-color: $color_danger50;
 }
 
+.alert-success {
+    color: $color_success100;
+    background-color: $color_success25;
+    border-color: $color_success50;
+}
+
 .alert-dismissable, .alert-dismissible {
     padding-right: 35px;
 }
@@ -358,6 +364,103 @@ ul.pagination {
     right: -21px;
     color: inherit;
 }
+
+.global-announcement-banner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8px 16px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.45;
+    box-sizing: border-box;
+
+    &.alert-dismissable {
+        padding-right: 40px;
+    }
+
+    a {
+        color: inherit;
+        text-decoration: underline;
+        font-weight: 600;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    &.alert-info {
+        color: $color_info100;
+        background-color: $color_info25;
+        border: 1px solid $color_info50;
+    }
+
+    &.alert-warning {
+        color: $color_warning100;
+        background-color: $color_warning25;
+        border: 1px solid $color_warning50;
+    }
+
+    &.alert-danger {
+        color: $color_danger100;
+        background-color: $color_danger25;
+        border: 1px solid $color_danger50;
+    }
+
+    &.alert-success {
+        color: $color_success100;
+        background-color: $color_success25;
+        border: 1px solid $color_success50;
+    }
+
+    button.close, .close {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        float: none;
+        font-size: 14px;
+        color: inherit !important;
+        opacity: 1;
+        text-decoration: none;
+        cursor: pointer;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 4px;
+        margin: 0;
+        line-height: 1;
+
+        &:hover, &:focus {
+            opacity: 0.75;
+        }
+
+        .fa-times {
+            display: inline-block;
+            color: inherit !important;
+            font-size: 14px;
+            line-height: 1;
+        }
+    }
+
+    .global-announcement-text {
+        text-align: center;
+        white-space: pre-line;
+        max-width: 100%;
+        word-break: break-word;
+
+        p {
+            margin: 0;
+        }
+
+        p + p {
+            margin-top: 5px;
+        }
+    }
+}
+
 
 .close {
     float: right;

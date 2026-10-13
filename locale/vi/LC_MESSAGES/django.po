@@ -6923,7 +6923,7 @@ msgstr "Danh sách"
 msgid "Calendar"
 msgstr "Lịch"
 
-#: templates/contest/contest-tabs.html:4
+#: judge/models/interface.py:164 templates/contest/contest-tabs.html:4
 msgid "Info"
 msgstr "Thông tin"
 
@@ -10667,3 +10667,97 @@ msgstr "Không tìm thấy URL rút gọn."
 #: urlshortener/views.py:97
 msgid "This shortened URL is not active."
 msgstr "URL rút gọn này không hoạt động."
+
+#: judge/models/interface.py:165
+msgid "Warning"
+msgstr "Cảnh báo"
+
+#: judge/models/interface.py:166
+msgid "Danger"
+msgstr "Nguy hiểm"
+
+#: judge/models/interface.py:167
+msgid "Success"
+msgstr "Thành công"
+
+#: judge/models/interface.py:173
+msgid "English message"
+msgstr "Thông báo tiếng Anh"
+
+#: judge/models/interface.py:175
+msgid "Announcement message in English."
+msgstr "Nội dung thông báo bằng tiếng Anh."
+
+#: judge/models/interface.py:178
+msgid "Vietnamese message"
+msgstr "Thông báo tiếng Việt"
+
+#: judge/models/interface.py:180
+msgid "Announcement message in Vietnamese."
+msgstr "Nội dung thông báo bằng tiếng Việt."
+
+#: judge/models/interface.py:195
+msgid "At least one message (English or Vietnamese) must be provided."
+msgstr "Phải cung cấp ít nhất một nội dung thông báo (tiếng Anh hoặc tiếng Việt)."
+
+#: judge/models/interface.py:175
+msgid "alert type"
+msgstr "loại thông báo"
+
+#: judge/models/interface.py:176
+msgid "Bootstrap alert style class."
+msgstr "Lớp kiểu thông báo Bootstrap."
+
+#: judge/models/interface.py:180
+msgid "enabled"
+msgstr "kích hoạt"
+
+#: judge/models/interface.py:181
+msgid "Whether this announcement is actively displayed on the site."
+msgstr "Có hiển thị thông báo này trên toàn trang hay không."
+
+#: judge/models/interface.py:183
+msgid "created at"
+msgstr "thời gian tạo"
+
+#: judge/models/interface.py:186
+msgid "global announcement"
+msgstr "thông báo toàn trang"
+
+#: judge/models/interface.py:187
+msgid "global announcements"
+msgstr "thông báo toàn trang"
+
+msgid "announcement"
+msgstr "thông báo"
+
+msgid "announcements"
+msgstr "thông báo"
+
+msgid "dismissible"
+msgstr "cho phép đóng"
+
+msgid "Whether users can dismiss this announcement."
+msgstr "Người dùng có thể đóng thông báo này hay không."
+
+msgid "dismissal version"
+msgstr "phiên bản đóng"
+
+msgid "Incrementing this will re-display the announcement to users who previously dismissed it."
+msgstr "Tăng số này sẽ hiển thị lại thông báo cho những người dùng đã từng đóng."
+
+msgid "valid from"
+msgstr "hiệu lực từ"
+
+msgid "Announcement visible from this time (optional)."
+msgstr "Thông báo bắt đầu hiển thị từ thời điểm này (không bắt buộc)."
+
+msgid "valid until"
+msgstr "hiệu lực đến"
+
+msgid "Announcement visible until this time (optional)."
+msgstr "Thông báo kết thúc hiển thị vào thời điểm này (không bắt buộc)."
+
+msgid "Valid until must be after valid from."
+msgstr "Thời điểm kết thúc phải sau thời điểm bắt đầu."
+
