@@ -165,7 +165,7 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
             .order_by()
             .values('contest_id')
             .annotate(total=Count('id'))
-            .values_list('contest_id', 'total')
+            .values_list('contest_id', 'total'),
         )
         solved_counts = dict(
             ContestSubmission.objects
@@ -178,7 +178,7 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
             .order_by()
             .values('participation__contest_id')
             .annotate(solved=Count('problem_id', distinct=True))
-            .values_list('participation__contest_id', 'solved')
+            .values_list('participation__contest_id', 'solved'),
         )
 
         for contest in participated_contests:
