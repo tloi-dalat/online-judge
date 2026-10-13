@@ -25,8 +25,8 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
             ],
             options={
-                'verbose_name': 'global announcement',
-                'verbose_name_plural': 'global announcements',
+                'verbose_name': 'announcement',
+                'verbose_name_plural': 'announcements',
                 'ordering': ('-id',),
             },
         ),

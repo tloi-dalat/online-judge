@@ -15,8 +15,14 @@ from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widg
 
 
 class GlobalAnnouncementAdmin(VersionAdmin):
-    fields = ('message_en', 'message_vi', 'alert_type', 'is_enabled', 'is_dismissible', 'dismissal_version', 'valid_from', 'valid_until')
-    list_display = ('message_en_preview', 'message_vi_preview', 'alert_type_badge', 'is_enabled', 'is_dismissible', 'valid_from', 'valid_until', 'created_at')
+    fields = (
+        'message_en', 'message_vi', 'alert_type', 'is_enabled',
+        'is_dismissible', 'dismissal_version', 'valid_from', 'valid_until',
+    )
+    list_display = (
+        'message_en_preview', 'message_vi_preview', 'alert_type_badge',
+        'is_enabled', 'is_dismissible', 'valid_from', 'valid_until', 'created_at',
+    )
     list_editable = ('is_enabled', 'is_dismissible')
     list_filter = ('is_enabled', 'is_dismissible', 'alert_type')
     search_fields = ('message_en', 'message_vi')

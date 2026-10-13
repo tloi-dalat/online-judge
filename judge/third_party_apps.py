@@ -21,6 +21,7 @@ def label_fields(app_config, labels):
             try:
                 meta.get_field(field_name).verbose_name = label
             except FieldDoesNotExist:
+                # Field may not exist in this third-party app version
                 pass
 
 
