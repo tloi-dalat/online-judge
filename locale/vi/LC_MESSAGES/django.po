@@ -10770,9 +10770,3 @@ msgstr "Không tìm thấy URL rút gọn."
 #: urlshortener/views.py:97
 msgid "This shortened URL is not active."
 msgstr "URL rút gọn này không hoạt động."
-
-#~ msgid "global announcement"
-#~ msgstr "thông báo toàn trang"
-
-#~ msgid "global announcements"
-#~ msgstr "thông báo toàn trang"

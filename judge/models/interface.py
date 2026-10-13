@@ -317,7 +317,7 @@ class GlobalAnnouncement(models.Model):
                     models.When(alert_type='alert-success', then=models.Value(4)),
                     default=models.Value(5),
                     output_field=models.IntegerField(),
-                )
+                ),
             ).order_by('is_dismissible', 'severity', '-id')
             announcements = list(qs[:5])
             cache.set(cache_key, announcements, 300)

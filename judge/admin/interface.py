@@ -55,7 +55,7 @@ class GlobalAnnouncementAdmin(VersionAdmin):
         return format_html(
             '<span style="display:inline-block; padding:3px 10px; border-radius:4px; font-weight:600; '
             'font-size:12px; color:{}; background-color:{}; border:1px solid {};">{}</span>',
-            color, bg, border, label
+            color, bg, border, label,
         )
 
 
