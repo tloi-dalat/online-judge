@@ -146,20 +146,67 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
         return super().get_paginator(queryset, per_page, orphans, allow_empty_first_page,
                                      count=self.get_queryset().values('id').count(), **kwargs)
 
+    def _populate_solved_counts(self, contests):
+        for contest in contests:
+            contest.solved_count = None
+            contest.total_count = None
+
+        if not self.request.user.is_authenticated:
+            return
+
+        participated_contests = [contest for contest in contests if contest.scoring_participations]
+        if not participated_contests:
+            return
+
+        participated_ids = [contest.id for contest in participated_contests]
+        total_counts = dict(
+            ContestProblem.objects
+            .filter(contest_id__in=participated_ids)
+            .order_by()
+            .values('contest_id')
+            .annotate(total=Count('id'))
+            .values_list('contest_id', 'total')
+        )
+        solved_counts = dict(
+            ContestSubmission.objects
+            .filter(
+                participation__contest_id__in=participated_ids,
+                participation__user=self.request.profile,
+                participation__virtual__gte=ContestParticipation.LIVE,
+                submission__result='AC',
+            )
+            .order_by()
+            .values('participation__contest_id')
+            .annotate(solved=Count('problem_id', distinct=True))
+            .values_list('participation__contest_id', 'solved')
+        )
+
+        for contest in participated_contests:
+            contest.total_count = total_counts.get(contest.id, 0)
+            contest.solved_count = solved_counts.get(contest.id, 0)
+
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
         past_contests = list(context['past_contests'])
         current_and_future = list(self._get_queryset().exclude(end_time__lt=self._now))
         all_contests = past_contests + current_and_future
 
+        is_authenticated = self.request.user.is_authenticated
         prefetches = ['tags']
-        if self.request.user.is_authenticated:
+        if is_authenticated:
             prefetches.append(Prefetch('users',
                                        queryset=ContestParticipation.objects.filter(
-                                           user=self.request.profile, virtual=0),
-                                       to_attr='user_participation'))
+                                           user=self.request.profile, virtual__gte=ContestParticipation.LIVE),
+                                       to_attr='scoring_participations'))
 
         prefetch_related_objects(all_contests, *prefetches)
+
+        if is_authenticated:
+            for contest in all_contests:
+                contest.live_participations = [
+                    participation for participation in contest.scoring_participations
+                    if participation.virtual == ContestParticipation.LIVE
+                ]
 
         present, active, future = [], [], []
         finished = set()
@@ -169,10 +216,12 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
             else:
                 present.append(contest)
 
-        if self.request.user.is_authenticated:
+        self._populate_solved_counts(past_contests + present)
+
+        if is_authenticated:
             for contest in list(present):
-                if hasattr(contest, 'user_participation') and contest.user_participation:
-                    participation = contest.user_participation[0]
+                if contest.live_participations:
+                    participation = contest.live_participations[0]
                     participation.contest = contest
                     if participation.ended:
                         finished.add(contest.key)
