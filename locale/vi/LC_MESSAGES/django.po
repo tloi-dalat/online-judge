@@ -3,7 +3,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
+<<<<<<< bkr/feat
 "POT-Creation-Date: 2026-10-14 11:36+0000\n"
+=======
+"POT-Creation-Date: 2026-10-13 17:49+0000\n"
+>>>>>>> main
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -1048,6 +1052,7 @@ msgid "Append main solution to tutorial"
 msgstr "Thêm lời giải vào hướng dẫn"
 
 #: judge/forms.py:295
+#, python-brace-format
 msgid "Please share the problem to user <strong>{}</strong> first"
 msgstr "Vui lòng chia sẻ bài cho người dùng <strong>{}</strong> trước"
 
