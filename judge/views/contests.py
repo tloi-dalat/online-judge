@@ -192,12 +192,28 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
         all_contests = past_contests + current_and_future
 
         is_authenticated = self.request.user.is_authenticated
+
         prefetches = ['tags']
         if is_authenticated:
-            prefetches.append(Prefetch('users',
-                                       queryset=ContestParticipation.objects.filter(
-                                           user=self.request.profile, virtual__gte=ContestParticipation.LIVE),
-                                       to_attr='scoring_participations'))
+            participations = ContestParticipation.objects.filter(
+                user=self.request.profile,
+            )
+            prefetches.extend([
+                Prefetch(
+                    'users',
+                    queryset=participations.filter(
+                        virtual__gte=ContestParticipation.LIVE,
+                    ),
+                    to_attr='scoring_participations',
+                ),
+                Prefetch(
+                    'users',
+                    queryset=ContestParticipation.objects.filter(
+                        virtual=ContestParticipation.LIVE
+                    ),
+                    to_attr='live_participations',
+                ),
+            ])
 
         prefetch_related_objects(all_contests, *prefetches)
 
