@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 17:49+0000\n"
+"POT-Creation-Date: 2026-10-14 05:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,11 +47,16 @@ msgstr ""
 msgid "Teacher"
 msgstr ""
 
-#: dmoj/settings.py:667
+#: dmoj/settings.py:514 templates/base.html:431
+#: templates/contest/contest.html:292
+msgid "Announcements"
+msgstr ""
+
+#: dmoj/settings.py:673
 msgid "English"
 msgstr ""
 
-#: dmoj/settings.py:668
+#: dmoj/settings.py:674
 msgid "Vietnamese"
 msgstr ""
 
@@ -87,7 +92,7 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: judge/admin/comments.py:25 judge/admin/interface.py:83
+#: judge/admin/comments.py:25 judge/admin/interface.py:128
 #: templates/misc_config/edit.html:88
 msgid "Content"
 msgstr ""
@@ -269,21 +274,50 @@ msgstr ""
 msgid "virtual"
 msgstr ""
 
-#: judge/admin/interface.py:28 judge/models/interface.py:48
+#: judge/admin/interface.py:38 judge/models/interface.py:197
+msgid "English message"
+msgstr ""
+
+#: judge/admin/interface.py:42 judge/models/interface.py:202
+msgid "Vietnamese message"
+msgstr ""
+
+#: judge/admin/interface.py:46 judge/models/interface.py:210
+msgid "alert type"
+msgstr ""
+
+#: judge/admin/interface.py:49 judge/models/interface.py:181
+#: templates/contest/contest-tabs.html:4
+msgid "Info"
+msgstr ""
+
+#: judge/admin/interface.py:50 judge/models/interface.py:182
+msgid "Warning"
+msgstr ""
+
+#: judge/admin/interface.py:51 judge/models/interface.py:183
+msgid "Danger"
+msgstr ""
+
+#: judge/admin/interface.py:52 judge/models/interface.py:184
+msgid "Success"
+msgstr ""
+
+#: judge/admin/interface.py:73 judge/models/interface.py:51
 msgid "link path"
 msgstr ""
 
-#: judge/admin/interface.py:84
+#: judge/admin/interface.py:129
 msgid "Summary"
 msgstr ""
 
-#: judge/admin/interface.py:102 judge/admin/problem.py:190
-#: judge/models/contest.py:81 judge/models/interface.py:82
+#: judge/admin/interface.py:147 judge/admin/problem.py:190
+#: judge/models/contest.py:81 judge/models/interface.py:85
 #: judge/models/problem.py:746
 msgid "authors"
 msgstr ""
 
-#: judge/admin/interface.py:132 judge/admin/profile.py:112
+#: judge/admin/interface.py:177 judge/admin/profile.py:112
 #: judge/admin/submission.py:227 judge/models/contest.py:690
 #: judge/models/contest.py:866 judge/models/profile.py:572
 #: judge/models/profile.py:603 judge/models/submission.py:75
@@ -291,7 +325,7 @@ msgstr ""
 msgid "user"
 msgstr ""
 
-#: judge/admin/interface.py:161
+#: judge/admin/interface.py:206
 msgid "object"
 msgstr ""
 
@@ -1296,7 +1330,7 @@ msgstr ""
 msgid "posted time"
 msgstr ""
 
-#: judge/models/comment.py:33 judge/models/interface.py:90
+#: judge/models/comment.py:33 judge/models/interface.py:93
 #: templates/blog/modern-content.html:98
 msgid "votes"
 msgstr ""
@@ -1341,12 +1375,12 @@ msgstr ""
 msgid "%(page)s by %(user)s"
 msgstr ""
 
-#: judge/models/comment.py:197 judge/models/interface.py:154
+#: judge/models/comment.py:197 judge/models/interface.py:157
 msgid "voter"
 msgstr ""
 
 #: judge/models/comment.py:199 judge/models/contest.py:692
-#: judge/models/interface.py:156
+#: judge/models/interface.py:159
 msgid "score"
 msgstr ""
 
@@ -1651,7 +1685,7 @@ msgstr ""
 msgid "private to organizations"
 msgstr ""
 
-#: judge/models/contest.py:166 judge/models/interface.py:93
+#: judge/models/contest.py:166 judge/models/interface.py:96
 #: judge/models/problem.py:65 judge/models/problem.py:255
 #: judge/models/profile.py:198 judge/models/profile.py:205
 #: judge/models/profile.py:232 judge/models/profile.py:276
@@ -1663,7 +1697,7 @@ msgstr ""
 msgid "If private, only this organization may see the contest"
 msgstr ""
 
-#: judge/models/contest.py:169 judge/models/interface.py:89
+#: judge/models/contest.py:169 judge/models/interface.py:92
 #: judge/models/problem.py:227
 msgid "OpenGraph image"
 msgstr ""
@@ -1981,7 +2015,7 @@ msgstr ""
 msgid "is pretested"
 msgstr ""
 
-#: judge/models/contest.py:825 judge/models/interface.py:45
+#: judge/models/contest.py:825 judge/models/interface.py:48
 msgid "order"
 msgstr ""
 
@@ -2074,136 +2108,206 @@ msgstr ""
 msgid "contest moss results"
 msgstr ""
 
-#: judge/models/interface.py:19 judge/models/problem.py:78
+#: judge/models/interface.py:22 judge/models/problem.py:78
 msgid "key"
 msgstr ""
 
-#: judge/models/interface.py:20
+#: judge/models/interface.py:23
 msgid "value"
 msgstr ""
 
-#: judge/models/interface.py:26
+#: judge/models/interface.py:29
 msgid "configuration item"
 msgstr ""
 
-#: judge/models/interface.py:27
+#: judge/models/interface.py:30
 msgid "miscellaneous configuration"
 msgstr ""
 
-#: judge/models/interface.py:39
+#: judge/models/interface.py:42
 msgid "navigation item"
 msgstr ""
 
-#: judge/models/interface.py:40
+#: judge/models/interface.py:43
 msgid "navigation bar"
 msgstr ""
 
-#: judge/models/interface.py:46
+#: judge/models/interface.py:49
 msgid "identifier"
 msgstr ""
 
-#: judge/models/interface.py:47
+#: judge/models/interface.py:50
 msgid "label"
 msgstr ""
 
-#: judge/models/interface.py:49
+#: judge/models/interface.py:52
 msgid "highlight regex"
 msgstr ""
 
-#: judge/models/interface.py:50
+#: judge/models/interface.py:53
 msgid "parent item"
 msgstr ""
 
-#: judge/models/interface.py:68
+#: judge/models/interface.py:71
 msgid "name"
 msgstr ""
 
-#: judge/models/interface.py:69 judge/models/interface.py:83
+#: judge/models/interface.py:72 judge/models/interface.py:86
 msgid "slug"
 msgstr ""
 
-#: judge/models/interface.py:72
+#: judge/models/interface.py:75
 msgid "blog tag"
 msgstr ""
 
-#: judge/models/interface.py:73
+#: judge/models/interface.py:76
 msgid "blog tags"
 msgstr ""
 
-#: judge/models/interface.py:81
+#: judge/models/interface.py:84
 msgid "post title"
 msgstr ""
 
-#: judge/models/interface.py:84 judge/models/problem.py:744
+#: judge/models/interface.py:87 judge/models/problem.py:744
 msgid "public visibility"
 msgstr ""
 
-#: judge/models/interface.py:85
+#: judge/models/interface.py:88
 msgid "sticky"
 msgstr ""
 
-#: judge/models/interface.py:86
+#: judge/models/interface.py:89
 msgid "publish after"
 msgstr ""
 
-#: judge/models/interface.py:87
+#: judge/models/interface.py:90
 msgid "post content"
 msgstr ""
 
-#: judge/models/interface.py:88
+#: judge/models/interface.py:91
 msgid "post summary"
 msgstr ""
 
-#: judge/models/interface.py:91
+#: judge/models/interface.py:94
 msgid "global post"
 msgstr ""
 
-#: judge/models/interface.py:92
+#: judge/models/interface.py:95
 msgid "Display this blog post at the homepage."
 msgstr ""
 
-#: judge/models/interface.py:95 judge/models/tag.py:29
+#: judge/models/interface.py:98 judge/models/tag.py:29
 msgid "tags"
 msgstr ""
 
-#: judge/models/interface.py:143
+#: judge/models/interface.py:146
 msgid "Edit all posts"
 msgstr ""
 
-#: judge/models/interface.py:144
+#: judge/models/interface.py:147
 msgid "Edit organization posts"
 msgstr ""
 
-#: judge/models/interface.py:145
+#: judge/models/interface.py:148
 msgid "Mark post as global"
 msgstr ""
 
-#: judge/models/interface.py:146
+#: judge/models/interface.py:149
 msgid "Pin post"
 msgstr ""
 
-#: judge/models/interface.py:147
+#: judge/models/interface.py:150
 msgid "Manage magazine blog posts"
 msgstr ""
 
-#: judge/models/interface.py:149
+#: judge/models/interface.py:152
 msgid "blog post"
 msgstr ""
 
-#: judge/models/interface.py:150
+#: judge/models/interface.py:153
 msgid "blog posts"
 msgstr ""
 
-#: judge/models/interface.py:155
+#: judge/models/interface.py:158
 msgid "blog"
 msgstr ""
 
-#: judge/models/interface.py:160
+#: judge/models/interface.py:163
 msgid "blog vote"
 msgstr ""
 
-#: judge/models/interface.py:161
+#: judge/models/interface.py:164
 msgid "blog votes"
+msgstr ""
+
+#: judge/models/interface.py:199
+msgid "Announcement message in English."
+msgstr ""
+
+#: judge/models/interface.py:204
+msgid "Announcement message in Vietnamese."
+msgstr ""
+
+#: judge/models/interface.py:211
+msgid "Bootstrap alert style class."
+msgstr ""
+
+#: judge/models/interface.py:215
+msgid "enabled"
+msgstr ""
+
+#: judge/models/interface.py:216
+msgid "Whether this announcement is actively displayed on the site."
+msgstr ""
+
+#: judge/models/interface.py:220
+msgid "dismissible"
+msgstr ""
+
+#: judge/models/interface.py:221
+msgid "Whether users can dismiss this announcement."
+msgstr ""
+
+#: judge/models/interface.py:225
+msgid "dismissal version"
+msgstr ""
+
+#: judge/models/interface.py:226
+msgid ""
+"Incrementing this will re-display the announcement to users who previously "
+"dismissed it."
+msgstr ""
+
+#: judge/models/interface.py:231
+msgid "valid from"
+msgstr ""
+
+#: judge/models/interface.py:232
+msgid "Announcement visible from this time (optional)."
+msgstr ""
+
+#: judge/models/interface.py:237
+msgid "valid until"
+msgstr ""
+
+#: judge/models/interface.py:238
+msgid "Announcement visible until this time (optional)."
+msgstr ""
+
+#: judge/models/interface.py:244
+msgid "announcement"
+msgstr ""
+
+#: judge/models/interface.py:245
+msgid "announcements"
+msgstr ""
+
+#: judge/models/interface.py:251
+msgid "At least one message (English or Vietnamese) must be provided."
+msgstr ""
+
+#: judge/models/interface.py:253
+msgid "Valid until must be after valid from."
 msgstr ""
 
 #: judge/models/notification.py:19
@@ -4032,364 +4136,364 @@ msgstr ""
 msgid "Preparing your comment data"
 msgstr ""
 
-#: judge/third_party_apps.py:25
+#: judge/third_party_apps.py:30
 msgid "Chunked upload"
 msgstr ""
 
-#: judge/third_party_apps.py:30
+#: judge/third_party_apps.py:35
 msgctxt "third-party model"
 msgid "chunked upload"
 msgstr ""
 
-#: judge/third_party_apps.py:31
+#: judge/third_party_apps.py:36
 msgctxt "third-party model"
 msgid "chunked uploads"
 msgstr ""
 
-#: judge/third_party_apps.py:35
+#: judge/third_party_apps.py:40
 msgctxt "third-party field"
 msgid "upload ID"
 msgstr ""
 
-#: judge/third_party_apps.py:36
+#: judge/third_party_apps.py:41
 msgctxt "third-party field"
 msgid "file"
 msgstr ""
 
-#: judge/third_party_apps.py:37
+#: judge/third_party_apps.py:42
 msgctxt "third-party field"
 msgid "filename"
 msgstr ""
 
-#: judge/third_party_apps.py:38
+#: judge/third_party_apps.py:43
 msgctxt "third-party field"
 msgid "offset"
 msgstr ""
 
-#: judge/third_party_apps.py:39
+#: judge/third_party_apps.py:44
 msgctxt "third-party field"
 msgid "created on"
 msgstr ""
 
-#: judge/third_party_apps.py:40
+#: judge/third_party_apps.py:45
 msgctxt "third-party field"
 msgid "status"
 msgstr ""
 
-#: judge/third_party_apps.py:41
+#: judge/third_party_apps.py:46
 msgctxt "third-party field"
 msgid "completed on"
 msgstr ""
 
-#: judge/third_party_apps.py:42 judge/third_party_apps.py:145
+#: judge/third_party_apps.py:47 judge/third_party_apps.py:150
 msgctxt "third-party field"
 msgid "user"
 msgstr ""
 
-#: judge/third_party_apps.py:47
+#: judge/third_party_apps.py:52
 msgctxt "third-party field"
 msgid "Uploading"
 msgstr ""
 
-#: judge/third_party_apps.py:48
+#: judge/third_party_apps.py:53
 msgctxt "third-party field"
 msgid "Complete"
 msgstr ""
 
-#: judge/third_party_apps.py:53 templates/user/user-tabs.html:16
+#: judge/third_party_apps.py:58 templates/user/user-tabs.html:16
 msgid "Impersonate"
 msgstr ""
 
-#: judge/third_party_apps.py:58
+#: judge/third_party_apps.py:63
 msgctxt "third-party model"
 msgid "impersonation log"
 msgstr ""
 
-#: judge/third_party_apps.py:59
+#: judge/third_party_apps.py:64
 msgctxt "third-party model"
 msgid "impersonation logs"
 msgstr ""
 
-#: judge/third_party_apps.py:63 judge/third_party_apps.py:81
+#: judge/third_party_apps.py:68 judge/third_party_apps.py:86
 msgctxt "third-party field"
 msgid "impersonator"
 msgstr ""
 
-#: judge/third_party_apps.py:64
+#: judge/third_party_apps.py:69
 msgctxt "third-party field"
 msgid "impersonated user"
 msgstr ""
 
-#: judge/third_party_apps.py:65
+#: judge/third_party_apps.py:70
 msgctxt "third-party field"
 msgid "session key"
 msgstr ""
 
-#: judge/third_party_apps.py:66
+#: judge/third_party_apps.py:71
 msgctxt "third-party field"
 msgid "session started at"
 msgstr ""
 
-#: judge/third_party_apps.py:67
+#: judge/third_party_apps.py:72
 msgctxt "third-party field"
 msgid "session ended at"
 msgstr ""
 
-#: judge/third_party_apps.py:75
+#: judge/third_party_apps.py:80
 msgctxt "third-party admin"
 msgid "Incomplete"
 msgstr ""
 
-#: judge/third_party_apps.py:76
+#: judge/third_party_apps.py:81
 msgctxt "third-party admin"
 msgid "Complete"
 msgstr ""
 
-#: judge/third_party_apps.py:79
+#: judge/third_party_apps.py:84
 msgctxt "third-party admin"
 msgid "session state"
 msgstr ""
 
-#: judge/third_party_apps.py:85
-msgid "Django OAuth Toolkit"
-msgstr ""
-
 #: judge/third_party_apps.py:90
-msgctxt "third-party model"
-msgid "application"
-msgstr ""
-
-#: judge/third_party_apps.py:91
-msgctxt "third-party model"
-msgid "applications"
-msgstr ""
-
-#: judge/third_party_apps.py:92
-msgctxt "third-party model"
-msgid "grant"
-msgstr ""
-
-#: judge/third_party_apps.py:93
-msgctxt "third-party model"
-msgid "grants"
-msgstr ""
-
-#: judge/third_party_apps.py:94
-msgctxt "third-party model"
-msgid "access token"
+msgid "Django OAuth Toolkit"
 msgstr ""
 
 #: judge/third_party_apps.py:95
 msgctxt "third-party model"
-msgid "access tokens"
+msgid "application"
 msgstr ""
 
 #: judge/third_party_apps.py:96
 msgctxt "third-party model"
-msgid "refresh token"
+msgid "applications"
 msgstr ""
 
 #: judge/third_party_apps.py:97
 msgctxt "third-party model"
-msgid "refresh tokens"
+msgid "grant"
 msgstr ""
 
 #: judge/third_party_apps.py:98
 msgctxt "third-party model"
-msgid "id token"
+msgid "grants"
 msgstr ""
 
 #: judge/third_party_apps.py:99
 msgctxt "third-party model"
-msgid "id tokens"
+msgid "access token"
 msgstr ""
 
 #: judge/third_party_apps.py:100
 msgctxt "third-party model"
-msgid "device grant"
+msgid "access tokens"
 msgstr ""
 
 #: judge/third_party_apps.py:101
 msgctxt "third-party model"
+msgid "refresh token"
+msgstr ""
+
+#: judge/third_party_apps.py:102
+msgctxt "third-party model"
+msgid "refresh tokens"
+msgstr ""
+
+#: judge/third_party_apps.py:103
+msgctxt "third-party model"
+msgid "id token"
+msgstr ""
+
+#: judge/third_party_apps.py:104
+msgctxt "third-party model"
+msgid "id tokens"
+msgstr ""
+
+#: judge/third_party_apps.py:105
+msgctxt "third-party model"
+msgid "device grant"
+msgstr ""
+
+#: judge/third_party_apps.py:106
+msgctxt "third-party model"
 msgid "device grants"
 msgstr ""
 
-#: judge/third_party_apps.py:107
+#: judge/third_party_apps.py:112
 msgctxt "third-party admin"
 msgid "Revoke selected access tokens"
 msgstr ""
 
-#: judge/third_party_apps.py:109
+#: judge/third_party_apps.py:114
 msgctxt "third-party admin"
 msgid "Revoke selected refresh tokens"
 msgstr ""
 
-#: judge/third_party_apps.py:110 judge/third_party_apps.py:111
-#: judge/third_party_apps.py:173
+#: judge/third_party_apps.py:115 judge/third_party_apps.py:116
+#: judge/third_party_apps.py:178
 msgctxt "third-party field"
 msgid "token"
 msgstr ""
 
-#: judge/third_party_apps.py:112 judge/third_party_apps.py:168
+#: judge/third_party_apps.py:117 judge/third_party_apps.py:173
 msgctxt "third-party field"
 msgid "code"
 msgstr ""
 
-#: judge/third_party_apps.py:116
+#: judge/third_party_apps.py:121
 msgid "Registration"
 msgstr ""
 
-#: judge/third_party_apps.py:121 judge/third_party_apps.py:122
+#: judge/third_party_apps.py:126 judge/third_party_apps.py:127
 msgctxt "third-party field"
 msgid "activated"
 msgstr ""
 
-#: judge/third_party_apps.py:127
-msgid "Python Social Auth"
-msgstr ""
-
 #: judge/third_party_apps.py:132
-msgctxt "third-party model"
-msgid "user social auth"
-msgstr ""
-
-#: judge/third_party_apps.py:133
-msgctxt "third-party model"
-msgid "user social auths"
-msgstr ""
-
-#: judge/third_party_apps.py:134
-msgctxt "third-party model"
-msgid "nonce"
-msgstr ""
-
-#: judge/third_party_apps.py:135
-msgctxt "third-party model"
-msgid "nonces"
-msgstr ""
-
-#: judge/third_party_apps.py:136
-msgctxt "third-party model"
-msgid "association"
+msgid "Python Social Auth"
 msgstr ""
 
 #: judge/third_party_apps.py:137
 msgctxt "third-party model"
-msgid "associations"
+msgid "user social auth"
 msgstr ""
 
 #: judge/third_party_apps.py:138
 msgctxt "third-party model"
-msgid "code"
+msgid "user social auths"
 msgstr ""
 
 #: judge/third_party_apps.py:139
 msgctxt "third-party model"
-msgid "codes"
+msgid "nonce"
 msgstr ""
 
 #: judge/third_party_apps.py:140
 msgctxt "third-party model"
-msgid "partial"
+msgid "nonces"
 msgstr ""
 
 #: judge/third_party_apps.py:141
 msgctxt "third-party model"
-msgid "partials"
+msgid "association"
+msgstr ""
+
+#: judge/third_party_apps.py:142
+msgctxt "third-party model"
+msgid "associations"
+msgstr ""
+
+#: judge/third_party_apps.py:143
+msgctxt "third-party model"
+msgid "code"
+msgstr ""
+
+#: judge/third_party_apps.py:144
+msgctxt "third-party model"
+msgid "codes"
+msgstr ""
+
+#: judge/third_party_apps.py:145
+msgctxt "third-party model"
+msgid "partial"
 msgstr ""
 
 #: judge/third_party_apps.py:146
-msgctxt "third-party field"
-msgid "provider"
-msgstr ""
-
-#: judge/third_party_apps.py:147
-msgctxt "third-party field"
-msgid "ID key"
-msgstr ""
-
-#: judge/third_party_apps.py:148
-msgctxt "third-party field"
-msgid "UID"
-msgstr ""
-
-#: judge/third_party_apps.py:149
-msgctxt "third-party field"
-msgid "extra data"
-msgstr ""
-
-#: judge/third_party_apps.py:150
-msgctxt "third-party field"
-msgid "created"
+msgctxt "third-party model"
+msgid "partials"
 msgstr ""
 
 #: judge/third_party_apps.py:151
 msgctxt "third-party field"
-msgid "modified"
+msgid "provider"
 msgstr ""
 
-#: judge/third_party_apps.py:154 judge/third_party_apps.py:159
+#: judge/third_party_apps.py:152
 msgctxt "third-party field"
-msgid "server URL"
+msgid "ID key"
 msgstr ""
 
-#: judge/third_party_apps.py:155 judge/third_party_apps.py:170
-#: judge/third_party_apps.py:177
+#: judge/third_party_apps.py:153
 msgctxt "third-party field"
-msgid "timestamp"
+msgid "UID"
+msgstr ""
+
+#: judge/third_party_apps.py:154
+msgctxt "third-party field"
+msgid "extra data"
+msgstr ""
+
+#: judge/third_party_apps.py:155
+msgctxt "third-party field"
+msgid "created"
 msgstr ""
 
 #: judge/third_party_apps.py:156
 msgctxt "third-party field"
-msgid "salt"
+msgid "modified"
 msgstr ""
 
-#: judge/third_party_apps.py:160
+#: judge/third_party_apps.py:159 judge/third_party_apps.py:164
 msgctxt "third-party field"
-msgid "handle"
+msgid "server URL"
+msgstr ""
+
+#: judge/third_party_apps.py:160 judge/third_party_apps.py:175
+#: judge/third_party_apps.py:182
+msgctxt "third-party field"
+msgid "timestamp"
 msgstr ""
 
 #: judge/third_party_apps.py:161
 msgctxt "third-party field"
+msgid "salt"
+msgstr ""
+
+#: judge/third_party_apps.py:165
+msgctxt "third-party field"
+msgid "handle"
+msgstr ""
+
+#: judge/third_party_apps.py:166
+msgctxt "third-party field"
 msgid "secret"
-msgstr ""
-
-#: judge/third_party_apps.py:162
-msgctxt "third-party field"
-msgid "issued"
-msgstr ""
-
-#: judge/third_party_apps.py:163
-msgctxt "third-party field"
-msgid "lifetime"
-msgstr ""
-
-#: judge/third_party_apps.py:164
-msgctxt "third-party field"
-msgid "association type"
 msgstr ""
 
 #: judge/third_party_apps.py:167
 msgctxt "third-party field"
-msgid "email"
+msgid "issued"
+msgstr ""
+
+#: judge/third_party_apps.py:168
+msgctxt "third-party field"
+msgid "lifetime"
 msgstr ""
 
 #: judge/third_party_apps.py:169
 msgctxt "third-party field"
-msgid "verified"
+msgid "association type"
+msgstr ""
+
+#: judge/third_party_apps.py:172
+msgctxt "third-party field"
+msgid "email"
 msgstr ""
 
 #: judge/third_party_apps.py:174
 msgctxt "third-party field"
+msgid "verified"
+msgstr ""
+
+#: judge/third_party_apps.py:179
+msgctxt "third-party field"
 msgid "next step"
 msgstr ""
 
-#: judge/third_party_apps.py:175
+#: judge/third_party_apps.py:180
 msgctxt "third-party field"
 msgid "backend"
 msgstr ""
 
-#: judge/third_party_apps.py:176
+#: judge/third_party_apps.py:181
 msgctxt "third-party field"
 msgid "data"
 msgstr ""
@@ -6176,14 +6280,14 @@ msgstr ""
 msgid "Edit user"
 msgstr ""
 
-#: templates/base.html:102 templates/base.html:427
+#: templates/base.html:102 templates/base.html:479
 #: templates/blog/modern-list.html:155
 #: templates/organization/users-table.html:29
 #: templates/urlshortener/list.html:67
 msgid "View"
 msgstr ""
 
-#: templates/base.html:103
+#: templates/base.html:103 templates/base.html:434
 msgid "Close"
 msgstr ""
 
@@ -6262,16 +6366,16 @@ msgstr ""
 msgid "This site works best with JavaScript enabled."
 msgstr ""
 
-#: templates/base.html:426
+#: templates/base.html:478
 msgid "You have unread notifications."
 msgstr ""
 
-#: templates/base.html:456
+#: templates/base.html:508
 #, python-format
 msgid "proudly powered by %(vnoj)s (based on %(dmoj)s)"
 msgstr ""
 
-#: templates/base.html:462
+#: templates/base.html:514
 #, python-format
 msgid "follow us on %(github)s and %(facebook)s"
 msgstr ""
@@ -6773,10 +6877,6 @@ msgstr ""
 msgid "Calendar"
 msgstr ""
 
-#: templates/contest/contest-tabs.html:4
-msgid "Info"
-msgstr ""
-
 #: templates/contest/contest-tabs.html:6 templates/submission/list.html:367
 #: templates/user/user-tabs.html:8
 msgid "Statistics"
@@ -7028,10 +7128,6 @@ msgstr ""
 
 #: templates/contest/contest.html:287
 msgid "All problems"
-msgstr ""
-
-#: templates/contest/contest.html:292
-msgid "Announcements"
 msgstr ""
 
 #: templates/contest/contest.html:296 templates/contest/contest.html:330

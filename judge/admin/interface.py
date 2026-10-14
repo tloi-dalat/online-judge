@@ -10,8 +10,53 @@ from mptt.admin import DraggableMPTTAdmin
 from reversion.admin import VersionAdmin
 
 from judge.dblock import LockModel
-from judge.models import NavigationBar
+from judge.models import GlobalAnnouncement, NavigationBar
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget
+
+
+class GlobalAnnouncementAdmin(VersionAdmin):
+    fields = (
+        'message_en', 'message_vi', 'alert_type', 'is_enabled',
+        'is_dismissible', 'dismissal_version', 'valid_from', 'valid_until',
+    )
+    list_display = (
+        'message_en_preview', 'message_vi_preview', 'alert_type_badge',
+        'is_enabled', 'is_dismissible', 'valid_from', 'valid_until',
+    )
+    list_editable = ('is_enabled', 'is_dismissible')
+    list_filter = ('is_enabled', 'is_dismissible', 'alert_type')
+    search_fields = ('message_en', 'message_vi')
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        GlobalAnnouncement.clear_cache()
+
+    def delete_queryset(self, request, queryset):
+        super().delete_queryset(request, queryset)
+        GlobalAnnouncement.clear_cache()
+
+    @admin.display(description=_('English message'))
+    def message_en_preview(self, obj):
+        return obj.message_en[:60] + ('...' if len(obj.message_en) > 60 else '')
+
+    @admin.display(description=_('Vietnamese message'))
+    def message_vi_preview(self, obj):
+        return obj.message_vi[:60] + ('...' if len(obj.message_vi) > 60 else '')
+
+    @admin.display(description=_('alert type'), ordering='alert_type')
+    def alert_type_badge(self, obj):
+        color_map = {
+            'alert-info': ('#368', '#def', '#bdf', _('Info')),
+            'alert-warning': ('#863', '#ffd', '#feb', _('Warning')),
+            'alert-danger': ('#944', '#edd', '#dbb', _('Danger')),
+            'alert-success': ('#173', '#ded', '#adb', _('Success')),
+        }
+        color, bg, border, label = color_map.get(obj.alert_type, ('#333', '#eee', '#ccc', obj.alert_type))
+        return format_html(
+            '<span style="display:inline-block; padding:3px 10px; border-radius:4px; font-weight:600; '
+            'font-size:12px; color:{}; background-color:{}; border:1px solid {};">{}</span>',
+            color, bg, border, label,
+        )
 
 
 class NavigationBarAdmin(DraggableMPTTAdmin):

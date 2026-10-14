@@ -7,7 +7,7 @@ from django.utils.functional import SimpleLazyObject, new_method_proxy
 
 from judge import event_poster as event
 from judge.utils.caniuse import CanIUse, SUPPORT
-from .models import NavigationBar, Profile
+from .models import GlobalAnnouncement, NavigationBar, Profile
 
 
 class FixedSimpleLazyObject(SimpleLazyObject):
@@ -79,6 +79,14 @@ def site(request):
 
 def misc_config(request):
     return {'misc_config': request.misc_config}
+
+
+def global_announcements(request):
+    active = GlobalAnnouncement.get_active()
+    return {
+        'global_announcements': active,
+        'global_announcement': active[0] if active else None,
+    }
 
 
 def site_name(request):

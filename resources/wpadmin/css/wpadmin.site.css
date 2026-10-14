@@ -43,3 +43,10 @@
         max-width: unset;
     }
 }
+
+#adminmenu li.wp-menu-top > a:not(.wp-add-url) {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

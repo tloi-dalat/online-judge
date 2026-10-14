@@ -508,6 +508,11 @@ else:
                     ],
                 },
                 ('flatpages.FlatPage', 'fa-file-text-o'),
+                {
+                    'model': 'judge.GlobalAnnouncement',
+                    'icon': 'fa-bullhorn',
+                    'title': _('Announcements'),
+                },
                 ('judge.MiscConfig', 'fa-question-circle'),
             ],
             'dashboard': {
@@ -619,6 +624,7 @@ TEMPLATES = [
                 'judge.template_context.site_name',
                 'judge.template_context.site_theme',
                 'judge.template_context.misc_config',
+                'judge.template_context.global_announcements',
                 'judge.template_context.math_setting',
                 'judge.template_context.graph_config',
                 'social_django.context_processors.backends',

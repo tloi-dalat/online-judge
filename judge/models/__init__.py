@@ -4,7 +4,8 @@ from judge.models.choices import ACE_THEMES, EFFECTIVE_MATH_ENGINES, MATH_ENGINE
 from judge.models.comment import Comment, CommentLock, CommentVote
 from judge.models.contest import Contest, ContestAnnouncement, ContestMoss, ContestParticipation, ContestProblem, \
     ContestSubmission, ContestTag, Rating
-from judge.models.interface import BlogPost, BlogPostTag, BlogVote, MiscConfig, NavigationBar, validate_regex
+from judge.models.interface import BlogPost, BlogPostTag, BlogVote, GlobalAnnouncement, MiscConfig, NavigationBar, \
+    validate_regex
 from judge.models.notification import Notification, make_notification
 from judge.models.problem import LanguageLimit, License, OrganizationProblemTag, Problem, ProblemClarification, \
     ProblemGroup, ProblemTranslation, ProblemType, Solution, SubmissionSourceAccess, TranslatedProblemQuerySet
@@ -30,4 +31,5 @@ revisions.register(Language)
 revisions.register(Comment, fields=['author', 'time', 'page', 'score', 'body', 'hidden', 'parent'])
 revisions.register(TagProblem)
 revisions.register(TagData, follow=['problem'])
+revisions.register(GlobalAnnouncement)
 del revisions

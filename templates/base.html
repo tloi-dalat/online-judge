@@ -417,6 +417,58 @@
     </noscript>
     <br>
     <main id="content">
+        {% if global_announcements %}
+            <noscript>
+                <style>
+                    .global-announcement-dismissible:first-of-type { display: flex !important; }
+                </style>
+            </noscript>
+            {% for announcement in global_announcements %}
+                {% set banner_msg = announcement.get_display_message(LANGUAGE_CODE) %}
+                {% if banner_msg %}
+                    <div id="global-announcement-{{ announcement.id }}"
+                         class="alert {{ announcement.alert_class }}{% if announcement.is_dismissible %} alert-dismissable global-announcement-dismissible{% endif %} global-announcement-banner"
+                         role="region" aria-label="{{ _('Announcements') }}" aria-live="polite"
+                         {% if announcement.is_dismissible %}style="display:none;" data-dismissal-id="{{ announcement.id }}" data-dismissal-key="{{ announcement.dismissal_key }}" data-dismissal-storage-key="global-announcement-dismissed-{{ announcement.id }}"{% endif %}>
+                        {% if announcement.is_dismissible %}
+                            <button type="button" class="close" title="{{ _('Close') }}" aria-label="{{ _('Close') }}"
+                                    onclick="dismissGlobalAnnouncement('{{ announcement.id }}', '{{ announcement.dismissal_key }}');"><i class="fa fa-times"></i></button>
+                        {% endif %}
+                        <div class="global-announcement-text">{{ banner_msg|trim }}</div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <script>
+                (function () {
+                    try {
+                        var dismissibles = document.querySelectorAll('.global-announcement-dismissible');
+                        for (var i = 0; i < dismissibles.length; i++) {
+                            var el = dismissibles[i];
+                            var storageKey = el.getAttribute('data-dismissal-storage-key');
+                            var key = el.getAttribute('data-dismissal-key');
+                            if (localStorage.getItem(storageKey) !== key) {
+                                el.style.display = '';
+                                break;
+                            }
+                        }
+                    } catch (e) {}
+                })();
+
+                function dismissGlobalAnnouncement(id, key) {
+                    var el = document.getElementById('global-announcement-' + id);
+                    if (el) {
+                        el.style.transition = 'opacity 0.2s ease, max-height 0.2s ease, margin 0.2s ease, padding 0.2s ease';
+                        el.style.opacity = '0';
+                        setTimeout(function () {
+                            el.style.display = 'none';
+                        }, 200);
+                    }
+                    try {
+                        localStorage.setItem('global-announcement-dismissed-' + id, key);
+                    } catch (e) {}
+                }
+            </script>
+        {% endif %}
         {% if misc_config.top_notification %}
             {{ render_django(misc_config.top_notification) }}
         {% endif %}
