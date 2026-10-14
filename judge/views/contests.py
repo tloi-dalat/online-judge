@@ -147,10 +147,6 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
                                      count=self.get_queryset().values('id').count(), **kwargs)
 
     def _populate_solved_counts(self, contests):
-        for contest in contests:
-            contest.solved_count = None
-            contest.total_count = None
-
         if not self.request.user.is_authenticated:
             return
 
@@ -195,23 +191,16 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
 
         prefetches = ['tags']
         if is_authenticated:
-            participations = ContestParticipation.objects.filter(
-                user=self.request.profile,
-            )
             prefetches.extend([
-                Prefetch(
-                    'users',
-                    queryset=participations.filter(
-                        virtual__gte=ContestParticipation.LIVE,
-                    ),
-                    to_attr='scoring_participations',
-                ),
+                'authors',
+                'curators',
                 Prefetch(
                     'users',
                     queryset=ContestParticipation.objects.filter(
-                        virtual=ContestParticipation.LIVE
+                        user=self.request.profile,
+                        virtual__gte=ContestParticipation.LIVE,
                     ),
-                    to_attr='live_participations',
+                    to_attr='scoring_participations',
                 ),
             ])
 
@@ -232,7 +221,20 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
             else:
                 present.append(contest)
 
-        self._populate_solved_counts(past_contests + present)
+        for contest in all_contests:
+            contest.solved_count = None
+            contest.total_count = None
+
+        if is_authenticated:
+            visible_contests = [
+                contest for contest in all_contests
+                if contest.start_time <= self._now
+                and not contest.should_hide_result(
+                    self.request.user,
+                    self.request.participation,
+                )
+            ]
+            self._populate_solved_counts(visible_contests)
 
         if is_authenticated:
             for contest in list(present):
