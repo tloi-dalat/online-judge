@@ -192,8 +192,6 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
         prefetches = ['tags']
         if is_authenticated:
             prefetches.extend([
-                'authors',
-                'curators',
                 Prefetch(
                     'users',
                     queryset=ContestParticipation.objects.filter(
@@ -228,8 +226,8 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
         if is_authenticated:
             visible_contests = [
                 contest for contest in all_contests
-                if contest.start_time <= self._now
-                and not contest.should_hide_result(
+                if contest.start_time <= self._now and
+                not contest.should_hide_result(
                     self.request.user,
                     self.request.participation,
                 )
