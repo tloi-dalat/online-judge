@@ -479,7 +479,13 @@ class Contest(models.Model):
         if user.is_authenticated:
             if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
                 return False
-            if user.profile.id in self.editor_ids:
+
+            if hasattr(self, 'has_author') and hasattr(self, 'has_curator'):
+                is_editor = self.has_author or self.has_curator
+            else:
+                is_editor = user.profile.id in self.editor_ids
+
+            if is_editor:
                 return False
 
         hides = getattr(self.format, 'hides_results_before_unfreeze', False)

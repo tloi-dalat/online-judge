@@ -146,6 +146,23 @@
     }
 }
 
+.contest-list-stats {
+    width: 100%;
+    table-layout: fixed;
+
+    th:first-child {
+        width: 55%;
+    }
+
+    th:not(:first-child) {
+        width: 15%;
+    }
+
+    td {
+        overflow-wrap: anywhere;
+    }
+}
+
 .contest-tag {
     box-shadow: inset 0 -0.1em 0 rgba(0, 0, 0, 0.12);
     padding: 0.15em 0.3em;
