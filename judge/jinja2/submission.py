@@ -50,7 +50,8 @@ def hidden_contest_problem_ids(user):
     if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
         return frozenset()
     from judge.contest_format import hidden_result_contest_ids
-    hidden = hidden_result_contest_ids(user.profile)
+    # These are the viewer's own submissions, so only contests hiding their own results count.
+    hidden = hidden_result_contest_ids(user.profile, own=True)
     if not hidden:
         return frozenset()
     return frozenset(
@@ -96,7 +97,9 @@ def submission_result_hidden(submission, user):
     hides = getattr(contest.format, 'hides_results_before_unfreeze', False)
 
     if (hides or (contest.unfreeze_time and contest.end_time < now)) and now < contest.get_unfreeze_time():
-        return True
+        # Outside VOI, only other people's results are hidden; viewers still see their own.
+        own = user.is_authenticated and submission.user_id == user.profile.id
+        return hides or not own
 
     if hides and user.is_authenticated and user.profile.current_contest_id is not None:
         return user.profile.current_contest.contest_id == contest.id

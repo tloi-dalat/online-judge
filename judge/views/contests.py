@@ -150,36 +150,22 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
         if not self.request.user.is_authenticated:
             return
 
-        participated_contests = [contest for contest in contests if contest.scoring_participations]
-        if not participated_contests:
-            return
-
-        participated_ids = [contest.id for contest in participated_contests]
-        total_counts = dict(
+        problems_by_contest = defaultdict(set)
+        for contest_id, problem_id in (
             ContestProblem.objects
-            .filter(contest_id__in=participated_ids)
+            .filter(contest_id__in=[contest.id for contest in contests])
             .order_by()
-            .values('contest_id')
-            .annotate(total=Count('id'))
-            .values_list('contest_id', 'total'),
-        )
-        solved_counts = dict(
-            ContestSubmission.objects
-            .filter(
-                participation__contest_id__in=participated_ids,
-                participation__user=self.request.profile,
-                participation__virtual__gte=ContestParticipation.LIVE,
-                submission__result='AC',
-            )
-            .order_by()
-            .values('participation__contest_id')
-            .annotate(solved=Count('problem_id', distinct=True))
-            .values_list('participation__contest_id', 'solved'),
-        )
+            .values_list('contest_id', 'problem_id')
+        ):
+            problems_by_contest[contest_id].add(problem_id)
 
-        for contest in participated_contests:
-            contest.total_count = total_counts.get(contest.id, 0)
-            contest.solved_count = solved_counts.get(contest.id, 0)
+        solved_problems = user_completed_ids(self.request.profile)
+        for contest in contests:
+            problems = problems_by_contest[contest.id]
+            if problems:
+                contest.total_count = len(problems)
+                if not contest.should_hide_result(self.request.user, self.request.participation, own=True):
+                    contest.solved_count = len(problems & solved_problems)
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
@@ -187,29 +173,14 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
         current_and_future = list(self._get_queryset().exclude(end_time__lt=self._now))
         all_contests = past_contests + current_and_future
 
-        is_authenticated = self.request.user.is_authenticated
-
         prefetches = ['tags']
-        if is_authenticated:
-            prefetches.extend([
-                Prefetch(
-                    'users',
-                    queryset=ContestParticipation.objects.filter(
-                        user=self.request.profile,
-                        virtual__gte=ContestParticipation.LIVE,
-                    ),
-                    to_attr='scoring_participations',
-                ),
-            ])
+        if self.request.user.is_authenticated:
+            prefetches.append(Prefetch('users',
+                                       queryset=ContestParticipation.objects.filter(
+                                           user=self.request.profile, virtual=0),
+                                       to_attr='user_participation'))
 
         prefetch_related_objects(all_contests, *prefetches)
-
-        if is_authenticated:
-            for contest in all_contests:
-                contest.live_participations = [
-                    participation for participation in contest.scoring_participations
-                    if participation.virtual == ContestParticipation.LIVE
-                ]
 
         present, active, future = [], [], []
         finished = set()
@@ -223,21 +194,14 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
             contest.solved_count = None
             contest.total_count = None
 
-        if is_authenticated:
-            visible_contests = [
-                contest for contest in all_contests
-                if contest.start_time <= self._now and
-                not contest.should_hide_result(
-                    self.request.user,
-                    self.request.participation,
-                )
-            ]
-            self._populate_solved_counts(visible_contests)
+        if self.request.user.is_authenticated:
+            started_contests = [contest for contest in all_contests if contest.start_time <= self._now]
+            self._populate_solved_counts(started_contests)
 
-        if is_authenticated:
+        if self.request.user.is_authenticated:
             for contest in list(present):
-                if contest.live_participations:
-                    participation = contest.live_participations[0]
+                if hasattr(contest, 'user_participation') and contest.user_participation:
+                    participation = contest.user_participation[0]
                     participation.contest = contest
                     if participation.ended:
                         finished.add(contest.key)
@@ -465,7 +429,8 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         authenticated = self.request.user.is_authenticated
         context['completed_problem_ids'] = user_completed_ids(self.request.profile) if authenticated else []
         context['attempted_problem_ids'] = user_attempted_ids(self.request.profile) if authenticated else []
-        context['result_hidden'] = self.object.should_hide_result(self.request.user, self.request.participation)
+        context['result_hidden'] = self.object.should_hide_result(self.request.user, self.request.participation,
+                                                                  own=True)
 
         context['can_download_data'] = bool(settings.DMOJ_CONTEST_DATA_DOWNLOAD)
 
@@ -513,7 +478,8 @@ class ContestAllProblems(ContestMixin, TitleMixin, DetailView):
         authenticated = self.request.user.is_authenticated
         context['completed_problem_ids'] = user_completed_ids(self.request.profile) if authenticated else []
         context['attempted_problem_ids'] = user_attempted_ids(self.request.profile) if authenticated else []
-        context['result_hidden'] = self.object.should_hide_result(self.request.user, self.request.participation)
+        context['result_hidden'] = self.object.should_hide_result(self.request.user, self.request.participation,
+                                                                  own=True)
 
         context['has_pdf_render'] = PDF_RENDERING_ENABLED
 

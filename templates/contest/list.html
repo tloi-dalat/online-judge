@@ -251,9 +251,9 @@
                                 {{ user_count(contest, request.user) }}
                             </td>
                             <td>
-                            {% if contest.solved_count is not none %}
+                            {% if contest.total_count is not none %}
                                 <span>
-                                    {{ contest.solved_count }} / {{ contest.total_count }}
+                                    {{ '?' if contest.solved_count is none else contest.solved_count }} / {{ contest.total_count }}
                                 </span>
                             {% endif %}
                             </td>
@@ -296,9 +296,9 @@
                             {{ user_count(contest, request.user) }}
                         </td>
                         <td>
-                            {% if contest.solved_count is not none %}
+                            {% if contest.total_count is not none %}
                                 <span>
-                                    {{ contest.solved_count }} / {{ contest.total_count }}
+                                    {{ '?' if contest.solved_count is none else contest.solved_count }} / {{ contest.total_count }}
                                 </span>
                             {% endif %}
                         </td>
@@ -396,9 +396,9 @@
                             {{ user_count(contest, request.user) }}
                         </td>
                         <td>
-                            {% if contest.solved_count is not none %}
+                            {% if contest.total_count is not none %}
                                 <span>
-                                    {{ contest.solved_count }} / {{ contest.total_count }}
+                                    {{ '?' if contest.solved_count is none else contest.solved_count }} / {{ contest.total_count }}
                                 </span>
                             {% endif %}
                         </td>

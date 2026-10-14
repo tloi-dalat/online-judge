@@ -3,7 +3,9 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from judge.models import ContestParticipation
+from judge.contest_format import hidden_result_submission_q
+from judge.jinja2.submission import hidden_contest_problem_ids, submission_result_hidden
+from judge.models import ContestParticipation, ContestSubmission, Language, Submission
 from judge.models.tests.util import (
     create_contest,
     create_contest_participation,
@@ -158,3 +160,79 @@ class ContestReplayHiddenResultTestCase(TestCase):
     def test_participation_model_live_constant(self):
         # Guard: the ranking JSON relies on LIVE == 0 for "live" participations.
         self.assertEqual(ContestParticipation.LIVE, 0)
+
+
+class OwnResultVisibilityTestCase(TestCase):
+    """Between the end and the unfreeze time, ICPC hides only other people's results; VOI hides everything."""
+    fixtures = ['language_all.json']
+
+    @classmethod
+    def setUpTestData(cls):
+        cls._now = timezone.now()
+        cls.me = create_user(username='me')
+        cls.other = create_user(username='other')
+        cls.icpc, cls.icpc_subs = cls.make_contest('own_icpc', 'icpc')
+        cls.voi, cls.voi_subs = cls.make_contest('own_voi', 'voi')
+
+    @classmethod
+    def make_contest(cls, key, format_name):
+        contest = create_contest(
+            key=key,
+            format_name=format_name,
+            start_time=cls._now - timezone.timedelta(days=2),
+            end_time=cls._now - timezone.timedelta(days=1),
+            unfreeze_time=cls._now + timezone.timedelta(days=1),
+            is_visible=True,
+        )
+        problem_a = create_contest_problem(contest=contest, problem=create_problem(f'{key}_a'), order=1)
+        problem_b = create_contest_problem(contest=contest, problem=create_problem(f'{key}_b'), order=2)
+        # 'me' solved A, 'other' solved B.
+        subs = {}
+        for user, contest_problem in ((cls.me, problem_a), (cls.other, problem_b)):
+            participation = create_contest_participation(contest=contest, user=user.profile)
+            sub = Submission.objects.create(
+                user=user.profile, problem=contest_problem.problem, language=Language.get_python3(),
+                status='D', result='AC', points=100, time=0.1, memory=1024, contest_object=contest,
+            )
+            ContestSubmission.objects.create(
+                submission=sub, problem=contest_problem, participation=participation, points=100,
+            )
+            subs[user.username] = sub
+        return contest, subs
+
+    def setUp(self):
+        cache.clear()
+
+    def test_should_hide_result_own_flag(self):
+        self.assertFalse(self.icpc.should_hide_result(self.me, own=True))
+        self.assertTrue(self.icpc.should_hide_result(self.me))
+        self.assertTrue(self.voi.should_hide_result(self.me, own=True))
+
+    def test_submission_row_hidden_only_for_others(self):
+        self.assertFalse(submission_result_hidden(self.icpc_subs['me'], self.me))
+        self.assertTrue(submission_result_hidden(self.icpc_subs['other'], self.me))
+        self.assertTrue(submission_result_hidden(self.voi_subs['me'], self.me))
+
+    def test_own_hidden_problem_ids(self):
+        hidden = hidden_contest_problem_ids(self.me)
+        self.assertNotIn(self.icpc_subs['me'].problem_id, hidden)
+        self.assertIn(self.voi_subs['me'].problem_id, hidden)
+
+    def test_hidden_submission_q_keeps_own_icpc_submissions(self):
+        icpc = Submission.objects.filter(contest_object=self.icpc)
+        self.assertEqual(list(icpc.exclude(hidden_result_submission_q(self.me.profile))), [self.icpc_subs['me']])
+        self.assertEqual(list(icpc.exclude(hidden_result_submission_q(None))), [])
+        voi = Submission.objects.filter(contest_object=self.voi)
+        self.assertEqual(list(voi.exclude(hidden_result_submission_q(self.me.profile))), [])
+
+    def test_contest_list_shows_own_icpc_count(self):
+        self.client.force_login(self.me)
+        response = self.client.get(reverse('contest_list'))
+        self.assertContains(response, '1 / 2')
+        self.assertContains(response, '? / 2')
+
+    def test_contest_submission_list_hides_only_others(self):
+        self.client.force_login(self.me)
+        response = self.client.get(reverse('contest_all_submissions', args=[self.icpc.key]))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content.decode().count('<span class="status">HD</span>'), 1)

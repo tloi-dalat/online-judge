@@ -466,16 +466,7 @@ class Contest(models.Model):
     def get_unfreeze_time(self):
         return self.unfreeze_time or self.end_time
 
-    def should_hide_result(self, user, participation=None):
-        """
-        Returns True if submission results should be hidden from this user.
-
-        For VOI format: hidden from everyone until the unfreeze time, and additionally
-        hidden from a user while they are inside this contest (e.g. a virtual replay) —
-        revealed the moment they leave. `participation` is the viewer's current participation.
-        For ICPC/VNOJ with unfreeze_time set: hidden between contest end and unfreeze time.
-        Admins and editors always see real results.
-        """
+    def should_hide_result(self, user, participation=None, own=False):
         if user.is_authenticated:
             if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
                 return False
@@ -490,11 +481,9 @@ class Contest(models.Model):
 
         hides = getattr(self.format, 'hides_results_before_unfreeze', False)
 
-        # Global window: hidden from everyone until the unfreeze time.
         if (hides or (self.unfreeze_time and self.ended)) and self._now < self.get_unfreeze_time():
-            return True
+            return hides or not own
 
-        # Personal: a VOI participant sees nothing for this contest while they are in it.
         if hides and participation is not None and participation.contest_id == self.id:
             return True
 
