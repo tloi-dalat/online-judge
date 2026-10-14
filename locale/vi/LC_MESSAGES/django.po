@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 12:58+0000\n"
+"POT-Creation-Date: 2026-10-14 05:27+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -97,7 +97,7 @@ msgstr "Đã gửi email đặt lại mật khẩu"
 msgid "Home"
 msgstr "Trang chủ"
 
-#: judge/admin/comments.py:25 judge/admin/interface.py:122
+#: judge/admin/comments.py:25 judge/admin/interface.py:128
 #: templates/misc_config/edit.html:88
 msgid "Content"
 msgstr "Nội dung"
@@ -279,50 +279,50 @@ msgstr "tên người dùng"
 msgid "virtual"
 msgstr "ảo"
 
-#: judge/admin/interface.py:32 judge/models/interface.py:198
+#: judge/admin/interface.py:38 judge/models/interface.py:197
 msgid "English message"
 msgstr "Thông báo tiếng Anh"
 
-#: judge/admin/interface.py:36 judge/models/interface.py:203
+#: judge/admin/interface.py:42 judge/models/interface.py:202
 msgid "Vietnamese message"
 msgstr "Thông báo tiếng Việt"
 
-#: judge/admin/interface.py:40 judge/models/interface.py:211
+#: judge/admin/interface.py:46 judge/models/interface.py:210
 msgid "alert type"
 msgstr "loại thông báo"
 
-#: judge/admin/interface.py:43 judge/models/interface.py:182
+#: judge/admin/interface.py:49 judge/models/interface.py:181
 #: templates/contest/contest-tabs.html:4
 msgid "Info"
 msgstr "Thông tin"
 
-#: judge/admin/interface.py:44 judge/models/interface.py:183
+#: judge/admin/interface.py:50 judge/models/interface.py:182
 msgid "Warning"
 msgstr "Cảnh báo"
 
-#: judge/admin/interface.py:45 judge/models/interface.py:184
+#: judge/admin/interface.py:51 judge/models/interface.py:183
 msgid "Danger"
 msgstr "Nguy hiểm"
 
-#: judge/admin/interface.py:46 judge/models/interface.py:185
+#: judge/admin/interface.py:52 judge/models/interface.py:184
 msgid "Success"
 msgstr "Thành công"
 
-#: judge/admin/interface.py:67 judge/models/interface.py:52
+#: judge/admin/interface.py:73 judge/models/interface.py:51
 msgid "link path"
 msgstr "đường dẫn liên kết"
 
-#: judge/admin/interface.py:123
+#: judge/admin/interface.py:129
 msgid "Summary"
 msgstr "Tóm tắt"
 
-#: judge/admin/interface.py:141 judge/admin/problem.py:190
-#: judge/models/contest.py:81 judge/models/interface.py:86
+#: judge/admin/interface.py:147 judge/admin/problem.py:190
+#: judge/models/contest.py:81 judge/models/interface.py:85
 #: judge/models/problem.py:746
 msgid "authors"
 msgstr "tác giả"
 
-#: judge/admin/interface.py:171 judge/admin/profile.py:112
+#: judge/admin/interface.py:177 judge/admin/profile.py:112
 #: judge/admin/submission.py:227 judge/models/contest.py:690
 #: judge/models/contest.py:866 judge/models/profile.py:572
 #: judge/models/profile.py:603 judge/models/submission.py:75
@@ -330,7 +330,7 @@ msgstr "tác giả"
 msgid "user"
 msgstr "thành viên"
 
-#: judge/admin/interface.py:200
+#: judge/admin/interface.py:206
 msgid "object"
 msgstr "đối tượng"
 
@@ -1394,7 +1394,7 @@ msgstr "người bình luận"
 msgid "posted time"
 msgstr "thời gian đăng"
 
-#: judge/models/comment.py:33 judge/models/interface.py:94
+#: judge/models/comment.py:33 judge/models/interface.py:93
 #: templates/blog/modern-content.html:98
 msgid "votes"
 msgstr "đánh giá"
@@ -1439,12 +1439,12 @@ msgstr "Hướng giải cho %s"
 msgid "%(page)s by %(user)s"
 msgstr "%(page)s bởi %(user)s"
 
-#: judge/models/comment.py:197 judge/models/interface.py:158
+#: judge/models/comment.py:197 judge/models/interface.py:157
 msgid "voter"
 msgstr "người bình chọn"
 
 #: judge/models/comment.py:199 judge/models/contest.py:692
-#: judge/models/interface.py:160
+#: judge/models/interface.py:159
 msgid "score"
 msgstr "điểm"
 
@@ -1759,7 +1759,7 @@ msgstr "Hiện tóm tắt các cài đặt của kỳ thi ở trang kỳ thi."
 msgid "private to organizations"
 msgstr "dành riêng cho tổ chức"
 
-#: judge/models/contest.py:166 judge/models/interface.py:97
+#: judge/models/contest.py:166 judge/models/interface.py:96
 #: judge/models/problem.py:65 judge/models/problem.py:255
 #: judge/models/profile.py:198 judge/models/profile.py:205
 #: judge/models/profile.py:232 judge/models/profile.py:276
@@ -1771,7 +1771,7 @@ msgstr "tổ chức"
 msgid "If private, only this organization may see the contest"
 msgstr "Nếu là riêng tư, thì chỉ các tổ chức này mới có thể xem kỳ thi"
 
-#: judge/models/contest.py:169 judge/models/interface.py:93
+#: judge/models/contest.py:169 judge/models/interface.py:92
 #: judge/models/problem.py:227
 msgid "OpenGraph image"
 msgstr "Ảnh OpenGraph"
@@ -2101,7 +2101,7 @@ msgstr "một phần"
 msgid "is pretested"
 msgstr "có pretest?"
 
-#: judge/models/contest.py:825 judge/models/interface.py:49
+#: judge/models/contest.py:825 judge/models/interface.py:48
 msgid "order"
 msgstr "thứ tự"
 
@@ -2194,211 +2194,207 @@ msgstr "kết quả moss"
 msgid "contest moss results"
 msgstr "kết quả moss"
 
-#: judge/models/interface.py:23 judge/models/problem.py:78
+#: judge/models/interface.py:22 judge/models/problem.py:78
 msgid "key"
 msgstr "khóa"
 
-#: judge/models/interface.py:24
+#: judge/models/interface.py:23
 msgid "value"
 msgstr "giá trị"
 
-#: judge/models/interface.py:30
+#: judge/models/interface.py:29
 msgid "configuration item"
 msgstr "cấu hình"
 
-#: judge/models/interface.py:31
+#: judge/models/interface.py:30
 msgid "miscellaneous configuration"
 msgstr "cấu hình khác"
 
-#: judge/models/interface.py:43
+#: judge/models/interface.py:42
 msgid "navigation item"
 msgstr "mục điều hướng"
 
-#: judge/models/interface.py:44
+#: judge/models/interface.py:43
 msgid "navigation bar"
 msgstr "thanh điều hướng"
 
-#: judge/models/interface.py:50
+#: judge/models/interface.py:49
 msgid "identifier"
 msgstr "định danh"
 
-#: judge/models/interface.py:51
+#: judge/models/interface.py:50
 msgid "label"
 msgstr "nhãn"
 
-#: judge/models/interface.py:53
+#: judge/models/interface.py:52
 msgid "highlight regex"
 msgstr "regex làm nổi bật"
 
-#: judge/models/interface.py:54
+#: judge/models/interface.py:53
 msgid "parent item"
 msgstr "mục cha"
 
-#: judge/models/interface.py:72
+#: judge/models/interface.py:71
 msgid "name"
 msgstr "tên"
 
-#: judge/models/interface.py:73 judge/models/interface.py:87
+#: judge/models/interface.py:72 judge/models/interface.py:86
 msgid "slug"
 msgstr "slug"
 
-#: judge/models/interface.py:76
+#: judge/models/interface.py:75
 msgid "blog tag"
 msgstr "nhãn blog"
 
-#: judge/models/interface.py:77
+#: judge/models/interface.py:76
 msgid "blog tags"
 msgstr "các nhãn blog"
 
-#: judge/models/interface.py:85
+#: judge/models/interface.py:84
 msgid "post title"
 msgstr "tiêu đề bài viết"
 
-#: judge/models/interface.py:88 judge/models/problem.py:744
+#: judge/models/interface.py:87 judge/models/problem.py:744
 msgid "public visibility"
 msgstr "hiển thị công khai"
 
-#: judge/models/interface.py:89
+#: judge/models/interface.py:88
 msgid "sticky"
 msgstr "ghim"
 
-#: judge/models/interface.py:90
+#: judge/models/interface.py:89
 msgid "publish after"
 msgstr "thời gian đăng"
 
-#: judge/models/interface.py:91
+#: judge/models/interface.py:90
 msgid "post content"
 msgstr "nội dung"
 
-#: judge/models/interface.py:92
+#: judge/models/interface.py:91
 msgid "post summary"
 msgstr "tóm tắt bài đăng"
 
-#: judge/models/interface.py:95
+#: judge/models/interface.py:94
 msgid "global post"
 msgstr "bài đăng chung"
 
-#: judge/models/interface.py:96
+#: judge/models/interface.py:95
 msgid "Display this blog post at the homepage."
 msgstr "Hiển thị bài đăng này ở trang chủ."
 
-#: judge/models/interface.py:99 judge/models/tag.py:29
+#: judge/models/interface.py:98 judge/models/tag.py:29
 msgid "tags"
 msgstr "nhãn"
 
-#: judge/models/interface.py:147
+#: judge/models/interface.py:146
 msgid "Edit all posts"
 msgstr "Chỉnh sửa tất cả bài đăng"
 
-#: judge/models/interface.py:148
+#: judge/models/interface.py:147
 msgid "Edit organization posts"
 msgstr "Chỉnh sửa các bài đăng của tổ chức"
 
-#: judge/models/interface.py:149
+#: judge/models/interface.py:148
 msgid "Mark post as global"
 msgstr "Đánh dấu bài viết là bài đăng chung"
 
-#: judge/models/interface.py:150
+#: judge/models/interface.py:149
 msgid "Pin post"
 msgstr "Ghim bài viết"
 
-#: judge/models/interface.py:151
+#: judge/models/interface.py:150
 msgid "Manage magazine blog posts"
 msgstr "Quản lý bài đăng tạp chí"
 
-#: judge/models/interface.py:153
+#: judge/models/interface.py:152
 msgid "blog post"
 msgstr "bài đăng blog"
 
-#: judge/models/interface.py:154
+#: judge/models/interface.py:153
 msgid "blog posts"
 msgstr "bài đăng blog"
 
-#: judge/models/interface.py:159
+#: judge/models/interface.py:158
 msgid "blog"
 msgstr "bài đăng blog"
 
-#: judge/models/interface.py:164
+#: judge/models/interface.py:163
 msgid "blog vote"
 msgstr "bỏ phiếu blog"
 
-#: judge/models/interface.py:165
+#: judge/models/interface.py:164
 msgid "blog votes"
 msgstr "bỏ phiếu blog"
 
-#: judge/models/interface.py:200
+#: judge/models/interface.py:199
 msgid "Announcement message in English."
 msgstr "Nội dung thông báo bằng tiếng Anh."
 
-#: judge/models/interface.py:205
+#: judge/models/interface.py:204
 msgid "Announcement message in Vietnamese."
 msgstr "Nội dung thông báo bằng tiếng Việt."
 
-#: judge/models/interface.py:212
+#: judge/models/interface.py:211
 msgid "Bootstrap alert style class."
 msgstr "Lớp kiểu thông báo Bootstrap."
 
-#: judge/models/interface.py:216
+#: judge/models/interface.py:215
 msgid "enabled"
 msgstr "kích hoạt"
 
-#: judge/models/interface.py:217
+#: judge/models/interface.py:216
 msgid "Whether this announcement is actively displayed on the site."
 msgstr "Có hiển thị thông báo này trên toàn trang hay không."
 
-#: judge/models/interface.py:221
+#: judge/models/interface.py:220
 msgid "dismissible"
 msgstr "cho phép đóng"
 
-#: judge/models/interface.py:222
+#: judge/models/interface.py:221
 msgid "Whether users can dismiss this announcement."
 msgstr "Người dùng có thể đóng thông báo này hay không."
 
-#: judge/models/interface.py:226
+#: judge/models/interface.py:225
 msgid "dismissal version"
 msgstr "phiên bản đóng"
 
-#: judge/models/interface.py:227
+#: judge/models/interface.py:226
 msgid ""
 "Incrementing this will re-display the announcement to users who previously "
 "dismissed it."
 msgstr ""
 "Tăng số này sẽ hiển thị lại thông báo cho những người dùng đã từng đóng."
 
-#: judge/models/interface.py:232
+#: judge/models/interface.py:231
 msgid "valid from"
 msgstr "hiệu lực từ"
 
-#: judge/models/interface.py:233
+#: judge/models/interface.py:232
 msgid "Announcement visible from this time (optional)."
 msgstr "Thông báo bắt đầu hiển thị từ thời điểm này (không bắt buộc)."
 
-#: judge/models/interface.py:238
+#: judge/models/interface.py:237
 msgid "valid until"
 msgstr "hiệu lực đến"
 
-#: judge/models/interface.py:239
+#: judge/models/interface.py:238
 msgid "Announcement visible until this time (optional)."
 msgstr "Thông báo kết thúc hiển thị vào thời điểm này (không bắt buộc)."
 
-#: judge/models/interface.py:241
-msgid "created at"
-msgstr "thời gian tạo"
-
-#: judge/models/interface.py:246
+#: judge/models/interface.py:244
 msgid "announcement"
 msgstr "thông báo"
 
-#: judge/models/interface.py:247
+#: judge/models/interface.py:245
 msgid "announcements"
 msgstr "thông báo"
 
-#: judge/models/interface.py:253
+#: judge/models/interface.py:251
 msgid "At least one message (English or Vietnamese) must be provided."
 msgstr ""
 "Phải cung cấp ít nhất một nội dung thông báo (tiếng Anh hoặc tiếng Việt)."
 
-#: judge/models/interface.py:255
+#: judge/models/interface.py:253
 msgid "Valid until must be after valid from."
 msgstr "Thời điểm kết thúc phải sau thời điểm bắt đầu."
 
@@ -4259,364 +4255,364 @@ msgstr "Đang chuẩn bị dữ liệu về bài nộp của bạn"
 msgid "Preparing your comment data"
 msgstr "Đang chuẩn bị dữ liệu về bình luận của bạn"
 
-#: judge/third_party_apps.py:29
+#: judge/third_party_apps.py:30
 msgid "Chunked upload"
 msgstr "Tải lên theo phần"
 
-#: judge/third_party_apps.py:34
+#: judge/third_party_apps.py:35
 msgctxt "third-party model"
 msgid "chunked upload"
 msgstr "tệp tải lên theo phần"
 
-#: judge/third_party_apps.py:35
+#: judge/third_party_apps.py:36
 msgctxt "third-party model"
 msgid "chunked uploads"
 msgstr "tệp tải lên theo phần"
 
-#: judge/third_party_apps.py:39
+#: judge/third_party_apps.py:40
 msgctxt "third-party field"
 msgid "upload ID"
 msgstr "mã tải lên"
 
-#: judge/third_party_apps.py:40
+#: judge/third_party_apps.py:41
 msgctxt "third-party field"
 msgid "file"
 msgstr "tệp"
 
-#: judge/third_party_apps.py:41
+#: judge/third_party_apps.py:42
 msgctxt "third-party field"
 msgid "filename"
 msgstr "tên tệp"
 
-#: judge/third_party_apps.py:42
+#: judge/third_party_apps.py:43
 msgctxt "third-party field"
 msgid "offset"
 msgstr "vị trí"
 
-#: judge/third_party_apps.py:43
+#: judge/third_party_apps.py:44
 msgctxt "third-party field"
 msgid "created on"
 msgstr "ngày tạo"
 
-#: judge/third_party_apps.py:44
+#: judge/third_party_apps.py:45
 msgctxt "third-party field"
 msgid "status"
 msgstr "trạng thái"
 
-#: judge/third_party_apps.py:45
+#: judge/third_party_apps.py:46
 msgctxt "third-party field"
 msgid "completed on"
 msgstr "ngày hoàn tất"
 
-#: judge/third_party_apps.py:46 judge/third_party_apps.py:149
+#: judge/third_party_apps.py:47 judge/third_party_apps.py:150
 msgctxt "third-party field"
 msgid "user"
 msgstr "thành viên"
 
-#: judge/third_party_apps.py:51
+#: judge/third_party_apps.py:52
 msgctxt "third-party field"
 msgid "Uploading"
 msgstr "Đang tải lên"
 
-#: judge/third_party_apps.py:52
+#: judge/third_party_apps.py:53
 msgctxt "third-party field"
 msgid "Complete"
 msgstr "Hoàn tất"
 
-#: judge/third_party_apps.py:57 templates/user/user-tabs.html:16
+#: judge/third_party_apps.py:58 templates/user/user-tabs.html:16
 msgid "Impersonate"
 msgstr "Mạo danh"
 
-#: judge/third_party_apps.py:62
+#: judge/third_party_apps.py:63
 msgctxt "third-party model"
 msgid "impersonation log"
 msgstr "nhật ký mạo danh"
 
-#: judge/third_party_apps.py:63
+#: judge/third_party_apps.py:64
 msgctxt "third-party model"
 msgid "impersonation logs"
 msgstr "nhật ký mạo danh"
 
-#: judge/third_party_apps.py:67 judge/third_party_apps.py:85
+#: judge/third_party_apps.py:68 judge/third_party_apps.py:86
 msgctxt "third-party field"
 msgid "impersonator"
 msgstr "người mạo danh"
 
-#: judge/third_party_apps.py:68
+#: judge/third_party_apps.py:69
 msgctxt "third-party field"
 msgid "impersonated user"
 msgstr "người bị mạo danh"
 
-#: judge/third_party_apps.py:69
+#: judge/third_party_apps.py:70
 msgctxt "third-party field"
 msgid "session key"
 msgstr "khóa phiên"
 
-#: judge/third_party_apps.py:70
+#: judge/third_party_apps.py:71
 msgctxt "third-party field"
 msgid "session started at"
 msgstr "bắt đầu phiên lúc"
 
-#: judge/third_party_apps.py:71
+#: judge/third_party_apps.py:72
 msgctxt "third-party field"
 msgid "session ended at"
 msgstr "kết thúc phiên lúc"
 
-#: judge/third_party_apps.py:79
+#: judge/third_party_apps.py:80
 msgctxt "third-party admin"
 msgid "Incomplete"
 msgstr "Chưa kết thúc"
 
-#: judge/third_party_apps.py:80
+#: judge/third_party_apps.py:81
 msgctxt "third-party admin"
 msgid "Complete"
 msgstr "Đã kết thúc"
 
-#: judge/third_party_apps.py:83
+#: judge/third_party_apps.py:84
 msgctxt "third-party admin"
 msgid "session state"
 msgstr "trạng thái phiên"
 
-#: judge/third_party_apps.py:89
+#: judge/third_party_apps.py:90
 msgid "Django OAuth Toolkit"
 msgstr "Xác thực OAuth"
 
-#: judge/third_party_apps.py:94
+#: judge/third_party_apps.py:95
 msgctxt "third-party model"
 msgid "application"
 msgstr "ứng dụng"
 
-#: judge/third_party_apps.py:95
+#: judge/third_party_apps.py:96
 msgctxt "third-party model"
 msgid "applications"
 msgstr "ứng dụng"
 
-#: judge/third_party_apps.py:96
+#: judge/third_party_apps.py:97
 msgctxt "third-party model"
 msgid "grant"
 msgstr "mã cấp quyền"
 
-#: judge/third_party_apps.py:97
+#: judge/third_party_apps.py:98
 msgctxt "third-party model"
 msgid "grants"
 msgstr "mã cấp quyền"
 
-#: judge/third_party_apps.py:98
+#: judge/third_party_apps.py:99
 msgctxt "third-party model"
 msgid "access token"
 msgstr "mã truy cập"
 
-#: judge/third_party_apps.py:99
+#: judge/third_party_apps.py:100
 msgctxt "third-party model"
 msgid "access tokens"
 msgstr "mã truy cập"
 
-#: judge/third_party_apps.py:100
+#: judge/third_party_apps.py:101
 msgctxt "third-party model"
 msgid "refresh token"
 msgstr "mã làm mới"
 
-#: judge/third_party_apps.py:101
+#: judge/third_party_apps.py:102
 msgctxt "third-party model"
 msgid "refresh tokens"
 msgstr "mã làm mới"
 
-#: judge/third_party_apps.py:102
+#: judge/third_party_apps.py:103
 msgctxt "third-party model"
 msgid "id token"
 msgstr "mã định danh"
 
-#: judge/third_party_apps.py:103
+#: judge/third_party_apps.py:104
 msgctxt "third-party model"
 msgid "id tokens"
 msgstr "mã định danh"
 
-#: judge/third_party_apps.py:104
+#: judge/third_party_apps.py:105
 msgctxt "third-party model"
 msgid "device grant"
 msgstr "cấp quyền thiết bị"
 
-#: judge/third_party_apps.py:105
+#: judge/third_party_apps.py:106
 msgctxt "third-party model"
 msgid "device grants"
 msgstr "cấp quyền thiết bị"
 
-#: judge/third_party_apps.py:111
+#: judge/third_party_apps.py:112
 msgctxt "third-party admin"
 msgid "Revoke selected access tokens"
 msgstr "Thu hồi mã truy cập đã chọn"
 
-#: judge/third_party_apps.py:113
+#: judge/third_party_apps.py:114
 msgctxt "third-party admin"
 msgid "Revoke selected refresh tokens"
 msgstr "Thu hồi mã làm mới đã chọn"
 
-#: judge/third_party_apps.py:114 judge/third_party_apps.py:115
-#: judge/third_party_apps.py:177
+#: judge/third_party_apps.py:115 judge/third_party_apps.py:116
+#: judge/third_party_apps.py:178
 msgctxt "third-party field"
 msgid "token"
 msgstr "mã"
 
-#: judge/third_party_apps.py:116 judge/third_party_apps.py:172
+#: judge/third_party_apps.py:117 judge/third_party_apps.py:173
 msgctxt "third-party field"
 msgid "code"
 msgstr "mã"
 
-#: judge/third_party_apps.py:120
+#: judge/third_party_apps.py:121
 msgid "Registration"
 msgstr "Đăng ký tài khoản"
 
-#: judge/third_party_apps.py:125 judge/third_party_apps.py:126
+#: judge/third_party_apps.py:126 judge/third_party_apps.py:127
 msgctxt "third-party field"
 msgid "activated"
 msgstr "đã kích hoạt"
 
-#: judge/third_party_apps.py:131
+#: judge/third_party_apps.py:132
 msgid "Python Social Auth"
 msgstr "Đăng nhập qua mạng xã hội"
 
-#: judge/third_party_apps.py:136
+#: judge/third_party_apps.py:137
 msgctxt "third-party model"
 msgid "user social auth"
 msgstr "tài khoản mạng xã hội"
 
-#: judge/third_party_apps.py:137
+#: judge/third_party_apps.py:138
 msgctxt "third-party model"
 msgid "user social auths"
 msgstr "tài khoản mạng xã hội"
 
-#: judge/third_party_apps.py:138
+#: judge/third_party_apps.py:139
 msgctxt "third-party model"
 msgid "nonce"
 msgstr "mã dùng một lần"
 
-#: judge/third_party_apps.py:139
+#: judge/third_party_apps.py:140
 msgctxt "third-party model"
 msgid "nonces"
 msgstr "mã dùng một lần"
 
-#: judge/third_party_apps.py:140
+#: judge/third_party_apps.py:141
 msgctxt "third-party model"
 msgid "association"
 msgstr "liên kết OpenID"
 
-#: judge/third_party_apps.py:141
+#: judge/third_party_apps.py:142
 msgctxt "third-party model"
 msgid "associations"
 msgstr "liên kết OpenID"
 
-#: judge/third_party_apps.py:142
+#: judge/third_party_apps.py:143
 msgctxt "third-party model"
 msgid "code"
 msgstr "mã xác minh email"
 
-#: judge/third_party_apps.py:143
+#: judge/third_party_apps.py:144
 msgctxt "third-party model"
 msgid "codes"
 msgstr "mã xác minh email"
 
-#: judge/third_party_apps.py:144
+#: judge/third_party_apps.py:145
 msgctxt "third-party model"
 msgid "partial"
 msgstr "phiên đăng nhập dở dang"
 
-#: judge/third_party_apps.py:145
+#: judge/third_party_apps.py:146
 msgctxt "third-party model"
 msgid "partials"
 msgstr "phiên đăng nhập dở dang"
 
-#: judge/third_party_apps.py:150
+#: judge/third_party_apps.py:151
 msgctxt "third-party field"
 msgid "provider"
 msgstr "nhà cung cấp"
 
-#: judge/third_party_apps.py:151
+#: judge/third_party_apps.py:152
 msgctxt "third-party field"
 msgid "ID key"
 msgstr "khóa ID"
 
-#: judge/third_party_apps.py:152
+#: judge/third_party_apps.py:153
 msgctxt "third-party field"
 msgid "UID"
 msgstr "UID"
 
-#: judge/third_party_apps.py:153
+#: judge/third_party_apps.py:154
 msgctxt "third-party field"
 msgid "extra data"
 msgstr "dữ liệu bổ sung"
 
-#: judge/third_party_apps.py:154
+#: judge/third_party_apps.py:155
 msgctxt "third-party field"
 msgid "created"
 msgstr "ngày tạo"
 
-#: judge/third_party_apps.py:155
+#: judge/third_party_apps.py:156
 msgctxt "third-party field"
 msgid "modified"
 msgstr "ngày sửa"
 
-#: judge/third_party_apps.py:158 judge/third_party_apps.py:163
+#: judge/third_party_apps.py:159 judge/third_party_apps.py:164
 msgctxt "third-party field"
 msgid "server URL"
 msgstr "URL máy chủ"
 
-#: judge/third_party_apps.py:159 judge/third_party_apps.py:174
-#: judge/third_party_apps.py:181
+#: judge/third_party_apps.py:160 judge/third_party_apps.py:175
+#: judge/third_party_apps.py:182
 msgctxt "third-party field"
 msgid "timestamp"
 msgstr "thời điểm"
 
-#: judge/third_party_apps.py:160
+#: judge/third_party_apps.py:161
 msgctxt "third-party field"
 msgid "salt"
 msgstr "chuỗi salt"
 
-#: judge/third_party_apps.py:164
+#: judge/third_party_apps.py:165
 msgctxt "third-party field"
 msgid "handle"
 msgstr "định danh"
 
-#: judge/third_party_apps.py:165
+#: judge/third_party_apps.py:166
 msgctxt "third-party field"
 msgid "secret"
 msgstr "khóa bí mật"
 
-#: judge/third_party_apps.py:166
+#: judge/third_party_apps.py:167
 msgctxt "third-party field"
 msgid "issued"
 msgstr "thời điểm cấp"
 
-#: judge/third_party_apps.py:167
+#: judge/third_party_apps.py:168
 msgctxt "third-party field"
 msgid "lifetime"
 msgstr "thời hạn"
 
-#: judge/third_party_apps.py:168
+#: judge/third_party_apps.py:169
 msgctxt "third-party field"
 msgid "association type"
 msgstr "kiểu liên kết"
 
-#: judge/third_party_apps.py:171
+#: judge/third_party_apps.py:172
 msgctxt "third-party field"
 msgid "email"
 msgstr "email"
 
-#: judge/third_party_apps.py:173
+#: judge/third_party_apps.py:174
 msgctxt "third-party field"
 msgid "verified"
 msgstr "đã xác minh"
 
-#: judge/third_party_apps.py:178
+#: judge/third_party_apps.py:179
 msgctxt "third-party field"
 msgid "next step"
 msgstr "bước tiếp theo"
 
-#: judge/third_party_apps.py:179
+#: judge/third_party_apps.py:180
 msgctxt "third-party field"
 msgid "backend"
 msgstr "backend xác thực"
 
-#: judge/third_party_apps.py:180
+#: judge/third_party_apps.py:181
 msgctxt "third-party field"
 msgid "data"
 msgstr "dữ liệu"

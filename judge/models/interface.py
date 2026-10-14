@@ -237,7 +237,6 @@ class GlobalAnnouncement(models.Model):
         verbose_name=_('valid until'),
         help_text=_('Announcement visible until this time (optional).'),
     )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name=_('created at'))
 
     objects = GlobalAnnouncementQuerySet.as_manager()
 

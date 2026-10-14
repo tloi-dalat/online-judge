@@ -22,7 +22,6 @@ class Migration(migrations.Migration):
                 ('dismissal_version', models.PositiveIntegerField(default=1, help_text='Incrementing this will re-display the announcement to users who previously dismissed it.', verbose_name='dismissal version')),
                 ('valid_from', models.DateTimeField(blank=True, help_text='Announcement visible from this time (optional).', null=True, verbose_name='valid from')),
                 ('valid_until', models.DateTimeField(blank=True, help_text='Announcement visible until this time (optional).', null=True, verbose_name='valid until')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
             ],
             options={
                 'verbose_name': 'announcement',
