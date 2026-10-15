@@ -251,9 +251,9 @@
                                 {{ user_count(contest, request.user) }}
                             </td>
                             <td>
-                            {% if contest.solved_count is not none %}
+                            {% if contest.total_count is not none %}
                                 <span>
-                                    {{ contest.solved_count }} / {{ contest.total_count }}
+                                    {{ '?' if contest.solved_count is none else contest.solved_count }} / {{ contest.total_count }}
                                 </span>
                             {% endif %}
                             </td>
@@ -273,7 +273,9 @@
                 <tr>
                     <th>{{ _('Contest') }}</th>
                     <th>{{ _('Users') }}</th>
-                    <th>{{ _('Solved') }}</th>
+                    {% if request.user.is_authenticated %}
+                        <th>{{ _('Solved') }}</th>
+                    {% endif %}
                     <th></th>
                 </tr>
                 </thead>
@@ -295,13 +297,15 @@
                         <td>
                             {{ user_count(contest, request.user) }}
                         </td>
-                        <td>
-                            {% if contest.solved_count is not none %}
-                                <span>
-                                    {{ contest.solved_count }} / {{ contest.total_count }}
-                                </span>
-                            {% endif %}
-                        </td>
+                        {% if request.user.is_authenticated %}
+                            <td>
+                                {% if contest.total_count is not none %}
+                                    <span>
+                                        {{ '?' if contest.solved_count is none else contest.solved_count }} / {{ contest.total_count }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                        {% endif %}
                         {% if not contest.require_registration or contest.can_register %}
                             {{ contest_join(contest, request, finished_contests) }}
                         {% else %}
@@ -379,7 +383,9 @@
                 <tr>
                     <th>{{ _('Contest') }}</th>
                     <th>{{ _('Users') }}</th>
-                    <th>{{ _('Solved') }}</th>
+                    {% if request.user.is_authenticated %}
+                        <th>{{ _('Solved') }}</th>
+                    {% endif %}
                     <th></th>
                 </tr>
                 </thead>
@@ -395,13 +401,15 @@
                         <td>
                             {{ user_count(contest, request.user) }}
                         </td>
-                        <td>
-                            {% if contest.solved_count is not none %}
-                                <span>
-                                    {{ contest.solved_count }} / {{ contest.total_count }}
-                                </span>
-                            {% endif %}
-                        </td>
+                        {% if request.user.is_authenticated %}
+                            <td>
+                                {% if contest.total_count is not none %}
+                                    <span>
+                                        {{ '?' if contest.solved_count is none else contest.solved_count }} / {{ contest.total_count }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                        {% endif %}
                         <td>
                             {% if not request.in_contest and not contest.disallow_virtual %}
                                 <form action="{{ url('contest_join', contest.key) }}" method="post">

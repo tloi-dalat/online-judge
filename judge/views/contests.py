@@ -147,39 +147,33 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
                                      count=self.get_queryset().values('id').count(), **kwargs)
 
     def _populate_solved_counts(self, contests):
-        if not self.request.user.is_authenticated:
-            return
-
-        participated_contests = [contest for contest in contests if contest.scoring_participations]
-        if not participated_contests:
-            return
-
-        participated_ids = [contest.id for contest in participated_contests]
+        contest_ids = [contest.id for contest in contests]
         total_counts = dict(
             ContestProblem.objects
-            .filter(contest_id__in=participated_ids)
+            .filter(contest_id__in=contest_ids)
             .order_by()
             .values('contest_id')
             .annotate(total=Count('id'))
             .values_list('contest_id', 'total'),
         )
         solved_counts = dict(
-            ContestSubmission.objects
+            ContestProblem.objects
             .filter(
-                participation__contest_id__in=participated_ids,
-                participation__user=self.request.profile,
-                participation__virtual__gte=ContestParticipation.LIVE,
-                submission__result='AC',
+                contest_id__in=contest_ids,
+                problem_id__in=user_completed_ids(self.request.profile),
             )
             .order_by()
-            .values('participation__contest_id')
-            .annotate(solved=Count('problem_id', distinct=True))
-            .values_list('participation__contest_id', 'solved'),
+            .values('contest_id')
+            .annotate(solved=Count('id'))
+            .values_list('contest_id', 'solved'),
         )
 
-        for contest in participated_contests:
-            contest.total_count = total_counts.get(contest.id, 0)
-            contest.solved_count = solved_counts.get(contest.id, 0)
+        for contest in contests:
+            if contest.id not in total_counts:
+                continue
+            contest.total_count = total_counts[contest.id]
+            if not contest.should_hide_result(self.request.user, self.request.participation):
+                contest.solved_count = solved_counts.get(contest.id, 0)
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
@@ -196,20 +190,13 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
                     'users',
                     queryset=ContestParticipation.objects.filter(
                         user=self.request.profile,
-                        virtual__gte=ContestParticipation.LIVE,
+                        virtual=ContestParticipation.LIVE,
                     ),
-                    to_attr='scoring_participations',
+                    to_attr='live_participations',
                 ),
             ])
 
         prefetch_related_objects(all_contests, *prefetches)
-
-        if is_authenticated:
-            for contest in all_contests:
-                contest.live_participations = [
-                    participation for participation in contest.scoring_participations
-                    if participation.virtual == ContestParticipation.LIVE
-                ]
 
         present, active, future = [], [], []
         finished = set()
@@ -224,17 +211,9 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
             contest.total_count = None
 
         if is_authenticated:
-            visible_contests = [
-                contest for contest in all_contests
-                if contest.start_time <= self._now and
-                not contest.should_hide_result(
-                    self.request.user,
-                    self.request.participation,
-                )
-            ]
-            self._populate_solved_counts(visible_contests)
+            started_contests = [contest for contest in all_contests if contest.start_time <= self._now]
+            self._populate_solved_counts(started_contests)
 
-        if is_authenticated:
             for contest in list(present):
                 if contest.live_participations:
                     participation = contest.live_participations[0]
