@@ -1,9 +1,5 @@
 {% set can_view, can_edit = submission_layout(submission, profile_id, request.user, completed_problem_ids, editable_problem_ids, tester_problem_ids) %}
-{% if result_hidden is defined %}
-    {% set _result_hidden = own_result_hidden if (own_result_hidden is defined and submission.user_id == profile_id) else result_hidden %}
-{% else %}
-    {% set _result_hidden = submission_result_hidden(submission, request.user) %}
-{% endif %}
+{% set _result_hidden = result_hidden if result_hidden is defined else submission_result_hidden(submission, request.user) %}
 {% if _result_hidden %}
 <div class="sub-result">
     <div class="score">---</div>

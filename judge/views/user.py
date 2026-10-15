@@ -339,7 +339,7 @@ class UserProblemsPage(UserPage):
                 self.request.user.has_perm('judge.edit_all_contest')):
             from judge.contest_format import hidden_result_contest_ids
             viewer = self.request.profile if self.request.user.is_authenticated else None
-            hidden_contests = hidden_result_contest_ids(viewer, own=viewer is not None and viewer.id == self.object.id)
+            hidden_contests = hidden_result_contest_ids(viewer)
             if hidden_contests:
                 hidden_problem_ids = frozenset(
                     Problem.objects.filter(
@@ -391,7 +391,7 @@ class UserPerformancePointsAjax(UserProblemsPage):
                 self.request.user.has_perm('judge.edit_all_contest')):
             from judge.contest_format import hidden_result_contest_ids
             viewer = self.request.profile if self.request.user.is_authenticated else None
-            hidden_contests = hidden_result_contest_ids(viewer, own=viewer is not None and viewer.id == self.object.id)
+            hidden_contests = hidden_result_contest_ids(viewer)
             if hidden_contests:
                 hidden_problem_ids = frozenset(
                     Problem.objects.filter(
