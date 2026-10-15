@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 08:12+0000\n"
+"POT-Creation-Date: 2026-10-15 11:08+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -6344,7 +6344,7 @@ msgid "Submissions"
 msgstr "Các bài nộp"
 
 #: templates/base.html:293 templates/contest/list.html:223
-#: templates/contest/list.html:271 templates/contest/list.html:377
+#: templates/contest/list.html:271 templates/contest/list.html:381
 #: templates/organization/tabs.html:16
 msgid "Users"
 msgstr "Thành viên"
@@ -6538,7 +6538,7 @@ msgstr "Các kỳ thi đang diễn ra"
 msgid "Ends in %(countdown)s."
 msgstr "Kết thúc trong %(countdown)s."
 
-#: templates/blog/list.html:143 templates/contest/list.html:313
+#: templates/blog/list.html:143 templates/contest/list.html:317
 msgid "Upcoming contests"
 msgstr "Các kỳ thi sắp tới"
 
@@ -6790,8 +6790,8 @@ msgid "Copied!"
 msgstr "Đã sao chép!"
 
 #: templates/contest/access_code.html:40 templates/contest/list.html:222
-#: templates/contest/list.html:270 templates/contest/list.html:318
-#: templates/contest/list.html:376 templates/problem/problem.html:419
+#: templates/contest/list.html:270 templates/contest/list.html:322
+#: templates/contest/list.html:380 templates/problem/problem.html:419
 msgid "Contest"
 msgstr "Kỳ thi"
 
@@ -6962,7 +6962,7 @@ msgstr "Nhân bản"
 msgid "Leave contest"
 msgstr "Rời khỏi kỳ thi"
 
-#: templates/contest/contest-tabs.html:48 templates/contest/list.html:406
+#: templates/contest/contest-tabs.html:48 templates/contest/list.html:414
 msgid "Virtual join"
 msgstr "Tham gia ảo"
 
@@ -7362,8 +7362,8 @@ msgstr "Số người đã đăng ký:"
 msgid "Active contests"
 msgstr "Các kỳ thi đang tham gia"
 
-#: templates/contest/list.html:224 templates/contest/list.html:272
-#: templates/contest/list.html:378 templates/contest/ranking.html:614
+#: templates/contest/list.html:224 templates/contest/list.html:273
+#: templates/contest/list.html:383 templates/contest/ranking.html:614
 msgid "Solved"
 msgstr "Đã giải"
 
@@ -7372,35 +7372,35 @@ msgstr "Đã giải"
 msgid "Window ends in %(countdown)s"
 msgstr "Thời gian làm bài kết thúc trong %(countdown)s."
 
-#: templates/contest/list.html:240 templates/contest/list.html:285
+#: templates/contest/list.html:240 templates/contest/list.html:287
 #, python-format
 msgid "Ends in %(countdown)s"
 msgstr "Kết thúc trong %(countdown)s."
 
-#: templates/contest/list.html:331
+#: templates/contest/list.html:335
 #, python-format
 msgid "Starting in %(countdown)s"
 msgstr "Bắt đầu trong %(countdown)s."
 
-#: templates/contest/list.html:347
+#: templates/contest/list.html:351
 msgid "There are no scheduled contests at this time."
 msgstr "Chưa có kỳ thi được lên lịch trong tương lai."
 
-#: templates/contest/list.html:352
+#: templates/contest/list.html:356
 msgid "Past contests"
 msgstr "Các kỳ thi đã qua"
 
-#: templates/contest/list.html:359
+#: templates/contest/list.html:363
 msgid "Search contest..."
 msgstr "Tìm kỳ thi..."
 
-#: templates/contest/list.html:367 templates/problem/search-form.html:80
+#: templates/contest/list.html:371 templates/problem/search-form.html:80
 #: templates/submission/list.html:362 templates/tag/search-form.html:21
 #: templates/ticket/list.html:187
 msgid "Go"
 msgstr "Tìm"
 
-#: templates/contest/list.html:418
+#: templates/contest/list.html:426
 msgid "There are no past contests."
 msgstr "Không có kỳ thi nào đã qua."
 
