@@ -147,9 +147,6 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
                                      count=self.get_queryset().values('id').count(), **kwargs)
 
     def _populate_solved_counts(self, contests):
-        if not self.request.user.is_authenticated:
-            return
-
         contest_ids = [contest.id for contest in contests]
         total_counts = dict(
             ContestProblem.objects
@@ -193,20 +190,13 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
                     'users',
                     queryset=ContestParticipation.objects.filter(
                         user=self.request.profile,
-                        virtual__gte=ContestParticipation.LIVE,
+                        virtual=ContestParticipation.LIVE,
                     ),
-                    to_attr='scoring_participations',
+                    to_attr='live_participations',
                 ),
             ])
 
         prefetch_related_objects(all_contests, *prefetches)
-
-        if is_authenticated:
-            for contest in all_contests:
-                contest.live_participations = [
-                    participation for participation in contest.scoring_participations
-                    if participation.virtual == ContestParticipation.LIVE
-                ]
 
         present, active, future = [], [], []
         finished = set()
@@ -224,7 +214,6 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
             started_contests = [contest for contest in all_contests if contest.start_time <= self._now]
             self._populate_solved_counts(started_contests)
 
-        if is_authenticated:
             for contest in list(present):
                 if contest.live_participations:
                     participation = contest.live_participations[0]
