@@ -26,7 +26,7 @@ class TagGroupForm(ModelForm):
 
 
 class TagProblemForm(ModelForm):
-    change_message = forms.CharField(max_length=256, label='Edit reason', required=False)
+    change_message = forms.CharField(max_length=256, label=_('Edit reason'), required=False)
 
 
 class TagDataInlineForm(ModelForm):

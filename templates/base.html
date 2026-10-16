@@ -24,7 +24,6 @@
     <link rel="icon" type="image/png" href="{{ static('icons/android-chrome-192x192.png') }}" sizes="192x192">
     <link rel="icon" type="image/png" href="{{ static('icons/favicon-96x96.png') }}" sizes="96x96">
     <link rel="icon" type="image/png" href="{{ static('icons/favicon-16x16.png') }}" sizes="16x16">
-    <link rel="manifest" href="{{ static('icons/manifest.json') }}">
     <meta name="msapplication-TileColor" content="#231F20">
     <meta name="msapplication-TileImage" content="{{ static('icons/mstile-144x144.png') }}">
     {# Chrome 39 for Android colour #}
@@ -46,23 +45,17 @@
         <link rel="stylesheet" href="{{ FONTAWESOME_CSS }}">
     {% endif %}
     {% compress css %}
-        <link rel="stylesheet" href="{{ static(LIGHT_STYLE_CSS) }}">
+        {% if PREFERRED_STYLE_CSS is not none %}
+            <link rel="stylesheet" href="{{ static(PREFERRED_STYLE_CSS) }}">
+        {% else %}
+            <link rel="stylesheet" href="{{ static(LIGHT_STYLE_CSS) }}">
+            <link rel="stylesheet" href="{{ static(DARK_STYLE_CSS) }}" media="(prefers-color-scheme: dark)">
+        {% endif %}
         {% if INLINE_FONTAWESOME %}<link rel="stylesheet" href="{{ static('libs/fontawesome/font-awesome.css') }}">{% endif %}
         <link rel="stylesheet" href="{{ static('source_sans_pro.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ static('libs/clipboard/tooltip.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ static('libs/select2/select2.css') }}">
     {% endcompress %}
-    <link rel="stylesheet" href="{{ static(DARK_STYLE_CSS) }}" id="dark-theme-style"
-          media="{% if SITE_THEME_NAME == 'dark' %}all{% elif SITE_THEME_NAME == 'light' %}not all{% else %}(prefers-color-scheme: dark){% endif %}">
-    <script>
-        (function() {
-            var theme = localStorage.getItem('theme') || '{{ SITE_THEME_NAME }}';
-            var darkStyle = document.getElementById('dark-theme-style');
-            if (darkStyle && theme !== 'auto') {
-                darkStyle.media = (theme === 'dark') ? 'all' : 'not all';
-            }
-        })();
-    </script>
     <link rel="canonical"
           href="{{ DMOJ_SCHEME }}://{{ DMOJ_CANONICAL|default(site.domain) }}{{ request.get_full_path() }}">
     {% if request.user.is_impersonate %}
@@ -98,6 +91,21 @@
         </script>
     {% endcompress %}
     {% block js_media %}{% endblock %}
+    {% if request.user.is_authenticated %}
+        <script>
+            window.notificationConfig = {
+                channel: 'notification_{{ NOTIFICATION_SECRET }}',
+                cacheKey: 'notif_cache_notification_{{ NOTIFICATION_SECRET }}',
+                clearCache: function () { try { localStorage.removeItem(this.cacheKey); } catch (e) {} },
+                ajaxUrl: '{{ url("notification_ajax") }}',
+                markReadUrl: '{{ url("notification_mark_read") }}',
+                access: '{{ _("View") }}',
+                close: '{{ _("Close") }}',
+                empty: '{{ _("No notifications.") }}',
+            };
+        </script>
+        <script src="{{ static('notification.js') }}"></script>
+    {% endif %}
     {% if EVENT_LAST_MSG %}
         <script>
             window.event_dispatcher = new WSEventDispatcher(
@@ -107,16 +115,7 @@
             );
         </script>
         {% if request.user.is_authenticated %}
-            <script>
-                window.ticketNotify = {
-                    channel: 'tickets_{{ request.profile.ticket_secret }}',
-                    newTicket: '{{ _("You have a new ticket: ") }}',
-                    newReply: '{{ _("You have a new reply on ticket ") }}',
-                    access: '{{ _("Access ticket") }}',
-                    close: '{{ _("Close") }}',
-                };
-            </script>
-            <script src="{{ static('ticket_notification.js') }}"></script>
+            <script src="{{ static('notification-realtime.js') }}"></script>
         {% endif %}
     {% endif %}
     {% if request.in_contest %}
@@ -124,35 +123,52 @@
             count_down($("#contest-time-remaining"));
 
             var selected = null,
-                x_pos = 0, y_pos = 0,
-                x_elem = 0, y_elem = 0;
+                x_elem = 0, y_elem = 0,
+                start_x = 0, start_y = 0,
+                dragging = false;
 
-            $('#contest-info').mousedown(function () {
+            $('#contest-info').mousedown(function (e) {
+                if (e.which !== 1) return;
                 selected = $(this);
-                x_elem = x_pos - selected.offset().left;
-                y_elem = y_pos - (selected.offset().top - $(window).scrollTop());
+                var rect = this.getBoundingClientRect();
+                x_elem = e.clientX - rect.left;
+                y_elem = e.clientY - rect.top;
+                start_x = e.clientX;
+                start_y = e.clientY;
+                dragging = false;
                 return false;
             });
 
-            if (localStorage.getItem("contest_timer_pos")) {
-                data = localStorage.getItem("contest_timer_pos").split(":");
-                $("#contest-info").css({
-                    left: data[0],
-                    top: data[1]
-                });
-            }
+            $('#contest-info').on('click', 'a', function (e) {
+                if (dragging) {
+                    e.preventDefault();
+                }
+            });
 
             $("#contest-info").show();
 
-            $(document).mousemove(function (e) {
-                x_pos = e.screenX;
-                y_pos = e.screenY;
-                x_pos = Math.max(Math.min(x_pos, window.innerWidth), 0);
-                y_pos = Math.max(Math.min(y_pos, window.innerHeight), 0);
+            if (localStorage.getItem("contest_timer_pos")) {
+                var data = localStorage.getItem("contest_timer_pos").split(":");
+                var left_val = parseFloat(data[0]);
+                var top_val = parseFloat(data[1]);
+                if (!isNaN(left_val) && !isNaN(top_val)) {
+                    var box = $("#contest-info");
+                    var left_max = Math.max(0, $(window).width() - box.outerWidth());
+                    var top_max = Math.max(0, $(window).height() - box.outerHeight());
+                    box.css({
+                        left: Math.max(0, Math.min(left_val, left_max)) + 'px',
+                        top: Math.max(0, Math.min(top_val, top_max)) + 'px'
+                    });
+                }
+            }
 
+            $(document).mousemove(function (e) {
                 if (selected !== null) {
-                    left_px = (x_pos - x_elem) + 'px';
-                    top_px = (y_pos - y_elem) + 'px';
+                    if (Math.abs(e.clientX - start_x) > 3 || Math.abs(e.clientY - start_y) > 3) {
+                        dragging = true;
+                    }
+                    var left_px = Math.max(Math.min(e.clientX - x_elem, $(window).width() - selected.outerWidth()), 0) + 'px';
+                    var top_px = Math.max(Math.min(e.clientY - y_elem, $(window).height() - selected.outerHeight()), 0) + 'px';
 
                     localStorage.setItem("contest_timer_pos", left_px + ":" + top_px);
 
@@ -164,17 +180,22 @@
             });
 
             $(document).mouseup(function () {
-                selected = null;
-            })
+                if (selected !== null) {
+                    selected = null;
+                    setTimeout(function () {
+                        dragging = false;
+                    }, 0);
+                }
+            });
 
             {# Virtual = 0 is live participation, virtual = -1 is spectating #}
             {% if EVENT_LAST_MSG and request.participation.contest.push_announcements and request.participation.virtual <= 0 %}
                 $(function () {
                     event_dispatcher.auto_reconnect = true;
                     event_dispatcher.on('contest_{{ request.participation.contest.id_secret }}', function (data) {
-                        alert(data.title + '\n\n' + data.message);
+                        if (window.handleNotificationEvent) window.handleNotificationEvent(data);
                     });
-                })
+                });
             {% endif %}
         });
         </script>
@@ -207,6 +228,14 @@
                 $("#set_language").submit()
             }
         }
+        function toggle_theme() {
+            var current = "{{ SITE_THEME_NAME }}";
+            if (current !== 'light' && current !== 'dark') {
+                current = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            $("input[name=theme]").val(current === 'dark' ? 'light' : 'dark');
+            $("#set_theme").submit();
+        }
     </script>
     <noscript>
         <style>
@@ -221,15 +250,6 @@
     </noscript>
 </head>
 <body data-theme="{{ SITE_THEME_NAME }}">
-<script>
-    (function() {
-        var theme = localStorage.getItem('theme') || '{{ SITE_THEME_NAME }}';
-        if (theme === 'auto') {
-            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        }
-        document.body.setAttribute('data-theme', theme);
-    })();
-</script>
 <svg width="0" height="0" style="display: block">
     <defs>
         <clipPath id="rating-clip"><circle cx="8" cy="8" r="7"/></clipPath>
@@ -275,6 +295,18 @@
         </ul>
 
         <span id="user-links">
+            {% if request.user.is_authenticated %}
+                <a id="report-issue" href=
+                    {% if request.resolver_match.view_name == "problem_detail" and problem %}
+                        "{{ url('new_problem_ticket', problem.code) }}"
+                    {% else %}
+                        "/tickets/new?issue_url={{ request.get_full_path()|urlencode }}"
+                    {% endif %}
+                >
+                    <i class="fa fa-exclamation-triangle"></i>
+                    <span class="hide-on-small">{{ _('Report an issue') }}</span>
+                </a>
+            {% endif %}
             {% if request.user.is_superuser %}
                 <a href="{{ url('misc_config') }}" style="margin-right: 5px;">
                     <span title="{{ _('Site settings') }}">
@@ -282,29 +314,42 @@
                     </span>
                 </a>
             {% endif %}
-            <a id="theme-toggle" href="javascript:void(0)" style="margin-right: 5px;">
-                <span title="{{ _('Toggle Dark/Light Mode') }}">
-                    <i class="fa fa-moon-o" id="theme-icon" style="font-size: 1.15em;"></i>
-                </span>
+            <a id="theme-toggle" href="#" onclick="toggle_theme(); return false;" title="{{ _('Toggle dark mode') }}">
+                <img class="theme-icon-dark" src="{{ static('icons/dark.svg') }}" alt="{{ _('Dark') }}" height="20" width="20">
+                <img class="theme-icon-light" src="{{ static('icons/light.svg') }}" alt="{{ _('Light') }}" height="20" width="20">
             </a>
-            <a href=
-                {% if request.resolver_match.view_name == "problem_detail" and problem %}
-                    "{{ url('new_problem_ticket', problem.code) }}"
-                {% else %}
-                    "/tickets/new?issue_url={{ request.build_absolute_uri()|urlencode }}"
-                {% endif %}
-            style="margin-right: 5px;">
-                <span title="{{ _('Report issue') }}">
-                    <i class="fa fa-exclamation-triangle" style="color: yellow;"></i>
-                </span>
-            </a>
-            <a id="flag_vi" href="#" onclick="submmit_language('vi')" style="margin-right: 5px; margin-top: 4px;">
-                <img src="{{ static('icons/vi_flag.svg') }}" alt="VI" height="24">
-            </a>
-            <a id="flag_en" href="#" onclick="submmit_language('en')" style="margin-right: 5px; margin-top: 4px;">
-                <img src="{{ static('icons/gb_flag.svg') }}" alt="EN" height="24">
-            </a>
+            {% if LANGUAGE_CODE == 'vi' %}
+                <a id="flag_en" href="#" onclick="submmit_language('en'); return false;" title="English" style="margin-right: 5px; margin-top: 4px;">
+                    <img src="{{ static('icons/gb_flag.svg') }}" alt="EN" height="24">
+                </a>
+            {% else %}
+                <a id="flag_vi" href="#" onclick="submmit_language('vi'); return false;" title="Tiếng Việt" style="margin-right: 5px; margin-top: 4px;">
+                    <img src="{{ static('icons/vi_flag.svg') }}" alt="VI" height="24">
+                </a>
+            {% endif %}
+            <span class="nav-divider"></span>
             {% if request.user.is_authenticated %}
+                <ul id="notification-nav">
+                    <li>
+                        <a href="{{ url('notification_list') }}" class="notification-bell" title="{{ _('Notifications') }}">
+                            <i class="fa fa-bell"></i>
+                            <span class="notification-badge{% if not UNREAD_NOTIFICATION_COUNT %} hidden{% endif %}">{{ UNREAD_NOTIFICATION_COUNT }}</span>
+                        </a>
+                        <ul class="notification-panel" style="width: 340px; right: 0; left: auto;">
+                            <li class="notification-panel-header">
+                                <span class="notification-panel-title">{{ _('Unread') }}</span>
+                                <a href="#" class="notification-mark-all">{{ _('Mark all read') }}</a>
+                            </li>
+                            <li class="notification-list-container">
+                                <div class="notification-items"></div>
+                                <div class="notification-empty hidden">{{ _('No notifications.') }}</div>
+                            </li>
+                            <li class="notification-panel-footer">
+                                <a href="{{ url('notification_list') }}">{{ _('See all notifications') }}</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
                 <ul>
                     <li>
                         <a href="{{ url('user_page') }}">
@@ -313,7 +358,7 @@
                                 <span>{{ _('Hello, %(username)s.', username=bold(request.user.first_name or request.profile.display_name)) }}</span>
                             </span>
                         </a>
-                        <ul style="width: 150px">
+                        <ul style="width: 150px; right: 0; left: auto;">
                             {% if request.user.is_staff or request.user.is_superuser %}
                                 <li><a href="{{ url('admin:index') }}">{{ _('Admin') }}</a></li>
                             {% endif %}
@@ -347,16 +392,16 @@
 {% if request.in_contest %}
     {% set current_contest = request.participation.contest %}
     <div id="contest-info">
-        <a href="{{ url('contest_view', current_contest.key) }}">
-            {{ current_contest.name }} -
+        <a href="{{ url('contest_view', current_contest.key) }}" title="{{ current_contest.name }}">
+            <span class="contest-name">{{ current_contest.name }}</span> -
             {% if request.participation.spectate %}
-                {{ _('spectating') }}
-            {% elif request.participation.end_time %}
-                <div id="contest-time-remaining" data-secs="{{ request.participation.time_remaining|seconds }}">
+                <span class="contest-status">{{ _('spectating') }}</span>
+            {% elif request.participation.time_remaining %}
+                <span id="contest-time-remaining" data-secs="{{ request.participation.time_remaining|seconds }}">
                     {{ request.participation.time_remaining|timedelta("localized") }}
-                </div>
+                </span>
             {% else %}
-                {{ _('virtual') }}
+                <span class="contest-status">{{ _('Your time is up!') }}</span>
             {% endif %}
         </a>
         {% if current_contest.can_see_own_scoreboard(request.user) %}
@@ -374,6 +419,13 @@
     <main id="content">
         {% if misc_config.top_notification %}
             {{ render_django(misc_config.top_notification) }}
+        {% endif %}
+        {% if request.user.is_authenticated %}
+            <div class="alert alert-warning unread-notification-banner{% if not UNREAD_NOTIFICATION_COUNT %} hidden{% endif %}">
+                <i class="fa fa-bell" style="color:#e6a817;"></i>
+                <span>{{ _('You have unread notifications.') }}</span>
+                <a href="#" class="banner-open-notifications">{{ _('View') }}</a>
+            </div>
         {% endif %}
         {% block title_row %}
             <h2 style="display:inline">
@@ -405,8 +457,8 @@
 
             |
 
-            {% set github_link = safe('<a style="color: #808080" href="https://github.com/tloi-dalat"><b>GitHub</b></a>') %}
-            {% set facebook_link = safe('<a style="color: #808080" href="https://fb.com/tloi.dl"><b>Facebook</b></a>') %}
+            {% set github_link %}<a style="color: #808080" href="{{ misc_config.github_link }}"><b>GitHub</b></a>{% endset %}
+            {% set facebook_link %}<a style="color: #808080" href="{{ misc_config.facebook_link }}"><b>Facebook</b></a>{% endset %}
             {{ _('follow us on %(github)s and %(facebook)s', github=github_link, facebook=facebook_link) }}
 
             {% if misc_config.footer %}
@@ -417,6 +469,11 @@
                 {% csrf_token %}
                 <input name="next" type="hidden" value="{{ request.get_full_path() }}">
                 <input name="language" type="hidden" value="{{ LANGUAGE_CODE }}">
+            </form>
+            <form id="set_theme" action="{{ url('set_theme') }}" method="post" style="display: inline">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.get_full_path() }}">
+                <input name="theme" type="hidden" value="{{ SITE_THEME_NAME }}">
             </form>
         </span>
     </footer>

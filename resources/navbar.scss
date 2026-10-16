@@ -1,4 +1,3 @@
-// Navbar should look the same in every theme, so vars-common should be enough.
 @use "vars-common" as *;
 
 #user-links {
@@ -207,9 +206,11 @@ nav {
     display: none;
 }
 
-@media (max-width: 760px) {
-    #navigation {
-        height: 36px;
+@mixin _nav-collapsed {
+    height: 36px;
+
+    .hide-on-small {
+        display: none;
     }
 
     #navicon {
@@ -280,6 +281,21 @@ nav {
     }
 }
 
+@media (max-width: 760px) {
+    #navigation {
+        @include _nav-collapsed;
+    }
+}
+
+nav.nav-overflow {
+    @include _nav-collapsed;
+
+    // beats the `display: none !important` from @media not all and (max-width: 760px)
+    #nav-list li > ul.show-list {
+        display: block !important;
+    }
+}
+
 @media not all and (max-width: 760px) {
     #nav-list {
         li {
@@ -296,4 +312,65 @@ nav {
             }
         }
     }
+}
+
+#user-links #report-issue {
+    margin-right: 10px;
+    font-size: 13px;
+    color: #eee;
+
+    .fa {
+        color: yellow;
+        margin-right: 4px;
+    }
+
+    &:hover span {
+        text-decoration: underline;
+    }
+}
+
+#user-links #theme-toggle {
+    display: inline-flex;
+    margin-right: 8px;
+    padding: 4px;
+
+    // The icons are black strokes; invert them to match the light-grey navbar icons.
+    img {
+        filter: invert(80%);
+    }
+
+    &:hover img {
+        filter: invert(100%);
+    }
+
+    // Show the icon of the theme a click switches to.
+    .theme-icon-light {
+        display: none;
+    }
+}
+
+@mixin theme-toggle-dark {
+    #user-links #theme-toggle {
+        .theme-icon-dark {
+            display: none;
+        }
+
+        .theme-icon-light {
+            display: inline-block;
+        }
+    }
+}
+
+body[data-theme="dark"] {
+    @include theme-toggle-dark;
+}
+
+@media (prefers-color-scheme: dark) {
+    body:not([data-theme="light"]):not([data-theme="dark"]) {
+        @include theme-toggle-dark;
+    }
+}
+
+#user-links .nav-divider {
+    margin-right: 8px;
 }

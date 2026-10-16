@@ -1,10 +1,10 @@
-# TLOJ: Thang Long Da Lat Online Judge [![Build Status](https://github.com/tloi-dalat/TLOJ/workflows/build/badge.svg)](https://github.com/tloi-dalat/TLOJ/actions) [![AGPL License](https://img.shields.io/badge/license-AGPLv3.0-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
+# TLOJ: Thang Long Da Lat Online Judge [![Build Status](https://github.com/tloi-dalat/online-judge/workflows/build/badge.svg)](https://github.com/tloi-dalat/online-judge/actions) [![AGPL License](https://img.shields.io/badge/license-AGPLv3.0-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 
 ![TLOJ](resources/icons/og_logo.png)
 
-As a fork of [VNOJ](https://github.com/VNOI-Admin/OJ), TLOJ serves as [TLOI](https://tloi.io.vn/)'s official online judge and hosts its programming contests.
+As a fork of [VNOJ](https://github.com/VNOI-Admin/OJ), TLOJ serves as [TLOI](https://tloi.vn/)'s official online judge and hosts its programming contests.
 
-See it live at [oj.tloi.io.vn](https://oj.tloi.io.vn/)!
+See it live at [oj.tloi.vn](https://oj.tloi.vn/)!
 
 ## Features
 

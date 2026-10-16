@@ -32,7 +32,14 @@
         };
 
         var isDarkMode = function () {
-            return $('body').attr('data-theme') === 'dark';
+            var theme = $('body').data('theme');
+            if (theme === 'auto') {
+                return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            } else if (theme === 'dark') {
+                return true;
+            } else {
+                return false;
+            }
         };
 
         // Each multiple editor fields
@@ -56,9 +63,11 @@
             }
 
             setupTheme();
-            window.addEventListener('theme-change', function () {
-                setupTheme();
-            });
+            if ($('body').data('theme') === 'auto' && window.matchMedia) {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+                    setupTheme();
+                });
+            }
 
             editor.getSession().setMode('ace/mode/markdown');
             editor.getSession().setUseWrapMode(true);

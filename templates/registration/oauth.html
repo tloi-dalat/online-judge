@@ -21,6 +21,19 @@
         .github-icon i {
             color: black;
         }
+
+        .social-login {
+            display: inline;
+        }
+
+        button.social, button.social:hover, button.social:active {
+            background: none;
+            border: 0;
+            padding: 0;
+            line-height: inherit;
+            vertical-align: baseline;
+            display: inline;
+        }
     </style>
 {% endblock %}
 
@@ -35,19 +48,31 @@
             {% set next = '' %}
         {% endif %}
         {% if oauth.has_google_auth %}
-            <a href="{{ url('social:begin', "google-oauth2") }}?next={{ next }}" class="social google-icon">
-                <i class="fa fa-google-plus-square"></i>
-            </a>
+            <form action="{{ url('social:begin', "google-oauth2") }}" method="post" class="social-login">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                <button type="submit" class="social google-icon" title="Google">
+                    <i class="fa fa-google-plus-square"></i>
+                </button>
+            </form>
         {% endif %}
         {% if oauth.has_facebook_auth %}
-            <a href="{{ url('social:begin', "facebook") }}?next={{ next }}" class="social facebook-icon">
-                <i class="fa fa-facebook-square"></i>
-            </a>
+            <form action="{{ url('social:begin', "facebook") }}" method="post" class="social-login">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                <button type="submit" class="social facebook-icon" title="Facebook">
+                    <i class="fa fa-facebook-square"></i>
+                </button>
+            </form>
         {% endif %}
         {% if oauth.has_github_auth %}
-            <a href="{{ url('social:begin', "github-secure") }}?next={{ next }}" class="social github-icon">
-                <i class="fa fa-github-square"></i>
-            </a>
+            <form action="{{ url('social:begin', "github-secure") }}" method="post" class="social-login">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                <button type="submit" class="social github-icon" title="Github">
+                    <i class="fa fa-github-square"></i>
+                </button>
+            </form>
         {% endif %}
     </div>
 {% endif %}
