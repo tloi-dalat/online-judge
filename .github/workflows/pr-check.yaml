@@ -1,7 +1,7 @@
 name: 'check'
 on:
   pull_request:
-    branches: [main]
+    branches: [main, release, 'releases/**']
     types: [opened, edited, synchronize, reopened]
 
 concurrency:
@@ -13,3 +13,8 @@ jobs:
     name: check-title
     permissions: {}
     uses: tloi-dalat/reusable-workflow/.github/workflows/pr-title-check.yaml@main
+
+  source:
+    name: check-source
+    permissions: {}
+    uses: tloi-dalat/reusable-workflow/.github/workflows/pr-source-check.yaml@main

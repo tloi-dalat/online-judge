@@ -1,7 +1,7 @@
 name: 'check'
 on:
   pull_request:
-    branches: [main]
+    branches: [main, release, 'releases/**']
   schedule:
     - cron: '17 2 * * 1'
   workflow_dispatch:
