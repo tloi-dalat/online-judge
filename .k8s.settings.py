@@ -268,6 +268,13 @@ LOGGING = {
         '': {'handlers': ['console'], 'level': _env('LOG__LEVEL', 'INFO')},
     },
 }
+# Errors also go to Discord when DISCORD__ON_ERROR is set (see Integrations).
+if _env('DISCORD__ON_ERROR'):
+    LOGGING['handlers']['discord_webhook'] = {
+        'level': 'ERROR', 'class': 'dmoj.throttle_discord_webhook.ThrottledDiscordWebhookHandler',
+    }
+    for _logger in ('django.request', 'judge.bridge'):
+        LOGGING['loggers'][_logger]['handlers'].append('discord_webhook')
 
 
 #########################
@@ -297,3 +304,25 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = _env('SOCIAL__GOOGLE_SECRET', '')
 
 GROUP_PERMISSION_FOR_ORG_ADMIN = 'Teacher'
 VNOJ_CONTEST_DURATION_LIMIT = 365
+
+# Log in with Google only (no password form). Production: on.
+OAUTH_ONLY = _env('AUTH__OAUTH_ONLY', False, cast=bool)
+
+# Codeforces Polygon import. Key and secret are secrets (Infisical); the
+# username is not.
+VNOJ_POLYGON_API_KEY = _env('POLYGON__API_KEY')
+VNOJ_POLYGON_API_SECRET = _env('POLYGON__API_SECRET')
+VNOJ_POLYGON_API_USERNAME = _env('POLYGON__API_USERNAME')
+
+# MOSS plagiarism checks (secret, Infisical).
+MOSS_API_KEY = _env('MOSS__API_KEY')
+
+# Discord webhooks, one per event: DISCORD__<EVENT>, e.g. DISCORD__ON_NEW_TICKET,
+# DISCORD__ON_ERROR, DISCORD__ON_LONG_QUEUE, DISCORD__QUEUE_TIME_STATS. The URLs
+# carry a token, so they live in Infisical. Unset = that notification is off.
+DISCORD_WEBHOOK = {
+    event: _env('DISCORD__' + event.upper())
+    for event in ('default', 'on_new_ticket', 'on_new_comment', 'on_new_problem', 'on_new_suggested_problem',
+                  'on_new_tag_problem', 'on_new_tag', 'on_new_blogpost', 'on_error', 'on_long_queue',
+                  'queue_time_stats')
+}
