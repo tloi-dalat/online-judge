@@ -1,22 +1,5 @@
-# .k8s.settings.py — env-driven settings for containerised TLOJ.
-#
-# Commit this at the repo root, next to .ci.settings.py.
-# The Dockerfile copies it into place:   COPY .k8s.settings.py dmoj/local_settings.py
-#
-# dmoj/settings.py exec()s this file inside its own namespace, so `os`, `BASE_DIR`
-# and every default defined before the exec (MIDDLEWARE, STATICFILES_FINDERS, ...)
-# are already in scope. That is why there are no imports and why `+=` works.
-#
-# RULES
-#   1. No values live in this file. Anything environment-specific is an env var,
-#      supplied by values.yaml (non-secret) or by the online-judge-secrets Secret (secret).
-#   2. Anything constant across dev and prd IS hardcoded here — it is code.
-#   3. Names use Cake's double-underscore convention (MYSQL__HOST, EVENT__KEY).
-#
-# DEPLOYMENT MODEL THIS FILE ASSUMES
-#   Browser -> Cloudflare edge (TLS) -> cloudflared pod -> gunicorn (plain HTTP).
-#   Django therefore never sees TLS or the client's IP directly; see the
-#   "Behind Cloudflare Tunnel" section below.
+# Settings for the container image, copied to dmoj/local_settings.py.
+# Environment-specific values come from environment variables.
 
 def _env(key, default=None, required=False, cast=str):
     v = os.environ.get(key)
@@ -31,11 +14,9 @@ def _env(key, default=None, required=False, cast=str):
     return cast(v)
 
 
-ENV = _env('ENV', 'dev')                                    # dev | prd
+ENV = _env('ENV', 'dev')
 
-# One hostname drives every URL-shaped setting below. Moving dev from
-# oj-dev.tloi.vn to oj.dev.tloi.vn later is a one-line change in values.yaml.
-_DOMAIN = _env('SITE__DOMAIN', 'localhost', required=True)  # e.g. oj-dev.tloi.vn
+_DOMAIN = _env('SITE__DOMAIN', 'localhost', required=True)
 
 
 #####################################
@@ -46,7 +27,6 @@ SECRET_KEY = _env('DJANGO__SECRET_KEY', 'build-only-not-a-real-key', required=Tr
 DEBUG = _env('DJANGO__DEBUG', False, cast=bool)
 ALLOWED_HOSTS = _env('DJANGO__ALLOWED_HOSTS', [_DOMAIN], cast=list)
 
-# Sign-up form on/off (values.yaml sets it false on dev).
 REGISTRATION_OPEN = _env('DJANGO__REGISTRATION_OPEN', True, cast=bool)
 
 INSTALLED_APPS += (
@@ -56,27 +36,15 @@ INSTALLED_APPS += (
 #########################################
 ########## Behind Cloudflare Tunnel #####
 #########################################
-# Three things that break SILENTLY if Django doesn't know it's behind a proxy.
 
-# 1. HTTPS detection. TLS ends at Cloudflare; gunicorn sees plain HTTP.
-#    Without this, request.is_secure() is False, so build_absolute_uri() emits
-#    http:// URLs — Google OAuth rejects the redirect_uri, and Django 4's CSRF
-#    origin check fails on every POST from an https:// page.
+# TLS ends at Cloudflare.
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CSRF_TRUSTED_ORIGINS = ['https://%s' % _DOMAIN]
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 
-# 2. Real client IP. gunicorn sets REMOTE_ADDR to the cloudflared pod, and DMOJ
-#    reads REMOTE_ADDR directly (judge/user_log.py, the password-reset throttle in
-#    judge/views/user.py, IP_BASED_AUTHENTICATION_HEADER). Without this, every
-#    visitor is one IP: one person's reset attempts throttle everyone, and contest
-#    IP logs become useless. See dmoj/cf_realip.py for the trust model.
-#
-# 3. Static files. No host nginx in front any more, so WhiteNoise serves
-#    /static/ from inside gunicorn (Cloudflare caches it at the edge).
-#    Order matters: real-IP first, WhiteNoise next, then DMOJ's own chain.
+# Real client IP from Cloudflare, then static files from WhiteNoise.
 _PREPEND = ['whitenoise.middleware.WhiteNoiseMiddleware']
 if _env('PROXY__CLOUDFLARE', True, cast=bool):
     _PREPEND.insert(0, 'dmoj.cf_realip.CloudflareRealIPMiddleware')
@@ -107,8 +75,6 @@ DATABASES = {
 ###########################
 ########## Cache ##########
 ###########################
-# WAS LocMemCache — per-process, so site and judge never shared a cache.
-# Redis is mandatory once there is more than one process.
 
 _redis_pw = _env('REDIS__PASSWORD', '')
 _redis_auth = ':%s@' % _redis_pw if _redis_pw else ''
@@ -147,36 +113,20 @@ STATIC_ROOT = _env('STATIC__ROOT', os.path.join(BASE_DIR, 'static'))
 STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
-# Files served at the site root (robots.txt, favicon.ico, the icon set) —
-# what the upstream nginx config served via its @icons location. The image
-# build copies them here.
+# Files served at the site root (robots.txt, favicon.ico, ...).
 WHITENOISE_ROOT = os.path.join(BASE_DIR, 'rootfiles')
 
-# User uploads. STATE — a PersistentVolume, never the container filesystem.
-# Served by the online-judge-media nginx pod, not Django. MEDIA_URL is the site root, as
-# in upstream VNOJ: uploads live at /martor/, /pdf/, /submission_file/ and
-# /static-upload/ (see *_UPLOAD_URL_PREFIX in dmoj/settings.py), and those URLs
-# are already embedded in problem statements stored in the database.
+# User uploads, served by the media pod.
 MEDIA_ROOT = _env('MEDIA__ROOT', '/media')
 MEDIA_URL = _env('MEDIA__URL', '/')
 
-# django-compressor is DISABLED: {% compress %} blocks render their contents
-# unchanged and WhiteNoise serves the individual files.
-#  - Offline compression can't work here: the compress blocks in base.html and
-#    friends depend on request context (inlinei18n(LANGUAGE_CODE), theme
-#    variables), so the offline manifest never matches at render time.
-#  - Online compression (what upstream VNOJ does) writes bundles into
-#    STATIC_ROOT at request time, which needs a shared writable volume plus
-#    nginx to serve it. WhiteNoise only serves files that exist at startup.
-# Behind Cloudflare (HTTP/2 + edge caching + compression) the extra requests are
-# cheap. Re-enabling means a shared static volume — see the dev plan.
+# Off: the compress blocks depend on request context.
 COMPRESS_ENABLED = False
 
 
 #########################################
 ########## Email configuration ##########
 #########################################
-# WAS localhost:25 — there is no MTA in a container.
 
 EMAIL_BACKEND = _env('MAIL__BACKEND', 'django.core.mail.backends.smtp.EmailBackend')
 EMAIL_HOST = _env('MAIL__HOST', 'localhost')
@@ -184,11 +134,12 @@ EMAIL_PORT = _env('MAIL__PORT', 25, cast=int)
 EMAIL_USE_TLS = _env('MAIL__USE_TLS', False, cast=bool)
 EMAIL_HOST_USER = _env('MAIL__USER', '')
 EMAIL_HOST_PASSWORD = _env('MAIL__PASSWORD', '')
+EMAIL_TIMEOUT = 10
 
 DEFAULT_FROM_EMAIL = _env('MAIL__FROM', 'TLOI Support <support@tloi.vn>')
 SERVER_EMAIL = _env('MAIL__SERVER_EMAIL', 'support@tloi.vn')
 
-# MAIL__ADMINS format: "name:email,name:email"
+# MAIL__ADMINS: name:email,name:email
 ADMINS = tuple(
     tuple(pair.split(':', 1))
     for pair in _env('MAIL__ADMINS', [], cast=list)
@@ -206,14 +157,9 @@ SITE_LONG_NAME = 'TLOJ: Thang Long Da Lat Online Judge'
 SITE_ADMIN_EMAIL = _env('SITE__ADMIN_EMAIL', 'support@tloi.vn')
 TERMS_OF_SERVICE_URL = '//%s/tos/' % _DOMAIN
 
-# Site side of problem data (admin test-data editor writes here).
-# The judge has its own read-only copy — see the dev plan, problem data section.
 DMOJ_PROBLEM_DATA_ROOT = _env('PROBLEM__DATA_ROOT', '/problems')
 
 ## Bridge.
-# The bridge pod BINDS 0.0.0.0 (not localhost, or nothing outside the pod can
-# reach it). Site/celery pods CONNECT to it through its ClusterIP Service.
-# Judges are in-cluster, so neither port is ever exposed outside the cluster.
 BRIDGED_JUDGE_ADDRESS = [(_env('BRIDGE__JUDGE_HOST', '0.0.0.0'),
                           _env('BRIDGE__JUDGE_PORT', 9999, cast=int))]
 BRIDGED_DJANGO_ADDRESS = [(_env('BRIDGE__DJANGO_HOST', '0.0.0.0'),
@@ -225,21 +171,15 @@ BRIDGED_DJANGO_CONNECT = (_env('BRIDGE__CONNECT_HOST', 'online-judge-bridge'),
 ENABLE_FTS = _env('FEATURE__ENABLE_FTS', False, cast=bool)
 BAD_MAIL_PROVIDERS = set()
 
-## Event server (websocket/daemon.js). Ports follow the DMOJ standard:
-## 15100 = websocket GET (browsers), 15101 = POST (site), 15102 = HTTP long-poll.
+## Event server (websocket/daemon.js).
 EVENT_DAEMON_USE = _env('EVENT__USE', True, cast=bool)
 EVENT_DAEMON_POST = _env('EVENT__POST', 'ws://online-judge-wsevent:15101/')
 EVENT_DAEMON_GET = 'ws://%s/event/' % _DOMAIN
 EVENT_DAEMON_GET_SSL = 'wss://%s/event/' % _DOMAIN
 EVENT_DAEMON_POLL = '/channels/'
-# VNOJ's websocket/daemon.js has no `auth` command: with any key set, the site
-# sends one, the daemon answers "bad-command" and every page 500s. The POST
-# port (15101) is cluster-internal only (no tunnel route; the judge's
-# NetworkPolicy blocks it), so no key is needed.
+# daemon.js has no auth command, so no key.
 EVENT_DAEMON_KEY = None
 
-# Never overridden before, so the site ran on the public literals hardcoded in
-# dmoj/settings.py. Required here: a pod without them refuses to start.
 EVENT_DAEMON_SUBMISSION_KEY = _env('EVENT__SUBMISSION_KEY', 'build-only', required=True)
 EVENT_DAEMON_CONTEST_KEY = _env('EVENT__CONTEST_KEY', 'build-only', required=True)
 EVENT_DAEMON_TICKET_KEY = _env('EVENT__TICKET_KEY', 'build-only', required=True)
@@ -248,8 +188,6 @@ EVENT_DAEMON_TICKET_KEY = _env('EVENT__TICKET_KEY', 'build-only', required=True)
 #############################
 ########## Logging ##########
 #############################
-# WAS a RotatingFileHandler writing bridge_log.txt into the working directory.
-# In a pod that's invisible and lost on every roll. Everything goes to stdout.
 
 LOGGING = {
     'version': 1,
@@ -268,7 +206,7 @@ LOGGING = {
         '': {'handlers': ['console'], 'level': _env('LOG__LEVEL', 'INFO')},
     },
 }
-# Errors also go to Discord when DISCORD__ON_ERROR is set (see Integrations).
+# Errors also go to Discord when DISCORD__ON_ERROR is set.
 if _env('DISCORD__ON_ERROR'):
     LOGGING['handlers']['discord_webhook'] = {
         'level': 'ERROR', 'class': 'dmoj.throttle_discord_webhook.ThrottledDiscordWebhookHandler',
@@ -291,9 +229,8 @@ TIMEZONE_MAP = 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Blue_M
 ##################################
 ########## Integrations ##########
 ##################################
-# Add https://<SITE__DOMAIN>/complete/google-oauth2/ to the OAuth client's
-# authorised redirect URIs for every environment that uses it.
 
+# Redirect URI: https://<SITE__DOMAIN>/complete/google-oauth2/
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = _env('SOCIAL__GOOGLE_KEY', '')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = _env('SOCIAL__GOOGLE_SECRET', '')
 
@@ -305,24 +242,24 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = _env('SOCIAL__GOOGLE_SECRET', '')
 GROUP_PERMISSION_FOR_ORG_ADMIN = 'Teacher'
 VNOJ_CONTEST_DURATION_LIMIT = 365
 
-# Log in with Google only (no password form). Production: on.
+# Log in with Google only.
 OAUTH_ONLY = _env('AUTH__OAUTH_ONLY', False, cast=bool)
 
-# Codeforces Polygon import. Key and secret are secrets (Infisical); the
-# username is not.
+# Codeforces Polygon import.
 VNOJ_POLYGON_API_KEY = _env('POLYGON__API_KEY')
 VNOJ_POLYGON_API_SECRET = _env('POLYGON__API_SECRET')
 VNOJ_POLYGON_API_USERNAME = _env('POLYGON__API_USERNAME')
 
-# MOSS plagiarism checks (secret, Infisical).
+# MOSS plagiarism checks.
 MOSS_API_KEY = _env('MOSS__API_KEY')
 
-# Discord webhooks, one per event: DISCORD__<EVENT>, e.g. DISCORD__ON_NEW_TICKET,
-# DISCORD__ON_ERROR, DISCORD__ON_LONG_QUEUE, DISCORD__QUEUE_TIME_STATS. The URLs
-# carry a token, so they live in Infisical. Unset = that notification is off.
+# Discord webhooks: DISCORD__<EVENT>; unset turns that notification off.
 DISCORD_WEBHOOK = {
     event: _env('DISCORD__' + event.upper())
     for event in ('default', 'on_new_ticket', 'on_new_comment', 'on_new_problem', 'on_new_suggested_problem',
                   'on_new_tag_problem', 'on_new_tag', 'on_new_blogpost', 'on_error', 'on_long_queue',
                   'queue_time_stats')
 }
+
+# Hide passwords in URLs and webhooks from error reports.
+DEFAULT_EXCEPTION_REPORTER_FILTER = 'dmoj.safe_exception_reporter.SafeURLExceptionReporterFilter'
