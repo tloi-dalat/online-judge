@@ -62,7 +62,7 @@ msgstr "Tiếng Việt"
 
 #: dmoj/urls.py:43
 msgid "Activation Successful!"
-msgstr "Kích hoạt thành công"
+msgstr "Kích hoạt thành công!"
 
 #: dmoj/urls.py:51
 msgid "Registration Completed"
