@@ -162,6 +162,7 @@ SITE_NAME = _env('SITE_NAME', 'TLOJ')
 SITE_LONG_NAME = _env('SITE_LONG_NAME', 'TLOJ: Thang Long Da Lat Online Judge')
 SITE_ADMIN_EMAIL = _env('SITE_ADMIN_EMAIL', 'support@tloi.vn')
 TERMS_OF_SERVICE_URL = '//%s/tos/' % _DOMAIN
+DMOJ_CANONICAL = _env('DMOJ_CANONICAL', _DOMAIN)
 
 DMOJ_PROBLEM_DATA_ROOT = _env('DMOJ_PROBLEM_DATA_ROOT', '/problems')
 
