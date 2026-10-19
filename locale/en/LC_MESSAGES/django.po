@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 11:08+0000\n"
+"POT-Creation-Date: 2026-10-19 18:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -992,7 +992,6 @@ msgid "Append main solution to tutorial"
 msgstr ""
 
 #: judge/forms.py:295
-#, python-brace-format
 msgid "Please share the problem to user <strong>{}</strong> first"
 msgstr ""
 
@@ -5610,17 +5609,16 @@ msgstr ""
 msgid "New Problems"
 msgstr ""
 
-#: judge/views/status.py:24 templates/submission/list.html:323
-#: templates/urlshortener/detail.html:75 templates/urlshortener/list.html:38
-msgid "Status"
+#: judge/views/status.py:24 templates/status/status-tabs.html:4
+msgid "Judges"
 msgstr ""
 
 #: judge/views/status.py:33
 msgid "You must be admin to view this content."
 msgstr ""
 
-#: judge/views/status.py:36
-msgid "OJ Status"
+#: judge/views/status.py:36 templates/status/status-tabs.html:5
+msgid "System"
 msgstr ""
 
 #: judge/views/status.py:118
@@ -9487,14 +9485,6 @@ msgstr ""
 msgid "Organization Submissions/New Problems by Day"
 msgstr ""
 
-#: templates/status/status-tabs.html:4
-msgid "Judges"
-msgstr ""
-
-#: templates/status/status-tabs.html:5 templates/tag/list.html:92
-msgid "OJ"
-msgstr ""
-
 #: templates/status/status-tabs.html:7
 msgid "Versions"
 msgstr ""
@@ -9533,6 +9523,11 @@ msgstr ""
 
 #: templates/submission/list.html:319
 msgid "Filter submissions"
+msgstr ""
+
+#: templates/submission/list.html:323 templates/urlshortener/detail.html:75
+#: templates/urlshortener/list.html:38
+msgid "Status"
 msgstr ""
 
 #: templates/submission/list.html:350
@@ -9748,6 +9743,10 @@ msgstr ""
 
 #: templates/tag/list.html:91
 msgid "Problem name"
+msgstr ""
+
+#: templates/tag/list.html:92
+msgid "OJ"
 msgstr ""
 
 #: templates/tag/problem.html:30
