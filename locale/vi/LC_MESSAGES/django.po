@@ -13540,6 +13540,3 @@ msgid ""
 "cookies are enabled for this site and restart login in the same browser and "
 "container."
 msgstr ""
-
-#~ msgid "OJ Status"
-#~ msgstr "Trạng thái của OJ"
