@@ -10031,7 +10031,7 @@ msgstr "Tên bài"
 
 #: templates/tag/list.html:92
 msgid "OJ"
-msgstr "VNOJ"
+msgstr "OJ"
 
 #: templates/tag/problem.html:30
 msgid "Assign new tag"
