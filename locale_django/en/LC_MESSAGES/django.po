@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Django overrides\n"
-"POT-Creation-Date: 2026-10-19 15:34+0000\n"
+"POT-Creation-Date: 2026-10-11 16:13+0000\n"
 "PO-Revision-Date: 2026-10-11 00:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: English\n"
@@ -11,118 +11,119 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/options.py
+#: django/contrib/admin/options.py
+#, python-brace-format
 msgid "Select this object for an action - {}"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/options.py
+#: django/contrib/admin/options.py
 #, python-format
 msgid "The app \"%s\" could not be found."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/options.py
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templatetags/admin_filters.py
+#: django/contrib/admin/options.py
+#: django/contrib/admin/templatetags/admin_filters.py
 #, python-format
 msgid "…and %(count)d more object."
 msgid_plural "…and %(count)d more objects."
 msgstr[0] ""
 msgstr[1] ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/actions.html
+#: django/contrib/admin/templates/admin/actions.html
 msgid "Run"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/app_index.html
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/base.html
+#: django/contrib/admin/templates/admin/app_index.html
+#: django/contrib/admin/templates/admin/base.html
 msgid "Breadcrumbs"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/app_list.html
+#: django/contrib/admin/templates/admin/app_list.html
 msgid "Model name"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/app_list.html
+#: django/contrib/admin/templates/admin/app_list.html
 msgid "Add link"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/app_list.html
+#: django/contrib/admin/templates/admin/app_list.html
 msgid "Change or view list link"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/auth/user/add_form.html
+#: django/contrib/admin/templates/admin/auth/user/add_form.html
 msgid "After you’ve created a user, you’ll be able to edit more user options."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/auth/user/change_password.html
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/change_form.html
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/change_list.html
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/login.html
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/registration/password_change_form.html
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/registration/password_reset_confirm.html
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/registration/password_reset_form.html
+#: django/contrib/admin/templates/admin/auth/user/change_password.html
+#: django/contrib/admin/templates/admin/change_form.html
+#: django/contrib/admin/templates/admin/change_list.html
+#: django/contrib/admin/templates/admin/login.html
+#: django/contrib/admin/templates/registration/password_change_form.html
+#: django/contrib/admin/templates/registration/password_reset_confirm.html
+#: django/contrib/admin/templates/registration/password_reset_form.html
 msgid "Error:"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/auth/user/change_password.html
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/auth/forms.py
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_reset_confirm.html
+#: django/contrib/admin/templates/admin/auth/user/change_password.html
+#: django/contrib/auth/forms.py
+#: registration/templates/registration/password_reset_confirm.html
 msgid "Set password"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/auth/user/change_password.html
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/change_form.html
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/change_list.html
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/login.html
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/registration/password_change_form.html
+#: django/contrib/admin/templates/admin/auth/user/change_password.html
+#: django/contrib/admin/templates/admin/change_form.html
+#: django/contrib/admin/templates/admin/change_list.html
+#: django/contrib/admin/templates/admin/login.html
+#: django/contrib/admin/templates/registration/password_change_form.html
 msgid "Please correct the error below."
 msgid_plural "Please correct the errors below."
 msgstr[0] ""
 msgstr[1] ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/auth/user/change_password.html
+#: django/contrib/admin/templates/admin/auth/user/change_password.html
 msgid ""
 "This action will <strong>enable</strong> password-based authentication for "
 "this user."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/auth/user/change_password.html
+#: django/contrib/admin/templates/admin/auth/user/change_password.html
 msgid "Disable password-based authentication"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/auth/user/change_password.html
+#: django/contrib/admin/templates/admin/auth/user/change_password.html
 msgid "Enable password-based authentication"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/base.html
+#: django/contrib/admin/templates/admin/base.html
 msgid "Skip to main content"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/change_list.html
+#: django/contrib/admin/templates/admin/change_list.html
 msgid "Hide counts"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/change_list.html
+#: django/contrib/admin/templates/admin/change_list.html
 msgid "Show counts"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/color_theme_toggle.html
+#: django/contrib/admin/templates/admin/color_theme_toggle.html
 msgid "Toggle theme (current theme: auto)"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/color_theme_toggle.html
+#: django/contrib/admin/templates/admin/color_theme_toggle.html
 msgid "Toggle theme (current theme: light)"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/color_theme_toggle.html
+#: django/contrib/admin/templates/admin/color_theme_toggle.html
 msgid "Toggle theme (current theme: dark)"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/date_hierarchy.html
+#: django/contrib/admin/templates/admin/date_hierarchy.html
 #, python-format
 msgid "Filter by %(field_name)s"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/delete_confirmation.html
+#: django/contrib/admin/templates/admin/delete_confirmation.html
 #, python-format
 msgid ""
 "Deleting the %(object_name)s “%(escaped_object)s” would result in deleting "
@@ -130,134 +131,134 @@ msgid ""
 "following types of objects:"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/delete_confirmation.html
+#: django/contrib/admin/templates/admin/delete_confirmation.html
 #, python-format
 msgid ""
 "Deleting the %(object_name)s “%(escaped_object)s” would require deleting the "
 "following protected related objects:"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/delete_confirmation.html
+#: django/contrib/admin/templates/admin/delete_confirmation.html
 #, python-format
 msgid ""
 "Are you sure you want to delete the %(object_name)s “%(escaped_object)s”? "
 "All of the following related items will be deleted:"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/index.html
+#: django/contrib/admin/templates/admin/index.html
 msgid "Added:"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/index.html
+#: django/contrib/admin/templates/admin/index.html
 msgid "Changed:"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/index.html
+#: django/contrib/admin/templates/admin/index.html
 msgid "Deleted:"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/login.html
+#: django/contrib/admin/templates/admin/login.html
 msgid "Forgotten your login credentials?"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/nav_sidebar.html
+#: django/contrib/admin/templates/admin/nav_sidebar.html
 msgid "Toggle navigation"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/nav_sidebar.html
+#: django/contrib/admin/templates/admin/nav_sidebar.html
 msgid "Sidebar"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/nav_sidebar.html
+#: django/contrib/admin/templates/admin/nav_sidebar.html
 msgid "Filter navigation items"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/object_history.html
+#: django/contrib/admin/templates/admin/object_history.html
 #, python-format
 msgid "Pagination %(name)s entries"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/object_history.html
+#: django/contrib/admin/templates/admin/object_history.html
 msgid "entry"
 msgid_plural "entries"
 msgstr[0] ""
 msgstr[1] ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/pagination.html
+#: django/contrib/admin/templates/admin/pagination.html
 #, python-format
 msgid "Pagination %(name)s"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/search_form.html
+#: django/contrib/admin/templates/admin/search_form.html
 #, python-format
 msgid "Search %(name)s"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/admin/widgets/related_widget_wrapper.html
+#: django/contrib/admin/templates/admin/widgets/related_widget_wrapper.html
 #, python-format
 msgid "View selected %(model)s"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/registration/logged_out.html
+#: django/contrib/admin/templates/registration/logged_out.html
 msgid "Logout"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templates/registration/password_reset_email.html
+#: django/contrib/admin/templates/registration/password_reset_email.html
 msgid "In case you’ve forgotten, you are:"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/admin/templatetags/admin_list.py
+#: django/contrib/admin/templatetags/admin_list.py
 msgid "Select all objects on this page for an action"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/auth/admin.py
+#: django/contrib/auth/admin.py
 msgid "Conflicting form data submitted. Please try again."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/auth/admin.py
+#: django/contrib/auth/admin.py
 msgid "Password-based authentication was disabled."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/auth/admin.py
+#: django/contrib/auth/admin.py
 #, python-format
 msgid "Set password: %s"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/auth/forms.py
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_reset_form.html
+#: django/contrib/auth/forms.py
+#: registration/templates/registration/password_reset_form.html
 msgid "Reset password"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/auth/forms.py
+#: django/contrib/auth/forms.py
 msgid ""
 "Whether the user will be able to authenticate using a password or not. If "
 "disabled, they may still be able to authenticate using other backends, such "
 "as Single Sign-On or LDAP."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/auth/forms.py
+#: django/contrib/auth/forms.py
 msgid "Password-based authentication"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/auth/forms.py
+#: django/contrib/auth/forms.py
 msgid "Enabled"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/auth/forms.py
+#: django/contrib/auth/forms.py
 msgid "Disabled"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/auth/forms.py
+#: django/contrib/auth/forms.py
 msgid ""
 "Raw passwords are not stored, so there is no way to see the user’s password."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/auth/forms.py
+#: django/contrib/auth/forms.py
 msgid ""
 "Enable password-based authentication for this user by setting a password."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/auth/password_validation.py
+#: django/contrib/auth/password_validation.py
 #, python-format
 msgid "This password is too short. It must contain at least %d character."
 msgid_plural ""
@@ -265,154 +266,154 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/auth/validators.py
+#: django/contrib/auth/validators.py
 msgid ""
 "Enter a valid username. This value may contain only unaccented lowercase a-z "
 "and uppercase A-Z letters, numbers, and @/./+/-/_ characters."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/flatpages/apps.py
+#: django/contrib/flatpages/apps.py
 msgid "Flat Pages"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/flatpages/forms.py
+#: django/contrib/flatpages/forms.py
 msgid ""
 "Example: “/about/contact/”. Make sure to have leading and trailing slashes."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/flatpages/forms.py
+#: django/contrib/flatpages/forms.py
 msgid ""
 "This value must contain only letters, numbers, dots, underscores, dashes, "
 "slashes or tildes."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/flatpages/forms.py
+#: django/contrib/flatpages/forms.py
 msgid "Example: “/about/contact”. Make sure to have a leading slash."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/flatpages/forms.py
+#: django/contrib/flatpages/forms.py
 msgid "URL is missing a leading slash."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/flatpages/forms.py
+#: django/contrib/flatpages/forms.py
 msgid "URL is missing a trailing slash."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/flatpages/forms.py
+#: django/contrib/flatpages/forms.py
 #, python-format
 msgid "Flatpage with url %(url)s already exists for site %(site)s"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/flatpages/models.py
+#: django/contrib/flatpages/models.py
 msgid ""
 "Example: “flatpages/contact_page.html”. If this isn’t provided, the system "
 "will use “flatpages/default.html”."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/flatpages/models.py
+#: django/contrib/flatpages/models.py
 msgid "flat page"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/flatpages/models.py
+#: django/contrib/flatpages/models.py
 msgid "flat pages"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/redirects/apps.py
+#: django/contrib/redirects/apps.py
 msgid "Redirects"
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/redirects/models.py
+#: django/contrib/redirects/models.py
 msgid ""
 "This should be an absolute path, excluding the domain name. Example: “/"
 "events/search/”."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/redirects/models.py
+#: django/contrib/redirects/models.py
 msgid ""
 "This can be either an absolute path (as above) or a full URL starting with a "
 "scheme such as “https://”."
 msgstr ""
 
-#: django/vnojsite/lib/python3.14/site-packages/django/contrib/sites/apps.py
+#: django/contrib/sites/apps.py
 msgid "Sites"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/admin.py
+#: registration/admin.py
 msgid "Activate users"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/admin.py
+#: registration/admin.py
 msgid "Re-send activation emails"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/forms.py
+#: registration/forms.py
 msgid "E-mail"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/forms.py
+#: registration/forms.py
 msgid "I have read and agree to the Terms of Service"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/forms.py
+#: registration/forms.py
 msgid "You must agree to the terms to register"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/forms.py
+#: registration/forms.py
 msgid ""
 "This email address is already in use. Please supply a different email "
 "address."
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/forms.py
+#: registration/forms.py
 msgid ""
 "Registration using free email addresses is prohibited. Please supply a "
 "different email address."
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/models.py
+#: registration/models.py
 msgid "activation key"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/models.py
+#: registration/models.py
 msgid "registration profile"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/models.py
+#: registration/models.py
 msgid "registration profiles"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activate.html
+#: registration/templates/registration/activate.html
 msgid "Activation Failure"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activate.html
+#: registration/templates/registration/activate.html
 msgid "Account activation failed."
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activation_complete.html
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activation_complete_admin_pending.html
+#: registration/templates/registration/activation_complete.html
+#: registration/templates/registration/activation_complete_admin_pending.html
 msgid "Account Activated"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activation_complete.html
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activation_complete_admin_pending.html
+#: registration/templates/registration/activation_complete.html
+#: registration/templates/registration/activation_complete_admin_pending.html
 msgid "Your account is now activated."
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activation_complete.html
+#: registration/templates/registration/activation_complete.html
 msgid "You can log in."
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activation_complete_admin_pending.html
+#: registration/templates/registration/activation_complete_admin_pending.html
 msgid "Once a site administrator activates your account you can login."
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activation_email.html
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_email.html
+#: registration/templates/registration/activation_email.html
+#: registration/templates/registration/admin_approve_email.html
 msgid "registration"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activation_email.html
+#: registration/templates/registration/activation_email.html
 #, python-format
 msgid ""
 "\n"
@@ -423,7 +424,7 @@ msgid ""
 "    "
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activation_email.html
+#: registration/templates/registration/activation_email.html
 #, python-format
 msgid ""
 "\n"
@@ -433,8 +434,8 @@ msgid ""
 "    "
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activation_email.html
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_email.html
+#: registration/templates/registration/activation_email.html
+#: registration/templates/registration/admin_approve_email.html
 #, python-format
 msgid ""
 "\n"
@@ -443,7 +444,7 @@ msgid ""
 "    "
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activation_email.txt
+#: registration/templates/registration/activation_email.txt
 #, python-format
 msgid ""
 "\n"
@@ -452,7 +453,7 @@ msgid ""
 "and your address will be removed from our records.\n"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activation_email.txt
+#: registration/templates/registration/activation_email.txt
 #, python-format
 msgid ""
 "\n"
@@ -460,7 +461,7 @@ msgid ""
 "%(expiration_days)s days:\n"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activation_email.txt
+#: registration/templates/registration/activation_email.txt
 #, python-format
 msgid ""
 "\n"
@@ -468,49 +469,49 @@ msgid ""
 "%(site_name)s Management\n"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/activation_email_subject.txt
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_complete_email_subject.txt
+#: registration/templates/registration/activation_email_subject.txt
+#: registration/templates/registration/admin_approve_complete_email_subject.txt
 msgid "Account activation on"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve.html
+#: registration/templates/registration/admin_approve.html
 msgid "Approval Failure"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve.html
+#: registration/templates/registration/admin_approve.html
 msgid "Account Approval failed."
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_complete.html
+#: registration/templates/registration/admin_approve_complete.html
 msgid "Account Approved"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_complete.html
+#: registration/templates/registration/admin_approve_complete.html
 msgid "The user's account is now approved."
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_complete_email.html
+#: registration/templates/registration/admin_approve_complete_email.html
 msgid "admin approval"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_complete_email.html
+#: registration/templates/registration/admin_approve_complete_email.html
 msgid ""
 "\n"
 "    Your account is now approved. You can \n"
 "    "
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_complete_email.html
+#: registration/templates/registration/admin_approve_complete_email.html
 msgid "log in."
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_complete_email.txt
+#: registration/templates/registration/admin_approve_complete_email.txt
 msgid ""
 "\n"
 "Your account is now approved. You can log in using the following link\n"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_email.html
+#: registration/templates/registration/admin_approve_email.html
 #, python-format
 msgid ""
 "\n"
@@ -519,18 +520,18 @@ msgid ""
 "    "
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_email.html
+#: registration/templates/registration/admin_approve_email.html
 msgid ""
 "\n"
 "    To approve this, please\n"
 "    "
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_email.html
+#: registration/templates/registration/admin_approve_email.html
 msgid "click here"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_email.txt
+#: registration/templates/registration/admin_approve_email.txt
 #, python-format
 msgid ""
 "\n"
@@ -538,54 +539,54 @@ msgid ""
 "%(site_name)s.\n"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_email.txt
+#: registration/templates/registration/admin_approve_email.txt
 msgid ""
 "\n"
 "To approve this, please click the following link.\n"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/admin_approve_email_subject.txt
+#: registration/templates/registration/admin_approve_email_subject.txt
 msgid "Account approval on"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/login.html
+#: registration/templates/registration/login.html
 msgid "Reset it"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/login.html
+#: registration/templates/registration/login.html
 msgid "Not a member?"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/logout.html
+#: registration/templates/registration/logout.html
 msgid "Successfully logged out"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_change_done.html
+#: registration/templates/registration/password_change_done.html
 msgid "Password changed"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_change_done.html
+#: registration/templates/registration/password_change_done.html
 msgid "Password successfully changed!"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_reset_complete.html
+#: registration/templates/registration/password_reset_complete.html
 msgid "Your password has been reset!"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_reset_complete.html
+#: registration/templates/registration/password_reset_complete.html
 #, python-format
 msgid "You may now <a href=\"%(login_url)s\">log in</a>"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_reset_confirm.html
+#: registration/templates/registration/password_reset_confirm.html
 msgid "Confirm password reset"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_reset_confirm.html
+#: registration/templates/registration/password_reset_confirm.html
 msgid "Enter your new password below to reset your password:"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_reset_done.html
+#: registration/templates/registration/password_reset_done.html
 msgid ""
 "\n"
 "    We have sent you an email with a link to reset your password. Please "
@@ -594,11 +595,11 @@ msgid ""
 "    "
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_reset_email.html
+#: registration/templates/registration/password_reset_email.html
 msgid "Greetings"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_reset_email.html
+#: registration/templates/registration/password_reset_email.html
 #, python-format
 msgid ""
 "\n"
@@ -607,7 +608,7 @@ msgid ""
 "wish to reset your password, please ignore this message.\n"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_reset_email.html
+#: registration/templates/registration/password_reset_email.html
 msgid ""
 "\n"
 "To reset your password, please click the following link, or copy and paste "
@@ -615,15 +616,15 @@ msgid ""
 "into your web browser:\n"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_reset_email.html
+#: registration/templates/registration/password_reset_email.html
 msgid "Best regards"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_reset_email.html
+#: registration/templates/registration/password_reset_email.html
 msgid "Management"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/password_reset_form.html
+#: registration/templates/registration/password_reset_form.html
 msgid ""
 "\n"
 "    Forgot your password? Enter your email in the form below and we'll send "
@@ -631,36 +632,31 @@ msgid ""
 "    "
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/registration_closed.html
+#: registration/templates/registration/registration_closed.html
 msgid "Registration is closed"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/registration_closed.html
+#: registration/templates/registration/registration_closed.html
 msgid "Sorry, but registration is closed at this moment. Come back later."
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/registration_complete.html
+#: registration/templates/registration/registration_complete.html
 msgid "Activation email sent"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/registration_complete.html
-#, python-format
-msgid ""
-"\n"
-"    Please check your email, %(email)s, to complete the registration "
-"process.\n"
-"  "
+#: registration/templates/registration/registration_complete.html
+msgid "Please check your email to complete the registration process."
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/registration_form.html
+#: registration/templates/registration/registration_form.html
 msgid "Register for an account"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/resend_activation_complete.html
+#: registration/templates/registration/resend_activation_complete.html
 msgid "Account Activation Resent"
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/resend_activation_complete.html
+#: registration/templates/registration/resend_activation_complete.html
 #, python-format
 msgid ""
 "\n"
@@ -668,104 +664,65 @@ msgid ""
 "  "
 msgstr ""
 
-#: registration/vnojsite/lib/python3.14/site-packages/registration/templates/registration/resend_activation_form.html
+#: registration/templates/registration/resend_activation_form.html
 msgid "Resend Activation Email"
 msgstr ""
 
 #. Translators: This is already translated in Django
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/menu/items.py
+#: wpadmin/menu/items.py
 msgid "No permission"
 msgstr ""
 
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/menu/menus.py
+#: wpadmin/menu/menus.py
 msgid "Site"
 msgstr ""
 
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/menu/menus.py
+#: wpadmin/menu/menus.py
 msgid "Applications"
 msgstr ""
 
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/admin/change_form.html
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/admin/change_list.html
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/admin/login.html
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/registration/password_change_form.html
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/registration/password_reset_confirm.html
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/registration/password_reset_form.html
-msgid "Please correct the errors below."
-msgstr ""
-
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/admin/delete_confirmation.html
-#, python-format
-msgid ""
-"Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
-"related objects, but your account doesn't have permission to delete the "
-"following types of objects:"
-msgstr ""
-
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/admin/delete_confirmation.html
-#, python-format
-msgid ""
-"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
-"following protected related objects:"
-msgstr ""
-
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/admin/delete_confirmation.html
-#, python-format
-msgid ""
-"Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
-"All of the following related items will be deleted:"
-msgstr ""
-
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/admin/delete_confirmation.html
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/admin/delete_selected_confirmation.html
+#: wpadmin/templates/admin/delete_confirmation.html
+#: wpadmin/templates/admin/delete_selected_confirmation.html
 msgid "Yes, I'm sure"
 msgstr ""
 
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/admin/index.html
+#: wpadmin/templates/admin/index.html
 msgid "You don't have permission to edit anything."
 msgstr ""
 
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/admin/index.html
+#: wpadmin/templates/admin/index.html
 msgid "Recent Actions"
 msgstr ""
 
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/admin/index.html
+#: wpadmin/templates/admin/index.html
 msgid "My Actions"
 msgstr ""
 
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/admin/login.html
+#: wpadmin/templates/admin/login.html
 msgid "Password:"
 msgstr ""
 
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/admin/login.html
-msgid "Forgotten your password or username?"
-msgstr ""
-
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/registration/password_change_form.html
+#: wpadmin/templates/registration/password_change_form.html
 msgid ""
 "Please enter your old password, for security's sake, and then enter your new "
 "password twice so we can verify you typed it in correctly."
 msgstr ""
 
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/registration/password_change_form.html
-msgid "Password (again)"
-msgstr ""
-
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/registration/password_reset_form.html
+#: wpadmin/templates/registration/password_reset_form.html
 msgid ""
 "Forgotten your password? Enter your email address below, and we'll email "
 "instructions for setting a new one."
 msgstr ""
 
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/wpadmin/menu/left_menu.html
+#: wpadmin/templates/wpadmin/menu/left_menu.html
 msgid "Menu options"
 msgstr ""
 
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/wpadmin/menu/left_menu.html
+#: wpadmin/templates/wpadmin/menu/left_menu.html
 msgid "Expand menu"
 msgstr ""
 
-#: wpadmin/vnojsite/lib/python3.14/site-packages/wpadmin/templates/wpadmin/menu/left_menu.html
+#: wpadmin/templates/wpadmin/menu/left_menu.html
 msgid "Collapse menu"
 msgstr ""
 
@@ -1243,117 +1200,116 @@ msgid ""
 "container."
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/admin.py
+#: reversion/admin.py
 msgid "Initial version."
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/admin.py
+#: reversion/admin.py
 #, python-format
 msgid "Reverted to previous version, saved on %(datetime)s"
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/admin.py
+#: reversion/admin.py
 #, python-format
 msgid "Could not load %(object_repr)s version - not found"
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/admin.py
+#: reversion/admin.py
 #, python-format
 msgid "Recover %(name)s"
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/admin.py
+#: reversion/admin.py
 #, python-format
 msgid "Revert %(name)s"
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/admin.py
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/templates/reversion/change_list.html
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/templates/reversion/recover_form.html
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/templates/reversion/recover_list.html
+#: reversion/admin.py reversion/templates/reversion/change_list.html
+#: reversion/templates/reversion/recover_form.html
+#: reversion/templates/reversion/recover_list.html
 #, python-format
 msgid "Recover deleted %(name)s"
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/apps.py
+#: reversion/apps.py
 msgid "Reversion"
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/models.py
+#: reversion/models.py
 #, python-format
 msgid "Could not save %(object_repr)s version - missing dependency."
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/models.py
+#: reversion/models.py
 msgid "date created"
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/models.py
+#: reversion/models.py
 msgid "revision"
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/models.py
+#: reversion/models.py
 #, python-format
 msgid "Could not load %(object_repr)s version - incompatible version data."
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/models.py
+#: reversion/models.py
 #, python-format
 msgid "Could not load %(object_repr)s version - unknown serializer %(format)s."
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/models.py
+#: reversion/models.py
 msgid "versions"
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/templates/reversion/object_history.html
+#: reversion/templates/reversion/object_history.html
 msgid ""
 "Choose a date from the list below to revert to a previous version of this "
 "object."
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/templates/reversion/object_history.html
+#: reversion/templates/reversion/object_history.html
 msgid ""
 "This object doesn't have a change history. It probably wasn't added via this "
 "admin site."
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/templates/reversion/recover_form.html
+#: reversion/templates/reversion/recover_form.html
 msgid "Press the save button below to recover this version of the object."
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/templates/reversion/recover_list.html
+#: reversion/templates/reversion/recover_list.html
 msgid ""
 "Choose a date from the list below to recover a deleted version of an object."
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/templates/reversion/recover_list.html
+#: reversion/templates/reversion/recover_list.html
 msgid "There are no deleted objects to recover."
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/templates/reversion/revision_form.html
+#: reversion/templates/reversion/revision_form.html
 #, python-format
 msgid "Revert %(verbose_name)s"
 msgstr ""
 
-#: reversion/vnojsite/lib/python3.14/site-packages/reversion/templates/reversion/revision_form.html
+#: reversion/templates/reversion/revision_form.html
 msgid "Press the save button below to revert to this version of the object."
 msgstr ""
 
-#: sortedm2m/vnojsite/lib/python3.14/site-packages/sortedm2m/fields.py
+#: sortedm2m/fields.py
 #, python-format
 msgid "%(from)s-%(to)s relationship"
 msgstr ""
 
-#: sortedm2m/vnojsite/lib/python3.14/site-packages/sortedm2m/fields.py
+#: sortedm2m/fields.py
 #, python-format
 msgid "%(from)s-%(to)s relationships"
 msgstr ""
 
-#: sortedm2m/vnojsite/lib/python3.14/site-packages/sortedm2m/templates/sortedm2m/sorted_checkbox_select_multiple_widget.html
+#: sortedm2m/templates/sortedm2m/sorted_checkbox_select_multiple_widget.html
 msgid "Type into this box to filter down the list."
 msgstr ""
 
-#: sortedm2m/vnojsite/lib/python3.14/site-packages/sortedm2m/templates/sortedm2m/sorted_checkbox_select_multiple_widget.html
+#: sortedm2m/templates/sortedm2m/sorted_checkbox_select_multiple_widget.html
 msgid "Choose items and order by drag & drop."
 msgstr ""
