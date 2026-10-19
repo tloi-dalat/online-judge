@@ -1,16 +1,5 @@
 {% extends "tabs-base.html" %}
 
-<!-- {% macro make_tab(name, fa, url, text) %} -->
-<!--     <li class="tab{% if tab == name %} active{% endif %}"> -->
-<!--         {%- if url %}<a href="{{ url }}">{% else %}<span>{% endif -%} -->
-<!--         <i class="tab-icon fa {{ fa }}"></i> {{ text }} -->
-<!--         {%- if url %}</a>{% else %}</span>{% endif -%} -->
-<!--     </li> -->
-<!-- {% endmacro %} -->
-
-<!-- make_tab(name,fa,url,text) -->
-
-
 {% block tabs %}
     {{ make_tab('judges', 'fa-server', url('status_all'), _('Judges')) }}
     {% if request.user.is_superuser %}{{ make_tab('System', 'fa-server', url('status_oj'), _('System')) }}{% endif %}
