@@ -5760,7 +5760,7 @@ msgstr "Bạn phải là admin để xem nội dung này."
 
 #: judge/views/status.py:36 templates/status/status-tabs.html:5
 msgid "System"
-msgstr "Hệ Thống"
+msgstr "Hệ thống"
 
 #: judge/views/status.py:118
 msgid "Version"
