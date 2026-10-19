@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 11:08+0000\n"
+"POT-Creation-Date: 2026-10-19 15:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -288,6 +288,18 @@ msgstr ""
 #: judge/models/contest.py:872 judge/models/profile.py:572
 #: judge/models/profile.py:603 judge/models/submission.py:75
 #: judge/models/ticket.py:60
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:206
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:523
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:612
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:764
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:916
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:1020
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:206
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:523
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:612
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:764
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:916
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:1020
 msgid "user"
 msgstr ""
 
@@ -463,6 +475,8 @@ msgid "Capabilities"
 msgstr ""
 
 #: judge/admin/submission.py:26 judge/models/submission.py:83
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:1034
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:1034
 msgid "status"
 msgstr ""
 
@@ -992,7 +1006,6 @@ msgid "Append main solution to tutorial"
 msgstr ""
 
 #: judge/forms.py:295
-#, python-brace-format
 msgid "Please share the problem to user <strong>{}</strong> first"
 msgstr ""
 
@@ -1192,26 +1205,36 @@ msgid "%s B"
 msgstr ""
 
 #: judge/jinja2/filesize.py:33
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:928
+#: vnojsite/lib/python3.14/site-packages/django/template/defaultfilters.py:928
 #, python-format
 msgid "%s KB"
 msgstr ""
 
 #: judge/jinja2/filesize.py:33
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:930
+#: vnojsite/lib/python3.14/site-packages/django/template/defaultfilters.py:930
 #, python-format
 msgid "%s MB"
 msgstr ""
 
 #: judge/jinja2/filesize.py:33
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:932
+#: vnojsite/lib/python3.14/site-packages/django/template/defaultfilters.py:932
 #, python-format
 msgid "%s GB"
 msgstr ""
 
 #: judge/jinja2/filesize.py:33
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:934
+#: vnojsite/lib/python3.14/site-packages/django/template/defaultfilters.py:934
 #, python-format
 msgid "%s TB"
 msgstr ""
 
 #: judge/jinja2/filesize.py:33
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:936
+#: vnojsite/lib/python3.14/site-packages/django/template/defaultfilters.py:936
 #, python-format
 msgid "%s PB"
 msgstr ""
@@ -2063,6 +2086,8 @@ msgid "submission count"
 msgstr ""
 
 #: judge/models/contest.py:901
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2721
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2721
 msgid "URL"
 msgstr ""
 
@@ -2115,6 +2140,8 @@ msgid "parent item"
 msgstr ""
 
 #: judge/models/interface.py:68
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:233
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:233
 msgid "name"
 msgstr ""
 
@@ -4885,7 +4912,7 @@ msgid "Graph Editor"
 msgstr ""
 
 #: judge/views/language.py:12 templates/status/judge-status-table.html:10
-#: templates/status/status-tabs.html:6
+#: templates/status/status-tabs.html:17
 msgid "Runtimes"
 msgstr ""
 
@@ -5610,20 +5637,19 @@ msgstr ""
 msgid "New Problems"
 msgstr ""
 
-#: judge/views/status.py:24 templates/submission/list.html:323
-#: templates/urlshortener/detail.html:75 templates/urlshortener/list.html:38
-msgid "Status"
+#: judge/views/status.py:27 templates/status/status-tabs.html:15
+msgid "Judges"
 msgstr ""
 
-#: judge/views/status.py:33
+#: judge/views/status.py:38
 msgid "You must be admin to view this content."
 msgstr ""
 
-#: judge/views/status.py:36
-msgid "OJ Status"
+#: judge/views/status.py:45 templates/status/status-tabs.html:16
+msgid "System"
 msgstr ""
 
-#: judge/views/status.py:118
+#: judge/views/status.py:137
 msgid "Version"
 msgstr ""
 
@@ -5786,7 +5812,12 @@ msgstr ""
 msgid "#%(id)d, assigned to: %(users)s"
 msgstr ""
 
+#. Translators: This string is used as a separator between list elements
 #: judge/views/ticket.py:371
+#: venv/lib/python3.14/site-packages/django/utils/text.py:301
+#: venv/lib/python3.14/site-packages/django/utils/timesince.py:135
+#: vnojsite/lib/python3.14/site-packages/django/utils/text.py:301
+#: vnojsite/lib/python3.14/site-packages/django/utils/timesince.py:135
 msgid ", "
 msgstr ""
 
@@ -5945,6 +5976,8 @@ msgid "Currently:"
 msgstr ""
 
 #: judge/widgets/chunked_upload.py:27 templates/contest/ranking.html:542
+#: venv/lib/python3.14/site-packages/django/forms/widgets.py:573
+#: vnojsite/lib/python3.14/site-packages/django/forms/widgets.py:573
 msgid "Clear"
 msgstr ""
 
@@ -6091,6 +6124,8 @@ msgid "Add"
 msgstr ""
 
 #: templates/admin/judge/app_index.html:20
+#: venv/lib/python3.14/site-packages/django/forms/widgets.py:575
+#: vnojsite/lib/python3.14/site-packages/django/forms/widgets.py:575
 msgid "Change"
 msgstr ""
 
@@ -6104,6 +6139,14 @@ msgstr ""
 #: templates/urlshortener/confirm_delete.html:91
 #: templates/urlshortener/detail.html:101 templates/urlshortener/list.html:73
 #: templates/user/edit-profile.html:509
+#: venv/lib/python3.14/site-packages/django/forms/formsets.py:499
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_confirm_delete.html:13
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:53
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorized-token-delete.html:7
+#: vnojsite/lib/python3.14/site-packages/django/forms/formsets.py:499
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_confirm_delete.html:13
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:53
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorized-token-delete.html:7
 msgid "Delete"
 msgstr ""
 
@@ -6239,6 +6282,8 @@ msgid "Log in"
 msgstr ""
 
 #: templates/base.html:383 templates/registration/registration_form.html:207
+#: venv/lib/python3.14/site-packages/django/utils/text.py:282
+#: vnojsite/lib/python3.14/site-packages/django/utils/text.py:282
 msgid "or"
 msgstr ""
 
@@ -6317,6 +6362,8 @@ msgstr ""
 #: templates/organization/tags.html:139 templates/organization/tags.html:207
 #: templates/problem/editorial.html:22 templates/urlshortener/detail.html:98
 #: templates/urlshortener/list.html:70
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:52
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:52
 msgid "Edit"
 msgstr ""
 
@@ -6531,6 +6578,16 @@ msgid "Could not hide comment."
 msgstr ""
 
 #: templates/comments/base-media-js.html:248
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:237
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:534
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:653
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:788
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:930
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:237
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:534
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:653
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:788
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:930
 msgid "updated"
 msgstr ""
 
@@ -6685,34 +6742,50 @@ msgid "COLOR"
 msgstr ""
 
 #: templates/contest/balloons.html:112
+#: venv/lib/python3.14/site-packages/django/forms/widgets.py:914
+#: vnojsite/lib/python3.14/site-packages/django/forms/widgets.py:914
 msgid "Unknown"
 msgstr ""
 
 #: templates/contest/calendar.html:12
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:13
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:13
 msgid "Sunday"
 msgstr ""
 
 #: templates/contest/calendar.html:13
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:7
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:7
 msgid "Monday"
 msgstr ""
 
 #: templates/contest/calendar.html:14
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:8
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:8
 msgid "Tuesday"
 msgstr ""
 
 #: templates/contest/calendar.html:15
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:9
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:9
 msgid "Wednesday"
 msgstr ""
 
 #: templates/contest/calendar.html:16
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:10
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:10
 msgid "Thursday"
 msgstr ""
 
 #: templates/contest/calendar.html:17
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:11
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:11
 msgid "Friday"
 msgstr ""
 
 #: templates/contest/calendar.html:18
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:12
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:12
 msgid "Saturday"
 msgstr ""
 
@@ -8009,6 +8082,8 @@ msgstr ""
 
 #: templates/organization/requests/log.html:10
 #: templates/organization/requests/pending.html:32
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2613
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2613
 msgid "Time"
 msgstr ""
 
@@ -8080,6 +8155,10 @@ msgstr ""
 #: templates/organization/tags.html:162
 #: templates/problem/confirm_delete.html:44 templates/problem/data.html:1219
 #: templates/status/oj-status.html:75
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_confirm_delete.html:12
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorize.html:29
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_confirm_delete.html:12
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorize.html:29
 msgid "Cancel"
 msgstr ""
 
@@ -8104,6 +8183,8 @@ msgstr ""
 #: templates/organization/tags.html:154 templates/problem/data.html:274
 #: templates/problem/data.html:1187 templates/problem/data.html:1190
 #: templates/urlshortener/form.html:31
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_form.html:40
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_form.html:40
 msgid "Save"
 msgstr ""
 
@@ -8414,6 +8495,10 @@ msgid "files selected"
 msgstr ""
 
 #: templates/problem/data.html:685
+#: venv/lib/python3.14/site-packages/django/db/models/base.py:1666
+#: venv/lib/python3.14/site-packages/django/forms/models.py:933
+#: vnojsite/lib/python3.14/site-packages/django/db/models/base.py:1666
+#: vnojsite/lib/python3.14/site-packages/django/forms/models.py:933
 msgid "and"
 msgstr ""
 
@@ -9487,15 +9572,7 @@ msgstr ""
 msgid "Organization Submissions/New Problems by Day"
 msgstr ""
 
-#: templates/status/status-tabs.html:4
-msgid "Judges"
-msgstr ""
-
-#: templates/status/status-tabs.html:5 templates/tag/list.html:92
-msgid "OJ"
-msgstr ""
-
-#: templates/status/status-tabs.html:7
+#: templates/status/status-tabs.html:18
 msgid "Versions"
 msgstr ""
 
@@ -9533,6 +9610,11 @@ msgstr ""
 
 #: templates/submission/list.html:319
 msgid "Filter submissions"
+msgstr ""
+
+#: templates/submission/list.html:323 templates/urlshortener/detail.html:75
+#: templates/urlshortener/list.html:38
+msgid "Status"
 msgstr ""
 
 #: templates/submission/list.html:350
@@ -9750,6 +9832,10 @@ msgstr ""
 msgid "Problem name"
 msgstr ""
 
+#: templates/tag/list.html:92
+msgid "OJ"
+msgstr ""
+
 #: templates/tag/problem.html:30
 msgid "Assign new tag"
 msgstr ""
@@ -9907,6 +9993,8 @@ msgid "Directed"
 msgstr ""
 
 #: templates/tools/graph_editor.html:143
+#: venv/lib/python3.14/site-packages/click/core.py:1304
+#: vnojsite/lib/python3.14/site-packages/click/core.py:1304
 msgid "Options"
 msgstr ""
 
@@ -10176,10 +10264,14 @@ msgid "This user has not earned any badges or awards."
 msgstr ""
 
 #: templates/user/user-about.html:69
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:22
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:22
 msgid "Sun"
 msgstr ""
 
 #: templates/user/user-about.html:74
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:16
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:16
 msgid "Mon"
 msgstr ""
 
@@ -10188,6 +10280,8 @@ msgid "Tues"
 msgstr ""
 
 #: templates/user/user-about.html:84
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:18
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:18
 msgid "Wed"
 msgstr ""
 
@@ -10196,10 +10290,14 @@ msgid "Thurs"
 msgstr ""
 
 #: templates/user/user-about.html:94
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:20
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:20
 msgid "Fri"
 msgstr ""
 
 #: templates/user/user-about.html:99
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:21
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:21
 msgid "Sat"
 msgstr ""
 
@@ -10373,4 +10471,2488 @@ msgstr ""
 
 #: urlshortener/views.py:97
 msgid "This shortened URL is not active."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/chunked_upload/constants.py:15
+#: vnojsite/lib/python3.14/site-packages/chunked_upload/constants.py:15
+msgid "Uploading"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/chunked_upload/constants.py:16
+#: vnojsite/lib/python3.14/site-packages/chunked_upload/constants.py:16
+msgid "Complete"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/chunked_upload/management/commands/delete_expired_uploads.py:9
+#: vnojsite/lib/python3.14/site-packages/chunked_upload/management/commands/delete_expired_uploads.py:9
+#, python-brace-format
+msgid "Do you want to delete {obj}?"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/_termui_impl.py:186
+#: vnojsite/lib/python3.14/site-packages/click/_termui_impl.py:186
+msgid "d"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/_termui_impl.py:736
+#: vnojsite/lib/python3.14/site-packages/click/_termui_impl.py:736
+#, python-brace-format
+msgid "{editor}: Editing failed"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/_termui_impl.py:740
+#: vnojsite/lib/python3.14/site-packages/click/_termui_impl.py:740
+#, python-brace-format
+msgid "{editor}: Editing failed: {e}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/_winconsole.py:156
+#: venv/lib/python3.14/site-packages/click/_winconsole.py:173
+#: vnojsite/lib/python3.14/site-packages/click/_winconsole.py:156
+#: vnojsite/lib/python3.14/site-packages/click/_winconsole.py:173
+#, python-brace-format
+msgid "Windows error: {error}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:104
+#: vnojsite/lib/python3.14/site-packages/click/core.py:104
+msgid "deprecated"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:1316
+#: vnojsite/lib/python3.14/site-packages/click/core.py:1316
+msgid "Positional arguments"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:1391
+#: vnojsite/lib/python3.14/site-packages/click/core.py:1391
+#, python-brace-format
+msgid "Got unexpected extra argument ({args})"
+msgid_plural "Got unexpected extra arguments ({args})"
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:1407
+#: vnojsite/lib/python3.14/site-packages/click/core.py:1407
+msgid "DeprecationWarning: The command {name!r} is deprecated.{extra_message}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:1594
+#: vnojsite/lib/python3.14/site-packages/click/core.py:1594
+msgid "Aborted!"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:1981
+#: vnojsite/lib/python3.14/site-packages/click/core.py:1981
+msgid "Commands"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:2012
+#: vnojsite/lib/python3.14/site-packages/click/core.py:2012
+msgid "Missing command."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:2547
+#: vnojsite/lib/python3.14/site-packages/click/core.py:2547
+msgid "Value must be an iterable."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:2570
+#: vnojsite/lib/python3.14/site-packages/click/core.py:2570
+#, python-brace-format
+msgid "Takes {nargs} values but 1 was given."
+msgid_plural "Takes {nargs} values but {len} were given."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:2767
+#: vnojsite/lib/python3.14/site-packages/click/core.py:2767
+msgid ""
+"DeprecationWarning: The {param_type} {name!r} is deprecated.{extra_message}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:3246
+#: vnojsite/lib/python3.14/site-packages/click/core.py:3246
+#, python-brace-format
+msgid "Name '{name}' defined twice"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:3262
+#: vnojsite/lib/python3.14/site-packages/click/core.py:3262
+msgid "Boolean option {decl!r} cannot use the same flag for true/false."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:3281
+#: vnojsite/lib/python3.14/site-packages/click/core.py:3281
+msgid "Could not determine name for option with declarations {decls!r}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:3288
+#: vnojsite/lib/python3.14/site-packages/click/core.py:3288
+#, python-brace-format
+msgid ""
+"No options defined but a name was passed ({name}). Did you mean to declare "
+"an argument instead? Did you mean to pass '--{name}'?"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:3368
+#: vnojsite/lib/python3.14/site-packages/click/core.py:3368
+#, python-brace-format
+msgid "env var: {var}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:3371
+#: vnojsite/lib/python3.14/site-packages/click/core.py:3371
+#, python-brace-format
+msgid "default: {default}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:3435
+#: vnojsite/lib/python3.14/site-packages/click/core.py:3435
+msgid "(dynamic)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/core.py:3754
+#: vnojsite/lib/python3.14/site-packages/click/core.py:3754
+#, python-brace-format
+msgid ""
+"Arguments take exactly one parameter declaration, got {length}: {decls}."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/decorators.py:399
+#: vnojsite/lib/python3.14/site-packages/click/decorators.py:399
+msgid "Do you want to continue?"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/decorators.py:400
+#: vnojsite/lib/python3.14/site-packages/click/decorators.py:400
+msgid "Confirm the action without prompting."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/decorators.py:482
+#: vnojsite/lib/python3.14/site-packages/click/decorators.py:482
+#, python-format
+msgid "%(prog)s, version %(version)s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/decorators.py:556
+#: venv/lib/python3.14/site-packages/click/decorators.py:598
+#: vnojsite/lib/python3.14/site-packages/click/decorators.py:556
+#: vnojsite/lib/python3.14/site-packages/click/decorators.py:598
+msgid "Show the version and exit."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/decorators.py:624
+#: vnojsite/lib/python3.14/site-packages/click/decorators.py:624
+msgid "Show this message and exit."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/exceptions.py:29
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:29
+#, python-brace-format
+msgid "Did you mean {possibility}?"
+msgid_plural "(Did you mean one of: {possibilities}?)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/click/exceptions.py:62
+#: venv/lib/python3.14/site-packages/click/exceptions.py:108
+#: venv/lib/python3.14/site-packages/click/termui.py:275
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:62
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:108
+#: vnojsite/lib/python3.14/site-packages/click/termui.py:275
+#, python-brace-format
+msgid "Error: {message}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/exceptions.py:99
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:99
+#, python-brace-format
+msgid "Try '{command} {option}' for help."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/exceptions.py:152
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:152
+#, python-brace-format
+msgid "Invalid value: {message}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/exceptions.py:154
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:154
+#, python-brace-format
+msgid "Invalid value for {param_hint}: {message}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/exceptions.py:214
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:214
+msgid "Missing argument"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/exceptions.py:216
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:216
+msgid "Missing option"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/exceptions.py:218
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:218
+msgid "Missing parameter"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/exceptions.py:220
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:220
+#, python-brace-format
+msgid "Missing {param_type}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/exceptions.py:227
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:227
+#, python-brace-format
+msgid "Missing parameter: {param_name}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/exceptions.py:249
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:249
+msgid "No such option {name!r}."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/exceptions.py:285
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:285
+msgid "No such command {name!r}."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/exceptions.py:350
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:350
+msgid "unknown error"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/exceptions.py:357
+#: vnojsite/lib/python3.14/site-packages/click/exceptions.py:357
+msgid "Could not open file {filename!r}: {message}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/formatting.py:167
+#: vnojsite/lib/python3.14/site-packages/click/formatting.py:167
+msgid "Usage:"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/parser.py:145
+#: vnojsite/lib/python3.14/site-packages/click/parser.py:145
+#, python-brace-format
+msgid "Invalid start character for option ({option})"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/parser.py:203
+#: vnojsite/lib/python3.14/site-packages/click/parser.py:203
+msgid "Argument {name!r} takes {nargs} values."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/parser.py:382
+#: vnojsite/lib/python3.14/site-packages/click/parser.py:382
+msgid "Option {name!r} does not take a value."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/parser.py:445
+#: vnojsite/lib/python3.14/site-packages/click/parser.py:445
+msgid "Option {name!r} requires an argument."
+msgid_plural "Option {name!r} requires {nargs} arguments."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/click/shell_completion.py:417
+#: vnojsite/lib/python3.14/site-packages/click/shell_completion.py:417
+msgid "Shell completion is not supported for Bash versions older than 4.4."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/shell_completion.py:424
+#: vnojsite/lib/python3.14/site-packages/click/shell_completion.py:424
+msgid "Couldn't detect Bash version, shell completion is not supported."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/termui.py:256
+#: vnojsite/lib/python3.14/site-packages/click/termui.py:256
+msgid "Repeat for confirmation"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/termui.py:286
+#: vnojsite/lib/python3.14/site-packages/click/termui.py:286
+msgid "Error: The two entered values do not match."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/termui.py:340
+#: vnojsite/lib/python3.14/site-packages/click/termui.py:340
+msgid "Error: invalid input"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/termui.py:638
+#: vnojsite/lib/python3.14/site-packages/click/termui.py:638
+msgid "Unknown color {colour!r}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/termui.py:1003
+#: vnojsite/lib/python3.14/site-packages/click/termui.py:1003
+msgid "Press any key to continue..."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:439
+#: vnojsite/lib/python3.14/site-packages/click/types.py:439
+#, python-brace-format
+msgid ""
+"Choose from:\n"
+"\t{choices}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:476
+#: vnojsite/lib/python3.14/site-packages/click/types.py:476
+msgid "{value!r} is not {choice}."
+msgid_plural "{value!r} is not one of {choices}."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:482
+#: vnojsite/lib/python3.14/site-packages/click/types.py:482
+#, python-brace-format
+msgid "Choice({choices})"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:570
+#: vnojsite/lib/python3.14/site-packages/click/types.py:570
+msgid "{value!r} does not match the format {format}."
+msgid_plural "{value!r} does not match the formats {formats}."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:594
+#: vnojsite/lib/python3.14/site-packages/click/types.py:594
+msgid "{value!r} is not a valid {number_type}."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:679
+#: vnojsite/lib/python3.14/site-packages/click/types.py:679
+#, python-brace-format
+msgid "{value} is not in the range {range}."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:866
+#: vnojsite/lib/python3.14/site-packages/click/types.py:866
+msgid "{value!r} is not a valid boolean. Recognized values: {states}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:892
+#: vnojsite/lib/python3.14/site-packages/click/types.py:892
+msgid "{value!r} is not a valid UUID."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:1116
+#: vnojsite/lib/python3.14/site-packages/click/types.py:1116
+msgid "file"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:1118
+#: vnojsite/lib/python3.14/site-packages/click/types.py:1118
+msgid "directory"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:1120
+#: vnojsite/lib/python3.14/site-packages/click/types.py:1120
+msgid "path"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:1167
+#: vnojsite/lib/python3.14/site-packages/click/types.py:1167
+msgid "{name} {filename!r} does not exist."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:1176
+#: vnojsite/lib/python3.14/site-packages/click/types.py:1176
+msgid "{name} {filename!r} is a file."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:1184
+#: vnojsite/lib/python3.14/site-packages/click/types.py:1184
+msgid "{name} {filename!r} is a directory."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:1193
+#: vnojsite/lib/python3.14/site-packages/click/types.py:1193
+msgid "{name} {filename!r} is not readable."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:1202
+#: vnojsite/lib/python3.14/site-packages/click/types.py:1202
+msgid "{name} {filename!r} is not writable."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:1211
+#: vnojsite/lib/python3.14/site-packages/click/types.py:1211
+msgid "{name} {filename!r} is not executable."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/click/types.py:1283
+#: vnojsite/lib/python3.14/site-packages/click/types.py:1283
+#, python-brace-format
+msgid "{len_type} values are required, but {len_value} was given."
+msgid_plural "{len_type} values are required, but {len_value} were given."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/click/utils.py:362
+#: venv/lib/python3.14/site-packages/click/utils.py:389
+#: vnojsite/lib/python3.14/site-packages/click/utils.py:362
+#: vnojsite/lib/python3.14/site-packages/click/utils.py:389
+#, python-brace-format
+msgid "Unknown standard stream '{name}'"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/contrib/messages/apps.py:16
+#: vnojsite/lib/python3.14/site-packages/django/contrib/messages/apps.py:16
+msgid "Messages"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/contrib/sitemaps/apps.py:8
+#: vnojsite/lib/python3.14/site-packages/django/contrib/sitemaps/apps.py:8
+msgid "Site Maps"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/contrib/staticfiles/apps.py:9
+#: vnojsite/lib/python3.14/site-packages/django/contrib/staticfiles/apps.py:9
+msgid "Static Files"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/contrib/syndication/apps.py:7
+#: vnojsite/lib/python3.14/site-packages/django/contrib/syndication/apps.py:7
+msgid "Syndication"
+msgstr ""
+
+#. Translators: String used to replace omitted page numbers in elided page
+#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
+#: venv/lib/python3.14/site-packages/django/core/paginator.py:33
+#: vnojsite/lib/python3.14/site-packages/django/core/paginator.py:33
+msgid "…"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/paginator.py:35
+#: vnojsite/lib/python3.14/site-packages/django/core/paginator.py:35
+msgid "That page number is not an integer"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/paginator.py:36
+#: vnojsite/lib/python3.14/site-packages/django/core/paginator.py:36
+msgid "That page number is less than 1"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/paginator.py:37
+#: vnojsite/lib/python3.14/site-packages/django/core/paginator.py:37
+msgid "That page contains no results"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:22
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:22
+msgid "Enter a valid value."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:70
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:70
+msgid "Enter a valid domain name."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:153
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:775
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:153
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:775
+msgid "Enter a valid URL."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:200
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:200
+msgid "Enter a valid integer."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:211
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:211
+msgid "Enter a valid email address."
+msgstr ""
+
+#. Translators: "letters" means latin letters: a-z and A-Z.
+#: venv/lib/python3.14/site-packages/django/core/validators.py:289
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:289
+msgid ""
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:297
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:297
+msgid ""
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:309
+#: venv/lib/python3.14/site-packages/django/core/validators.py:318
+#: venv/lib/python3.14/site-packages/django/core/validators.py:332
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2299
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:309
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:318
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:332
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2299
+#, python-format
+msgid "Enter a valid %(protocol)s address."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:311
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:311
+msgid "IPv4"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:320
+#: venv/lib/python3.14/site-packages/django/utils/ipv6.py:43
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:320
+#: vnojsite/lib/python3.14/site-packages/django/utils/ipv6.py:43
+msgid "IPv6"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:334
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:334
+msgid "IPv4 or IPv6"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:375
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:375
+msgid "Enter only digits separated by commas."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:381
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:381
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:416
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:416
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:425
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:425
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:434
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:434
+#, python-format
+msgid "Ensure this value is a multiple of step size %(limit_value)s."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:441
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:441
+#, python-format
+msgid ""
+"Ensure this value is a multiple of step size %(limit_value)s, starting from "
+"%(offset)s, e.g. %(offset)s, %(valid_value1)s, %(valid_value2)s, and so on."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:473
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:473
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:491
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:491
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:514
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:366
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:405
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:514
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:366
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:405
+msgid "Enter a number."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:516
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:516
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:521
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:521
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:526
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:526
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:597
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:597
+#, python-format
+msgid ""
+"File extension “%(extension)s” is not allowed. Allowed extensions are: "
+"%(allowed_extensions)s."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/core/validators.py:659
+#: vnojsite/lib/python3.14/site-packages/django/core/validators.py:659
+msgid "Null characters are not allowed."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/base.py:1668
+#: vnojsite/lib/python3.14/site-packages/django/db/models/base.py:1668
+#, python-format
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/constraints.py:22
+#: vnojsite/lib/python3.14/site-packages/django/db/models/constraints.py:22
+#, python-format
+msgid "Constraint “%(name)s” is violated."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:94
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:94
+msgid "- Select an option -"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:143
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:143
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:144
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:144
+msgid "This field cannot be null."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:145
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:145
+msgid "This field cannot be blank."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:146
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:146
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr ""
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or
+#. 'month'. Eg: "Title must be unique for pub_date year"
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:150
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:150
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:187
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:187
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1203
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1203
+#, python-format
+msgid "“%(value)s” value must be either True or False."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1204
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1204
+#, python-format
+msgid "“%(value)s” value must be either True, False, or None."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1206
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1206
+msgid "Boolean (Either True or False)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1256
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1256
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1258
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1258
+msgid "String (unlimited)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1367
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1367
+msgid "Comma-separated integers"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1468
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1468
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1472
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1607
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1472
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1607
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1476
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1476
+msgid "Date (without time)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1603
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1603
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD "
+"HH:MM[:ss[.uuuuuu]][TZ] format."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1611
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1611
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1616
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1616
+msgid "Date (with time)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1743
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1743
+#, python-format
+msgid "“%(value)s” value must be a decimal number."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1745
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1745
+msgid "Decimal number"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1947
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1947
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in [DD] "
+"[[HH:]MM:]ss[.uuuuuu] format."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1951
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1951
+msgid "Duration"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1999
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:1999
+msgid "Email address"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2024
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2024
+msgid "File path"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2102
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2102
+#, python-format
+msgid "“%(value)s” value must be a float."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2104
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2104
+msgid "Floating point number"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2144
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2144
+#, python-format
+msgid "“%(value)s” value must be an integer."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2146
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2146
+msgid "Integer"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2242
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2242
+msgid "Big (8 byte) integer"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2259
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2259
+msgid "Small integer"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2267
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2267
+msgid "IPv4 address"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2298
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2298
+msgid "IP address"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2389
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2390
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2389
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2390
+#, python-format
+msgid "“%(value)s” value must be either None, True or False."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2392
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2392
+msgid "Boolean (Either True, False or None)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2443
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2443
+msgid "Positive big integer"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2458
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2458
+msgid "Positive integer"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2473
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2473
+msgid "Positive small integer"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2489
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2489
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2525
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2525
+msgid "Text"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2605
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2605
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2609
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2609
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2745
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2745
+msgid "Raw binary data"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2748
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2748
+#, python-format
+msgid "“%(value)s” is not a valid binary value."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2821
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2821
+#, python-format
+msgid "“%(value)s” is not a valid UUID."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2823
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/__init__.py:2823
+msgid "Universally unique identifier"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/files.py:247
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/files.py:247
+msgid "File"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/files.py:423
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/files.py:423
+msgid "Image"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/json.py:26
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/json.py:26
+msgid "A JSON object"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/json.py:28
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/json.py:28
+msgid "Value must be valid JSON."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/related.py:991
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/related.py:991
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r is not a valid choice."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/related.py:994
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/related.py:994
+msgid "Foreign Key (type determined by related field)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/related.py:1369
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/related.py:1369
+msgid "One-to-one relationship"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/related.py:1426
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/related.py:1426
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/related.py:1428
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/related.py:1428
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/db/models/fields/related.py:1476
+#: vnojsite/lib/python3.14/site-packages/django/db/models/fields/related.py:1476
+msgid "Many-to-many relationship"
+msgstr ""
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to
+#. the label
+#: venv/lib/python3.14/site-packages/django/forms/boundfield.py:188
+#: vnojsite/lib/python3.14/site-packages/django/forms/boundfield.py:188
+msgid ":?.!"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:93
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:93
+msgid "This field is required."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:315
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:315
+msgid "Enter a whole number."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:486
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:1246
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:486
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:1246
+msgid "Enter a valid date."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:509
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:1247
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:509
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:1247
+msgid "Enter a valid time."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:536
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:536
+msgid "Enter a valid date/time."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:570
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:570
+msgid "Enter a valid duration."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:571
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:571
+#, python-brace-format
+msgid "The number of days must be between {min_days} and {max_days}."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:640
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:640
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:641
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:641
+msgid "No file was submitted."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:642
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:642
+msgid "The submitted file is empty."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:644
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:644
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:649
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:649
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:717
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:717
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:864
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:951
+#: venv/lib/python3.14/site-packages/django/forms/models.py:1625
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:864
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:951
+#: vnojsite/lib/python3.14/site-packages/django/forms/models.py:1625
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:953
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:1073
+#: venv/lib/python3.14/site-packages/django/forms/models.py:1623
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:953
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:1073
+#: vnojsite/lib/python3.14/site-packages/django/forms/models.py:1623
+msgid "Enter a list of values."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:1074
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:1074
+msgid "Enter a complete value."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:1318
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:1318
+msgid "Enter a valid UUID."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/fields.py:1348
+#: vnojsite/lib/python3.14/site-packages/django/forms/fields.py:1348
+msgid "Enter a valid JSON."
+msgstr ""
+
+#. Translators: This is the default suffix added to form field labels
+#: venv/lib/python3.14/site-packages/django/forms/forms.py:97
+#: vnojsite/lib/python3.14/site-packages/django/forms/forms.py:97
+msgid ":"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/forms.py:239
+#: vnojsite/lib/python3.14/site-packages/django/forms/forms.py:239
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/formsets.py:61
+#: vnojsite/lib/python3.14/site-packages/django/forms/formsets.py:61
+#, python-format
+msgid ""
+"ManagementForm data is missing or has been tampered with. Missing fields: "
+"%(field_names)s. You may need to file a bug report if the issue persists."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/formsets.py:65
+#: vnojsite/lib/python3.14/site-packages/django/forms/formsets.py:65
+#, python-format
+msgid "Please submit at most %(num)d form."
+msgid_plural "Please submit at most %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/forms/formsets.py:70
+#: vnojsite/lib/python3.14/site-packages/django/forms/formsets.py:70
+#, python-format
+msgid "Please submit at least %(num)d form."
+msgid_plural "Please submit at least %(num)d forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/forms/formsets.py:484
+#: venv/lib/python3.14/site-packages/django/forms/formsets.py:491
+#: vnojsite/lib/python3.14/site-packages/django/forms/formsets.py:484
+#: vnojsite/lib/python3.14/site-packages/django/forms/formsets.py:491
+msgid "Order"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/models.py:926
+#: vnojsite/lib/python3.14/site-packages/django/forms/models.py:926
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/models.py:931
+#: vnojsite/lib/python3.14/site-packages/django/forms/models.py:931
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/models.py:938
+#: vnojsite/lib/python3.14/site-packages/django/forms/models.py:938
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/models.py:947
+#: vnojsite/lib/python3.14/site-packages/django/forms/models.py:947
+msgid "Please correct the duplicate values below."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/models.py:1385
+#: vnojsite/lib/python3.14/site-packages/django/forms/models.py:1385
+msgid "The inline value did not match the parent instance."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/models.py:1476
+#: vnojsite/lib/python3.14/site-packages/django/forms/models.py:1476
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/models.py:1627
+#: vnojsite/lib/python3.14/site-packages/django/forms/models.py:1627
+#, python-format
+msgid "“%(pk)s” is not a valid value."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/utils.py:229
+#: vnojsite/lib/python3.14/site-packages/django/forms/utils.py:229
+#, python-format
+msgid ""
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/widgets.py:574
+#: vnojsite/lib/python3.14/site-packages/django/forms/widgets.py:574
+msgid "Currently"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/widgets.py:915
+#: vnojsite/lib/python3.14/site-packages/django/forms/widgets.py:915
+msgid "Yes"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/forms/widgets.py:916
+#: vnojsite/lib/python3.14/site-packages/django/forms/widgets.py:916
+msgid "No"
+msgstr ""
+
+#. Translators: %s is the name of a model, e.g. "No City matches the
+#. given query."
+#: venv/lib/python3.14/site-packages/django/shortcuts.py:105
+#: venv/lib/python3.14/site-packages/django/shortcuts.py:125
+#: venv/lib/python3.14/site-packages/django/shortcuts.py:149
+#: venv/lib/python3.14/site-packages/django/shortcuts.py:168
+#: vnojsite/lib/python3.14/site-packages/django/shortcuts.py:105
+#: vnojsite/lib/python3.14/site-packages/django/shortcuts.py:125
+#: vnojsite/lib/python3.14/site-packages/django/shortcuts.py:149
+#: vnojsite/lib/python3.14/site-packages/django/shortcuts.py:168
+#, python-format
+msgid "No %s matches the given query."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/tasks/base.py:35
+#: vnojsite/lib/python3.14/site-packages/django/tasks/base.py:35
+msgctxt "Task"
+msgid "Ready"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/tasks/base.py:37
+#: vnojsite/lib/python3.14/site-packages/django/tasks/base.py:37
+msgctxt "Task"
+msgid "Running"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/tasks/base.py:39
+#: vnojsite/lib/python3.14/site-packages/django/tasks/base.py:39
+msgctxt "Task"
+msgid "Failed"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/tasks/base.py:41
+#: vnojsite/lib/python3.14/site-packages/django/tasks/base.py:41
+msgctxt "Task"
+msgid "Successful"
+msgstr ""
+
+#. Translators: Please do not add spaces around commas.
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:879
+#: vnojsite/lib/python3.14/site-packages/django/template/defaultfilters.py:879
+msgid "yes,no,maybe"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:909
+#: venv/lib/python3.14/site-packages/django/template/defaultfilters.py:926
+#: vnojsite/lib/python3.14/site-packages/django/template/defaultfilters.py:909
+#: vnojsite/lib/python3.14/site-packages/django/template/defaultfilters.py:926
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dateformat.py:74
+#: vnojsite/lib/python3.14/site-packages/django/utils/dateformat.py:74
+msgid "p.m."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dateformat.py:75
+#: vnojsite/lib/python3.14/site-packages/django/utils/dateformat.py:75
+msgid "a.m."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dateformat.py:80
+#: vnojsite/lib/python3.14/site-packages/django/utils/dateformat.py:80
+msgid "PM"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dateformat.py:81
+#: vnojsite/lib/python3.14/site-packages/django/utils/dateformat.py:81
+msgid "AM"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dateformat.py:153
+#: vnojsite/lib/python3.14/site-packages/django/utils/dateformat.py:153
+msgid "midnight"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dateformat.py:155
+#: vnojsite/lib/python3.14/site-packages/django/utils/dateformat.py:155
+msgid "noon"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:17
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:17
+msgid "Tue"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:19
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:19
+msgid "Thu"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:25
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:25
+msgid "January"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:26
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:26
+msgid "February"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:27
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:27
+msgid "March"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:28
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:28
+msgid "April"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:29
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:29
+msgid "May"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:30
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:30
+msgid "June"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:31
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:31
+msgid "July"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:32
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:32
+msgid "August"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:33
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:33
+msgid "September"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:34
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:34
+msgid "October"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:35
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:35
+msgid "November"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:36
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:36
+msgid "December"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:39
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:39
+msgid "jan"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:40
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:40
+msgid "feb"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:41
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:41
+msgid "mar"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:42
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:42
+msgid "apr"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:43
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:43
+msgid "may"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:44
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:44
+msgid "jun"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:45
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:45
+msgid "jul"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:46
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:46
+msgid "aug"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:47
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:47
+msgid "sep"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:48
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:48
+msgid "oct"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:49
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:49
+msgid "nov"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:50
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:50
+msgid "dec"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:53
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:53
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:54
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:54
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:55
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:55
+msgctxt "abbrev. month"
+msgid "March"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:56
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:56
+msgctxt "abbrev. month"
+msgid "April"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:57
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:57
+msgctxt "abbrev. month"
+msgid "May"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:58
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:58
+msgctxt "abbrev. month"
+msgid "June"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:59
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:59
+msgctxt "abbrev. month"
+msgid "July"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:60
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:60
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:61
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:61
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:62
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:62
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:63
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:63
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:64
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:64
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:67
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:67
+msgctxt "alt. month"
+msgid "January"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:68
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:68
+msgctxt "alt. month"
+msgid "February"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:69
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:69
+msgctxt "alt. month"
+msgid "March"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:70
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:70
+msgctxt "alt. month"
+msgid "April"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:71
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:71
+msgctxt "alt. month"
+msgid "May"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:72
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:72
+msgctxt "alt. month"
+msgid "June"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:73
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:73
+msgctxt "alt. month"
+msgid "July"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:74
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:74
+msgctxt "alt. month"
+msgid "August"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:75
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:75
+msgctxt "alt. month"
+msgid "September"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:76
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:76
+msgctxt "alt. month"
+msgid "October"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:77
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:77
+msgctxt "alt. month"
+msgid "November"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/dates.py:78
+#: vnojsite/lib/python3.14/site-packages/django/utils/dates.py:78
+msgctxt "alt. month"
+msgid "December"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/ipv6.py:20
+#: vnojsite/lib/python3.14/site-packages/django/utils/ipv6.py:20
+msgid "This is not a valid IPv6 address."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/text.py:76
+#: vnojsite/lib/python3.14/site-packages/django/utils/text.py:76
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s…"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/utils/timesince.py:8
+#: vnojsite/lib/python3.14/site-packages/django/utils/timesince.py:8
+#, python-format
+msgid "%(num)d year"
+msgid_plural "%(num)d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/utils/timesince.py:9
+#: vnojsite/lib/python3.14/site-packages/django/utils/timesince.py:9
+#, python-format
+msgid "%(num)d month"
+msgid_plural "%(num)d months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/utils/timesince.py:10
+#: vnojsite/lib/python3.14/site-packages/django/utils/timesince.py:10
+#, python-format
+msgid "%(num)d week"
+msgid_plural "%(num)d weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/utils/timesince.py:11
+#: vnojsite/lib/python3.14/site-packages/django/utils/timesince.py:11
+#, python-format
+msgid "%(num)d day"
+msgid_plural "%(num)d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/utils/timesince.py:12
+#: vnojsite/lib/python3.14/site-packages/django/utils/timesince.py:12
+#, python-format
+msgid "%(num)d hour"
+msgid_plural "%(num)d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/utils/timesince.py:13
+#: vnojsite/lib/python3.14/site-packages/django/utils/timesince.py:13
+#, python-format
+msgid "%(num)d minute"
+msgid_plural "%(num)d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:30
+#: vnojsite/lib/python3.14/site-packages/django/views/csrf.py:30
+msgid "Forbidden"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:31
+#: vnojsite/lib/python3.14/site-packages/django/views/csrf.py:31
+msgid "CSRF verification failed. Request aborted."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:35
+#: vnojsite/lib/python3.14/site-packages/django/views/csrf.py:35
+msgid ""
+"You are seeing this message because this HTTPS site requires a “Referer "
+"header” to be sent by your web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:41
+#: vnojsite/lib/python3.14/site-packages/django/views/csrf.py:41
+msgid ""
+"If you have configured your browser to disable “Referer” headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for “same-"
+"origin” requests."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:46
+#: vnojsite/lib/python3.14/site-packages/django/views/csrf.py:46
+msgid ""
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the “Referrer-Policy: no-referrer” header, please remove them. The "
+"CSRF protection requires the “Referer” header to do strict referer checking. "
+"If you’re concerned about privacy, use alternatives like <a "
+"rel=\"noreferrer\" …> for links to third-party sites."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:55
+#: vnojsite/lib/python3.14/site-packages/django/views/csrf.py:55
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:61
+#: vnojsite/lib/python3.14/site-packages/django/views/csrf.py:61
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for “same-origin” requests."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/csrf.py:67
+#: vnojsite/lib/python3.14/site-packages/django/views/csrf.py:67
+msgid "More information is available with DEBUG=True."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:44
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/dates.py:44
+msgid "No year specified"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:64
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:115
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:214
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/dates.py:64
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/dates.py:115
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/dates.py:214
+msgid "Date out of range"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:94
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/dates.py:94
+msgid "No month specified"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:147
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/dates.py:147
+msgid "No day specified"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:194
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/dates.py:194
+msgid "No week specified"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:353
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:384
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/dates.py:353
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/dates.py:384
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:680
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/dates.py:680
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because "
+"%(class_name)s.allow_future is False."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/dates.py:720
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/dates.py:720
+#, python-format
+msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/detail.py:56
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/detail.py:56
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/list.py:70
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/list.py:70
+msgid "Page is not “last”, nor can it be converted to an int."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/list.py:77
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/list.py:77
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/generic/list.py:173
+#: vnojsite/lib/python3.14/site-packages/django/views/generic/list.py:173
+#, python-format
+msgid "Empty list and “%(class_name)s.allow_empty” is False."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/static.py:49
+#: vnojsite/lib/python3.14/site-packages/django/views/static.py:49
+msgid "Directory indexes are not allowed here."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/static.py:51
+#: vnojsite/lib/python3.14/site-packages/django/views/static.py:51
+#, python-format
+msgid "“%(path)s” does not exist"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/static.py:68
+#: venv/lib/python3.14/site-packages/django/views/templates/directory_index.html:9
+#: venv/lib/python3.14/site-packages/django/views/templates/directory_index.html:12
+#: vnojsite/lib/python3.14/site-packages/django/views/static.py:68
+#: vnojsite/lib/python3.14/site-packages/django/views/templates/directory_index.html:9
+#: vnojsite/lib/python3.14/site-packages/django/views/templates/directory_index.html:12
+#, python-format
+msgid "Index of %(directory)s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:7
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:197
+#: vnojsite/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:7
+#: vnojsite/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:197
+msgid "The install worked successfully! Congratulations!"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:199
+#: vnojsite/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:199
+#, python-format
+msgid ""
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:201
+#: vnojsite/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:201
+#, python-format
+msgid ""
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" "
+"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
+"configured any URLs."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:220
+#: vnojsite/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:220
+msgid "Django Documentation"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:221
+#: vnojsite/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:221
+msgid "Topics, references, &amp; how-to’s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:229
+#: vnojsite/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:229
+msgid "Tutorial: A Polling App"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:230
+#: vnojsite/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:230
+msgid "Get started with Django"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:238
+#: vnojsite/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:238
+msgid "Django Community"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:239
+#: vnojsite/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:239
+msgid "Connect, get help, or contribute"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/jsonfield/fields.py:48
+#: vnojsite/lib/python3.14/site-packages/jsonfield/fields.py:48
+msgid "Enter valid JSON."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/jsonfield/forms.py:15
+#: vnojsite/lib/python3.14/site-packages/jsonfield/forms.py:15
+#, python-format
+msgid "\"%(value)s\" value must be valid JSON."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/kombu/transport/qpid.py:1311
+#: vnojsite/lib/python3.14/site-packages/kombu/transport/qpid.py:1311
+#, python-format
+msgid "Attempting to connect to qpid with SASL mechanism %s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/kombu/transport/qpid.py:1316
+#: vnojsite/lib/python3.14/site-packages/kombu/transport/qpid.py:1316
+#, python-format
+msgid "Connected to qpid with SASL mechanism %s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/kombu/transport/qpid.py:1334
+#: vnojsite/lib/python3.14/site-packages/kombu/transport/qpid.py:1334
+#, python-format
+msgid "Unable to connect to qpid with SASL mechanism %s"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/admin.py:117
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/admin.py:117
+#, python-format
+msgid "Revoked %d access token."
+msgid_plural "Revoked %d access tokens."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/admin.py:217
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/admin.py:217
+#, python-format
+msgid "Revoked %d refresh token."
+msgid_plural "Revoked %d refresh tokens."
+msgstr[0] ""
+msgstr[1] ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/forms.py:70
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/forms.py:70
+msgid ""
+"The client secret is hashed and can no longer be viewed. To rotate it, enter "
+"a new value and copy it before saving; the original secret cannot be "
+"recovered."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/forms.py:80
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/forms.py:80
+msgid ""
+"Copy and store this secret now. Once saved, it will be hashed and cannot be "
+"recovered."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/forms.py:84
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/forms.py:84
+msgid ""
+"This application stores its client secret unhashed, so the value above "
+"remains usable. Entering a new value replaces it."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/forms.py:89
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/forms.py:89
+msgid ""
+"Copy and store this secret now. This application stores the secret unhashed."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/forms.py:127
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/forms.py:127
+msgid ""
+"HS256 signs tokens with the client secret as the HMAC key, so the secret "
+"must be stored unhashed. Uncheck “Hash client secret” and set an unhashed "
+"client secret, or choose a different algorithm."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/forms.py:134
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/forms.py:134
+msgid ""
+"HS256 requires an unhashed client secret. Uncheck this and set an unhashed "
+"client secret, or choose a different algorithm."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:158
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:158
+msgid "Manual"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:159
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:159
+msgid "Dynamic Client Registration"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:160
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:160
+msgid "Client ID Metadata Document"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:166
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:166
+msgid "Confidential"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:167
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:167
+msgid "Public"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:177
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:177
+msgid "Authorization code"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:178
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:178
+msgid "Device Code"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:179
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:179
+msgid "Implicit"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:180
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:180
+msgid "Resource owner password-based"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:181
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:181
+msgid "Client credentials"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:182
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:182
+msgid "OpenID connect hybrid"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:189
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:189
+msgid "No OIDC support"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:190
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:190
+msgid "RSA with SHA-2 256"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:191
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:191
+msgid "HMAC with SHA-2 256"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:198
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:1036
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:198
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:1036
+msgid "client ID"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:211
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:211
+msgid "Allowed URIs list, space separated"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:212
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:212
+msgid "redirect URIs"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:216
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:216
+msgid "Allowed Post Logout URIs list, space separated"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:218
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:218
+msgid "post logout redirect URIs"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:220
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:220
+msgid "client type"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:222
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:222
+msgid "authorization grant type"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:229
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:229
+msgid "Client secret for authentication"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:230
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:230
+msgid "client secret"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:232
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:232
+msgid "hash client secret"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:234
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:234
+msgid "skip authorization"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:236
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:533
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:652
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:787
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:929
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:236
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:533
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:652
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:787
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:929
+msgid "created"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:239
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:239
+msgid "algorithm"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:243
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:243
+msgid "Allowed origins list to enable CORS, space separated"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:245
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:245
+msgid "allowed origins"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:251
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:251
+msgid "How this application was registered (manual, DCR per RFC 7591, or CIMD)"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:252
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:252
+msgid "registration source"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:258
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:258
+msgid "When the cached Client ID Metadata Document should be re-fetched"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:259
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:259
+msgid "CIMD expires at"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:363
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:363
+#, python-brace-format
+msgid "redirect_uris cannot be empty with grant_type {grant_type}"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:385
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:385
+msgid "You must set OIDC_RSA_PRIVATE_KEY to use RSA algorithm"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:396
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:396
+msgid "You cannot use HS256 with public grants or clients"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:401
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:401
+msgid ""
+"You cannot use HS256 without a client secret; it is the HMAC signing key."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:414
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:414
+msgid ""
+"You cannot use HS256 with a hashed client secret. For HS256 the client "
+"secret is the shared signing key and must be stored unhashed so the relying "
+"party can verify the token; set hash_client_secret=False and store an "
+"unhashed client_secret on this application."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:525
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:525
+msgid "code"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:527
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:644
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:773
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:924
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:527
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:644
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:773
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:924
+msgid "application"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:529
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:647
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:926
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:1028
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:529
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:647
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:926
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:1028
+msgid "expires"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:530
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:530
+msgid "redirect URI"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:531
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:648
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:927
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:1026
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:531
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:648
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:927
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:1026
+msgid "scope"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:537
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:537
+msgid "code challenge"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:544
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:544
+msgid "code challenge method"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:547
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:547
+msgid "nonce"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:548
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:548
+msgid "claims"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:550
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:650
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:785
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:550
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:650
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:785
+msgid "resource"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:621
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:621
+msgid "source refresh token"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:623
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:766
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:623
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:766
+msgid "token"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:629
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:770
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:629
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:770
+msgid "token checksum"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:637
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:637
+msgid "ID token"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:781
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:781
+msgid "access token"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:783
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:783
+msgid "token family"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:789
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:789
+msgid "revoked"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:918
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:918
+msgid "JWT Token ID"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:1007
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:1007
+msgid "Authorized"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:1008
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:1008
+msgid "Authorization pending"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:1009
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:1009
+msgid "Expired"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:1010
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:1010
+msgid "Denied"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:1024
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:1024
+msgid "device code"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:1025
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:1025
+msgid "user code"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:1027
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:1027
+msgid "interval"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/models.py:1037
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/models.py:1037
+msgid "last checked"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/oauth2_validators.py:392
+#: venv/lib/python3.14/site-packages/oauth2_provider/oauth2_validators.py:673
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/oauth2_validators.py:392
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/oauth2_validators.py:673
+msgid "The access token is invalid."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/oauth2_validators.py:399
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/oauth2_validators.py:399
+msgid "The access token has expired."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/oauth2_validators.py:406
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/oauth2_validators.py:406
+msgid "The access token is valid but does not have enough scope."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/oauth2_validators.py:657
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/oauth2_validators.py:657
+msgid "The access token is not valid for this resource."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_confirm_delete.html:6
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_confirm_delete.html:6
+msgid "Are you sure to delete the application"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:10
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:10
+msgid "Client id"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:15
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:15
+msgid "Client secret"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:20
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:20
+msgid "Hash client secret"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:21
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:21
+msgid "yes,no"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:25
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:25
+msgid "Client type"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:30
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:30
+msgid "Authorization Grant Type"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:35
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:35
+msgid "Redirect Uris"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:40
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:40
+msgid "Post Logout Redirect Uris"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:45
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:45
+msgid "Allowed Origins"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:51
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_form.html:38
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_detail.html:51
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_form.html:38
+msgid "Go Back"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_form.html:9
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_form.html:9
+msgid "Edit application"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:6
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:6
+msgid "Your applications"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:14
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:14
+msgid "New Application"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:17
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:17
+msgid "No applications defined"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:17
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:17
+msgid "Click here"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:17
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_list.html:17
+msgid "if you want to register a new one"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_registration_form.html:5
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/application_registration_form.html:5
+msgid "Register a new application"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorize.html:8
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorize.html:30
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorize.html:8
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorize.html:30
+msgid "Authorize"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorize.html:17
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorize.html:17
+msgid "Application requires the following permissions"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorized-token-delete.html:6
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorized-token-delete.html:6
+msgid "Are you sure you want to delete this token?"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorized-tokens.html:6
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorized-tokens.html:6
+msgid "Tokens"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorized-tokens.html:11
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorized-tokens.html:11
+msgid "revoke"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorized-tokens.html:19
+#: vnojsite/lib/python3.14/site-packages/oauth2_provider/templates/oauth2_provider/authorized-tokens.html:19
+msgid "There are no authorized tokens yet."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/social_django/templates/social_django/error.html:8
+#: venv/lib/python3.14/site-packages/social_django/templates/social_django/error.html:12
+#: vnojsite/lib/python3.14/site-packages/social_django/templates/social_django/error.html:8
+#: vnojsite/lib/python3.14/site-packages/social_django/templates/social_django/error.html:12
+msgid "Authentication failed"
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/social_django/templates/social_django/error.html:15
+#: vnojsite/lib/python3.14/site-packages/social_django/templates/social_django/error.html:15
+msgid "Return to the sign-in page and start login again."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/social_django/templates/social_django/error.html:17
+#: vnojsite/lib/python3.14/site-packages/social_django/templates/social_django/error.html:17
+msgid "Return to the sign-in page and authenticate with your provider again."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/social_django/templates/social_django/error.html:19
+#: vnojsite/lib/python3.14/site-packages/social_django/templates/social_django/error.html:19
+msgid "Check the information you entered and try again."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/social_django/templates/social_django/error.html:21
+#: vnojsite/lib/python3.14/site-packages/social_django/templates/social_django/error.html:21
+msgid "Please try again later."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/social_django/templates/social_django/error.html:23
+#: vnojsite/lib/python3.14/site-packages/social_django/templates/social_django/error.html:23
+msgid "Check your profile with the authentication provider and try again."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/social_django/templates/social_django/error.html:25
+#: vnojsite/lib/python3.14/site-packages/social_django/templates/social_django/error.html:25
+msgid "Sign in using the account you already have."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/social_django/templates/social_django/error.html:27
+#: vnojsite/lib/python3.14/site-packages/social_django/templates/social_django/error.html:27
+msgid "Please contact the site administrator for help."
+msgstr ""
+
+#: venv/lib/python3.14/site-packages/social_django/templates/social_django/error.html:30
+#: vnojsite/lib/python3.14/site-packages/social_django/templates/social_django/error.html:30
+msgid ""
+"Your session may have expired, or cookies may be unavailable. Check that "
+"cookies are enabled for this site and restart login in the same browser and "
+"container."
 msgstr ""
