@@ -1,15 +1,15 @@
 name: 'analyze'
 on:
   pull_request:
-    branches: [main, release, 'releases/**']
+    branches: [main]
   push:
-    branches: [main, release]
+    branches: [main]
   schedule:
     - cron: '43 2 * * 1'
   workflow_dispatch:
 
 concurrency:
-  group: codeql-${{ github.head_ref || github.run_id }}
+  group: analyze-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
