@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: checks-${{ github.head_ref || github.run_id }}
+  group: ci-check-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
