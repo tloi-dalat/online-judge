@@ -413,9 +413,9 @@ a.close {
 
 .sidebox h3 {
     margin: 0 -5px;
-    background: $color_primary75;
+    background: $color_primary67;
+    color: $color_text_sidebox;
     border-radius: $widget_border_radius $widget_border_radius 0 0;
-    color: $color_primary0;
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 7px;
@@ -423,7 +423,7 @@ a.close {
 }
 
 .sidebox h3 .fa {
-    color: $color_primary0;
+    color: $color_text_sidebox;
     float: right;
     margin: 0.2em 0.4em 0 0;
 }
