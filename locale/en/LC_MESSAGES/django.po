@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-19 18:24+0000\n"
+"POT-Creation-Date: 2026-10-24 08:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -992,6 +992,7 @@ msgid "Append main solution to tutorial"
 msgstr ""
 
 #: judge/forms.py:295
+#, python-brace-format
 msgid "Please share the problem to user <strong>{}</strong> first"
 msgstr ""
 
@@ -1452,7 +1453,7 @@ msgid "terms"
 msgstr ""
 
 #: judge/models/contest.py:94 judge/models/problem.py:690
-#: judge/views/organization.py:1162
+#: judge/views/organization.py:1164
 msgid "problems"
 msgstr ""
 
@@ -4577,8 +4578,8 @@ msgid "Creating new blog post"
 msgstr ""
 
 #: judge/views/blog.py:380 judge/views/contests.py:1730
-#: judge/views/organization.py:470 judge/views/organization.py:995
-#: judge/views/organization.py:1019 judge/views/problem.py:993
+#: judge/views/organization.py:472 judge/views/organization.py:997
+#: judge/views/organization.py:1021 judge/views/problem.py:993
 #: judge/views/tag.py:182
 msgid "Created on site"
 msgstr ""
@@ -4600,7 +4601,7 @@ msgid "Updating blog post"
 msgstr ""
 
 #: judge/views/blog.py:427 judge/views/comment.py:142
-#: judge/views/contests.py:1800 judge/views/organization.py:519
+#: judge/views/contests.py:1800 judge/views/organization.py:521
 #: judge/views/problem.py:1177
 msgid "Edited from site"
 msgstr ""
@@ -5108,183 +5109,183 @@ msgstr ""
 msgid "Join request detail"
 msgstr ""
 
-#: judge/views/organization.py:380 judge/views/organization.py:381
+#: judge/views/organization.py:382 judge/views/organization.py:383
 #, python-format
 msgid "Managing join requests for %s"
 msgstr ""
 
-#: judge/views/organization.py:415
+#: judge/views/organization.py:417
 #, python-format
 msgid "Your organization can only receive %d more member."
 msgid_plural "Your organization can only receive %d more members."
 msgstr[0] ""
 msgstr[1] ""
 
-#: judge/views/organization.py:417
+#: judge/views/organization.py:419
 #, python-format
 msgid "You cannot approve %d user."
 msgid_plural "You cannot approve %d users."
 msgstr[0] ""
 msgstr[1] ""
 
-#: judge/views/organization.py:430
+#: judge/views/organization.py:432
 #, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
 msgstr[0] ""
 msgstr[1] ""
 
-#: judge/views/organization.py:431
+#: judge/views/organization.py:433
 #, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
 msgstr[0] ""
 msgstr[1] ""
 
-#: judge/views/organization.py:461 templates/organization/list-tabs.html:12
+#: judge/views/organization.py:463 templates/organization/list-tabs.html:12
 msgid "Create new organization"
 msgstr ""
 
-#: judge/views/organization.py:488 judge/views/organization.py:492
+#: judge/views/organization.py:490 judge/views/organization.py:494
 msgid "Can't create organization"
 msgstr ""
 
-#: judge/views/organization.py:493
+#: judge/views/organization.py:495
 msgid "You are not allowed to create new organizations."
 msgstr ""
 
-#: judge/views/organization.py:502
+#: judge/views/organization.py:504
 #, python-format
 msgid "Editing %s"
 msgstr ""
 
-#: judge/views/organization.py:546
+#: judge/views/organization.py:548
 #, python-format
 msgid "Restoring archived problems for %s..."
 msgstr ""
 
-#: judge/views/organization.py:568
+#: judge/views/organization.py:570
 #, python-format
 msgid "Tags of %s"
 msgstr ""
 
-#: judge/views/organization.py:595 judge/views/organization.py:615
+#: judge/views/organization.py:597 judge/views/organization.py:617
 msgid "A tag with this name already exists."
 msgstr ""
 
-#: judge/views/organization.py:636 judge/views/organization.py:640
-#: judge/views/organization.py:645
+#: judge/views/organization.py:638 judge/views/organization.py:642
+#: judge/views/organization.py:647
 msgid "Can't kick user"
 msgstr ""
 
-#: judge/views/organization.py:637
+#: judge/views/organization.py:639
 msgid "The user you are trying to kick does not exist!"
 msgstr ""
 
-#: judge/views/organization.py:641
+#: judge/views/organization.py:643
 #, python-format
 msgid "The user you are trying to kick is not in organization: %s"
 msgstr ""
 
-#: judge/views/organization.py:646
+#: judge/views/organization.py:648
 #, python-format
 msgid "The user you are trying to kick is an admin of organization: %s."
 msgstr ""
 
-#: judge/views/organization.py:825
+#: judge/views/organization.py:827
 msgid "No such member"
 msgstr ""
 
-#: judge/views/organization.py:826
+#: judge/views/organization.py:828
 #, python-format
 msgid "Could not find a member with the username \"%s\" in this organization."
 msgstr ""
 
-#: judge/views/organization.py:843
+#: judge/views/organization.py:845
 msgid "Untagged"
 msgstr ""
 
-#: judge/views/organization.py:879
+#: judge/views/organization.py:881
 msgid "No problems selected for deletion."
 msgstr ""
 
-#: judge/views/organization.py:883
+#: judge/views/organization.py:885
 #, python-format
 msgid "Cannot delete more than %d problems at once."
 msgstr ""
 
-#: judge/views/organization.py:897
+#: judge/views/organization.py:899
 #, python-format
 msgid "%d problem was skipped because you are not its author."
 msgid_plural "%d problems were skipped because you are not their author."
 msgstr[0] ""
 msgstr[1] ""
 
-#: judge/views/organization.py:908
+#: judge/views/organization.py:910
 msgid "Bulk marked as deleted"
 msgstr ""
 
-#: judge/views/organization.py:912
+#: judge/views/organization.py:914
 #, python-format
 msgid "Successfully deleted %d problem."
 msgid_plural "Successfully deleted %d problems."
 msgstr[0] ""
 msgstr[1] ""
 
-#: judge/views/organization.py:917
+#: judge/views/organization.py:919
 msgid "No valid problems could be deleted."
 msgstr ""
 
-#: judge/views/organization.py:1060
+#: judge/views/organization.py:1062
 #, python-format
 msgid "Organization cost - %s"
 msgstr ""
 
-#: judge/views/organization.py:1143 templates/organization/usage.html:235
+#: judge/views/organization.py:1145 templates/organization/usage.html:235
 #: templates/organization/usage.html:236 templates/organization/usage.html:237
 #: templates/organization/usage.html:238
 #, python-format
 msgid "Last submission %(months)d+ months ago"
 msgstr ""
 
-#: judge/views/organization.py:1144
+#: judge/views/organization.py:1146
 #, python-format
 msgid "Last submission %(from)d-%(to)d months ago"
 msgstr ""
 
-#: judge/views/organization.py:1145
+#: judge/views/organization.py:1147
 #, python-format
 msgid "Last submission < %(months)d months ago"
 msgstr ""
 
-#: judge/views/organization.py:1147 templates/contest/moss.html:61
+#: judge/views/organization.py:1149 templates/contest/moss.html:61
 #: templates/organization/usage.html:239
 msgid "No submissions"
 msgstr ""
 
-#: judge/views/organization.py:1184
+#: judge/views/organization.py:1186
 msgid "Current month"
 msgstr ""
 
-#: judge/views/organization.py:1188
+#: judge/views/organization.py:1190
 msgid "Credit usage (hour)"
 msgstr ""
 
-#: judge/views/organization.py:1191
+#: judge/views/organization.py:1193
 msgid "Cost (thousand vnd)"
 msgstr ""
 
-#: judge/views/organization.py:1227
+#: judge/views/organization.py:1229
 #, python-format
 msgid "Archived problems - %s"
 msgstr ""
 
-#: judge/views/organization.py:1272
+#: judge/views/organization.py:1274
 #, python-format
 msgid "%s has been restored from the archive."
 msgstr ""
 
-#: judge/views/organization.py:1274
+#: judge/views/organization.py:1276
 #, python-format
 msgid "Could not restore %s from the archive. Please try again later."
 msgstr ""
