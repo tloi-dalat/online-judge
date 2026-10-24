@@ -178,7 +178,10 @@ def make_batch(batch, cases, statuses=None):
     return result
 
 
-TestCase = namedtuple('TestCase', 'id status batch num_combined')
+class TestCase(namedtuple('TestCase', 'id status batch num_combined')):
+    @property
+    def result_class(self):
+        return Submission.result_class_from_code(self.status)
 
 
 def get_statuses(batch, cases):
