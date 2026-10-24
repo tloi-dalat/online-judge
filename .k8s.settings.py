@@ -252,6 +252,7 @@ MOSS_API_KEY = _env('MOSS_API_KEY')
 
 # DISCORD_WEBHOOK_<EVENT> sets DISCORD_WEBHOOK[<event>]; unset turns that notification off.
 DISCORD_WEBHOOK = {event: _env('DISCORD_WEBHOOK_' + event.upper()) for event in _DISCORD_EVENTS}
+DISCORD_WEBHOOK_PREFIX = _env('DISCORD_WEBHOOK_PREFIX', '')
 if DISCORD_WEBHOOK['on_error']:
     LOGGING['handlers']['discord_webhook'] = {
         'level': 'ERROR', 'class': 'dmoj.throttle_discord_webhook.ThrottledDiscordWebhookHandler',

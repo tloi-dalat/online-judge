@@ -243,6 +243,7 @@ VNOJ_PROBLEM_ARCHIVE_SERVICE_TOKEN = None
 
 # Urls of discord webhook.
 # https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
+DISCORD_WEBHOOK_PREFIX = ''
 DISCORD_WEBHOOK = {
     'default': None,  # use this link if the specific link not found
     'on_new_ticket': None,
