@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 08:26+0000\n"
+"POT-Creation-Date: 2026-10-24 21:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,11 +47,11 @@ msgstr ""
 msgid "Teacher"
 msgstr ""
 
-#: dmoj/settings.py:667
+#: dmoj/settings.py:668
 msgid "English"
 msgstr ""
 
-#: dmoj/settings.py:668
+#: dmoj/settings.py:669
 msgid "Vietnamese"
 msgstr ""
 
@@ -992,7 +992,6 @@ msgid "Append main solution to tutorial"
 msgstr ""
 
 #: judge/forms.py:295
-#, python-brace-format
 msgid "Please share the problem to user <strong>{}</strong> first"
 msgstr ""
 
@@ -5649,61 +5648,61 @@ msgstr ""
 msgid "Comparing submission %(first)s with %(second)s"
 msgstr ""
 
-#: judge/views/submission.py:356 judge/views/submission.py:357
+#: judge/views/submission.py:359 judge/views/submission.py:360
 #: templates/problem/problem.html:244 templates/problem/problem.html:253
 msgid "All submissions"
 msgstr ""
 
-#: judge/views/submission.py:577 judge/views/submission.py:582
+#: judge/views/submission.py:580 judge/views/submission.py:585
 msgid "All my submissions"
 msgstr ""
 
-#: judge/views/submission.py:578 judge/views/submission.py:583
+#: judge/views/submission.py:581 judge/views/submission.py:586
 #, python-format
 msgid "All submissions by %s"
 msgstr ""
 
-#: judge/views/submission.py:619 judge/views/submission.py:622
+#: judge/views/submission.py:622 judge/views/submission.py:625
 #, python-format
 msgid "All submissions for %s"
 msgstr ""
 
-#: judge/views/submission.py:693 judge/views/submission.py:700
+#: judge/views/submission.py:696 judge/views/submission.py:703
 #, python-format
 msgid "My submissions for %(problem)s"
 msgstr ""
 
-#: judge/views/submission.py:694 judge/views/submission.py:704
+#: judge/views/submission.py:697 judge/views/submission.py:707
 #, python-format
 msgid "%(user)s's submissions for %(problem)s"
 msgstr ""
 
-#: judge/views/submission.py:835
+#: judge/views/submission.py:838
 #, python-brace-format
 msgid "All submissions in <a href=\"{1}\">{0}</a>"
 msgstr ""
 
-#: judge/views/submission.py:850 judge/views/submission.py:868
+#: judge/views/submission.py:853 judge/views/submission.py:871
 #, python-format
 msgid "My submissions in %(contest)s"
 msgstr ""
 
-#: judge/views/submission.py:851 judge/views/submission.py:872
+#: judge/views/submission.py:854 judge/views/submission.py:875
 #, python-format
 msgid "%(user)s's submissions in %(contest)s"
 msgstr ""
 
-#: judge/views/submission.py:883 judge/views/submission.py:901
+#: judge/views/submission.py:886 judge/views/submission.py:904
 #, python-brace-format
 msgid "{user}'s submissions for {problem} in {contest}"
 msgstr ""
 
-#: judge/views/submission.py:888
+#: judge/views/submission.py:891
 #, python-brace-format
 msgid "{user}'s submissions for problem {number} in {contest}"
 msgstr ""
 
-#: judge/views/submission.py:909
+#: judge/views/submission.py:912
 #, python-brace-format
 msgid "{user}'s submissions for problem {label} in {contest}"
 msgstr ""

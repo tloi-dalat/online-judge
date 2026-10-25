@@ -65,7 +65,7 @@ svg.rate-box {
     }
 
     &.rate-primary0 {
-        @include rate-svg-color($color_primary0);
+        @include rate-svg-color($color_text_sidebox);
     }
 
     &.rate-newbie {

@@ -169,7 +169,7 @@ DMOJ_PROBLEM_DATA_ROOT = _env('DMOJ_PROBLEM_DATA_ROOT', '/problems')
 ## Bridge: host:port, several separated by commas.
 BRIDGED_JUDGE_ADDRESS = [_address(a) for a in _env('BRIDGED_JUDGE_ADDRESS', ['0.0.0.0:9999'], cast=list)]
 BRIDGED_DJANGO_ADDRESS = [_address(a) for a in _env('BRIDGED_DJANGO_ADDRESS', ['0.0.0.0:9998'], cast=list)]
-BRIDGED_DJANGO_CONNECT = _address(_env('BRIDGED_DJANGO_CONNECT', 'online-judge-bridge:9998'))
+BRIDGED_DJANGO_CONNECT = _address(_env('BRIDGED_DJANGO_CONNECT', 'bridge:9998'))
 
 ## DMOJ features.
 ENABLE_FTS = _env('ENABLE_FTS', False, cast=bool)
@@ -177,7 +177,7 @@ BAD_MAIL_PROVIDERS = set()
 
 ## Event server (websocket/daemon.js).
 EVENT_DAEMON_USE = _env('EVENT_DAEMON_USE', True, cast=bool)
-EVENT_DAEMON_POST = _env('EVENT_DAEMON_POST', 'ws://online-judge-wsevent:15101/')
+EVENT_DAEMON_POST = _env('EVENT_DAEMON_POST', 'ws://event:15101/')
 EVENT_DAEMON_GET = 'ws://%s/event/' % _DOMAIN
 EVENT_DAEMON_GET_SSL = 'wss://%s/event/' % _DOMAIN
 EVENT_DAEMON_POLL = '/channels/'
@@ -252,6 +252,7 @@ MOSS_API_KEY = _env('MOSS_API_KEY')
 
 # DISCORD_WEBHOOK_<EVENT> sets DISCORD_WEBHOOK[<event>]; unset turns that notification off.
 DISCORD_WEBHOOK = {event: _env('DISCORD_WEBHOOK_' + event.upper()) for event in _DISCORD_EVENTS}
+DISCORD_WEBHOOK_PREFIX = _env('DISCORD_WEBHOOK_PREFIX', '')
 if DISCORD_WEBHOOK['on_error']:
     LOGGING['handlers']['discord_webhook'] = {
         'level': 'ERROR', 'class': 'dmoj.throttle_discord_webhook.ThrottledDiscordWebhookHandler',
