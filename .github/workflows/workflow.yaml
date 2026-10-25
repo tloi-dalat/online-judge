@@ -10,48 +10,48 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  core:
+  site:
     permissions:
       contents: read
       packages: write
     uses: tloi-dalat/reusable-workflow/.github/workflows/build-push.yaml@main
     with:
-      image: oj-core
+      image: online-judge-site
       dockerfile: Dockerfile
       submodules: recursive
       push: ${{ github.event_name != 'pull_request' }}
 
-  wsevent:
+  event:
     permissions:
       contents: read
       packages: write
     uses: tloi-dalat/reusable-workflow/.github/workflows/build-push.yaml@main
     with:
-      image: oj-wsevent
+      image: online-judge-event
       dockerfile: websocket/Dockerfile
       push: ${{ github.event_name != 'pull_request' }}
 
   deploy-dev:
     if: github.ref == 'refs/heads/main'
-    needs: [core, wsevent]
+    needs: [site, event]
     permissions:
       contents: read
     uses: tloi-dalat/reusable-workflow/.github/workflows/dispatch.yaml@main
     with:
-      apps: core,wsevent
+      apps: site,event
       namespace: online-judge
       environment: development
-      version: ${{ needs.core.outputs.version }}
+      version: ${{ needs.site.outputs.version }}
     secrets: inherit
 
   production-values:
     if: github.ref_type == 'tag'
-    needs: [core, wsevent]
+    needs: [site, event]
     permissions:
       contents: write
     uses: tloi-dalat/reusable-workflow/.github/workflows/production-values.yaml@main
     with:
-      apps: core,wsevent
-      images: oj-core,oj-wsevent
+      apps: site,event
+      images: online-judge-site,online-judge-event
       namespace: online-judge
-      version: ${{ needs.core.outputs.version }}
+      version: ${{ needs.site.outputs.version }}

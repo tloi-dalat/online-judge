@@ -89,8 +89,8 @@ jobs:
     with:
       submodules: recursive
       images: >-
-        [{"image": "oj-core", "dockerfile": "Dockerfile"},
-         {"image": "oj-wsevent", "dockerfile": "websocket/Dockerfile"}]
+        [{"image": "online-judge-site", "dockerfile": "Dockerfile"},
+         {"image": "online-judge-event", "dockerfile": "websocket/Dockerfile"}]
 
   dependencies:
     name: check-dependencies
