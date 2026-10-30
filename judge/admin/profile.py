@@ -162,8 +162,29 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
 
 
 class UserAdmin(OldUserAdmin):
+    superuser_only_fields = ('is_superuser', 'groups', 'user_permissions')
+
     def view_on_site(self, obj):
         return obj.profile.get_absolute_url()
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+        if request.user.is_superuser:
+            return fieldsets
+        return tuple(
+            (name, {**opts, 'fields': tuple(f for f in opts['fields'] if f not in self.superuser_only_fields)})
+            for name, opts in fieldsets
+        )
+
+    def has_change_permission(self, request, obj=None):
+        if obj is not None and obj.is_superuser and not request.user.is_superuser:
+            return False
+        return super().has_change_permission(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        if obj is not None and obj.is_superuser and not request.user.is_superuser:
+            return False
+        return super().has_delete_permission(request, obj)
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         if db_field.name == 'user_permissions':
