@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-15 11:08+0000\n"
+"POT-Creation-Date: 2026-10-31 05:40+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -4149,364 +4149,364 @@ msgstr "Đang chuẩn bị dữ liệu về bài nộp của bạn"
 msgid "Preparing your comment data"
 msgstr "Đang chuẩn bị dữ liệu về bình luận của bạn"
 
-#: judge/third_party_apps.py:25
+#: judge/third_party_apps.py:29
 msgid "Chunked upload"
 msgstr "Tải lên theo phần"
 
-#: judge/third_party_apps.py:30
+#: judge/third_party_apps.py:34
 msgctxt "third-party model"
 msgid "chunked upload"
 msgstr "tệp tải lên theo phần"
 
-#: judge/third_party_apps.py:31
+#: judge/third_party_apps.py:35
 msgctxt "third-party model"
 msgid "chunked uploads"
 msgstr "tệp tải lên theo phần"
 
-#: judge/third_party_apps.py:35
+#: judge/third_party_apps.py:39
 msgctxt "third-party field"
 msgid "upload ID"
 msgstr "mã tải lên"
 
-#: judge/third_party_apps.py:36
+#: judge/third_party_apps.py:40
 msgctxt "third-party field"
 msgid "file"
 msgstr "tệp"
 
-#: judge/third_party_apps.py:37
+#: judge/third_party_apps.py:41
 msgctxt "third-party field"
 msgid "filename"
 msgstr "tên tệp"
 
-#: judge/third_party_apps.py:38
+#: judge/third_party_apps.py:42
 msgctxt "third-party field"
 msgid "offset"
 msgstr "vị trí"
 
-#: judge/third_party_apps.py:39
+#: judge/third_party_apps.py:43
 msgctxt "third-party field"
 msgid "created on"
 msgstr "ngày tạo"
 
-#: judge/third_party_apps.py:40
+#: judge/third_party_apps.py:44
 msgctxt "third-party field"
 msgid "status"
 msgstr "trạng thái"
 
-#: judge/third_party_apps.py:41
+#: judge/third_party_apps.py:45
 msgctxt "third-party field"
 msgid "completed on"
 msgstr "ngày hoàn tất"
 
-#: judge/third_party_apps.py:42 judge/third_party_apps.py:145
+#: judge/third_party_apps.py:46 judge/third_party_apps.py:149
 msgctxt "third-party field"
 msgid "user"
 msgstr "thành viên"
 
-#: judge/third_party_apps.py:47
+#: judge/third_party_apps.py:51
 msgctxt "third-party field"
 msgid "Uploading"
 msgstr "Đang tải lên"
 
-#: judge/third_party_apps.py:48
+#: judge/third_party_apps.py:52
 msgctxt "third-party field"
 msgid "Complete"
 msgstr "Hoàn tất"
 
-#: judge/third_party_apps.py:53 templates/user/user-tabs.html:16
+#: judge/third_party_apps.py:57 templates/user/user-tabs.html:16
 msgid "Impersonate"
 msgstr "Mạo danh"
 
-#: judge/third_party_apps.py:58
+#: judge/third_party_apps.py:62
 msgctxt "third-party model"
 msgid "impersonation log"
 msgstr "nhật ký mạo danh"
 
-#: judge/third_party_apps.py:59
+#: judge/third_party_apps.py:63
 msgctxt "third-party model"
 msgid "impersonation logs"
 msgstr "nhật ký mạo danh"
 
-#: judge/third_party_apps.py:63 judge/third_party_apps.py:81
+#: judge/third_party_apps.py:67 judge/third_party_apps.py:85
 msgctxt "third-party field"
 msgid "impersonator"
 msgstr "người mạo danh"
 
-#: judge/third_party_apps.py:64
+#: judge/third_party_apps.py:68
 msgctxt "third-party field"
 msgid "impersonated user"
 msgstr "người bị mạo danh"
 
-#: judge/third_party_apps.py:65
+#: judge/third_party_apps.py:69
 msgctxt "third-party field"
 msgid "session key"
 msgstr "khóa phiên"
 
-#: judge/third_party_apps.py:66
+#: judge/third_party_apps.py:70
 msgctxt "third-party field"
 msgid "session started at"
 msgstr "bắt đầu phiên lúc"
 
-#: judge/third_party_apps.py:67
+#: judge/third_party_apps.py:71
 msgctxt "third-party field"
 msgid "session ended at"
 msgstr "kết thúc phiên lúc"
 
-#: judge/third_party_apps.py:75
+#: judge/third_party_apps.py:79
 msgctxt "third-party admin"
 msgid "Incomplete"
 msgstr "Chưa kết thúc"
 
-#: judge/third_party_apps.py:76
+#: judge/third_party_apps.py:80
 msgctxt "third-party admin"
 msgid "Complete"
 msgstr "Đã kết thúc"
 
-#: judge/third_party_apps.py:79
+#: judge/third_party_apps.py:83
 msgctxt "third-party admin"
 msgid "session state"
 msgstr "trạng thái phiên"
 
-#: judge/third_party_apps.py:85
+#: judge/third_party_apps.py:89
 msgid "Django OAuth Toolkit"
 msgstr "Xác thực OAuth"
 
-#: judge/third_party_apps.py:90
+#: judge/third_party_apps.py:94
 msgctxt "third-party model"
 msgid "application"
 msgstr "ứng dụng"
 
-#: judge/third_party_apps.py:91
+#: judge/third_party_apps.py:95
 msgctxt "third-party model"
 msgid "applications"
 msgstr "ứng dụng"
 
-#: judge/third_party_apps.py:92
+#: judge/third_party_apps.py:96
 msgctxt "third-party model"
 msgid "grant"
 msgstr "mã cấp quyền"
 
-#: judge/third_party_apps.py:93
+#: judge/third_party_apps.py:97
 msgctxt "third-party model"
 msgid "grants"
 msgstr "mã cấp quyền"
 
-#: judge/third_party_apps.py:94
+#: judge/third_party_apps.py:98
 msgctxt "third-party model"
 msgid "access token"
 msgstr "mã truy cập"
 
-#: judge/third_party_apps.py:95
+#: judge/third_party_apps.py:99
 msgctxt "third-party model"
 msgid "access tokens"
 msgstr "mã truy cập"
 
-#: judge/third_party_apps.py:96
+#: judge/third_party_apps.py:100
 msgctxt "third-party model"
 msgid "refresh token"
 msgstr "mã làm mới"
 
-#: judge/third_party_apps.py:97
+#: judge/third_party_apps.py:101
 msgctxt "third-party model"
 msgid "refresh tokens"
 msgstr "mã làm mới"
 
-#: judge/third_party_apps.py:98
+#: judge/third_party_apps.py:102
 msgctxt "third-party model"
 msgid "id token"
 msgstr "mã định danh"
 
-#: judge/third_party_apps.py:99
+#: judge/third_party_apps.py:103
 msgctxt "third-party model"
 msgid "id tokens"
 msgstr "mã định danh"
 
-#: judge/third_party_apps.py:100
+#: judge/third_party_apps.py:104
 msgctxt "third-party model"
 msgid "device grant"
 msgstr "cấp quyền thiết bị"
 
-#: judge/third_party_apps.py:101
+#: judge/third_party_apps.py:105
 msgctxt "third-party model"
 msgid "device grants"
 msgstr "cấp quyền thiết bị"
 
-#: judge/third_party_apps.py:107
+#: judge/third_party_apps.py:111
 msgctxt "third-party admin"
 msgid "Revoke selected access tokens"
 msgstr "Thu hồi mã truy cập đã chọn"
 
-#: judge/third_party_apps.py:109
+#: judge/third_party_apps.py:113
 msgctxt "third-party admin"
 msgid "Revoke selected refresh tokens"
 msgstr "Thu hồi mã làm mới đã chọn"
 
-#: judge/third_party_apps.py:110 judge/third_party_apps.py:111
-#: judge/third_party_apps.py:173
+#: judge/third_party_apps.py:114 judge/third_party_apps.py:115
+#: judge/third_party_apps.py:177
 msgctxt "third-party field"
 msgid "token"
 msgstr "mã"
 
-#: judge/third_party_apps.py:112 judge/third_party_apps.py:168
+#: judge/third_party_apps.py:116 judge/third_party_apps.py:172
 msgctxt "third-party field"
 msgid "code"
 msgstr "mã"
 
-#: judge/third_party_apps.py:116
+#: judge/third_party_apps.py:120
 msgid "Registration"
 msgstr "Đăng ký tài khoản"
 
-#: judge/third_party_apps.py:121 judge/third_party_apps.py:122
+#: judge/third_party_apps.py:125 judge/third_party_apps.py:126
 msgctxt "third-party field"
 msgid "activated"
 msgstr "đã kích hoạt"
 
-#: judge/third_party_apps.py:127
+#: judge/third_party_apps.py:131
 msgid "Python Social Auth"
 msgstr "Đăng nhập qua mạng xã hội"
 
-#: judge/third_party_apps.py:132
+#: judge/third_party_apps.py:136
 msgctxt "third-party model"
 msgid "user social auth"
 msgstr "tài khoản mạng xã hội"
 
-#: judge/third_party_apps.py:133
+#: judge/third_party_apps.py:137
 msgctxt "third-party model"
 msgid "user social auths"
 msgstr "tài khoản mạng xã hội"
 
-#: judge/third_party_apps.py:134
+#: judge/third_party_apps.py:138
 msgctxt "third-party model"
 msgid "nonce"
 msgstr "mã dùng một lần"
 
-#: judge/third_party_apps.py:135
+#: judge/third_party_apps.py:139
 msgctxt "third-party model"
 msgid "nonces"
 msgstr "mã dùng một lần"
 
-#: judge/third_party_apps.py:136
+#: judge/third_party_apps.py:140
 msgctxt "third-party model"
 msgid "association"
 msgstr "liên kết OpenID"
 
-#: judge/third_party_apps.py:137
+#: judge/third_party_apps.py:141
 msgctxt "third-party model"
 msgid "associations"
 msgstr "liên kết OpenID"
 
-#: judge/third_party_apps.py:138
+#: judge/third_party_apps.py:142
 msgctxt "third-party model"
 msgid "code"
 msgstr "mã xác minh email"
 
-#: judge/third_party_apps.py:139
+#: judge/third_party_apps.py:143
 msgctxt "third-party model"
 msgid "codes"
 msgstr "mã xác minh email"
 
-#: judge/third_party_apps.py:140
+#: judge/third_party_apps.py:144
 msgctxt "third-party model"
 msgid "partial"
 msgstr "phiên đăng nhập dở dang"
 
-#: judge/third_party_apps.py:141
+#: judge/third_party_apps.py:145
 msgctxt "third-party model"
 msgid "partials"
 msgstr "phiên đăng nhập dở dang"
 
-#: judge/third_party_apps.py:146
+#: judge/third_party_apps.py:150
 msgctxt "third-party field"
 msgid "provider"
 msgstr "nhà cung cấp"
 
-#: judge/third_party_apps.py:147
+#: judge/third_party_apps.py:151
 msgctxt "third-party field"
 msgid "ID key"
 msgstr "khóa ID"
 
-#: judge/third_party_apps.py:148
+#: judge/third_party_apps.py:152
 msgctxt "third-party field"
 msgid "UID"
 msgstr "UID"
 
-#: judge/third_party_apps.py:149
+#: judge/third_party_apps.py:153
 msgctxt "third-party field"
 msgid "extra data"
 msgstr "dữ liệu bổ sung"
 
-#: judge/third_party_apps.py:150
+#: judge/third_party_apps.py:154
 msgctxt "third-party field"
 msgid "created"
 msgstr "ngày tạo"
 
-#: judge/third_party_apps.py:151
+#: judge/third_party_apps.py:155
 msgctxt "third-party field"
 msgid "modified"
 msgstr "ngày sửa"
 
-#: judge/third_party_apps.py:154 judge/third_party_apps.py:159
+#: judge/third_party_apps.py:158 judge/third_party_apps.py:163
 msgctxt "third-party field"
 msgid "server URL"
 msgstr "URL máy chủ"
 
-#: judge/third_party_apps.py:155 judge/third_party_apps.py:170
-#: judge/third_party_apps.py:177
+#: judge/third_party_apps.py:159 judge/third_party_apps.py:174
+#: judge/third_party_apps.py:181
 msgctxt "third-party field"
 msgid "timestamp"
 msgstr "thời điểm"
 
-#: judge/third_party_apps.py:156
+#: judge/third_party_apps.py:160
 msgctxt "third-party field"
 msgid "salt"
 msgstr "chuỗi salt"
 
-#: judge/third_party_apps.py:160
+#: judge/third_party_apps.py:164
 msgctxt "third-party field"
 msgid "handle"
 msgstr "định danh"
 
-#: judge/third_party_apps.py:161
+#: judge/third_party_apps.py:165
 msgctxt "third-party field"
 msgid "secret"
 msgstr "khóa bí mật"
 
-#: judge/third_party_apps.py:162
+#: judge/third_party_apps.py:166
 msgctxt "third-party field"
 msgid "issued"
 msgstr "thời điểm cấp"
 
-#: judge/third_party_apps.py:163
+#: judge/third_party_apps.py:167
 msgctxt "third-party field"
 msgid "lifetime"
 msgstr "thời hạn"
 
-#: judge/third_party_apps.py:164
+#: judge/third_party_apps.py:168
 msgctxt "third-party field"
 msgid "association type"
 msgstr "kiểu liên kết"
 
-#: judge/third_party_apps.py:167
+#: judge/third_party_apps.py:171
 msgctxt "third-party field"
 msgid "email"
 msgstr "email"
 
-#: judge/third_party_apps.py:169
+#: judge/third_party_apps.py:173
 msgctxt "third-party field"
 msgid "verified"
 msgstr "đã xác minh"
 
-#: judge/third_party_apps.py:174
+#: judge/third_party_apps.py:178
 msgctxt "third-party field"
 msgid "next step"
 msgstr "bước tiếp theo"
 
-#: judge/third_party_apps.py:175
+#: judge/third_party_apps.py:179
 msgctxt "third-party field"
 msgid "backend"
 msgstr "backend xác thực"
 
-#: judge/third_party_apps.py:176
+#: judge/third_party_apps.py:180
 msgctxt "third-party field"
 msgid "data"
 msgstr "dữ liệu"
@@ -9285,20 +9285,10 @@ msgid "Please click on the following link to activate your account:"
 msgstr "Hãy nhấn vào link này để kích hoạt tài khoản:"
 
 #: templates/registration/activation_email.html:10
-#: templates/registration/activation_email.txt:6
-msgid "Alternatively, you can reply to this message to activate your account."
-msgstr "Hoặc bạn có thể reply lại email này để kích hoạt."
-
-#: templates/registration/activation_email.html:11
-#: templates/registration/activation_email.txt:7
-msgid "Your reply must keep the following text intact for this to work:"
-msgstr "Email reply của bạn cần có đoạn text sau:"
-
-#: templates/registration/activation_email.html:17
 msgid "See you soon!"
 msgstr "Hẹn gặp lại!"
 
-#: templates/registration/activation_email.html:19
+#: templates/registration/activation_email.html:12
 msgid ""
 "If you have problems activating your account, feel free to shoot us a "
 "message at: "
