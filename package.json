@@ -1,5 +1,5 @@
 {
-  "name": "@vnoi-admin/oj",
+  "name": "@tloi-dalat/online-judge",
   "type": "module",
   "scripts": {
     "format": "prettier --write websocket",

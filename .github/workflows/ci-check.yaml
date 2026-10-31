@@ -18,7 +18,7 @@ jobs:
       contents: read
     uses: tloi-dalat/reusable-workflow/.github/workflows/django-migration-check.yaml@main
     with:
-      python-version: '3.12'
+      python-version: '3.14'
       requirements: requirements.txt
       settings-file: .ci.settings.py
       mysql-image: mariadb:10.11
@@ -30,7 +30,7 @@ jobs:
       contents: read
     uses: tloi-dalat/reusable-workflow/.github/workflows/django-i18n-check.yaml@main
     with:
-      python-version: '3.12'
+      python-version: '3.14'
       requirements: requirements.txt
       settings-file: .ci.settings.py
       settings-target: dmoj/local_settings.py
@@ -50,7 +50,7 @@ jobs:
       contents: read
     uses: tloi-dalat/reusable-workflow/.github/workflows/django-i18n-check.yaml@main
     with:
-      python-version: '3.12'
+      python-version: '3.14'
       requirements: requirements.txt
       settings-file: .ci.settings.py
       settings-target: dmoj/local_settings.py
@@ -68,7 +68,7 @@ jobs:
       contents: read
     uses: tloi-dalat/reusable-workflow/.github/workflows/django-template-check.yaml@main
     with:
-      python-version: '3.12'
+      python-version: '3.14'
       requirements: requirements.txt
       settings-file: .ci.settings.py
       settings-target: dmoj/local_settings.py
@@ -98,5 +98,5 @@ jobs:
       contents: read
     uses: tloi-dalat/reusable-workflow/.github/workflows/python-audit.yaml@main
     with:
-      python-version: '3.12'
+      python-version: '3.14'
       requirements: requirements.txt
