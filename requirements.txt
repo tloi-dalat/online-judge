@@ -25,6 +25,7 @@ pyyaml
 jinja2
 django_jinja>=2.5.0
 llist
+latex2mathml
 requests
 django-fernet-fields @ git+https://github.com/DMOJ/django-fernet-fields.git
 pyotp
