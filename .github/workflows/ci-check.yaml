@@ -1,13 +1,13 @@
 name: 'check'
 on:
   pull_request:
-    branches: [main]
+    branches: [main, release, 'releases/**']
   schedule:
     - cron: '17 2 * * 1'
   workflow_dispatch:
 
 concurrency:
-  group: checks-${{ github.head_ref || github.run_id }}
+  group: ci-check-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
@@ -89,8 +89,8 @@ jobs:
     with:
       submodules: recursive
       images: >-
-        [{"image": "oj-core", "dockerfile": "Dockerfile"},
-         {"image": "oj-wsevent", "dockerfile": "websocket/Dockerfile"}]
+        [{"image": "online-judge-site", "dockerfile": "Dockerfile"},
+         {"image": "online-judge-event", "dockerfile": "websocket/Dockerfile"}]
 
   dependencies:
     name: check-dependencies

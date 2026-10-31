@@ -1,3 +1,5 @@
+@use "vars" as *;
+
 .AB {
     background-color: #CCC;
     color: black;
@@ -41,4 +43,59 @@
 .QU, .G {
     background: white;
     color: black;
+}
+
+#daterange {
+  background: $color_primary0; 
+  color: $color_primary100;
+  cursor: pointer;
+  padding: 5px 10px; 
+  border: 1px solid #ccc;
+}
+
+.daterangepicker {
+    background-color: $color_primary10 !important;
+    border: 1px solid $color_primary25 !important;
+    color: $color_primary100 !important;
+
+    .ranges {
+        li {
+            background-color: $color_primary0 !important;
+            border: 1px solid $color_primary25 !important;
+            color: $color_primary75 !important;     
+
+            &:hover, &.active {
+                background-color: #3b82f6 !important;
+                border-color: #3b82f6 !important;
+                color: #ffffff !important;
+            }
+        }
+    }
+
+    .calendar-table {
+        background-color: $color_primary10 !important;
+        border: none !important;
+
+        th, td {
+            color: $color_primary100 !important;
+            background-color: transparent !important;
+
+            &.off, &.off.in-range {
+                color: $color_primary33 !important;
+            }
+
+            &:hover {
+                background-color: $color_primary25 !important;
+            }
+
+            &.active, &.active:hover {
+                background-color: #3b82f6 !important;
+                color: #ffffff !important;
+            }
+
+            &.in-range {
+                background-color: rgba(#3b82f6, 0.2) !important;
+            }
+        }
+    }
 }

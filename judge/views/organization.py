@@ -351,7 +351,8 @@ class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
     def get_object(self, queryset=None):
         object = super(OrganizationRequestDetail, self).get_object(queryset)
         profile = self.request.profile
-        if object.user_id != profile.id and not object.organization.is_admin(profile):
+        if object.user_id != profile.id and not (object.organization.is_admin(profile) or
+                                                 self.request.user.has_perm('judge.edit_all_organization')):
             raise PermissionDenied()
         return object
 
@@ -365,7 +366,8 @@ class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateRespon
 
     def get_object(self, queryset=None):
         organization = super(OrganizationRequestBaseView, self).get_object(queryset)
-        if not organization.is_admin(self.request.profile):
+        if not (organization.is_admin(self.request.profile) or
+                self.request.user.has_perm('judge.edit_all_organization')):
             raise PermissionDenied()
         return organization
 
