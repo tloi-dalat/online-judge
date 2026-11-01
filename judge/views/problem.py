@@ -479,6 +479,13 @@ class ProblemDetail(ProblemMixin, ProblemClarificationsMixin, SolvedProblemMixin
                                                                                user.profile.current_contest.virtual), 0)
             context['contest_problems'] = Problem.objects.filter(contests__contest=contest_problem.contest) \
                 .order_by('contests__order').only('code')
+        elif self.object.source.startswith('c:'):
+            origin = Contest.objects.filter(key=self.object.source[2:]).first()
+            # no access_check, the contest/problem pages enforce it on click
+            if origin is not None and origin.ended:
+                context['origin_contest'] = origin
+                context['contest_problems'] = Problem.objects.filter(contests__contest=origin) \
+                    .order_by('contests__order').only('code')
 
         context['available_judges'] = Judge.objects.filter(
             online=True,
@@ -646,7 +653,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, Infinite
         queryset = queryset.add_i18n_name(self.request.LANGUAGE_CODE)
         sort_key = self.order.lstrip('-')
         if sort_key in self.sql_sort:
-            queryset = queryset.order_by(self.order, 'id')
+            queryset = queryset.order_by(self.order, self.id_tiebreak)
         elif sort_key == 'name':
             queryset = queryset.order_by('i18n_name', self.order, 'name', 'id')
         elif sort_key == 'group':
@@ -694,7 +701,15 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, Infinite
     def get_filter(self):
         _filter = Q(is_public=True) & Q(is_organization_private=False)
         if self.profile is not None:
-            _filter = Problem.q_add_author_curator_tester(_filter, self.profile)
+            # Resolve the ids up front: OR EXISTS(...) defeats the (is_public, is_organization_private, date)
+            # index and scans the whole table, a short literal id list does not.
+            through_ids = [
+                field.through.objects.filter(profile=self.profile).values_list('problem_id', flat=True)
+                for field in (Problem.authors, Problem.curators, Problem.testers)
+            ]
+            ids = list(through_ids[0].union(*through_ids[1:]))
+            if ids:
+                _filter |= Q(id__in=ids)
         return _filter
 
     def get_normal_queryset(self):
@@ -717,7 +732,8 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, Infinite
         if self.category is not None:
             queryset = queryset.filter(group__id=self.category)
         if self.selected_types:
-            queryset = queryset.filter(types__in=self.selected_types)
+            queryset = queryset.filter(id__in=Problem.types.through.objects
+                                       .filter(problemtype__in=self.selected_types).values('problem_id'))
         if 'search' in self.request.GET:
             self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
             if query:
@@ -726,13 +742,15 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, Infinite
                 else:
                     queryset = queryset.filter(
                         Q(code__icontains=query) | Q(name__icontains=query) | Q(source__icontains=query) |
-                        Q(translations__name__icontains=query, translations__language=self.request.LANGUAGE_CODE))
+                        Q(id__in=ProblemTranslation.objects.filter(
+                            name__icontains=query, language=self.request.LANGUAGE_CODE).values('problem_id')))
         self.prepoint_queryset = queryset
         if self.point_start is not None:
             queryset = queryset.filter(points__gte=self.point_start)
         if self.point_end is not None:
             queryset = queryset.filter(points__lte=self.point_end)
-        return queryset.distinct()
+        # No .distinct() needed: every filter above avoids multi-row joins.
+        return queryset
 
     def get_queryset(self):
         queryset = self.get_normal_queryset()
@@ -800,6 +818,8 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, Infinite
         self.all_sorts = set(self.all_sorts)
         if not self.show_types:
             self.all_sorts.discard('type')
+        if settings.VNOJ_LOW_POWER_MODE:
+            self.all_sorts &= {'points', 'user_count'}
 
         self.category = safe_int_or_none(request.GET.get('category'))
         if 'type' in request.GET:
@@ -1157,8 +1177,10 @@ class ProblemEdit(ProblemMixin, TitleMixin, UpdateView):
         return kwargs
 
     def save_statement(self, form, problem):
-        statement_file = form.files.get('statement_file', None)
-        if statement_file is not None:
+        statement_file = form.cleaned_data.get('statement_file')
+        if statement_file is False:
+            problem.pdf_url = ''
+        elif statement_file is not None:
             problem.pdf_url = pdf_statement_uploader(statement_file)
 
     def post(self, request, *args, **kwargs):

@@ -2,4 +2,3 @@
 
 {{ _('Please click on the following link to activate your account:') }}
     http://{{ site.domain }}/accounts/activate/{{ activation_key }}/
-

@@ -22,6 +22,7 @@ from django.utils.html import format_html
 from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _, ngettext_lazy
 
+from judge.contest_format import formats as contest_formats
 from judge.models import BlogPost, Contest, ContestAnnouncement, ContestParticipation, ContestProblem, Language, \
     LanguageLimit, Organization, OrganizationProblemTag, Problem, Profile, Solution, Submission, Tag, \
     WebAuthnCredential
@@ -165,12 +166,18 @@ class LanguageLimitForm(ModelForm):
         }
 
 
+class PdfStatementUrl(str):
+    @property
+    def url(self):
+        return self
+
+
 class ProblemEditForm(ModelForm):
     statement_file = forms.FileField(
         required=False,
         validators=[FileExtensionValidator(allowed_extensions=settings.PDF_STATEMENT_SAFE_EXTS)],
         help_text=_('Maximum file size is %s.') % filesizeformat(settings.PDF_STATEMENT_MAX_FILE_SIZE),
-        widget=forms.FileInput(attrs={'accept': 'application/pdf'}),
+        widget=forms.ClearableFileInput(attrs={'accept': 'application/pdf'}),
         label=_('Statement file'),
     )
     required_css_class = 'required'
@@ -179,6 +186,10 @@ class ProblemEditForm(ModelForm):
         self.org_pk = org_pk = kwargs.pop('org_pk', None)
         self.user = kwargs.pop('user', None)
         super(ProblemEditForm, self).__init__(*args, **kwargs)
+
+        if self.instance.pdf_url:
+            self.fields['statement_file'].initial = PdfStatementUrl(self.instance.pdf_url)
+        self.fields['statement_file'].widget.clear_checkbox_label = _('Delete')
 
         # Only allow to public/private problem in organization
         if org_pk is None:
@@ -210,6 +221,8 @@ class ProblemEditForm(ModelForm):
         return code
 
     def clean_statement_file(self):
+        if self.cleaned_data['statement_file'] is False:  # clear checkbox ticked
+            return False
         content = self.files.get('statement_file', None)
         if content is not None:
             if content.size > settings.PDF_STATEMENT_MAX_FILE_SIZE:
@@ -722,6 +735,7 @@ class ContestAnnouncementForm(forms.ModelForm):
 
 class ContestCloneForm(Form):
     key = CharField(max_length=32, validators=[RegexValidator('^[a-z0-9_]+$', _('Contest id must be ^[a-z0-9_]+$'))])
+    copy_problems = BooleanField(label=_('Copy problems'), initial=True, required=False)
 
     def clean_key(self):
         key = self.cleaned_data['key']
@@ -833,6 +847,7 @@ class ContestForm(ModelForm):
         self.org_pk = org_pk = kwargs.pop('org_pk', None)
         self.user = kwargs.pop('user', None)
         super(ContestForm, self).__init__(*args, **kwargs)
+        self.frozen_supported_formats = [key for key, fmt in contest_formats.items() if fmt.supports_frozen]
 
         # cannot use fields[].widget = ...
         # because it will remove the old values
@@ -846,8 +861,20 @@ class ContestForm(ModelForm):
             str(self.fields['private_contestants'].help_text) + ' ' + \
             str(_('You can paste a list of usernames into this box.'))
 
+        if not (self.user and self.user.is_superuser):
+            del self.fields['push_announcements']
+            del self.fields['disallow_virtual']
+
+        if org_pk:
+            del self.fields['tags']
+
     def clean(self):
         cleaned_data = super().clean()
+        frozen = cleaned_data.get('frozen_last_minutes')
+        if frozen and frozen < 0:
+            self.add_error('frozen_last_minutes', _('Frozen time cannot be negative.'))
+        elif frozen and cleaned_data.get('format_name') not in self.frozen_supported_formats:
+            cleaned_data['frozen_last_minutes'] = 0
         start_time = cleaned_data.get('start_time')
         end_time = cleaned_data.get('end_time')
 
@@ -881,7 +908,11 @@ class ContestForm(ModelForm):
             'show_short_display',
             'scoreboard_visibility',
             'format_name',
+            'frozen_last_minutes',
+            'push_announcements',
+            'disallow_virtual',
             'description',
+            'tags',
             'access_code',
             'is_private',
             'private_contestants',
@@ -893,6 +924,7 @@ class ContestForm(ModelForm):
             'description': MartorWidget(attrs={'data-markdownfy-url': reverse_lazy('contest_preview')}),
             'scoreboard_visibility': Select2Widget(),
             'format_name': Select2Widget(),
+            'tags': Select2MultipleWidget(attrs={'style': 'width: 100%'}),
             'private_contestants': HeavySelect2MultipleWidget(
                 data_view='profile_select2',
                 attrs={'style': 'width: 100%'},
@@ -901,6 +933,8 @@ class ContestForm(ModelForm):
         help_texts = {
             'end_time': _('Users are able to pratice contest problems even if the contest has ended, '
                           "so don't set the contest time too high if you don't really need it."),
+            'frozen_last_minutes': _('If set, the scoreboard will be frozen for the last X minutes. '
+                                     'Set it to 0 to unfreeze and reveal the actual ranking.'),
         }
         error_messages = {
             'key': {

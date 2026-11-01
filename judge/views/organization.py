@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import ImproperlyConfigured, PermissionDenied
 from django.db import IntegrityError, transaction
-from django.db.models import Count, FilteredRelation, OuterRef, Q, Subquery, Sum
+from django.db.models import Count, Exists, FilteredRelation, OuterRef, Q, Subquery, Sum
 from django.db.models.expressions import F, Value
 from django.db.models.functions import Coalesce
 from django.forms import Form, modelformset_factory
@@ -227,7 +227,7 @@ class OrganizationUsers(QueryStringSortMixin, DiggPaginatorMixin, BaseOrganizati
     context_object_name = 'users'
 
     def get_queryset(self):
-        return self.object.members.filter(is_unlisted=False).order_by(self.order, 'id') \
+        return self.object.members.filter(is_unlisted=False).order_by(self.order, self.id_tiebreak) \
             .select_related('user', 'display_badge').defer('about', 'user_script', 'notes')
 
     def get_context_data(self, **kwargs):
@@ -255,7 +255,7 @@ def org_user_ranking_redirect(request, slug):
     org = get_object_or_404(Organization, slug=slug)
     rank = org.members.filter(is_unlisted=False, performance_points__gt=user.performance_points).count()
     rank += org.members.filter(
-        is_unlisted=False, performance_points__exact=user.performance_points, id__lt=user.id,
+        is_unlisted=False, performance_points__exact=user.performance_points, id__gt=user.id,
     ).count()
     page = rank // OrganizationUsers.paginate_by
     return HttpResponseRedirect('%s%s#!%s' % (reverse('organization_users', args=(org.slug,)),
@@ -749,9 +749,7 @@ def get_organization_problem_filter(organization, user, profile):
 
     # Authors, curators, and testers should always have access, so OR at the very end.
     if profile is not None:
-        _filter |= Q(authors=profile)
-        _filter |= Q(curators=profile)
-        _filter |= Q(testers=profile)
+        _filter = Problem.q_add_author_curator_tester(_filter, profile)
 
     return _filter & Q(organization=organization)
 
@@ -789,9 +787,10 @@ class ProblemListOrganization(PrivateOrganizationMixin, ProblemList):
 
         tag_filter = Q()
         if tag_ids:
-            tag_filter |= Q(tags__id__in=tag_ids)
+            tag_filter |= Q(id__in=Problem.tags.through.objects.filter(organizationproblemtag__in=tag_ids)
+                            .values('problem_id'))
         if want_untagged:
-            tag_filter |= Q(tags__isnull=True)
+            tag_filter |= ~Exists(Problem.tags.through.objects.filter(problem=OuterRef('pk')))
         if tag_filter:
             _filter &= tag_filter
 
