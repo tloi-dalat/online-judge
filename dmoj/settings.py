@@ -101,7 +101,7 @@ VNOJ_HOMEPAGE_TOP_USERS_COUNT = 5
 VNOJ_DISPLAY_RANKS = (
     ('user', _('Normal User')),
     ('setter', _('Problem Setter')),
-    ('daor', _('Bedao Team')),
+    ('tloi', _('TLOI Team')),
     ('staff', _('Staff')),
     ('banned', _('Banned User')),
     ('admin', _('Admin')),
@@ -243,6 +243,7 @@ VNOJ_PROBLEM_ARCHIVE_SERVICE_TOKEN = None
 
 # Urls of discord webhook.
 # https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks
+DISCORD_WEBHOOK_PREFIX = ''
 DISCORD_WEBHOOK = {
     'default': None,  # use this link if the specific link not found
     'on_new_ticket': None,
@@ -256,7 +257,7 @@ DISCORD_WEBHOOK = {
     'queue_time_stats': None,
 }
 
-SITE_FULL_URL = None  # ie 'https://oj.vnoi.info', please remove the last / if needed
+SITE_FULL_URL = None  # ie 'https://oj.tloi.vn', please remove the last / if needed
 
 ACE_URL = '/static/vnoj/ace/1.4.14'
 SELECT2_JS_URL = '/static/vnoj/select2/4.0.3/js/select2.min.js'
@@ -271,6 +272,17 @@ DMOJ_CAMO_EXCLUDE = ()
 DMOJ_PROBLEM_DATA_ROOT = None
 # Path to YAML storage config file
 DMOJ_STORAGE_CONFIG_PATH = None
+
+# Chunked upload of large problem packages, to bypass Cloudflare's 100s / 100MB request limits
+VNOJ_PROBLEM_DATA_CHUNK_SIZE = 10 * 1024 * 1024  # 10 MB
+# Largest problem package accepted by chunked upload
+CHUNKED_UPLOAD_MAX_BYTES = 1 * 1024 * 1024 * 1024  # 1 GB
+
+# Shared Codeforces Polygon account used to import problems shared to it via the Polygon API
+VNOJ_POLYGON_API_URL = 'https://polygon.codeforces.com/api'
+VNOJ_POLYGON_API_KEY = None
+VNOJ_POLYGON_API_SECRET = None
+VNOJ_POLYGON_API_USERNAME = None
 
 DMOJ_PROBLEM_MIN_TIME_LIMIT = 0.01  # seconds
 DMOJ_PROBLEM_MAX_TIME_LIMIT = 60  # seconds
@@ -303,6 +315,17 @@ DMOJ_BLOG_NEW_PROBLEM_COUNT = 7
 DMOJ_TOTP_TOLERANCE_HALF_MINUTES = 1
 DMOJ_SCRATCH_CODES_COUNT = 5
 DMOJ_USER_MAX_ORGANIZATION_COUNT = 3
+
+# Graph editor constants
+GRAPH_NODE_RADIUS = 20
+GRAPH_EDGE_LABEL_SEPARATION = 10
+GRAPH_NODE_THICKNESS = 2.0
+GRAPH_EDGE_THICKNESS = 2.0
+GRAPH_CHARGE_STRENGTH = 10
+GRAPH_EDGE_STRENGTH = 15
+GRAPH_GRAVITY_STRENGTH = 0.007
+GRAPH_IDEAL_EDGE_DISTANCE = 140
+GRAPH_REPULSION_DISTANCE = 300
 
 # Whether to allow users to download their data
 DMOJ_USER_DATA_DOWNLOAD = False
@@ -390,7 +413,7 @@ INLINE_JQUERY = True
 INLINE_FONTAWESOME = True
 JQUERY_JS = '/static/vnoj/jquery/3.4.1/jquery.min.js'
 FONTAWESOME_CSS = '/static/vnoj/font-awesome/4.3.0/css/font-awesome.min.css'
-DMOJ_CANONICAL = 'oj.vnoi.info'
+DMOJ_CANONICAL = 'oj.tloi.vn'
 
 # Application definition
 
@@ -409,7 +432,7 @@ else:
             'title': 'DMOJ Admin',
             'menu': {
                 'top': 'wpadmin.menu.menus.BasicTopMenu',
-                'left': 'wpadmin.menu.custom.CustomModelLeftMenuWithDashboard',
+                'left': 'judge.admin.menu.CustomModelLeftMenuWithDashboard',
             },
             'custom_menu': [
                 {
@@ -507,21 +530,22 @@ INSTALLED_APPS += (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.sitemaps',
-    'registration',
+    'judge.third_party_apps.RegistrationAppConfig',
     'mptt',
     'reversion',
     'django_social_share',
-    'social_django',
+    'judge.third_party_apps.SocialAuthConfig',
     'compressor',
     'django_ace',
     'sortedm2m',
     'statici18n',
-    'impersonate',
+    'judge.third_party_apps.ImpersonateConfig',
     'django_jinja',
     'martor',
     'adminsortable2',
+    'judge.third_party_apps.ChunkedUploadConfig',
     'django_cleanup.apps.CleanupConfig',
-    'oauth2_provider',
+    'judge.third_party_apps.OAuth2ProviderConfig',
 )
 
 MIDDLEWARE = (
@@ -597,6 +621,7 @@ TEMPLATES = [
                 'judge.template_context.site_theme',
                 'judge.template_context.misc_config',
                 'judge.template_context.math_setting',
+                'judge.template_context.graph_config',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
             ],
@@ -628,6 +653,7 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'django.template.context_processors.request',
                 'django.contrib.messages.context_processors.messages',
+                'judge.template_context.site_theme',
             ],
         },
     },
@@ -635,6 +661,7 @@ TEMPLATES = [
 
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, 'locale'),
+    os.path.join(BASE_DIR, 'locale_django'),
 ]
 
 LANGUAGES = [

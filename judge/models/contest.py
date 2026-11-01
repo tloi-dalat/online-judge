@@ -1,6 +1,6 @@
 import hashlib
 import hmac
-from datetime import date, timedelta
+from datetime import date, timedelta, timezone as dt_timezone
 
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
@@ -77,19 +77,27 @@ class Contest(models.Model):
     key = models.CharField(max_length=32, verbose_name=_('contest id'), unique=True,
                            validators=[RegexValidator('^[a-z0-9_]+$', _('Contest id must be ^[a-z0-9_]+$'))])
     name = models.CharField(max_length=100, verbose_name=_('contest name'), db_index=True)
-    authors = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest.'),
+    authors = models.ManyToManyField(Profile, verbose_name=_('authors'),
+                                     help_text=_('These users will be able to edit the contest.'),
                                      related_name='authors+')
-    curators = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest, '
-                                                           'but will not be listed as authors.'),
+    curators = models.ManyToManyField(Profile, verbose_name=_('curators'),
+                                      help_text=_('These users will be able to edit the contest, '
+                                                  'but will not be listed as authors.'),
                                       related_name='curators+', blank=True)
-    testers = models.ManyToManyField(Profile, help_text=_('These users will be able to view the contest, '
-                                                          'but not edit it.'),
+    testers = models.ManyToManyField(Profile, verbose_name=_('testers'),
+                                     help_text=_('These users will be able to view the contest, '
+                                                 'but not edit it.'),
                                      blank=True, related_name='testers+')
     description = models.TextField(verbose_name=_('description'), blank=True)
     terms = models.TextField(verbose_name=_('terms'), blank=True)
     problems = models.ManyToManyField(Problem, verbose_name=_('problems'), through='ContestProblem')
     start_time = models.DateTimeField(verbose_name=_('start time'), db_index=True)
     end_time = models.DateTimeField(verbose_name=_('end time'), db_index=True)
+    unfreeze_time = models.DateTimeField(
+        verbose_name=_('unfreeze time'),
+        null=True, blank=True,
+        help_text=_('Results are revealed after this time.'),
+    )
     registration_start = models.DateTimeField(verbose_name=_('registration start time'),
                                               blank=True, null=True, default=None)
     registration_end = models.DateTimeField(verbose_name=_('registration end time'),
@@ -110,10 +118,10 @@ class Contest(models.Model):
     scoreboard_visibility = models.CharField(verbose_name=_('scoreboard visibility'), default=SCOREBOARD_VISIBLE,
                                              help_text=_('Scoreboard visibility through the duration of the contest'),
                                              max_length=1, choices=SCOREBOARD_VISIBILITY)
-    scoreboard_cache_timeout = models.PositiveIntegerField(verbose_name=('scoreboard cache timeout'), default=3,
+    scoreboard_cache_timeout = models.PositiveIntegerField(verbose_name=_('scoreboard cache timeout'), default=3,
                                                            help_text=_('How long should the scoreboard be cached. '
                                                                        'Set to 0 to disable caching.'))
-    show_submission_list = models.BooleanField(default=False,
+    show_submission_list = models.BooleanField(verbose_name=_('show submission list'), default=False,
                                                help_text=_('Allow contestants to view submission list '
                                                            'of others in contest time'))
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
@@ -201,7 +209,7 @@ class Contest(models.Model):
                                            help_text=_('An optional code to view the contest ranking. '
                                                        'Leave it blank to disable.'),
                                            blank=True, default='', max_length=255)
-    replay_version = models.PositiveIntegerField(default=0)
+    replay_version = models.PositiveIntegerField(verbose_name=_('replay version'), default=0)
 
     @property
     def can_replay(self):
@@ -216,14 +224,17 @@ class Contest(models.Model):
         1. The contest must be visible to all users.
         2. The contest must be ended and not frozen.
         3. Ranking must be visible.
-        4. The contest format must support replay.
+        4. The contest format must support replay (the new IOI format is not replayable).
+        5. Results must not be hidden (formats that hide results, e.g. VOI, are never replayable).
         """
         try:
             self.access_check(AnonymousUser())
         except Exception:
             return False
         return self.ended and self.frozen_last_minutes == 0 and self.show_scoreboard and \
-            self.format.name != contest_format.IOIContestFormat.name  # new IOI format is not replayable
+            self.format.name != contest_format.IOIContestFormat.name and \
+            not getattr(self.format, 'hides_results_before_unfreeze', False) and \
+            not self.should_hide_result(AnonymousUser())
 
     @cached_property
     def format_class(self):
@@ -247,6 +258,9 @@ class Contest(models.Model):
         # Django will complain if you didn't fill in start_time or end_time, so we don't have to.
         if self.start_time and self.end_time and self.start_time >= self.end_time:
             raise ValidationError('What is this? A contest that ended before it starts?')
+
+        if self.unfreeze_time and self.end_time and self.unfreeze_time < self.end_time:
+            raise ValidationError(_('Unfreeze time cannot be before contest end time.'))
 
         if self.registration_start and self.registration_end and self.registration_start >= self.registration_end:
             raise ValidationError('Registration window must start before it ends.')
@@ -291,6 +305,8 @@ class Contest(models.Model):
         if not user.is_authenticated:
             return False
         if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
+            return True
+        if getattr(self, 'has_author', False) or getattr(self, 'has_curator', False):
             return True
         if user.profile.id in self.editor_ids:
             return True
@@ -404,16 +420,15 @@ class Contest(models.Model):
 
     @cached_property
     def author_ids(self):
-        return Contest.authors.through.objects.filter(contest=self).values_list('profile_id', flat=True)
+        return [profile.id for profile in self.authors.all()]
 
     @cached_property
     def editor_ids(self):
-        return self.author_ids.union(
-            Contest.curators.through.objects.filter(contest=self).values_list('profile_id', flat=True))
+        return set(self.author_ids) | set(profile.id for profile in self.curators.all())
 
     @cached_property
     def tester_ids(self):
-        return Contest.testers.through.objects.filter(contest=self).values_list('profile_id', flat=True)
+        return [profile.id for profile in self.testers.all()]
 
     @classmethod
     def get_id_secret(cls, contest_id):
@@ -444,6 +459,43 @@ class Contest(models.Model):
         if self.format.supports_frozen:
             # Keep frozen even if the contest is ended
             return self._now >= self.frozen_time
+        return False
+
+    def get_unfreeze_time(self):
+        return self.unfreeze_time or self.end_time
+
+    def should_hide_result(self, user, participation=None):
+        """
+        Returns True if submission results should be hidden from this user.
+
+        For VOI format: hidden from everyone until the unfreeze time, and additionally
+        hidden from a user while they are inside this contest (e.g. a virtual replay) —
+        revealed the moment they leave. `participation` is the viewer's current participation.
+        For ICPC/VNOJ with unfreeze_time set: hidden between contest end and unfreeze time.
+        Admins and editors always see real results.
+        """
+        if user.is_authenticated:
+            if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
+                return False
+
+            if hasattr(self, 'has_author') and hasattr(self, 'has_curator'):
+                is_editor = self.has_author or self.has_curator
+            else:
+                is_editor = user.profile.id in self.editor_ids
+
+            if is_editor:
+                return False
+
+        hides = getattr(self.format, 'hides_results_before_unfreeze', False)
+
+        # Global window: hidden from everyone until the unfreeze time.
+        if (hides or (self.unfreeze_time and self.ended)) and self._now < self.get_unfreeze_time():
+            return True
+
+        # Personal: a VOI participant sees nothing for this contest while they are in it.
+        if hides and participation is not None and participation.contest_id == self.id:
+            return True
+
         return False
 
     class Inaccessible(Exception):
@@ -620,6 +672,13 @@ class ContestAnnouncement(models.Model):
     description = models.TextField(verbose_name=_('announcement body'))
     date = models.DateTimeField(verbose_name=_('announcement timestamp'), auto_now_add=True)
 
+    class Meta:
+        verbose_name = _('contest announcement')
+        verbose_name_plural = _('contest announcements')
+
+    def __str__(self):
+        return self.title
+
     def send(self):
         if not self.contest.push_announcements:
             return
@@ -704,7 +763,7 @@ class ContestParticipation(models.Model):
 
     @cached_property
     def pre_registered(self):
-        return self.real_start.astimezone(timezone.utc).date() == date(1970, 1, 1)
+        return self.real_start.astimezone(dt_timezone.utc).date() == date(1970, 1, 1)
 
     @cached_property
     def start(self):
@@ -770,7 +829,8 @@ class ContestProblem(models.Model):
     order = models.PositiveIntegerField(db_index=True, verbose_name=_('order'))
     output_prefix_override = models.IntegerField(verbose_name=_('output prefix length override'),
                                                  default=0, null=True, blank=True)
-    max_submissions = models.IntegerField(help_text=_('Maximum number of submissions for this problem, '
+    max_submissions = models.IntegerField(verbose_name=_('max submissions'),
+                                          help_text=_('Maximum number of submissions for this problem, '
                                                       'or leave blank for no limit.'),
                                           default=None, null=True, blank=True,
                                           validators=[MinValueOrNoneValidator(1, _('Why include a problem you '
@@ -781,6 +841,9 @@ class ContestProblem(models.Model):
         verbose_name = _('contest problem')
         verbose_name_plural = _('contest problems')
         ordering = ('order',)
+
+    def __str__(self):
+        return str(self.problem)
 
 
 class ContestSubmission(models.Model):
@@ -798,6 +861,9 @@ class ContestSubmission(models.Model):
     class Meta:
         verbose_name = _('contest submission')
         verbose_name_plural = _('contest submissions')
+
+    def __str__(self):
+        return str(self.submission)
 
 
 class Rating(models.Model):
@@ -828,9 +894,9 @@ class ContestMoss(models.Model):
 
     contest = models.ForeignKey(Contest, verbose_name=_('contest'), related_name='moss', on_delete=CASCADE)
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='moss', on_delete=CASCADE)
-    language = models.CharField(max_length=10)
-    submission_count = models.PositiveIntegerField(default=0)
-    url = models.URLField(null=True, blank=True)
+    language = models.CharField(verbose_name=_('language'), max_length=10)
+    submission_count = models.PositiveIntegerField(verbose_name=_('submission count'), default=0)
+    url = models.URLField(verbose_name=_('URL'), null=True, blank=True)
 
     class Meta:
         unique_together = ('contest', 'problem', 'language')

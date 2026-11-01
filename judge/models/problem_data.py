@@ -97,6 +97,10 @@ class ProblemData(models.Model):
     archived_size = models.BigIntegerField(verbose_name=_('archived test data storage size'), default=0,
                                            help_text=_('Size of the test data zip file in bytes when archived.'))
 
+    class Meta:
+        verbose_name = _('problem data')
+        verbose_name_plural = _('problem data')
+
     def has_yml(self):
         return problem_data_storage.exists('%s/init.yml' % self.problem.code)
 
@@ -149,6 +153,7 @@ class ProblemTestCase(models.Model):
     generator_args = models.TextField(verbose_name=_('generator arguments'), blank=True)
     points = models.IntegerField(verbose_name=_('point value'), blank=True, null=True)
     is_pretest = models.BooleanField(verbose_name=_('case is pretest?'))
+    is_example = models.BooleanField(verbose_name=_('case is example?'), default=False)
     output_prefix = models.IntegerField(verbose_name=_('output prefix length'), blank=True, null=True)
     output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
     checker = models.CharField(max_length=10, verbose_name=_('checker'), choices=CHECKERS, blank=True)
@@ -156,3 +161,7 @@ class ProblemTestCase(models.Model):
                                     help_text=_('Checker arguments as a JSON object.'))
     batch_dependencies = models.TextField(verbose_name=_('batch dependencies'), blank=True,
                                           help_text=_('batch dependencies as a comma-separated list of integers'))
+
+    class Meta:
+        verbose_name = _('problem test case')
+        verbose_name_plural = _('problem test cases')

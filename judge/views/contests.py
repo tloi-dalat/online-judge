@@ -1,8 +1,9 @@
 import json
+import logging
 import os
 from calendar import Calendar, SUNDAY
 from collections import defaultdict, namedtuple
-from datetime import date, datetime, time, timedelta
+from datetime import date, datetime, time, timedelta, timezone as dt_timezone
 from functools import partial
 from operator import attrgetter, itemgetter
 
@@ -13,16 +14,19 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist, PermissionDenied
 from django.db import IntegrityError, transaction
-from django.db.models import BooleanField, Case, Count, F, FloatField, IntegerField, Max, Min, OuterRef, Q, Subquery, \
-    Sum, Value, When
+from django.db.models import (
+    BooleanField, Case, Count, Exists, F, FloatField, IntegerField, Max, Min, OuterRef, Q, Subquery, Sum, Value, When,
+    prefetch_related_objects,
+)
 from django.db.models.expressions import CombinedExpression
 from django.db.models.functions import Coalesce
+from django.db.models.query import Prefetch
 from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.defaultfilters import date as date_filter, floatformat
 from django.template.loader import get_template
 from django.urls import reverse
-from django.utils import timezone
+from django.utils import timezone, translation
 from django.utils.functional import cached_property
 from django.utils.html import _json_script_escapes, escape, format_html
 from django.utils.safestring import mark_safe
@@ -48,6 +52,7 @@ from judge.utils.celery import redirect_to_task_status, task_status_by_id, task_
 from judge.utils.cms import parse_csv_ranking
 from judge.utils.infinite_paginator import InfinitePaginationMixin
 from judge.utils.opengraph import generate_opengraph
+from judge.utils.pdfoid import PDF_RENDERING_ENABLED, get_contest_pdf_basename, render_pdf
 from judge.utils.problems import _get_result_data, user_attempted_ids, user_completed_ids
 from judge.utils.raw_sql import use_straight_join
 from judge.utils.stats import get_bar_chart, get_pie_chart, get_stacked_bar_chart
@@ -107,48 +112,120 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
         return timezone.now()
 
     def _get_queryset(self):
-        return super().get_queryset().prefetch_related('tags', 'organization', 'authors', 'curators', 'testers')
+        queryset = super().get_queryset().select_related('organization')
+        if self.request.user.is_authenticated:
+            user_id = self.request.profile.id
+            authors_exists = Contest.authors.through.objects.filter(contest_id=OuterRef('pk'), profile_id=user_id)
+            curators_exists = Contest.curators.through.objects.filter(contest_id=OuterRef('pk'), profile_id=user_id)
+            testers_exists = Contest.testers.through.objects.filter(contest_id=OuterRef('pk'), profile_id=user_id)
+            queryset = queryset.annotate(
+                has_author=Exists(authors_exists),
+                has_curator=Exists(curators_exists),
+                has_tester=Exists(testers_exists),
+            )
+        return queryset
+
+    def _setup_filters(self):
+        self.search_query = None
+        self.selected_tags = [tag for tag in self.request.GET.getlist('tag') if tag]
+        if 'search' in self.request.GET:
+            self.search_query = ' '.join(self.request.GET.getlist('search')).strip()
+
+    def _apply_filters(self, queryset):
+        if self.search_query:
+            queryset = queryset.filter(Q(key__icontains=self.search_query) | Q(name__icontains=self.search_query))
+        if self.selected_tags:
+            queryset = queryset.filter(tags__name__in=self.selected_tags).distinct()
+        return queryset
 
     def get_queryset(self):
-        self.search_query = None
-        tag = self.request.GET.get('tag', '')
-        self.selected_tag = int(tag) if tag.isdigit() else None
+        self._setup_filters()
         query_set = self._get_queryset().order_by('-end_time', '-key').filter(end_time__lt=self._now)
-        if self.selected_tag:
-            query_set = query_set.filter(tags__id=self.selected_tag)
-        if 'search' in self.request.GET:
-            self.search_query = search_query = ' '.join(self.request.GET.getlist('search')).strip()
-            if search_query:
-                query_set = query_set.filter(Q(key__icontains=search_query) | Q(name__icontains=search_query))
-        return query_set
+        return self._apply_filters(query_set)
 
     def get_paginator(self, queryset, per_page, orphans=0, allow_empty_first_page=True, **kwargs):
         return super().get_paginator(queryset, per_page, orphans, allow_empty_first_page,
                                      count=self.get_queryset().values('id').count(), **kwargs)
 
+    def _populate_solved_counts(self, contests):
+        contest_ids = [contest.id for contest in contests]
+        total_counts = dict(
+            ContestProblem.objects
+            .filter(contest_id__in=contest_ids)
+            .order_by()
+            .values('contest_id')
+            .annotate(total=Count('id'))
+            .values_list('contest_id', 'total'),
+        )
+        solved_counts = dict(
+            ContestProblem.objects
+            .filter(
+                contest_id__in=contest_ids,
+                problem_id__in=user_completed_ids(self.request.profile),
+            )
+            .order_by()
+            .values('contest_id')
+            .annotate(solved=Count('id'))
+            .values_list('contest_id', 'solved'),
+        )
+
+        for contest in contests:
+            if contest.id not in total_counts:
+                continue
+            contest.total_count = total_counts[contest.id]
+            if not contest.should_hide_result(self.request.user, self.request.participation):
+                contest.solved_count = solved_counts.get(contest.id, 0)
+
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
+        past_contests = list(context['past_contests'])
+        current_and_future = list(self._get_queryset().exclude(end_time__lt=self._now))
+        all_contests = past_contests + current_and_future
+
+        is_authenticated = self.request.user.is_authenticated
+
+        prefetches = ['tags']
+        if is_authenticated:
+            prefetches.extend([
+                Prefetch(
+                    'users',
+                    queryset=ContestParticipation.objects.filter(
+                        user=self.request.profile,
+                        virtual=ContestParticipation.LIVE,
+                    ),
+                    to_attr='live_participations',
+                ),
+            ])
+
+        prefetch_related_objects(all_contests, *prefetches)
+
         present, active, future = [], [], []
         finished = set()
-        for contest in self._get_queryset().exclude(end_time__lt=self._now):
+        for contest in current_and_future:
             if contest.start_time > self._now:
                 future.append(contest)
             else:
                 present.append(contest)
 
-        if self.request.user.is_authenticated:
-            for participation in ContestParticipation.objects.filter(virtual=0, user=self.request.profile,
-                                                                     contest_id__in=present) \
-                    .select_related('contest') \
-                    .prefetch_related('contest__authors', 'contest__curators', 'contest__testers') \
-                    .annotate(key=F('contest__key')):
-                if participation.ended:
-                    finished.add(participation.contest.key)
-                else:
-                    active.append(participation)
-                    present.remove(participation.contest)
+        for contest in all_contests:
+            contest.solved_count = None
+            contest.total_count = None
 
-        active.sort(key=attrgetter('end_time', 'key'))
+        if is_authenticated:
+            started_contests = [contest for contest in all_contests if contest.start_time <= self._now]
+            self._populate_solved_counts(started_contests)
+
+            for contest in list(present):
+                if contest.live_participations:
+                    participation = contest.live_participations[0]
+                    participation.contest = contest
+                    if participation.ended:
+                        finished.add(contest.key)
+                    else:
+                        active.append(participation)
+                        present.remove(contest)
+
+        active.sort(key=attrgetter('end_time', 'contest.key'))
         present.sort(key=attrgetter('end_time', 'key'))
         future.sort(key=attrgetter('start_time'))
         context['active_participations'] = active
@@ -159,8 +236,9 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
         context['first_page_href'] = '.'
         context['page_suffix'] = '#past-contests'
         context['search_query'] = self.search_query
-        context['selected_tag'] = self.selected_tag
-        context['contest_tags'] = ContestTag.objects.order_by('name')
+        past_contest_ids = self._get_queryset().filter(end_time__lt=self._now).values('id')
+        context['contest_tags'] = ContestTag.objects.filter(contests__in=past_contest_ids).distinct().order_by('name')
+        context['selected_tags'] = self.selected_tags
         context.update(paginate_query_context(self.request))
         return context
 
@@ -367,6 +445,7 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         authenticated = self.request.user.is_authenticated
         context['completed_problem_ids'] = user_completed_ids(self.request.profile) if authenticated else []
         context['attempted_problem_ids'] = user_attempted_ids(self.request.profile) if authenticated else []
+        context['result_hidden'] = self.object.should_hide_result(self.request.user, self.request.participation)
 
         context['can_download_data'] = bool(settings.DMOJ_CONTEST_DATA_DOWNLOAD)
 
@@ -414,8 +493,100 @@ class ContestAllProblems(ContestMixin, TitleMixin, DetailView):
         authenticated = self.request.user.is_authenticated
         context['completed_problem_ids'] = user_completed_ids(self.request.profile) if authenticated else []
         context['attempted_problem_ids'] = user_attempted_ids(self.request.profile) if authenticated else []
+        context['result_hidden'] = self.object.should_hide_result(self.request.user, self.request.participation)
+
+        context['has_pdf_render'] = PDF_RENDERING_ENABLED
 
         return context
+
+
+def get_contest_problems_for_print(contest, language):
+    problems = Problem.objects.filter(contests__contest=contest) \
+        .order_by('contests__order') \
+        .add_i18n_name(language) \
+        .add_i18n_description(language)
+    return [{
+        'problem': problem,
+        'problem_name': problem.i18n_name,
+        'description': problem.i18n_description,
+    } for problem in problems]
+
+
+class ContestAllProblemsRaw(ContestMixin, TitleMixin, DetailView):
+    template_name = 'contest/all-problems-raw.html'
+
+    def get_title(self):
+        return self.object.name
+
+    def get_context_data(self, **kwargs):
+        context = super(ContestAllProblemsRaw, self).get_context_data(**kwargs)
+
+        if not self.can_view_all_problems:
+            raise Http404()
+
+        context['problems_data'] = get_contest_problems_for_print(self.object, self.request.LANGUAGE_CODE)
+        context['url'] = self.request.build_absolute_uri()
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        with translation.override(settings.LANGUAGE_CODE):
+            return self.render_to_response(self.get_context_data(
+                object=self.object,
+            ))
+
+
+class ContestAllProblemsPdf(ContestMixin, SingleObjectMixin, View):
+    logger = logging.getLogger('judge.problem.pdf')
+    languages = set(map(itemgetter(0), settings.LANGUAGES))
+
+    def get(self, request, *args, **kwargs):
+        if not PDF_RENDERING_ENABLED:
+            raise Http404()
+
+        language = kwargs.get('language', self.request.LANGUAGE_CODE)
+        if language not in self.languages:
+            raise Http404()
+
+        self.object = contest = self.get_object()
+        if not self.can_view_all_problems:
+            raise Http404()
+
+        pdf_basename = get_contest_pdf_basename(contest.id, language)
+
+        def render_contest_pdf():
+            self.logger.info('Rendering contest PDF in %s: %s', language, contest.key)
+
+            with translation.override(language):
+                return render_pdf(
+                    html=get_template('contest/all-problems-raw.html').render({
+                        'contest': contest,
+                        'problems_data': get_contest_problems_for_print(contest, language),
+                        'url': request.build_absolute_uri(),
+                    }).replace('"//', '"https://').replace("'//", "'https://"),
+                    title=contest.name,
+                )
+
+        response = HttpResponse()
+        response['Content-Type'] = 'application/pdf'
+        response['Content-Disposition'] = f'inline; filename={contest.key}.{language}.pdf'
+
+        if settings.DMOJ_PDF_PROBLEM_CACHE:
+            pdf_filename = os.path.join(settings.DMOJ_PDF_PROBLEM_CACHE, pdf_basename)
+            if not os.path.exists(pdf_filename):
+                with open(pdf_filename, 'wb') as f:
+                    f.write(render_contest_pdf())
+
+            if settings.DMOJ_PDF_PROBLEM_INTERNAL:
+                url_path = f'{settings.DMOJ_PDF_PROBLEM_INTERNAL}/{pdf_basename}'
+            else:
+                url_path = None
+
+            add_file_response(request, response, url_path, pdf_filename)
+        else:
+            response.content = render_contest_pdf()
+
+        return response
 
 
 class ContestClone(ContestMixin, PermissionRequiredMixin, TitleMixin, SingleObjectFormView):
@@ -537,7 +708,7 @@ class ContestRegister(LoginRequiredMixin, ContestMixin, SingleObjectMixin, View)
             except ContestParticipation.DoesNotExist:
                 ContestParticipation.objects.create(
                     contest=contest, user=profile, virtual=0,
-                    real_start=datetime(1970, 1, 1, tzinfo=timezone.utc),
+                    real_start=datetime(1970, 1, 1, tzinfo=dt_timezone.utc),
                 )
             else:
                 return generic_message(request, _('Already registered'),
@@ -741,15 +912,15 @@ class ContestICal(TitleMixin, ContestListMixin, BaseListView):
         cal.add('prodid', '-//DMOJ//NONSGML Contests Calendar//')
         cal.add('version', '2.0')
 
-        now = timezone.now().astimezone(timezone.utc)
+        now = timezone.now().astimezone(dt_timezone.utc)
         domain = self.request.get_host()
         for contest in self.get_queryset():
             event = Event()
             event.add('uid', f'contest-{contest.key}@{domain}')
             event.add('summary', contest.name)
             event.add('location', self.request.build_absolute_uri(contest.get_absolute_url()))
-            event.add('dtstart', contest.start_time.astimezone(timezone.utc))
-            event.add('dtend', contest.end_time.astimezone(timezone.utc))
+            event.add('dtstart', contest.start_time.astimezone(dt_timezone.utc))
+            event.add('dtend', contest.end_time.astimezone(dt_timezone.utc))
             event.add('dtstamp', now)
             cal.add_component(event)
         return cal.to_ical()
@@ -838,9 +1009,11 @@ def _submission_count():
 
 
 def base_contest_ranking_queryset(contest):
+    sort_fields = getattr(contest.format, 'ranking_sort_fields',
+                          ('-score', 'cumtime', 'tiebreaker', '-submission_count'))
     return contest.users.filter(virtual__gt=ContestParticipation.SPECTATE) \
         .annotate(submission_count=_submission_count()) \
-        .order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker', '-submission_count')
+        .order_by('is_disqualified', *sort_fields)
 
 
 def base_contest_frozen_ranking_queryset(contest):
@@ -947,6 +1120,13 @@ def _add_ranks_to_participation_json(participations):
         last_key = key
 
 
+def _hide_participation_result_json(participation):
+    """Strip everything that could reveal results while they are hidden (e.g. VOI before unfreeze).
+    Only which problems were attempted is kept, so the client can render a '?' cell for them."""
+    participation['score'] = participation['cumtime'] = participation['tiebreaker'] = None
+    participation['format_data'] = {pid: {'hidden': True} for pid in (participation['format_data'] or {})}
+
+
 class ContestRankingBase(ContestMixin, TitleMixin, DetailView):
     template_name = 'contest/ranking.html'
     tab = None
@@ -1020,6 +1200,9 @@ class ContestRankingBase(ContestMixin, TitleMixin, DetailView):
         context = super().get_context_data(**kwargs)
         self.check_can_see_own_scoreboard()
         context['tab'] = self.tab
+        result_hidden = self.object.should_hide_result(self.request.user, self.request.participation)
+        context['result_hidden'] = result_hidden
+        context['result_globally_hidden'] = result_hidden and self.object._now < self.object.get_unfreeze_time()
         return context
 
 
@@ -1079,15 +1262,20 @@ class ContestRanking(ContestRankingBase):
     def _show_full_ranking(self):
         return self.object.can_see_full_scoreboard(self.request.user)
 
+    @cached_property
+    def _result_hidden(self):
+        return self.object.should_hide_result(self.request.user, self.request.participation)
+
     @property
     def json_cache_key(self):
         return f'contest_ranking_json_{self.object.key}_{self.show_virtual}_{self.is_frozen}_' \
-               f'{self.request.LANGUAGE_CODE}'
+               f'{self._result_hidden}_{self.request.LANGUAGE_CODE}'
 
     def _build_ranking_json_data(self):
         contest = self.object
         problems, problems_data, contest_data = self._build_json_base()
 
+        result_hidden = self._result_hidden
         if not self._show_full_ranking:
             queryset = contest.users.filter(user=self.request.profile, virtual=ContestParticipation.LIVE)
             participations = make_contest_ranking_json(contest, problems, queryset)
@@ -1095,9 +1283,21 @@ class ContestRanking(ContestRankingBase):
                 p['rank'] = '???'
         else:
             queryset = self.get_ranking_queryset()
+            if result_hidden:
+                # Order by name (not score) so the row order doesn't leak the standings.
+                queryset = queryset.order_by('is_disqualified', 'user__user__username')
             participations = make_contest_ranking_json(contest, problems, queryset, frozen=self.is_frozen)
-            _add_ranks_to_participation_json(participations)
+            if result_hidden:
+                for p in participations:
+                    p['rank'] = '?'
+            else:
+                _add_ranks_to_participation_json(participations)
 
+        if result_hidden:
+            for p in participations:
+                _hide_participation_result_json(p)
+
+        contest_data['result_hidden'] = result_hidden
         contest_data['is_frozen'] = self.is_frozen
         contest_data['has_rating'] = contest.ratings.exists()
 
@@ -1761,7 +1961,7 @@ class ContestProblemMakePublic(LoginRequiredMixin, ContestMixin, SingleObjectMix
                 if not is_editable:
                     raise PermissionDenied(_('You do not have permission to edit this problem.'))
                 problem.is_public = True
-                problem.date = now
+                problem.date = timezone.localtime(contest.end_time) + timedelta(seconds=contest_problem.order)
                 problem.save(update_fields=['is_public', 'date'])
                 rescore_problem.delay(problem.id)
 

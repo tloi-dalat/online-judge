@@ -79,7 +79,7 @@ class Migration(migrations.Migration):
     atomic = False
 
     dependencies = [
-        ('judge', '0224_ticketmessage_action'),
+        ('judge', '0226_add_unfreeze_time'),
     ]
 
     operations = [

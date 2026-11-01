@@ -1,9 +1,10 @@
+import django
 from adminsortable2.admin import SortableAdminBase, SortableInlineAdminMixin
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.db import connection, transaction
 from django.db.models import F, Q, TextField
-from django.forms import ModelForm, ModelMultipleChoiceField
+from django.forms import Media, ModelForm, ModelMultipleChoiceField
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import path, reverse, reverse_lazy
@@ -82,8 +83,8 @@ class ContestProblemInline(SortableInlineAdminMixin, admin.TabularInline):
     def rescore_column(self, obj):
         if obj.id is None:
             return ''
-        return format_html('<a class="button rescore-link action-link" href="{}">Rescore</a>',
-                           reverse('admin:judge_contest_rescore', args=(obj.contest_id, obj.id)))
+        return format_html('<a class="button rescore-link action-link" href="{0}">{1}</a>',
+                           reverse('admin:judge_contest_rescore', args=(obj.contest_id, obj.id)), _('Rescore'))
 
 
 class ContestAnnouncementInlineForm(ModelForm):
@@ -101,9 +102,9 @@ class ContestAnnouncementInline(admin.StackedInline):
     @admin.display(description=_('Resend announcement'))
     def resend(self, obj):
         if obj.id is None:
-            return 'Not available'
-        return format_html('<a class="button resend-link action-link" href="{}">Resend</a>',
-                           reverse('admin:judge_contest_resend', args=(obj.contest_id, obj.id)))
+            return _('Not available')
+        return format_html('<a class="button resend-link action-link" href="{0}">{1}</a>',
+                           reverse('admin:judge_contest_resend', args=(obj.contest_id, obj.id)), _('Resend'))
 
 
 class ContestForm(ModelForm):
@@ -153,8 +154,8 @@ class ContestAdmin(AdminFastPaginationMixin, NoBatchDeleteMixin, SortableAdminBa
                                     'run_pretests_only', 'locked_after', 'scoreboard_visibility',
                                     'ranking_access_code', 'scoreboard_cache_timeout', 'show_submission_list',
                                     'points_precision', 'banned_judges')}),
-        (_('Scheduling'), {'fields': ('start_time', 'end_time', 'registration_start', 'registration_end',
-                                      'time_limit')}),
+        (_('Scheduling'), {'fields': ('start_time', 'end_time', 'unfreeze_time', 'registration_start',
+                                      'registration_end', 'time_limit')}),
         (_('Details'), {'fields': ('description', 'terms', 'og_image', 'logo_override_image', 'tags', 'summary')}),
         (_('Format'), {'fields': ('format_name', 'frozen_last_minutes', 'format_config', 'problem_label_script')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rate_disqualified', 'rating_floor', 'rating_ceiling',
@@ -174,6 +175,13 @@ class ContestAdmin(AdminFastPaginationMixin, NoBatchDeleteMixin, SortableAdminBa
     change_list_template = 'admin/judge/contest/change_list.html'
     filter_horizontal = ['rate_exclude']
     date_hierarchy = 'start_time'
+
+    @property
+    def media(self):
+        media = super().media
+        sortable_actions = 'adminsortable2/js/actions-{0}.{1}.js'.format(*django.VERSION)
+        js = ['admin/js/actions.js' if path == sortable_actions else path for path in media._js]
+        return Media(css=media._css, js=js)
 
     def get_actions(self, request):
         actions = super(ContestAdmin, self).get_actions(request)

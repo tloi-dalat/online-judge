@@ -12,6 +12,7 @@ from django.db.models.functions import Coalesce
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
+from django.utils.text import Truncator
 from django.utils.translation import gettext_lazy as _
 
 from judge.fulltext import SearchQuerySet
@@ -205,7 +206,7 @@ class Problem(models.Model):
                                                            '(e.g. 64mb = 65536 kilobytes).'),
                                                validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_MEMORY_LIMIT),
                                                            MaxValueValidator(settings.DMOJ_PROBLEM_MAX_MEMORY_LIMIT)])
-    short_circuit = models.BooleanField(default=False)
+    short_circuit = models.BooleanField(verbose_name=_('short circuit'), default=False)
     points = models.FloatField(verbose_name=_('points'),
                                help_text=_('Points awarded for problem completion. '
                                            "Points are displayed with a 'p' suffix if partial."),
@@ -221,7 +222,7 @@ class Problem(models.Model):
                                     "Doesn't have the magic ability to auto-publish due to backward compatibility."))
     banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
                                           help_text=_('Bans the selected users from submitting to this problem.'))
-    license = models.ForeignKey(License, null=True, blank=True, on_delete=SET_NULL,
+    license = models.ForeignKey(License, verbose_name=_('license'), null=True, blank=True, on_delete=SET_NULL,
                                 help_text=_('The license under which this problem is published.'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), max_length=150, blank=True)
     summary = models.TextField(blank=True, verbose_name=_('problem summary'),
@@ -234,7 +235,7 @@ class Problem(models.Model):
                                                          default=SubmissionSourceAccess.FOLLOW,
                                                          choices=SUBMISSION_SOURCE_ACCESS)
     testcase_visibility_mode = models.CharField(verbose_name=_('Testcase visibility'), max_length=1,
-                                                default=ProblemTestcaseAccess.AUTHOR_ONLY,
+                                                default=ProblemTestcaseAccess.OUT_CONTEST,
                                                 choices=PROBLEM_TESTCASE_ACCESS)
 
     testcase_result_visibility_mode = models.CharField(verbose_name=_('Testcase result visibility'), max_length=1,
@@ -257,6 +258,7 @@ class Problem(models.Model):
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
 
     allow_view_feedback = models.BooleanField(
+        verbose_name=_('allow view feedback'),
         help_text=_('Allow user to view checker feedback.'),
         default=False,
     )
@@ -361,7 +363,14 @@ class Problem(models.Model):
         return user.has_perm('judge.rejudge_submission') and self.is_editable_by(user)
 
     def is_subs_manageable_by(self, user):
-        return user.is_staff and self.is_rejudgeable_by(user)
+        if user.is_staff and self.is_rejudgeable_by(user):
+            return True
+
+        if user.is_authenticated and user.has_perm('judge.manage_own_problem_submissions') \
+                and self.is_editable_by(user):
+            return True
+
+        return False
 
     def is_testcase_accessible_by(self, user):
         if self.testcase_visibility_mode == ProblemTestcaseAccess.ALWAYS:
@@ -659,6 +668,7 @@ class Problem(models.Model):
         permissions = (
             ('see_private_problem', _('See hidden problems')),
             ('edit_own_problem', _('Edit own problems')),
+            ('manage_own_problem_submissions', _('Manage submissions for own problems')),
             ('create_organization_problem', _('Create organization problem')),
             ('edit_all_problem', _('Edit all problems')),
             ('edit_public_problem', _('Edit all public problems')),
@@ -694,11 +704,21 @@ class ProblemTranslation(models.Model):
         verbose_name = _('problem translation')
         verbose_name_plural = _('problem translations')
 
+    def __str__(self):
+        return self.name
+
 
 class ProblemClarification(models.Model):
     problem = models.ForeignKey(Problem, verbose_name=_('clarified problem'), on_delete=CASCADE)
     description = models.TextField(verbose_name=_('clarification body'), validators=[disallowed_characters_validator])
     date = models.DateTimeField(verbose_name=_('clarification timestamp'), auto_now_add=True)
+
+    class Meta:
+        verbose_name = _('problem clarification')
+        verbose_name_plural = _('problem clarifications')
+
+    def __str__(self):
+        return Truncator(self.description).chars(50)
 
 
 class LanguageLimit(models.Model):
@@ -715,6 +735,9 @@ class LanguageLimit(models.Model):
         unique_together = ('problem', 'language')
         verbose_name = _('language-specific resource limit')
         verbose_name_plural = _('language-specific resource limits')
+
+    def __str__(self):
+        return str(self.language)
 
 
 class Solution(models.Model):

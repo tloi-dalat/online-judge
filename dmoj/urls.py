@@ -1,5 +1,6 @@
 import os
 
+from django.apps import apps
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
@@ -14,6 +15,9 @@ from judge.sitemap import sitemaps
 from judge.views import TitledTemplateView, api, blog, comment, contests, language, license, mailgun, notification, \
     organization, preview, problem, problem_download, problem_manage, ranked_submission, register, stats, status, \
     submission, tag, tasks, ticket, two_factor, user, widgets
+from judge.views.chunked_upload import PolygonChunkedUploadCompleteView, PolygonChunkedUploadView, \
+    ProblemDataChunkedUploadCompleteView, ProblemDataChunkedUploadView
+from judge.views.graph_editor import GraphEditorView, ToolsListView
 from judge.views.magazine import MagazinePage
 from judge.views.misc_config import MiscConfigEdit
 from judge.views.problem_data import ProblemDataView, ProblemSubmissionDiff, \
@@ -117,6 +121,10 @@ urlpatterns = [
         path('/random/', problem.RandomProblem.as_view(), name='problem_random'),
         path('/create', problem.ProblemCreate.as_view(), name='problem_create'),
         path('/import-polygon', problem.ProblemImportPolygon.as_view(), name='problem_import_polygon'),
+        path('/import-polygon/upload/chunk', PolygonChunkedUploadView.as_view(),
+             name='polygon_chunked_upload'),
+        path('/import-polygon/upload/complete', PolygonChunkedUploadCompleteView.as_view(),
+             name='polygon_chunked_upload_complete'),
     ])),
 
     path('problem/<str:problem>', include([
@@ -142,6 +150,10 @@ urlpatterns = [
         path('/', lambda _, problem: HttpResponsePermanentRedirect(reverse('problem_detail', args=[problem]))),
 
         path('/test_data', ProblemDataView.as_view(), name='problem_data'),
+        path('/test_data/upload/chunk', ProblemDataChunkedUploadView.as_view(),
+             name='problem_data_chunked_upload'),
+        path('/test_data/upload/complete', ProblemDataChunkedUploadCompleteView.as_view(),
+             name='problem_data_chunked_upload_complete'),
         path('/test_data/init', problem_init_view, name='problem_data_init'),
         path('/test_data/diff', ProblemSubmissionDiff.as_view(), name='problem_submission_diff'),
         path('/data/<path:path>', problem_data_file, name='problem_data_file'),
@@ -249,6 +261,11 @@ urlpatterns = [
         path('', contests.ContestDetail.as_view(), name='contest_view'),
         path('/comments', contests.ContestComments.as_view(), name='contest_comments'),
         path('/all', contests.ContestAllProblems.as_view(), name='contest_all_problems'),
+        path('/all/raw',
+             xframe_options_sameorigin(contests.ContestAllProblemsRaw.as_view()),
+             name='contest_all_problems_raw'),
+        path('/all/pdf', contests.ContestAllProblemsPdf.as_view(), name='contest_all_problems_pdf'),
+        path('/all/pdf/<slug:language>', contests.ContestAllProblemsPdf.as_view(), name='contest_all_problems_pdf'),
         path('/edit', contests.EditContest.as_view(), name='contest_edit'),
         path('/delete', contests.ContestDelete.as_view(), name='contest_delete'),
         path('/moss', contests.ContestMossView.as_view(), name='contest_moss'),
@@ -372,6 +389,9 @@ urlpatterns = [
         path('/', lambda _, id, slug: HttpResponsePermanentRedirect(reverse('blog_post', args=[id, slug]))),
     ])),
 
+    path('tools/', ToolsListView.as_view(), name='tools_list'),
+    path('tool/graph_editor', GraphEditorView.as_view(), name='graph_editor'),
+
     path('license/<str:key>', license.LicenseDetail.as_view(), name='license'),
 
     path('mailgun/mail_activate/', mailgun.MailgunActivationView.as_view(), name='mailgun_activate'),
@@ -481,7 +501,7 @@ handler500 = 'judge.views.error.error500'
 
 if 'newsletter' in settings.INSTALLED_APPS:
     urlpatterns.append(path('newsletter/', include('newsletter.urls')))
-if 'impersonate' in settings.INSTALLED_APPS:
+if apps.is_installed('impersonate'):
     urlpatterns.append(path('impersonate/', include('impersonate.urls')))
 
 if settings.VNOJ_ENABLE_SYNC_API:

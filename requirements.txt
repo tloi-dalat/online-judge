@@ -1,4 +1,4 @@
-Django>=4.2,<5
+Django>=6.1,<6.2
 django-cleanup
 django_compressor>=3
 django-mptt>=0.13
@@ -12,18 +12,20 @@ mysqlclient
 dmoj-wpadmin @ git+https://github.com/DMOJ/dmoj-wpadmin.git
 lxml
 lxml_html_clean
-Pygments<2.12
-mistune<2
-social-auth-core==4.3.0
-social-auth-app-django==5.0.0
+Pygments>=2.20
+mistune>=3.3
+social-auth-core>=6.1
+social-auth-app-django>=7.1
 pytz
 django-statici18n
+polib
 pika
 ua-parser
 pyyaml
 jinja2
 django_jinja>=2.5.0
 llist
+latex2mathml
 requests
 django-fernet-fields @ git+https://github.com/DMOJ/django-fernet-fields.git
 pyotp
@@ -38,11 +40,10 @@ lupa
 netaddr
 webauthn<1
 nh3
-markdown2 @ git+https://github.com/VNOI-Admin/python-markdown2.git@860966466cc394e96377bbca408df2535afbc8a5
+markdown2 @ git+https://github.com/VNOI-Admin/python-markdown2.git
 discord-webhook
 django-admin-sortable2
 icalendar
-# This is a celery dependency whose latest major version is breaking everything.
-importlib-metadata<5
+django-chunked-upload @ git+https://github.com/juliomalegria/django-chunked-upload.git
 django-storages[s3]
 django-oauth-toolkit

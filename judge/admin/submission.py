@@ -23,7 +23,8 @@ from judge.widgets import AdminAceWidget
 
 
 class SubmissionStatusFilter(admin.SimpleListFilter):
-    parameter_name = title = 'status'
+    title = _('status')
+    parameter_name = 'status'
     __lookups = (('None', _('None')), ('NotDone', _('Not done')), ('EX', _('Exceptional'))) + Submission.STATUS
     __handles = set(map(itemgetter(0), Submission.STATUS))
 
@@ -42,7 +43,8 @@ class SubmissionStatusFilter(admin.SimpleListFilter):
 
 
 class SubmissionResultFilter(admin.SimpleListFilter):
-    parameter_name = title = 'result'
+    title = _('result')
+    parameter_name = 'result'
     __lookups = (('None', _('None')), ('BAD', _('Unaccepted'))) + Submission.RESULT
     __handles = set(map(itemgetter(0), Submission.RESULT))
 
@@ -87,7 +89,9 @@ class ContestSubmissionInline(admin.StackedInline):
                     if obj.spectate:
                         return gettext('%s (spectating)') % obj.contest.name
                     if obj.virtual:
-                        return gettext('%s (virtual %d)') % (obj.contest.name, obj.virtual)
+                        return gettext('%(contest)s (virtual %(virtual)d)') % {
+                            'contest': obj.contest.name, 'virtual': obj.virtual,
+                        }
                     return obj.contest.name
                 label = _label
             elif db_field.name == 'problem':

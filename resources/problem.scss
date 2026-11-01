@@ -116,6 +116,7 @@
 }
 
 #search {
+    background: $color_primary0;
     width: 100%;
     height: 2.3em;
 }
@@ -179,6 +180,10 @@ ul.problem-list {
 
 .attempted-problem-color {
     color: orange;
+}
+
+.hidden-problem-color {
+    color: #337AB7;
 }
 
 .has-editorial-color {
@@ -258,6 +263,7 @@ ul.problem-list {
 #problem_submit {
     width: 100%;
     box-sizing: border-box;
+    overflow: hidden;
 
     .hidden {
         display: none;
@@ -281,6 +287,28 @@ ul.problem-list {
 
         #id_language {
             width: 100%;
+        }
+
+        #language-select {
+            width: 100%;
+            max-width: 100%;
+
+            .select2-container {
+                width: 100% !important;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+
+            .select2-selection--single {
+                overflow: hidden;
+
+                .select2-selection__rendered {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    padding-right: 25px;
+                }
+            }
         }
     }
 
@@ -338,6 +366,42 @@ ul.problem-list {
     .required th::after {
         content: "*";
         color: red;
+    }
+
+    .submit-problem-facts {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 10px;
+        margin-top: 0.5em;
+        margin-bottom: 0.8em;
+        padding: 6px 12px;
+        background: $color_primary5;
+        border: 1px solid $color_primary25;
+        border-radius: 4px;
+
+        .submit-problem-fact {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+
+            .submit-problem-fact-label {
+                font-size: 0.85em;
+                color: $color_primary50;
+                font-weight: bold;
+
+                &::after {
+                    content: ":\00a0";
+                }
+            }
+
+            .submit-problem-fact-value {
+                font-size: 0.85em;
+                font-weight: 600;
+                color: $color_primary90;
+            }
+        }
     }
 }
 
@@ -450,6 +514,10 @@ ul.problem-list {
         line-height: 13px;
         padding: 0 3px;
         font-size: 13px;
+    }
+
+    &.noUi-target {
+        background: #242424 !important;
     }
 }
 

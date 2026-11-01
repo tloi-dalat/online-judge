@@ -1,0 +1,12 @@
+name: 'release'
+on:
+  push:
+    branches: [release, 'releases/**']
+
+jobs:
+  tag:
+    name: tag
+    permissions:
+      contents: write
+      actions: write
+    uses: tloi-dalat/reusable-workflow/.github/workflows/release-tag.yaml@main

@@ -1,0 +1,102 @@
+name: 'check'
+on:
+  pull_request:
+    branches: [main, release, 'releases/**']
+  schedule:
+    - cron: '17 2 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: ci-check-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  migrations:
+    name: check-migrations
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/django-migration-check.yaml@main
+    with:
+      python-version: '3.14'
+      requirements: requirements.txt
+      settings-file: .ci.settings.py
+      mysql-image: mariadb:10.11
+
+  i18n:
+    name: check-i18n
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/django-i18n-check.yaml@main
+    with:
+      python-version: '3.14'
+      requirements: requirements.txt
+      settings-file: .ci.settings.py
+      settings-target: dmoj/local_settings.py
+      source-locale: en
+      compile: |
+        python manage.py compilemessages
+        python manage.py compilejsi18n
+      template-globs: 'templates/**/*.html templates/**/*.txt'
+      makemessages: |
+        -e py,html,txt -i node_modules -i static -i sass_processed -i resources/libs -i resources/vnoj -i resources/mathjax
+        -d djangojs -i node_modules -i static -i sass_processed -i resources/libs -i resources/vnoj -i resources/mathjax
+
+  i18n-django:
+    name: check-i18n-django
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/django-i18n-check.yaml@main
+    with:
+      python-version: '3.14'
+      requirements: requirements.txt
+      settings-file: .ci.settings.py
+      settings-target: dmoj/local_settings.py
+      locale-dir: locale_django
+      source-locale: en
+      compile: |
+        python manage.py compilemessages
+        python manage.py compilejsi18n
+      regenerate: python manage.py makedjangomessages
+
+  templates:
+    name: check-templates
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/django-template-check.yaml@main
+    with:
+      python-version: '3.14'
+      requirements: requirements.txt
+      settings-file: .ci.settings.py
+      settings-target: dmoj/local_settings.py
+
+  workflows:
+    name: check-workflows
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/workflow-lint.yaml@main
+
+  docker:
+    name: check-docker
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/docker-build-check.yaml@main
+    with:
+      submodules: recursive
+      images: >-
+        [{"image": "online-judge-site", "dockerfile": "Dockerfile"},
+         {"image": "online-judge-event", "dockerfile": "websocket/Dockerfile"}]
+
+  dependencies:
+    name: check-dependencies
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/python-audit.yaml@main
+    with:
+      python-version: '3.14'
+      requirements: requirements.txt

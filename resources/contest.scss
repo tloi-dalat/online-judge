@@ -146,6 +146,23 @@
     }
 }
 
+.contest-list-stats {
+    width: 100%;
+    table-layout: fixed;
+
+    th:first-child {
+        width: 55%;
+    }
+
+    th:not(:first-child) {
+        width: 15%;
+    }
+
+    td {
+        overflow-wrap: anywhere;
+    }
+}
+
 .contest-tag {
     box-shadow: inset 0 -0.1em 0 rgba(0, 0, 0, 0.12);
     padding: 0.15em 0.3em;
@@ -420,4 +437,34 @@ form.contest-join-pseudotab {
     cursor: pointer;
     &:hover { background: $color_primary25; }
     &.expanded { display: none; }
+}
+
+#contest-search {
+    align-self: stretch;
+    border-radius: 4px;
+
+    &:not(:hover):not(:focus) {
+        border-color: $color_primary33;
+        box-shadow: none;
+    }
+}
+
+#contest-filter-form {
+    .select2-container {
+        align-self: stretch;
+    }
+
+    .select2-selection--multiple {
+        display: flex;
+        align-items: center;
+        height: 100%;
+    }
+
+    .select2-selection__rendered {
+        padding-bottom: 5px;
+    }
+
+    .select2-search--inline {
+        line-height: normal;
+    }
 }

@@ -6,8 +6,6 @@ enable-extensions = G
 ignore =
     # line break occurred after a binary operator
     W504,
-    # allow only generator_stop and annotations future imports
-    FI10,FI11,FI12,FI13,FI14,FI15,FI16,FI17,FI18,FI55,FI58,
     # missing trailing comma in Python 2 only
     C814,
 per-file-ignores =
@@ -25,5 +23,7 @@ exclude =
     ./dmoj/local_urls.py,
     # is actually a fragment to be included by settings.py
     ./.ci.settings.py,
+    # is actually a fragment to be included by settings.py
+    ./.k8s.settings.py,
     fc_*
     _mytempfile/

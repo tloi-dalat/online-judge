@@ -29,10 +29,11 @@ from reversion import revisions
 from judge.comments import CommentedDetailView
 from judge.forms import LanguageLimitFormSet, ProblemCloneForm, ProblemEditForm, ProblemEditTypeGroupForm, \
     ProblemImportPolygonForm, ProblemImportPolygonStatementFormSet, ProblemSubmitForm, ProposeProblemSolutionFormSet
-from judge.models import Contest, ContestSubmission, Judge, Language, Problem, ProblemGroup, \
+from judge.models import Contest, ContestProblem, ContestSubmission, Judge, Language, Problem, ProblemGroup, \
     ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource
+from judge.tasks import import_polygon_package, import_polygon_package_from_api
 from judge.template_context import misc_config
-from judge.utils.codeforces_polygon import ImportPolygonError, PolygonImporter
+from judge.utils.celery import redirect_to_task_status
 from judge.utils.infinite_paginator import InfinitePaginationMixin
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.pdfoid import PDF_RENDERING_ENABLED, render_pdf
@@ -278,6 +279,12 @@ class ProblemSubmitMixin:
         # If old_submission exists (for resubmit), use its language
         if hasattr(self, 'old_submission') and self.old_submission is not None:
             return self.old_submission.language
+        last_submission = Submission.objects.filter(
+            user=self.request.profile,
+            problem=self.object,
+        ).order_by('-id').first()
+        if last_submission:
+            return last_submission.language
         return self.request.profile.language
 
     def get_submit_form(self, **kwargs):
@@ -342,6 +349,7 @@ class ProblemSubmitMixin:
             'submissions_left': self.remaining_submission_count,
             'ACE_URL': settings.ACE_URL,
             'default_lang': self.default_language,
+            'language_limits': {limit.language_id: limit for limit in self.object.language_limits.all()},
         }
 
     def handle_submission_post(self, request):
@@ -524,6 +532,22 @@ class ProblemDetail(ProblemMixin, ProblemClarificationsMixin, SolvedProblemMixin
             submit_context = self.get_submit_context()
             context.update(submit_context)
             context['no_judges'] = not context['form'].fields['language'].queryset if context.get('form') else True
+
+        from_contests = (
+            ContestProblem.objects
+            .filter(problem=self.object)
+            .select_related('contest')
+            .order_by('-contest__start_time', 'contest__key')
+        )
+
+        accessible_contests = []
+        for c in from_contests:
+            contest = c.contest
+            if contest.is_accessible_by(user):
+                accessible_contests.append(contest)
+
+        context['from_contests'] = accessible_contests[:3]
+        context['from_contests_more_count'] = max(len(accessible_contests) - 3, 0)
 
         return context
 
@@ -1025,15 +1049,42 @@ class ProblemImportPolygon(PermissionRequiredMixin, TitleMixin, FormView):
         context = super().get_context_data(**kwargs)
         context['formset'] = self.get_formset()
         context['site_languages_json'] = mark_safe(json.dumps({code: str(name) for code, name in settings.LANGUAGES}))
+        context['chunk_size'] = settings.VNOJ_PROBLEM_DATA_CHUNK_SIZE
+        context['max_bytes'] = settings.CHUNKED_UPLOAD_MAX_BYTES
         return context
 
     def post(self, request, *args, **kwargs):
+        from chunked_upload.constants import COMPLETE
+        from chunked_upload.models import ChunkedUpload
+
         form = self.get_form()
         formset = self.get_formset()
         if form.is_valid() and formset.is_valid():
-            package = form.cleaned_data['package'].file
             code = form.cleaned_data['code']
             do_update = form.cleaned_data['do_update']
+            problem_id = form.cleaned_data['problem_id']
+
+            if problem_id:
+                config = {
+                    'ignore_zero_point_batches': form.cleaned_data['ignore_zero_point_batches'],
+                    'ignore_zero_point_cases': form.cleaned_data['ignore_zero_point_cases'],
+                    'append_main_solution_to_tutorial': form.cleaned_data['append_main_solution_to_tutorial'],
+                }
+                result = import_polygon_package_from_api.delay(
+                    problem_id, code, request.profile.id, do_update, config,
+                )
+                return redirect_to_task_status(
+                    result, message=_('Importing problem %s...') % code,
+                    redirect=reverse('problem_detail', args=[code]),
+                )
+
+            upload = ChunkedUpload.objects.filter(
+                upload_id=form.cleaned_data['upload_id'], user=request.user, status=COMPLETE,
+            ).first()
+            if upload is None:
+                form.add_error('package', _('Please upload a package or enter a problem ID.'))
+                return self.render_to_response(self.get_context_data(form=form))
+
             config = {
                 'ignore_zero_point_batches': form.cleaned_data['ignore_zero_point_batches'],
                 'ignore_zero_point_cases': form.cleaned_data['ignore_zero_point_cases'],
@@ -1052,21 +1103,11 @@ class ProblemImportPolygon(PermissionRequiredMixin, TitleMixin, FormView):
                     else:
                         config['polygon_to_site_language_map'][polygon_language] = site_language
 
-            try:
-                importer = PolygonImporter(
-                    package=package,
-                    code=code,
-                    authors=[self.request.profile],
-                    curators=[],
-                    do_update=do_update,
-                    interactive=False,
-                    config=config,
-                )
-                importer.run()
-            except ImportPolygonError as e:
-                return generic_message(request, _('Failed to import problem'), str(e), status=400)
-
-            return HttpResponseRedirect(reverse('problem_detail', args=[code]))
+            result = import_polygon_package.delay(upload.upload_id, code, request.profile.id, do_update, config)
+            return redirect_to_task_status(
+                result, message=_('Importing problem %s...') % code,
+                redirect=reverse('problem_detail', args=[code]),
+            )
 
         return self.render_to_response(self.get_context_data())
 

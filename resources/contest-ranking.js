@@ -203,6 +203,18 @@
         return '<small style="color:red"> (' + escapeHtml(fmtPoints(value, 0)) + ')</small>';
     }
 
+    // Hidden results (e.g. VOI before unfreeze): the backend only says which problems were attempted.
+    function hiddenProblemCell(entry, problem, meta) {
+        if (!entry) return '<td></td>';
+        return wrapProblemCell('pending', makeSubmissionUrl(meta, problem.code), '?');
+    }
+
+    function hiddenResultCell(participation, meta) {
+        var url = makeAllSubmissionsUrl(meta);
+        if (!url) return '<td class="user-points">?</td>';
+        return '<td class="user-points"><a href="' + escapeHtml(url) + '">?</a></td>';
+    }
+
     // ─── Format renderers ─────────────────────────────────────────────────────
     // Each renderer provides:
     //   renderProblemCell(entry, problem, participationId, firstSolves, meta)
@@ -236,7 +248,7 @@
             var isFirst = firstSolves[pid] === participationId;
             var url = makeSubmissionUrl(meta, problem.code);
 
-            var triesText = tries + ' ' + (tries === 1 ? 'try' : 'tries');
+            var triesText = interpolate(ngettext('%(count)s try', '%(count)s tries', tries), {count: tries}, true);
             var extraPrefix = entry.is_frozen ? 'pending ' : '';
             var state = problemStateClass(entry, problem, isFirst, meta, extraPrefix);
 
@@ -259,6 +271,10 @@
                 '<td class="user-penalty">' +
                 escapeHtml(Math.round(participation.cumtime)) +
                 '</td>';
+        },
+
+        renderHiddenResultCell: function (participation, meta) {
+            return hiddenResultCell(participation, meta) + '<td class="user-penalty">?</td>';
         },
     };
 
@@ -338,6 +354,18 @@
         },
     };
 
+    // ── VOI ───────────────────────────────────────────────────────────────────
+    var voiRenderer = {
+        renderProblemCell: function (entry, problem, participationId, firstSolves, meta) {
+            return standardProblemCell(entry, problem, participationId, firstSolves, meta, {
+                showTime: false,
+            });
+        },
+        renderResultCell: function (participation, meta) {
+            return standardResultCell(participation, meta, false);
+        },
+    };
+
     var RENDERERS = {
         'default':    defaultRenderer,
         'icpc':       icpcRenderer,
@@ -346,6 +374,7 @@
         'atcoder':    atcoderRenderer,
         'vnoj':       vnojRenderer,
         'ecoo':       ecooRenderer,
+        'voi':        voiRenderer,
     };
 
     // ─── Table builder ────────────────────────────────────────────────────────
@@ -358,16 +387,17 @@
             colspanTotalAC: renderer.colspanTotalAC || 3,
             renderProblemCell: renderer.renderProblemCell,
             renderResultCell: renderer.renderResultCell,
+            renderHiddenResultCell: renderer.renderHiddenResultCell || hiddenResultCell,
         };
     }
 
     function buildHeader(contest, problems, renderer) {
         var isICPC = contest.format === 'icpc';
         var html = '<thead><tr>';
-        html += '<th class="header rank">' + escapeHtml(contest.rank_header || 'Rank') + '</th>';
-        html += '<th class="header username">Username</th>';
-        html += '<th class="header points">Points</th>';
-        html += renderer.extraHeaderCols({ contest: contest, penaltyLabel: 'Penalty' });
+        html += '<th class="header rank">' + escapeHtml(contest.rank_header || gettext('Rank')) + '</th>';
+        html += '<th class="header username">' + escapeHtml(gettext('Username')) + '</th>';
+        html += '<th class="header points">' + escapeHtml(gettext('Points')) + '</th>';
+        html += renderer.extraHeaderCols({ contest: contest, penaltyLabel: gettext('Penalty') });
         for (var i = 0; i < problems.length; i++) {
             var prob = problems[i];
             html += '<th class="points header">' +
@@ -380,7 +410,7 @@
             html += '</a></th>';
         }
         if (contest.has_rating) {
-            html += '<th class="rating-column">Rating</th>';
+            html += '<th class="rating-column">' + escapeHtml(gettext('Rating')) + '</th>';
         }
         html += '</tr></thead>';
         return html;
@@ -389,7 +419,7 @@
     function buildAdminOps(participation, contest) {
         if (!contest.can_edit) return '';
         var p = participation;
-        var disqLabel = p.is_disqualified ? 'Un-Disqualify' : 'Disqualify';
+        var disqLabel = p.is_disqualified ? gettext('Un-Disqualify') : gettext('Disqualify');
         var disqClass = p.is_disqualified ? 'un-disqualify-participation' : 'disqualify-participation';
         var disqIcon  = p.is_disqualified ? 'fa-undo' : 'fa-trash';
 
@@ -401,7 +431,7 @@
 
         if (contest.can_change_participation) {
             var adminUrl = contest.admin_url_template.replace('__ID__', p.id);
-            html += '<a href="' + escapeHtml(adminUrl) + '" title="Admin" class="edit-participation">' +
+            html += '<a href="' + escapeHtml(adminUrl) + '" title="' + escapeHtml(gettext('Admin')) + '" class="edit-participation">' +
                 '<i class="fa fa-cog fa-fw"></i></a>';
         }
         html += '</span>';
@@ -460,7 +490,7 @@
         if (contest.mode === 'participation') {
             if (p.virtual === 0) {
                 var liveUrl = escapeHtml(contest.ranking_url + '#!' + u.username);
-                rankDisplay = '<a href="' + liveUrl + '">Live</a>';
+                rankDisplay = '<a href="' + liveUrl + '">' + escapeHtml(gettext('Live')) + '</a>';
             } else {
                 rankDisplay = escapeHtml(String(p.virtual));
             }
@@ -483,7 +513,8 @@
         html += buildUserLink(u, p.ghost, !badgeBesideOrg);
 
         if (p.virtual > 0) {
-            var virtualTitle = p.virtual + ' virtual participation' + (p.virtual > 1 ? 's' : '') + ' of this user';
+            var virtualTitle = interpolate(ngettext('%(count)s virtual participation of this user',
+                '%(count)s virtual participations of this user', p.virtual), {count: p.virtual}, true);
             html += '<sup class="virtual-participation" title="' + escapeHtml(virtualTitle) + '">' +
                 '[' + p.virtual + ']</sup>';
         }
@@ -529,14 +560,18 @@
         };
 
         // Result cell(s)
-        html += renderer.renderResultCell(p, meta);
+        html += contest.result_hidden
+            ? renderer.renderHiddenResultCell(p, meta)
+            : renderer.renderResultCell(p, meta);
 
         // Problem cells
         for (var pi = 0; pi < problems.length; pi++) {
             var prob = problems[pi];
             var pid = String(prob.id);
             var entry = (p.format_data || {})[pid] || null;
-            html += renderer.renderProblemCell(entry, prob, p.id, firstSolves, meta);
+            html += contest.result_hidden
+                ? hiddenProblemCell(entry, prob, meta)
+                : renderer.renderProblemCell(entry, prob, p.id, firstSolves, meta);
         }
 
         // Rating cell
@@ -548,14 +583,14 @@
         return html;
     }
 
-    function buildTotalACRow(problems, totalAC, colspan, hasRating) {
-        var html = '<tr><td colspan="' + colspan + '">Total AC</td>';
+    function buildTotalACRow(problems, totalAC, colspan, hasRating, resultHidden) {
+        var html = '<tr><td colspan="' + colspan + '">' + escapeHtml(gettext('Total AC')) + '</td>';
         for (var i = 0; i < problems.length; i++) {
             var prob = problems[i];
             var pid = String(prob.id);
             var label = escapeHtml(prob.label);
             html += '<td class="total-ac" id="' + label + '-total">' +
-                escapeHtml(String(totalAC[pid] || 0)) + '</td>';
+                (resultHidden ? '?' : escapeHtml(String(totalAC[pid] || 0))) + '</td>';
         }
         if (hasRating) html += '<td></td>';
         html += '</tr>';
@@ -587,7 +622,7 @@
             html += buildUserRow(participations[i], problems, firstSolves, contest, renderer);
         }
 
-        html += buildTotalACRow(problems, totalAC, renderer.colspanTotalAC, contest.has_rating);
+        html += buildTotalACRow(problems, totalAC, renderer.colspanTotalAC, contest.has_rating, contest.result_hidden);
         html += '</tbody></table>';
 
         var container = document.getElementById('ranking-container');
