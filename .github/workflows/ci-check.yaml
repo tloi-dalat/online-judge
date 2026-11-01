@@ -11,6 +11,40 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  flake8:
+    name: check-flake8
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/flake8-check.yaml@main
+    with:
+      python-version: '3.14'
+      packages: 'setuptools<82 flake8 flake8-import-order flake8-commas flake8-logging-format flake8-quotes'
+
+  tests:
+    name: check-tests
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/django-test-check.yaml@main
+    with:
+      python-version: '3.14'
+      requirements: requirements.txt
+      settings-file: .ci.settings.py
+      mysql-image: mariadb:10.11
+      setup: python manage.py compilejsi18n
+      labels: judge urlshortener
+
+  node:
+    name: check-node
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/node-build-check.yaml@main
+    with:
+      node-version: '26.x'
+      build: ./make_style.sh
+
   migrations:
     name: check-migrations
     if: github.event_name == 'pull_request'
