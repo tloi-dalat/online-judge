@@ -286,7 +286,7 @@ ul.pagination {
                     line-height: 1.42857;
                     text-decoration: none;
                     color: $color_text_sidebox;
-                    background-color: $color_primary67;
+                    background-color: $color_primary75;
                     border: 1px solid $color_primary50;
                     margin-left: -1px;
                 }
@@ -441,6 +441,10 @@ a.close {
         .table {
             margin: 0 !important;
         }
+    }
+
+    .time {
+      color: $color_primary100;
     }
 }
 
