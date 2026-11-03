@@ -13,12 +13,13 @@ from django.contrib.auth.context_processors import PermWrapper
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist, PermissionDenied
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.db.models import (
     BooleanField, Case, Count, Exists, F, FloatField, IntegerField, Max, Min, OuterRef, Q, Subquery, Sum, Value, When,
     prefetch_related_objects,
 )
 from django.db.models.expressions import CombinedExpression
+from django.db.models.functions import Coalesce
 from django.db.models.query import Prefetch
 from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
@@ -46,7 +47,7 @@ from judge.forms import ContestAnnouncementForm, ContestCloneForm, ContestDownlo
 from judge.models import Contest, ContestAnnouncement, ContestMoss, ContestParticipation, ContestProblem, \
     ContestSubmission, ContestTag, Language, Organization, Problem, ProblemClarification, Profile, Solution, Submission
 from judge.ratings import RATING_CLASS, RATING_LEVELS, RATING_VALUES
-from judge.tasks import on_new_contest, prepare_contest_data, rescore_problem, run_moss
+from judge.tasks import on_new_contest, prepare_contest_data, rescore_contest, rescore_problem, run_moss
 from judge.utils.celery import redirect_to_task_status, task_status_by_id, task_status_url_by_id
 from judge.utils.cms import parse_csv_ranking
 from judge.utils.infinite_paginator import InfinitePaginationMixin
@@ -62,7 +63,7 @@ from judge.views.submission import submission_related
 __all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'ContestClone', 'ContestStats', 'ContestMossView', 'ContestMossDelete',
            'ContestBalloons', 'ContestParticipationDisqualify',
-           'ContestProblemMakePublic']
+           'ContestProblemMakePublic', 'ContestProblemSetSource']
 
 
 def _find_contest(request, key, private_check=True):
@@ -139,7 +140,7 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
 
     def get_queryset(self):
         self._setup_filters()
-        query_set = self._get_queryset().order_by('-end_time', 'key').filter(end_time__lt=self._now)
+        query_set = self._get_queryset().order_by('-end_time', '-key').filter(end_time__lt=self._now)
         return self._apply_filters(query_set)
 
     def get_paginator(self, queryset, per_page, orphans=0, allow_empty_first_page=True, **kwargs):
@@ -609,7 +610,7 @@ class ContestClone(ContestMixin, PermissionRequiredMixin, TitleMixin, SingleObje
         organization = contest.organization
         private_contestants = list(contest.private_contestants.all())
         view_contest_scoreboard = list(contest.view_contest_scoreboard.all())
-        contest_problems = list(contest.contest_problems.all())
+        contest_problems = list(contest.contest_problems.all()) if form.cleaned_data['copy_problems'] else []
         old_key = contest.key
 
         contest.pk = None
@@ -998,31 +999,34 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
         return super().dispatch(request, *args, **kwargs)
 
 
+def _submission_count():
+    # this is faster than Count('submission') due to JOIN + GROUP BY doesn't take
+    # advantage of the index.
+    return Coalesce(Subquery(
+        ContestSubmission.objects.filter(participation=OuterRef('pk')).order_by()
+        .values('participation').annotate(c=Count('id')).values('c'),
+    ), 0)
+
+
 def base_contest_ranking_queryset(contest):
     sort_fields = getattr(contest.format, 'ranking_sort_fields',
                           ('-score', 'cumtime', 'tiebreaker', '-submission_count'))
     return contest.users.filter(virtual__gt=ContestParticipation.SPECTATE) \
-        .prefetch_related(Prefetch('user__organizations',
-                                   queryset=Organization.objects.filter(is_unlisted=False))) \
-        .annotate(submission_count=Count('submission')) \
+        .annotate(submission_count=_submission_count()) \
         .order_by('is_disqualified', *sort_fields)
 
 
 def base_contest_frozen_ranking_queryset(contest):
     return contest.users.filter(virtual__gt=ContestParticipation.SPECTATE) \
-        .prefetch_related(Prefetch('user__organizations',
-                                   queryset=Organization.objects.filter(is_unlisted=False))) \
-        .annotate(submission_count=Count('submission')) \
+        .annotate(submission_count=_submission_count()) \
         .order_by('is_disqualified', '-frozen_score', 'frozen_cumtime', 'frozen_tiebreaker', '-submission_count')
 
 
-def _serialize_user(row, user_url_tpl, org_url_tpl):
+def _serialize_user(row, user_url_tpl, org_url_tpl, orgs):
     """Serialize the user/profile portion of a participation row into a JSON-safe dict."""
     username = row['user__user__username']
     display_name = row['user__username_display_override'] or username
-    org_name = row['_org_name']
-    org_slug = row['_org_slug']
-    org_logo = row['_org_logo']
+    org_name, org_slug, org_logo = orgs.get(row['_org_id'], (None, None, None))
     badge_mini = row['_badge_mini']
     badge_name = row['_badge_name']
 
@@ -1060,15 +1064,14 @@ def make_contest_ranking_json(contest, problems, queryset, frozen=False):
     _user_url_tpl = reverse('user_page', args=['__USERNAME__'])
     _org_url_tpl = reverse('organization_home', args=['__SLUG__'])
 
-    # Subqueries for the user's first organisation (replicates Profile.organization).
+    # The user's first organisation (replicates Profile.organization). One subquery for the id,
+    # then a single lookup of the distinct orgs.
     _org_qs = Organization.objects.filter(
         member=OuterRef('user'), is_unlisted=False,
-    ).order_by('name')
+    ).order_by('name', 'id')
 
     queryset = queryset.annotate(
-        _org_name=Subquery(_org_qs.values('name')[:1]),
-        _org_slug=Subquery(_org_qs.values('slug')[:1]),
-        _org_logo=Subquery(_org_qs.values('logo_override_image')[:1]),
+        _org_id=Subquery(_org_qs.values('id')[:1]),
         _badge_mini=F('user__display_badge__mini'),
         _badge_name=F('user__display_badge__name'),
     ).values(
@@ -1079,11 +1082,16 @@ def make_contest_ranking_json(contest, problems, queryset, frozen=False):
         'user__username_display_override',
         'user__user__username', 'user__user__first_name',
         'rating__rating',
-        '_org_name', '_org_slug', '_org_logo', '_badge_mini', '_badge_name',
+        '_org_id', '_badge_mini', '_badge_name',
     )
 
+    rows = list(queryset)
+    org_ids = {row['_org_id'] for row in rows} - {None}
+    orgs = {pk: rest for pk, *rest in Organization.objects.filter(id__in=org_ids)
+            .values_list('id', 'name', 'slug', 'logo_override_image')} if org_ids else {}
+
     participations_data = []
-    for row in queryset:
+    for row in rows:
         participations_data.append({
             'id': row['id'],
             'score': float(row['frozen_score'] if frozen else row['score']),
@@ -1092,7 +1100,7 @@ def make_contest_ranking_json(contest, problems, queryset, frozen=False):
             'is_disqualified': row['is_disqualified'],
             'virtual': row['virtual'],
             'rating': row['rating__rating'],
-            'user': _serialize_user(row, _user_url_tpl, _org_url_tpl),
+            'user': _serialize_user(row, _user_url_tpl, _org_url_tpl, orgs),
             'format_data': _serialize_format_data(contest, problems, row['format_data'], frozen),
         })
     return participations_data
@@ -1360,6 +1368,7 @@ class ContestRanking(ContestRankingBase):
                 **data['contest'],
                 'replay_url': reverse('contest_replay_data', args=[contest.key, contest.replay_version]),
                 'replay_duration': int((contest.end_time - contest.start_time).total_seconds()),
+                'supports_frozen': contest.format.supports_frozen,
             },
         }
 
@@ -1381,9 +1390,11 @@ class ContestRanking(ContestRankingBase):
         context['is_frozen'] = self.is_frozen
         context['cache_timeout'] = 0 if self.bypass_cache_ranking else self.object.scoreboard_cache_timeout
         context['can_see_full_submission_list'] = self.object.can_see_full_submission_list(self.request.user)
-        context['ranking_json'] = json.dumps(
-            self._inject_replay_url(self.get_cached_json_ranking_data()),
-        ).translate(_json_script_escapes)
+        ranking_json = json.dumps(self._inject_replay_url(self.get_cached_json_ranking_data()))
+        # Same as ranking_json.translate(_json_script_escapes), but much much faster
+        for char, escaped in _json_script_escapes.items():
+            ranking_json = ranking_json.replace(chr(char), escaped)
+        context['ranking_json'] = ranking_json
         return context
 
 
@@ -1668,7 +1679,6 @@ class ContestMossDelete(ContestMossMixin, SingleObjectMixin, View):
 
 class ContestTagDetailAjax(DetailView):
     model = ContestTag
-    slug_field = slug_url_kwarg = 'name'
     context_object_name = 'tag'
     template_name = 'contest/tag-ajax.html'
 
@@ -1715,7 +1725,7 @@ class CreateContest(PermissionRequiredMixin, TitleMixin, CreateView):
 
     def post(self, request, *args, **kwargs):
         self.object = None
-        form = ContestForm(request.POST or None)
+        form = self.get_form()
         form_set = self.get_contest_problem_formset()
         if form.is_valid() and form_set.is_valid():
             if settings.VNOJ_OFFICIAL_CONTEST_MODE:
@@ -1800,9 +1810,23 @@ class EditContest(ContestMixin, LoginRequiredMixin, TitleMixin, UpdateView):
                 revisions.set_comment(_('Edited from site'))
                 revisions.set_user(self.request.user)
 
+                if any(f in form.changed_data for f in ('frozen_last_minutes', 'format_name')):
+                    transaction.on_commit(rescore_contest.s(self.object.key).delay)
+
             return HttpResponseRedirect(self.get_success_url())
         else:
             return self.render_to_response(self.get_context_data(object=self.object))
+
+
+class ContestDelete(LoginRequiredMixin, ContestMixin, SingleObjectMixin, View):
+    def post(self, request, *args, **kwargs):
+        contest = self.get_object()
+        if not contest.is_editable_by(request.user):
+            raise PermissionDenied(_('You are not allowed to delete this contest.'))
+        if contest.ratings.exists():
+            raise PermissionDenied(_('Rated contests cannot be deleted.'))
+        contest.delete()
+        return HttpResponseRedirect(reverse('contest_list'))
 
 
 class ContestDataMixin(ContestMixin, LoginRequiredMixin):
@@ -1944,4 +1968,20 @@ class ContestProblemMakePublic(LoginRequiredMixin, ContestMixin, SingleObjectMix
             if is_editable:
                 Solution.objects.filter(problem=problem, is_public=False).update(is_public=True, publish_on=now)
 
+        return HttpResponseRedirect(reverse('contest_view', args=(contest.key,)))
+
+
+class ContestProblemSetSource(LoginRequiredMixin, ContestMixin, SingleObjectMixin, View):
+    def dispatch(self, request, *args, **kwargs):
+        if request.method != 'POST':
+            return HttpResponseForbidden()
+
+        return super(ContestProblemSetSource, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            raise PermissionDenied()
+
+        contest = self.get_object()
+        Problem.objects.filter(contests__contest=contest, source='').update(source='c:%s' % contest.key)
         return HttpResponseRedirect(reverse('contest_view', args=(contest.key,)))

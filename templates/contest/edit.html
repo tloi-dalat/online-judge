@@ -141,6 +141,33 @@
                 },
             });
 
+            // Prefill points/order of a row when a problem is picked and they are still empty
+            $('#form_set').on('change', 'select[id$="-problem"]', function() {
+                if (!$(this).val()) return;
+                var $row = $(this).closest('tr.dynamic-form');
+                var $rows = $('#form_set tr.dynamic-form').not(function() {
+                    return $(this).find('input[id$="-DELETE"]').is(':checked');
+                });
+
+                var $points = $row.find('input[id$="-points"]');
+                if ($points.val() === '') {
+                    var prevPoints = $rows.slice(0, $rows.index($row)).find('input[id$="-points"]').filter(function() {
+                        return this.value !== '';
+                    }).last().val();
+                    $points.val(prevPoints || 1);
+                }
+
+                var $order = $row.find('input[id$="-order"]');
+                if ($order.val() === '') {
+                    var used = {};
+                    $rows.not($row).find('input[id$="-order"]').each(function() { used[parseInt(this.value)] = true; });
+                    var mex = 1;
+                    while (used[mex]) mex++;
+                    $order.val(mex);
+                    $row.find('span.order').text(mex);
+                }
+            });
+
             var oldSortIndex;
             $('#form_set').sortable({
                 handle: 'td.order-column',
@@ -254,6 +281,17 @@
             $('#form_set select[data-problem-src]').each(function() { _initProblemPicker(this); });
             {% endif %}
         })
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            var frozenFormats = {{ form.frozen_supported_formats|tojson }};
+            var $format = $('#id_format_name');
+            function toggleFrozen() {
+                $('#id_frozen_last_minutes').closest('tr').toggle(frozenFormats.indexOf($format.val()) !== -1);
+            }
+            $format.on('change', toggleFrozen);
+            toggleFrozen();
+        });
     </script>
     {{ form.media.js }}
 {% endblock %}
@@ -407,7 +445,11 @@
                 {% endfor %}
             </tbody>
         </table>
-        <div style="display: flex; justify-content: flex-end;"><button class="submit-bar" type="submit">
+        <div style="display: flex; justify-content: flex-end; align-items: center; gap: 1em;">
+            {% if request.resolver_match.url_name == 'contest_edit' %}
+                <button type="submit" form="delete-contest-form" class="button btn-danger">{{ _('Delete contest') }}</button>
+            {% endif %}
+            <button class="submit-bar" type="submit">
             {% if request.resolver_match.url_name == 'contest_edit' %}
                 {{ _('Update') }}
             {% else %}
@@ -415,5 +457,20 @@
             {% endif %}
         </button></div>
     </form>
+    {% if request.resolver_match.url_name == 'contest_edit' %}
+        <script>
+            function confirmDeleteContest() {
+                var answer = prompt({{ _('This will permanently delete the contest with all participations, rankings and announcements. Type YES to confirm.')|tojson }});
+                if (answer === null) return false;
+                if (answer === 'YES') return true;
+                alert({{ _('You did not type YES, so the contest was not deleted.')|tojson }});
+                return false;
+            }
+        </script>
+        <form id="delete-contest-form" method="post" action="{{ url('contest_delete', contest.key) }}"
+              onsubmit="return confirmDeleteContest();">
+            {% csrf_token %}
+        </form>
+    {% endif %}
 </div>
 {% endblock %}

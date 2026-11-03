@@ -7,13 +7,6 @@
       <a href="http://{{ site.domain }}/accounts/activate/{{ activation_key }}/">http://{{ site.domain }}/accounts/activate/{{ activation_key }}</a>
 </p>
 
-{{ _('Alternatively, you can reply to this message to activate your account.') }}
-{{ _('Your reply must keep the following text intact for this to work:') }}
-
-<pre style="margin-left:1em">
-{{ activation_key }}
-</pre>
-
 {{ _('See you soon!') }}
 <br>
 {{ _('If you have problems activating your account, feel free to shoot us a message at: ') }}{% if misc_config.facebook_link %}<a href="{{ misc_config.facebook_link }}" style="color: #2980b9; font-weight: bold;">Facebook</a>{% endif %}

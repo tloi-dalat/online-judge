@@ -159,6 +159,8 @@ class ProblemTestCase(models.Model):
     checker = models.CharField(max_length=10, verbose_name=_('checker'), choices=CHECKERS, blank=True)
     checker_args = models.TextField(verbose_name=_('checker arguments'), blank=True,
                                     help_text=_('Checker arguments as a JSON object.'))
+    batch_dependencies = models.TextField(verbose_name=_('batch dependencies'), blank=True,
+                                          help_text=_('batch dependencies as a comma-separated list of integers'))
 
     class Meta:
         verbose_name = _('problem test case')

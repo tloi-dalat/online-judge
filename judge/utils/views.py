@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.shortcuts import render
 from django.views.generic import FormView
 from django.views.generic.detail import SingleObjectMixin
@@ -86,6 +88,12 @@ class QueryStringSortMixin(object):
 
         return super(QueryStringSortMixin, self).get(request, *args, **kwargs)
 
+    @property
+    def id_tiebreak(self):
+        # Same direction as the sort key, to better use the index.
+        # Because mixed directions with PK force a full scan.
+        return '-id' if self.order.startswith('-') else 'id'
+
     def get_sort_context(self):
         query = self.request.GET.copy()
         query.setlist('order', [])
@@ -93,10 +101,12 @@ class QueryStringSortMixin(object):
         sort_prefix = '%s?%s&order=' % (self.request.path, query) if query else '%s?order=' % self.request.path
         current = self.order.lstrip('-')
 
-        links = {key: sort_prefix + ('-' if key in self.default_desc else '') + key for key in self.all_sorts}
+        # defaultdict so templates can reference columns that aren't sortable right now
+        links = defaultdict(str)
+        links.update({key: sort_prefix + ('-' if key in self.default_desc else '') + key for key in self.all_sorts})
         links[current] = sort_prefix + ('' if self.order.startswith('-') else '-') + current
 
-        order = {key: '' for key in self.all_sorts}
+        order = defaultdict(str)
         order[current] = ' \u25BE' if self.order.startswith('-') else ' \u25B4'
         return {'sort_links': links, 'sort_order': order}
 

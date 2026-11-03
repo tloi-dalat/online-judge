@@ -20,7 +20,7 @@ $color_link75: #1958c1;     // default
 $color_link100: #0645ad;    // hover
 $color_link200: #faa700;    // active
 
-$color_pageBg: color.adjust($color_primary5, $lightness: 10%);
+$color_pageBg: color.to-gamut(color.adjust($color_primary5, $lightness: 10%), $method: clip);
 
 // custom one-off colours
 $color_contest_ranking_disqualified: #ffa8a8;

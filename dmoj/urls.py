@@ -252,7 +252,7 @@ urlpatterns = [
     path('contests.ics', contests.ContestICal.as_view(), name='contest_ical'),
     path('contests/<int:year>/<int:month>/', contests.ContestCalendar.as_view(), name='contest_calendar'),
     path('contests/new', contests.CreateContest.as_view(), name='contest_new'),
-    re_path(r'^contests/tag/(?P<name>[a-z-]+)', include([
+    path('contests/tag/<int:pk>', include([
         path('', contests.ContestTagDetail.as_view(), name='contest_tag'),
         path('/ajax', contests.ContestTagDetailAjax.as_view(), name='contest_tag_ajax'),
     ])),
@@ -267,6 +267,7 @@ urlpatterns = [
         path('/all/pdf', contests.ContestAllProblemsPdf.as_view(), name='contest_all_problems_pdf'),
         path('/all/pdf/<slug:language>', contests.ContestAllProblemsPdf.as_view(), name='contest_all_problems_pdf'),
         path('/edit', contests.EditContest.as_view(), name='contest_edit'),
+        path('/delete', contests.ContestDelete.as_view(), name='contest_delete'),
         path('/moss', contests.ContestMossView.as_view(), name='contest_moss'),
         path('/moss/delete', contests.ContestMossDelete.as_view(), name='contest_moss_delete'),
         path('/announce', contests.ContestAnnounce.as_view(), name='contest_announce'),
@@ -283,6 +284,8 @@ urlpatterns = [
         path('/data/download/', contests.ContestDownloadData.as_view(), name='contest_download_data'),
         path('/make_problems_public', contests.ContestProblemMakePublic.as_view(),
              name='contest_problems_make_public'),
+        path('/set_problems_source', contests.ContestProblemSetSource.as_view(),
+             name='contest_problems_set_source'),
 
         path('/rank/<str:problem>/',
              paged_list_view(ranked_submission.ContestRankedSubmission, 'contest_ranked_submissions')),

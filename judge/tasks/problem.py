@@ -2,6 +2,7 @@ import os
 import shutil
 import tempfile
 import zipfile
+from datetime import timedelta
 
 from celery import shared_task
 from django.conf import settings
@@ -11,10 +12,10 @@ from django.utils.translation import gettext as _
 from judge.models import Problem, ProblemData, problem_data_storage
 from judge.models.problem_data import _problem_directory_file
 from judge.utils.problem_data import ProblemDataError
-from judge.utils.problems import fast_delete_problem
+from judge.utils.problems import fast_delete_problem, refresh_hot_problems
 
-__all__ = ('problem_garbage_collect', 'reassemble_problem_data_zip', 'delete_expired_chunked_uploads',
-           'import_polygon_package', 'import_polygon_package_from_api')
+__all__ = ('problem_garbage_collect', 'update_hot_problems', 'reassemble_problem_data_zip',
+           'delete_expired_chunked_uploads', 'import_polygon_package', 'import_polygon_package_from_api')
 
 DEFAULT_POLYGON_TO_SITE_LANGUAGE_MAP = {'english': 'en', 'vietnamese': 'vi'}
 
@@ -27,6 +28,11 @@ def problem_garbage_collect():
         if timezone.now() > end:
             break
         fast_delete_problem(problem)
+
+
+@shared_task
+def update_hot_problems():
+    refresh_hot_problems(timedelta(days=1), settings.DMOJ_PROBLEM_HOT_PROBLEM_COUNT)
 
 
 @shared_task

@@ -2,8 +2,3 @@
 
 {{ _('Please click on the following link to activate your account:') }}
     http://{{ site.domain }}/accounts/activate/{{ activation_key }}/
-
-{{ _('Alternatively, you can reply to this message to activate your account.') }} 
-{{ _('Your reply must keep the following text intact for this to work:') }}
-
-{{ activation_key }}

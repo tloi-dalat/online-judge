@@ -193,8 +193,16 @@
             {% if can_edit %}
                 <form method="post" action="{{ url('contest_problems_make_public', contest.key) }}" style="display: inline; float:right; margin-left: 10px;">
                     {% csrf_token %}
-                    <button type="submit" class="button" onclick="return confirm('{{ _('Are you sure you want to make all problems in this contest public?') }}');">
+                    <button type="submit" class="button" onclick="return confirm({{ _('Are you sure you want to make all problems in this contest public?')|htmltojs }});">
                         <i class="fa fa-unlock"></i> {{ _('Make All Problems Public') }}
+                    </button>
+                </form>
+            {% endif %}
+            {% if request.user.is_superuser %}
+                <form method="post" action="{{ url('contest_problems_set_source', contest.key) }}" style="display: inline; float:right; margin-left: 10px;">
+                    {% csrf_token %}
+                    <button type="submit" class="button" onclick="return confirm({{ _('Set this contest as the source of all problems that have no source?')|htmltojs }});">
+                        <i class="fa fa-link"></i> {{ _('Set Problems Source') }}
                     </button>
                 </form>
             {% endif %}

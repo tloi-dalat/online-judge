@@ -479,9 +479,17 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         context['show_problem'] = self.show_problem
 
         profile = self.request.profile
+
+        def page_problem_ids():
+            return {sub.problem_id for sub in context['submissions']}
+
         context['completed_problem_ids'] = memo_lazy(lambda: user_completed_ids(profile), set) if authenticated else []
-        context['editable_problem_ids'] = memo_lazy(lambda: user_editable_ids(profile), set) if authenticated else []
-        context['tester_problem_ids'] = memo_lazy(lambda: user_tester_ids(profile), set) if authenticated else []
+        context['editable_problem_ids'] = memo_lazy(
+            lambda: user_editable_ids(profile, page_problem_ids()), set,
+        ) if authenticated else []
+        context['tester_problem_ids'] = memo_lazy(
+            lambda: user_tester_ids(profile, page_problem_ids()), set,
+        ) if authenticated else []
 
         context['all_languages'] = Language.objects.all().values_list('key', 'name')
         context['selected_languages'] = self.selected_languages
@@ -659,12 +667,14 @@ class ProblemSubmissionsBase(SubmissionsListBase):
         if self.dynamic_update:
             context['dynamic_update'] = context['page_obj'].number == 1
             context['dynamic_problem_id'] = self.problem.id
-        if hasattr(self, 'contest'):
-            context['best_submissions_link'] = reverse('contest_ranked_submissions',
-                                                       kwargs={'problem': self.problem.code,
-                                                               'contest': self.contest.key})
-        else:
-            context['best_submissions_link'] = reverse('ranked_submissions', kwargs={'problem': self.problem.code})
+        if self.problem.is_public:
+            if hasattr(self, 'contest'):
+                context['best_submissions_link'] = reverse('contest_ranked_submissions',
+                                                           kwargs={'problem': self.problem.code,
+                                                                   'contest': self.contest.key})
+            else:
+                context['best_submissions_link'] = reverse('ranked_submissions',
+                                                           kwargs={'problem': self.problem.code})
         return context
 
 

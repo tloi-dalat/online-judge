@@ -669,7 +669,7 @@ LANGUAGES = [
     ('vi', _('Vietnamese')),
 ]
 
-BLEACH_USER_SAFE_TAGS = [
+MARKDOWN_SAFE_TAGS = [
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
     'b', 'i', 'strong', 'em', 'tt', 'del', 'kbd', 's', 'abbr', 'cite', 'mark', 'q', 'samp', 'small',
     'u', 'var', 'wbr', 'dfn', 'ruby', 'rb', 'rp', 'rt', 'rtc', 'sub', 'sup', 'time', 'data',
@@ -681,7 +681,7 @@ BLEACH_USER_SAFE_TAGS = [
     'noscript', 'center', 'object', 'iframe',
 ]
 
-BLEACH_USER_SAFE_ATTRS = {
+MARKDOWN_SAFE_ATTRS = {
     '*': ['id', 'class', 'data', 'height'],
     'img': ['src', 'alt', 'title', 'width', 'height', 'data-src', 'align'],
     'a': ['href', 'alt', 'title'],
@@ -703,9 +703,9 @@ MARKDOWN_STAFF_EDITABLE_STYLE = {
     'use_camo': True,
     'texoid': True,
     'math': True,
-    'bleach': {
-        'tags': BLEACH_USER_SAFE_TAGS,
-        'attributes': BLEACH_USER_SAFE_ATTRS,
+    'sanitizer': {
+        'tags': MARKDOWN_SAFE_TAGS,
+        'attributes': MARKDOWN_SAFE_ATTRS,
         'styles': True,
         'mathml': True,
     },
@@ -723,9 +723,9 @@ MARKDOWN_DEFAULT_STYLE = {
     'nofollow': True,
     'use_camo': True,
     'math': True,
-    'bleach': {
-        'tags': BLEACH_USER_SAFE_TAGS,
-        'attributes': BLEACH_USER_SAFE_ATTRS,
+    'sanitizer': {
+        'tags': MARKDOWN_SAFE_TAGS,
+        'attributes': MARKDOWN_SAFE_ATTRS,
         'styles': False,
         'mathml': True,
     },
@@ -736,9 +736,9 @@ MARKDOWN_USER_LARGE_STYLE = {
     'nofollow': True,
     'use_camo': True,
     'math': True,
-    'bleach': {
-        'tags': BLEACH_USER_SAFE_TAGS,
-        'attributes': BLEACH_USER_SAFE_ATTRS,
+    'sanitizer': {
+        'tags': MARKDOWN_SAFE_TAGS,
+        'attributes': MARKDOWN_SAFE_ATTRS,
         'styles': False,
         'mathml': True,
     },

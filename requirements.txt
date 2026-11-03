@@ -9,7 +9,7 @@ django-sortedm2m>=3.1.0
 django-impersonate
 django-redis
 mysqlclient
-dmoj-wpadmin @ git+https://github.com/DMOJ/dmoj-wpadmin.git
+dmoj-wpadmin @ git+https://github.com/DMOJ/dmoj-wpadmin.git@dfafe1b20d69e2e0f8cf625fecbb957414040b80
 lxml
 lxml_html_clean
 Pygments>=2.20
@@ -25,24 +25,25 @@ pyyaml
 jinja2
 django_jinja>=2.5.0
 llist
+latex2mathml
 requests
-django-fernet-fields @ git+https://github.com/DMOJ/django-fernet-fields.git
+django-fernet-fields @ git+https://github.com/DMOJ/django-fernet-fields.git@eaea7e760472106c015f65535f4837a1189c4e7c
 pyotp
 qrcode[pil]
-jsonfield @ git+https://github.com/DMOJ/jsonfield.git
+jsonfield @ git+https://github.com/DMOJ/jsonfield.git@560bdca857a69b4a5b2773a79d7511ebc628f339
 pymoss
 packaging>=22
 celery
-ansi2html @ git+https://github.com/VNOI-Admin/ansi2html.git
+ansi2html @ git+https://github.com/VNOI-Admin/ansi2html.git@4771e030bad0220dbf6bec4bb0cb00c31bb91062
 sqlparse
 lupa
 netaddr
 webauthn<1
-bleach[css]
-markdown2 @ git+https://github.com/VNOI-Admin/python-markdown2.git
+nh3
+markdown2 @ git+https://github.com/VNOI-Admin/python-markdown2.git@f9bd2e8c205f67f6ce9a298aea9cfebbbc31fdf0
 discord-webhook
 django-admin-sortable2
 icalendar
-django-chunked-upload @ git+https://github.com/juliomalegria/django-chunked-upload.git
+django-chunked-upload @ git+https://github.com/juliomalegria/django-chunked-upload.git@69dfedf148fe7793e372116ca3c88187f5d90ea2
 django-storages[s3]
 django-oauth-toolkit
