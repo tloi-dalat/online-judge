@@ -31,6 +31,7 @@ jobs:
       python-version: '3.14'
       requirements: requirements.txt
       settings-file: .ci.settings.py
+      settings-target: dmoj/local_settings.py
       mysql-image: mariadb:10.11
       setup: python manage.py compilejsi18n
       labels: judge urlshortener
@@ -55,6 +56,7 @@ jobs:
       python-version: '3.14'
       requirements: requirements.txt
       settings-file: .ci.settings.py
+      settings-target: dmoj/local_settings.py
       mysql-image: mariadb:10.11
 
   i18n:
