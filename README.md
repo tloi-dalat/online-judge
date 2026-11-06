@@ -28,13 +28,3 @@ Refer to the install documentation [here](https://vnoi-admin.github.io/vnoj-docs
   2. You can go to the admin page, scroll down to find the `Sites` setting and change `localhost:8081` to your domain.
 
 - To support `testlib.h`, you need to copy [testlib.h](https://github.com/MikeMirzayanov/testlib/blob/master/testlib.h) to `g++`'s include path in the judge server. To speed up compile time, you can also create a precompiled header for `testlib.h`.
-
-## Contributing ![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)
-
-Take a look at [our contribution guideline](contributing.md).
-
-If you find any bug, please feel free to contact us via [Facebook](https://fb.com/tloi.dl) or open an issue.
-
-Pull requests are welcome as well. Before you submit your PR, please check your code with [flake8](https://flake8.pycqa.org/en/latest/) and format it if needed. There's also `prettier` if you need to format JS code (in `websocket/`).
-
-Translation contributions are also welcome.
