@@ -46,16 +46,6 @@ jobs:
       node-version: '26.x'
       build: ./make_style.sh
 
-  atlas:
-    name: atlas
-    if: github.event_name == 'pull_request' && github.base_ref == 'main'
-    permissions:
-      contents: read
-    uses: tloi-dalat/reusable-workflow/.github/workflows/atlas-migration.yaml@main
-    secrets:
-      ATLAS_APP_ID: ${{ secrets.ATLAS_APP_ID }}
-      ATLAS_APP_PRIVATE_KEY: ${{ secrets.ATLAS_APP_PRIVATE_KEY }}
-
   i18n:
     name: check-i18n
     if: github.event_name == 'pull_request'
