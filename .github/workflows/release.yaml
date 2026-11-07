@@ -10,3 +10,16 @@ jobs:
       contents: write
       actions: write
     uses: tloi-dalat/reusable-workflow/.github/workflows/release-tag.yaml@main
+
+  atlas:
+    name: atlas
+    needs: tag
+    if: needs.tag.outputs.created == 'true'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/atlas-migration.yaml@main
+    with:
+      tag: ${{ needs.tag.outputs.version }}
+    secrets:
+      ATLAS_APP_ID: ${{ secrets.ATLAS_APP_ID }}
+      ATLAS_APP_PRIVATE_KEY: ${{ secrets.ATLAS_APP_PRIVATE_KEY }}

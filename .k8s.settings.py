@@ -262,3 +262,14 @@ if DISCORD_WEBHOOK['on_error']:
 
 # Hide passwords in URLs and webhooks from error reports.
 DEFAULT_EXCEPTION_REPORTER_FILTER = 'dmoj.safe_exception_reporter.SafeURLExceptionReporterFilter'
+
+
+class _NoMigrations(dict):
+    def __contains__(self, item):
+        return True
+
+    def __getitem__(self, item):
+        return None
+
+
+MIGRATION_MODULES = _NoMigrations()
