@@ -20,4 +20,7 @@ table "django_site" {
     unique  = true
     columns = [column.domain]
   }
+  index "idx_django_site_name" {
+    columns = [column.name]
+  }
 }
