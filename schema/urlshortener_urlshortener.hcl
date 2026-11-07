@@ -26,18 +26,7 @@ table "urlshortener_urlshortener" {
     type     = int
     unsigned = true
   }
-  column "is_active" {
-    null = false
-    type = bool
-  }
   primary_key {
     columns = [column.id]
-  }
-  index "short_code" {
-    unique  = true
-    columns = [column.short_code]
-  }
-  check "access_count" {
-    expr = "`access_count` >= 0"
   }
 }
