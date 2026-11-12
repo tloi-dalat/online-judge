@@ -231,6 +231,14 @@ TIMEZONE_MAP = 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Blue_M
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = _env('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY', '')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = _env('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET', '')
 
+# OAuth provider at /o/: the django-oauth-toolkit models it uses.
+OAUTH2_PROVIDER_APPLICATION_MODEL = 'oauth2_provider.Application'
+OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = 'oauth2_provider.AccessToken'
+OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'oauth2_provider.RefreshToken'
+OAUTH2_PROVIDER_ID_TOKEN_MODEL = 'oauth2_provider.IDToken'
+OAUTH2_PROVIDER_GRANT_MODEL = 'oauth2_provider.Grant'
+OAUTH2_PROVIDER_DEVICE_GRANT_MODEL = 'oauth2_provider.DeviceGrant'
+
 
 ########################################
 ########## Custom configuration ########
