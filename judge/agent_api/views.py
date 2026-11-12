@@ -8,8 +8,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_GET, require_POST
 
-from judge.agent_api import actions  # noqa: F401
-from judge.agent_api.core import ACTIONS, AgentError, validate_args
+from judge.agent_api.actions import ACTIONS
+from judge.agent_api.core import AgentError, validate_args
 
 logger = logging.getLogger('judge.agent_api')
 

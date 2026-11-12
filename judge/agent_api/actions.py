@@ -1,8 +1,10 @@
 import time
 
-from judge.agent_api.core import AgentError, action, call_view, json_body, redirect_target
+from judge.agent_api.core import ACTIONS, AgentError, action, call_view, json_body, redirect_target
 from judge.jinja2.submission import submission_result_hidden
 from judge.models import Language
+
+__all__ = ['ACTIONS']
 
 PARTICIPANT = 'participant'
 PENDING_STATUSES = ('QU', 'P', 'G')
@@ -424,7 +426,7 @@ _TICKET_PARAMS = {
 }
 
 
-@action('create_problem_ticket', "Open a ticket about a problem (e.g. an unclear statement). It goes to the "
+@action('create_problem_ticket', 'Open a ticket about a problem (e.g. an unclear statement). It goes to the '
         "problem's authors, or the contest's authors during a contest.", PARTICIPANT, read_only=False, params={
             'problem': {'type': 'string', 'description': 'Problem code.'},
             **_TICKET_PARAMS,
