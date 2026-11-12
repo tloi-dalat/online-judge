@@ -1,8 +1,9 @@
 import time
 
-from judge.agent_api.core import ACTIONS, AgentError, action, call_view, json_body, redirect_target
+from judge.agent_api.core import ACTIONS, AgentError, action, call_view, describe_forms, form_data, json_body, \
+    redirect_target
 from judge.jinja2.submission import submission_result_hidden
-from judge.models import Language
+from judge.models import Comment, Language, Profile
 
 __all__ = ['ACTIONS']
 
@@ -83,6 +84,7 @@ def list_problems(request, search=None, type=None, min_points=None, max_points=N
     completed = set(context.get('completed_problem_ids') or ())
     return {
         'problems': [{
+            'id': problem.id,
             'code': problem.code,
             'name': getattr(problem, 'i18n_name', None) or problem.name,
             'points': problem.points,
@@ -107,6 +109,7 @@ def get_problem(request, code):
     form = context.get('form')
     languages = form.fields['language'].queryset if form is not None else problem.usable_languages
     data = {
+        'id': problem.id,
         'code': problem.code,
         'name': context['title'],
         'statement': context['description'],
@@ -326,6 +329,7 @@ def get_contest_ranking(request, key, limit=20):
         user = participation.get('user') or {}
         if index < limit or user.get('username') == username:
             rows.append({
+                'participation_id': participation.get('id'),
                 'rank': participation.get('rank'),
                 'username': user.get('username'),
                 'score': participation.get('score'),
@@ -353,6 +357,8 @@ _ENTRY_PARAMS = {
 def register_contest(request, key, access_code=None, agree_terms=False):
     call_view(request, 'contest_register', args=[key], method='POST',
               data={'access_code': access_code, 'terms_agreed': agree_terms})
+    if not request.profile.contest_history.filter(contest__key=key, virtual=0).exists():
+        raise AgentError('Could not register. The contest may require an access code or agreeing to its terms.')
     return {'registered': key}
 
 
@@ -492,3 +498,438 @@ def list_notifications(request, unread_only=False, page=None):
 def mark_notifications_read(request, id=None):
     data = {'all': '1'} if id is None else {'id': id, 'read': '1'}
     return json_body(call_view(request, 'notification_mark_read', method='POST', data=data))
+
+
+COMMUNITY = 'community'
+AUTHOR = 'author'
+MODERATOR = 'moderator'
+
+_COMMENT_PAGES = {
+    'problem': lambda target: ('problem_comments', [target]),
+    'editorial': lambda target: ('problem_editorial_comments', [target]),
+    'contest': lambda target: ('contest_comments', [target]),
+    'blog': lambda target: ('blog_post_comments', [int(target), 'post']),
+}
+
+_COMMENT_TARGET = {
+    'on': {'type': 'string', 'enum': sorted(_COMMENT_PAGES),
+           'description': 'What the comments are on: a problem, its editorial, a contest or a blog post.'},
+    'target': {'type': 'string', 'description': 'Problem code, contest key or blog post ID.'},
+}
+
+
+def _comment_page(on, target):
+    if on not in _COMMENT_PAGES:
+        raise AgentError('"on" must be one of: %s.' % ', '.join(sorted(_COMMENT_PAGES)))
+    try:
+        return _COMMENT_PAGES[on](target)
+    except ValueError:
+        raise AgentError('Blog post target must be a numeric ID.')
+
+
+def _vote_direction(direction):
+    if direction not in ('up', 'down'):
+        raise AgentError('direction must be "up" or "down".')
+    return direction
+
+
+@action('list_comments', 'List the comments on a problem, editorial, contest or blog post (newest threads first).',
+        COMMUNITY, read_only=True, params={**_COMMENT_TARGET, 'page': _PAGE}, required=['on', 'target'])
+def list_comments(request, on, target, page=None):
+    url_name, args = _comment_page(on, target)
+    context = call_view(request, url_name, args=args, query={'page': page}).context_data
+    comments = context.get('comment_list') or []
+    data = {
+        'locked': bool(context.get('comment_lock')),
+        'comments': [{
+            'id': comment.id,
+            'author': comment.author.username,
+            'time': _iso(comment.time),
+            'parent': comment.parent_id,
+            'score': comment.score,
+            'my_vote': getattr(comment, 'vote_score', None),
+            'body': comment.body,
+        } for comment in comments],
+    }
+    page_obj = context.get('comments_page_obj')
+    if page_obj is not None:
+        data.update(page=page_obj.number, has_next=page_obj.has_next())
+    return data
+
+
+@action('post_comment', 'Post a comment, or reply to one, on a problem, editorial, contest or blog post.',
+        COMMUNITY, read_only=False, params={
+            **_COMMENT_TARGET,
+            'body': {'type': 'string', 'description': 'Comment text, in markdown.'},
+            'parent': {'type': 'integer', 'description': 'ID of the comment to reply to.'},
+        }, required=['on', 'target', 'body'])
+def post_comment(request, on, target, body, parent=None):
+    url_name, args = _comment_page(on, target)
+    call_view(request, url_name, args=args, method='POST', data={'body': body, 'parent': parent or ''})
+    comment = Comment.objects.filter(author=request.profile).order_by('-id').first()
+    return {'comment_id': comment.id if comment else None}
+
+
+@action('edit_comment', 'Edit one of your comments.', COMMUNITY, read_only=False, params={
+    'id': {'type': 'integer', 'description': 'Comment ID.'},
+    'body': {'type': 'string', 'description': 'New comment text, in markdown.'},
+}, required=['id', 'body'])
+def edit_comment(request, id, body):
+    call_view(request, 'comment_edit', args=[id], method='POST', data={'body': body})
+    return {'comment_id': id}
+
+
+@action('vote_comment', 'Upvote or downvote a comment.', COMMUNITY, read_only=False, params={
+    'id': {'type': 'integer', 'description': 'Comment ID.'},
+    'direction': {'type': 'string', 'enum': ['up', 'down']},
+}, required=['id', 'direction'])
+def vote_comment(request, id, direction):
+    url_name = 'comment_upvote' if _vote_direction(direction) == 'up' else 'comment_downvote'
+    call_view(request, url_name, method='POST', data={'id': id})
+    return {'comment_id': id, 'voted': direction}
+
+
+def _post_summary(post):
+    return {
+        'id': post.id,
+        'title': post.title,
+        'authors': [author.username for author in post.authors.all()],
+        'publish_on': _iso(post.publish_on),
+        'score': post.score,
+        'summary': post.summary,
+    }
+
+
+@action('list_blog_posts', 'List blog posts on the home feed, newest first.', COMMUNITY, read_only=True,
+        params={'page': _PAGE})
+def list_blog_posts(request, page=None):
+    context = call_view(request, 'blog_post_list', query={'page': page}).context_data
+    return {'posts': [_post_summary(post) for post in context['posts']], **_page_info(context)}
+
+
+@action('get_blog_post', 'Read a blog post.', COMMUNITY, read_only=True,
+        params={'id': {'type': 'integer', 'description': 'Blog post ID.'}}, required=['id'])
+def get_blog_post(request, id):
+    post = call_view(request, 'blog_post', args=[id, 'post']).context_data['post']
+    return {**_post_summary(post), 'content': post.content,
+            'organization': post.organization.slug if post.organization_id else None,
+            'my_vote': getattr(post, 'vote_score', None)}
+
+
+@action('vote_blog_post', 'Upvote or downvote a blog post.', COMMUNITY, read_only=False, params={
+    'id': {'type': 'integer', 'description': 'Blog post ID.'},
+    'direction': {'type': 'string', 'enum': ['up', 'down']},
+}, required=['id', 'direction'])
+def vote_blog_post(request, id, direction):
+    url_name = 'blog_upvote' if _vote_direction(direction) == 'up' else 'blog_downvote'
+    call_view(request, url_name, method='POST', data={'id': id})
+    return {'post_id': id, 'voted': direction}
+
+
+def _organization_summary(org):
+    return {
+        'slug': org.slug,
+        'name': org.name,
+        'short_name': org.short_name,
+        'is_open': org.is_open,
+        'member_count': org.member_count,
+    }
+
+
+@action('list_organizations', 'List organizations.', COMMUNITY, read_only=True, params={'page': _PAGE})
+def list_organizations(request, page=None):
+    context = call_view(request, 'organization_list', query={'page': page}).context_data
+    return {'organizations': [_organization_summary(org) for org in context['organizations']],
+            **_page_info(context)}
+
+
+@action('get_organization', 'Get an organization and its latest posts.', COMMUNITY, read_only=True,
+        params={'slug': {'type': 'string', 'description': 'Organization slug.'}}, required=['slug'])
+def get_organization(request, slug):
+    context = call_view(request, 'organization_home', args=[slug]).context_data
+    org = context['organization']
+    return {
+        **_organization_summary(org),
+        'about': org.about,
+        'admins': [admin.username for admin in org.admins.all()],
+        'is_member': request.profile.organizations.filter(id=org.id).exists(),
+        'posts': [_post_summary(post) for post in context.get('posts', [])],
+    }
+
+
+@action('join_organization', 'Join an open organization.', COMMUNITY, read_only=False,
+        params={'slug': {'type': 'string', 'description': 'Organization slug.'}}, required=['slug'])
+def join_organization(request, slug):
+    call_view(request, 'join_organization', args=[slug], method='POST')
+    return {'joined': slug}
+
+
+@action('leave_organization', 'Leave an organization.', COMMUNITY, read_only=False,
+        params={'slug': {'type': 'string', 'description': 'Organization slug.'}}, required=['slug'])
+def leave_organization(request, slug):
+    call_view(request, 'leave_organization', args=[slug], method='POST')
+    return {'left': slug}
+
+
+@action('request_join_organization', 'Ask to join a closed organization.', COMMUNITY, read_only=False, params={
+    'slug': {'type': 'string', 'description': 'Organization slug.'},
+    'reason': {'type': 'string', 'description': 'Why you want to join.'},
+}, required=['slug', 'reason'])
+def request_join_organization(request, slug, reason):
+    call_view(request, 'request_organization', args=[slug], method='POST', data={'reason': reason})
+    return {'requested': slug}
+
+
+def _user_summary(profile):
+    return {
+        'id': profile.id,
+        'username': profile.username,
+        'display_name': profile.display_name,
+        'points': profile.points,
+        'performance_points': profile.performance_points,
+        'problem_count': profile.problem_count,
+        'rating': profile.rating,
+    }
+
+
+@action('list_users', 'List users on the leaderboard.', COMMUNITY, read_only=True, params={
+    'sort': {'type': 'string', 'enum': ['rating', 'points', 'performance_points', 'problem_count']},
+    'page': _PAGE,
+})
+def list_users(request, sort=None, page=None):
+    context = call_view(request, 'user_list', query={'order': sort and '-' + sort, 'page': page}).context_data
+    return {'users': [{'rank': rank, **_user_summary(profile)} for rank, profile in context['users']],
+            **_page_info(context)}
+
+
+@action('get_user', "Get a user's profile.", COMMUNITY, read_only=True,
+        params={'username': {'type': 'string'}}, required=['username'])
+def get_user(request, username):
+    profile = call_view(request, 'user_page', args=[username]).context_data['user']
+    return {
+        **_user_summary(profile),
+        'about': profile.about,
+        'organizations': [org.slug for org in profile.organizations.filter(is_unlisted=False)],
+    }
+
+
+@action('list_user_submissions', "List a user's submissions, newest first, optionally for one problem.",
+        COMMUNITY, read_only=True, params={
+            'username': {'type': 'string'},
+            'problem': {'type': 'string', 'description': 'Problem code.'},
+            'page': _PAGE,
+        }, required=['username'])
+def list_user_submissions(request, username, problem=None, page=None):
+    if problem:
+        response = call_view(request, 'user_submissions', args=[problem, username], query={'page': page})
+    else:
+        response = call_view(request, 'all_user_submissions', args=[username], query={'page': page})
+    context = response.context_data
+    return {'submissions': [_submission_summary(s, request.user) for s in context['submissions']],
+            **_page_info(context)}
+
+
+@action('get_submission_source', 'Get the source code of a submission, if the user may see it.', COMMUNITY,
+        read_only=True, params={'id': {'type': 'integer', 'description': 'Submission ID.'}}, required=['id'])
+def get_submission_source(request, id):
+    context = call_view(request, 'submission_source', args=[id]).context_data
+    submission = context['submission']
+    return {'id': submission.id, 'user': submission.user.username, 'problem': submission.problem.code,
+            'language': submission.language.key, 'source': context['raw_source']}
+
+
+@action('abort_submission', 'Abort one of your submissions that is still being judged.', PARTICIPANT,
+        read_only=False, params={'id': {'type': 'integer', 'description': 'Submission ID.'}}, required=['id'])
+def abort_submission(request, id):
+    call_view(request, 'submission_abort', args=[id], method='POST')
+    return {'submission_id': id, 'aborted': True}
+
+
+_TARGETS = {
+    'problem': ({'type': 'string', 'description': 'Problem code.'}, lambda t: [t]),
+    'contest': ({'type': 'string', 'description': 'Contest key.'}, lambda t: [t]),
+    'organization': ({'type': 'string', 'description': 'Organization slug.'}, lambda t: [t]),
+    'user': ({'type': 'string', 'description': 'Username.'}, lambda t: [t]),
+    'blog_post': ({'type': 'string', 'description': 'Blog post ID.'}, lambda t: [int(t), 'post']),
+    'ticket': ({'type': 'string', 'description': 'Ticket ID.'}, lambda t: [int(t)]),
+}
+
+FORM_PAGES = {}
+
+
+def _form_page(name, url_name, description, toolset, target=None, permission=(), destructive=False):
+    FORM_PAGES[name] = (url_name, target)
+    params = {'values': {
+        'type': 'object',
+        'description': 'Field values by field name, as listed by get_form. Fields left out keep their current value.',
+    }}
+    required = ['values']
+    if target:
+        params['target'] = _TARGETS[target][0]
+        required.insert(0, 'target')
+
+    def handler(request, values, target=None):
+        return submit_form(request, name, target, values)
+
+    action(name, description + ' Call get_form first to see the fields.', toolset, read_only=False,
+           params=params, required=required, destructive=destructive, permission=permission)(handler)
+
+
+def _form_args(name, target):
+    url_name, target_type = FORM_PAGES[name]
+    if not target_type:
+        return url_name, []
+    if target in (None, ''):
+        raise AgentError('This form needs a target (%s).' % _TARGETS[target_type][0]['description'])
+    try:
+        return url_name, _TARGETS[target_type][1](target)
+    except ValueError:
+        raise AgentError('Invalid target "%s".' % target)
+
+
+def submit_form(request, name, target, values):
+    url_name, args = _form_args(name, target)
+    data = form_data(call_view(request, url_name, args=args).context_data)
+    for key, value in values.items():
+        if value is None or value is False:
+            data.pop(key, None)
+        else:
+            data[key] = value
+    response = call_view(request, url_name, args=args, method='POST', data=data)
+    result = {'done': True}
+    if hasattr(response, 'url'):
+        result['redirect'] = response.url
+        try:
+            result['page'], result['page_args'] = redirect_target(response)
+        except Exception:
+            pass
+    return result
+
+
+_form_page('create_blog_post', 'blog_post_new', 'Write a new blog post.', COMMUNITY)
+_form_page('edit_blog_post', 'blog_post_edit', 'Edit one of your blog posts.', COMMUNITY, target='blog_post')
+_form_page('create_problem', 'problem_create', 'Create a problem.', AUTHOR, permission='judge.add_problem')
+_form_page('create_organization_problem', 'problem_create_organization',
+           'Create a problem inside an organization you administer.', AUTHOR, target='organization')
+_form_page('edit_problem', 'problem_edit', 'Edit a problem: statement, limits, languages, editorial.', AUTHOR,
+           target='problem', permission='judge.edit_own_problem')
+_form_page('edit_problem_types', 'problem_edit_type_group', 'Change the types and group of a problem.', AUTHOR,
+           target='problem', permission='judge.edit_type_group_all_problem')
+_form_page('clone_problem', 'problem_clone', 'Clone a problem under a new code.', AUTHOR, target='problem',
+           permission='judge.clone_problem')
+_form_page('create_contest', 'contest_new', 'Create a contest.', AUTHOR, permission='judge.add_contest')
+_form_page('create_organization_contest', 'contest_create_organization',
+           'Create a contest inside an organization you administer.', AUTHOR, target='organization')
+_form_page('edit_contest', 'contest_edit', 'Edit a contest: settings, times and its problems.', AUTHOR,
+           target='contest', permission=('judge.edit_own_contest', 'judge.edit_all_contest'))
+_form_page('clone_contest', 'contest_clone', 'Clone a contest under a new key.', AUTHOR, target='contest',
+           permission='judge.clone_contest')
+_form_page('announce_contest', 'contest_announce', 'Post an announcement to contest participants.', AUTHOR,
+           target='contest', permission=('judge.edit_own_contest', 'judge.edit_all_contest'))
+_form_page('create_organization', 'organization_create', 'Create an organization.', MODERATOR,
+           permission='judge.add_organization')
+_form_page('edit_organization', 'edit_organization', 'Edit an organization you administer.', MODERATOR,
+           target='organization')
+_form_page('ban_user', 'user_ban', 'Ban a user.', MODERATOR, target='user', permission='judge.ban_user',
+           destructive=True)
+_form_page('unban_user', 'user_unban', 'Unban a user.', MODERATOR, target='user', permission='judge.ban_user')
+_form_page('edit_ticket_notes', 'ticket_notes', 'Edit the staff notes on a ticket.', MODERATOR, target='ticket',
+           permission='judge.change_ticket')
+
+
+@action('get_form', 'Show the fields of a form (for create_*/edit_* and other form actions) with their current '
+        'values and choices.', COMMUNITY, read_only=True, params={
+            'form': {'type': 'string', 'description': 'The form action name, e.g. edit_problem.'},
+            'target': {'type': 'string', 'description': 'Problem code, contest key, username, ... if the form '
+                                                        'needs one.'},
+        }, required=['form'])
+def get_form(request, form, target=None):
+    if form not in FORM_PAGES:
+        raise AgentError('Unknown form. One of: %s.' % ', '.join(sorted(FORM_PAGES)))
+    if not ACTIONS[form].is_allowed(request.user):
+        raise AgentError('Permission denied.', 403)
+    url_name, args = _form_args(form, target)
+    return {'form': form, **describe_forms(call_view(request, url_name, args=args).context_data)}
+
+
+@action('delete_blog_post', 'Delete a blog post.', MODERATOR, read_only=False, destructive=True,
+        permission='judge.delete_blogpost',
+        params={'id': {'type': 'integer', 'description': 'Blog post ID.'}}, required=['id'])
+def delete_blog_post(request, id):
+    call_view(request, 'blog_post_delete', args=[id, 'post'], method='POST')
+    return {'deleted': id}
+
+
+@action('delete_problem', 'Delete a problem.', AUTHOR, read_only=False, destructive=True,
+        permission='judge.edit_own_problem',
+        params={'code': {'type': 'string', 'description': 'Problem code.'}}, required=['code'])
+def delete_problem(request, code):
+    call_view(request, 'problem_delete', args=[code], method='POST')
+    return {'deleted': code}
+
+
+@action('delete_contest', 'Delete a contest that has no ratings.', AUTHOR, read_only=False, destructive=True,
+        permission=('judge.edit_own_contest', 'judge.edit_all_contest'),
+        params={'key': {'type': 'string', 'description': 'Contest key.'}}, required=['key'])
+def delete_contest(request, key):
+    call_view(request, 'contest_delete', args=[key], method='POST')
+    return {'deleted': key}
+
+
+@action('make_contest_problems_public', 'Make every problem in a contest public.', AUTHOR, read_only=False,
+        permission=('judge.edit_own_contest', 'judge.edit_all_contest'),
+        params={'key': {'type': 'string', 'description': 'Contest key.'}}, required=['key'])
+def make_contest_problems_public(request, key):
+    call_view(request, 'contest_problems_make_public', args=[key], method='POST')
+    return {'contest': key, 'problems_public': True}
+
+
+@action('disqualify_participant', 'Disqualify a contest participation, or undo it. Get participation_id from '
+        'get_contest_ranking.', MODERATOR, read_only=False, destructive=True,
+        permission=('judge.edit_own_contest', 'judge.edit_all_contest'), params={
+            'key': {'type': 'string', 'description': 'Contest key.'},
+            'participation_id': {'type': 'integer'},
+        }, required=['key', 'participation_id'])
+def disqualify_participant(request, key, participation_id):
+    call_view(request, 'contest_participation_disqualify', args=[key], method='POST',
+              data={'participation': participation_id})
+    return {'contest': key, 'participation_id': participation_id}
+
+
+@action('rejudge_submission', 'Rejudge a submission.', MODERATOR, read_only=False,
+        permission='judge.rejudge_submission',
+        params={'id': {'type': 'integer', 'description': 'Submission ID.'}}, required=['id'])
+def rejudge_submission(request, id):
+    call_view(request, 'submission_rejudge', method='POST', data={'id': id})
+    return {'submission_id': id, 'rejudging': True}
+
+
+@action('hide_comment', 'Hide a comment and its replies.', MODERATOR, read_only=False, destructive=True,
+        permission='judge.change_comment',
+        params={'id': {'type': 'integer', 'description': 'Comment ID.'}}, required=['id'])
+def hide_comment(request, id):
+    call_view(request, 'comment_hide', method='POST', data={'id': id})
+    return {'comment_id': id, 'hidden': True}
+
+
+@action('set_ticket_contributive', 'Mark a ticket as a good contribution or not (gives contribution points).',
+        MODERATOR, read_only=False, permission='judge.change_ticket', params={
+            'id': {'type': 'integer', 'description': 'Ticket ID.'},
+            'contributive': {'type': 'boolean'},
+        }, required=['id', 'contributive'])
+def set_ticket_contributive(request, id, contributive):
+    call_view(request, 'ticket_good' if contributive else 'ticket_norm', args=[id], method='POST')
+    return {'ticket_id': id, 'contributive': contributive}
+
+
+@action('kick_organization_user', 'Remove a member from an organization you administer.', MODERATOR,
+        read_only=False, destructive=True, params={
+            'slug': {'type': 'string', 'description': 'Organization slug.'},
+            'username': {'type': 'string'},
+        }, required=['slug', 'username'])
+def kick_organization_user(request, slug, username):
+    profile = Profile.objects.filter(user__username=username).first()
+    if profile is None:
+        raise AgentError('No such user.', 404)
+    call_view(request, 'organization_user_kick', args=[slug], method='POST', data={'user': profile.id})
+    return {'organization': slug, 'removed': username}
