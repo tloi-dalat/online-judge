@@ -2,7 +2,6 @@
 /.github/                 @tloi-dalat/sre
 /Dockerfile               @tloi-dalat/sre
 /.dockerignore            @tloi-dalat/sre
-/.ci.settings.py          @tloi-dalat/sre
 /requirements.k8s.txt     @tloi-dalat/sre
 /websocket/Dockerfile     @tloi-dalat/sre
 /websocket/config.k8s.js  @tloi-dalat/sre

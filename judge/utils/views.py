@@ -8,10 +8,12 @@ from judge.utils.diggpaginator import DiggPaginator
 
 
 def generic_message(request, title, message, status=None):
-    return render(request, 'generic-message.html', {
+    response = render(request, 'generic-message.html', {
         'message': message,
         'title': title,
     }, status=status)
+    response.agent_title, response.agent_message = title, message
+    return response
 
 
 def add_file_response(request, response, url_path, file_path, file_object=None):

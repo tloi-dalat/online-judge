@@ -530,6 +530,16 @@ if settings.VNOJ_ENABLE_SYNC_API:
         ])),
     )
 
+if settings.VNOJ_ENABLE_AGENT_API:
+    from judge.agent_api import views as agent_api_views
+    urlpatterns.append(
+        path('api/agent/', include([
+            path('capabilities', agent_api_views.capabilities, name='agent_api_capabilities'),
+            path('openapi.json', agent_api_views.openapi, name='agent_api_openapi'),
+            path('actions/<str:name>', agent_api_views.run_action, name='agent_api_action'),
+        ])),
+    )
+
 try:
     with open(os.path.join(os.path.dirname(__file__), 'local_urls.py')) as f:
         exec(f.read(), globals())
