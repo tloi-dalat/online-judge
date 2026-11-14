@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-01 06:41+0000\n"
+"POT-Creation-Date: 2026-11-12 06:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,27 +13,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: dmoj/settings.py:102
+#: dmoj/settings.py:104
 msgid "Normal User"
 msgstr ""
 
-#: dmoj/settings.py:103
+#: dmoj/settings.py:105
 msgid "Problem Setter"
 msgstr ""
 
-#: dmoj/settings.py:104
+#: dmoj/settings.py:106
 msgid "TLOI Team"
 msgstr ""
 
-#: dmoj/settings.py:105
+#: dmoj/settings.py:107
 msgid "Staff"
 msgstr ""
 
-#: dmoj/settings.py:106
+#: dmoj/settings.py:108
 msgid "Banned User"
 msgstr ""
 
-#: dmoj/settings.py:107 templates/base.html:363
+#: dmoj/settings.py:109 templates/base.html:363
 #: templates/comments/list.html:102 templates/contest/contest-list-tabs.html:34
 #: templates/problem/problem-list-tabs.html:9
 #: templates/submission/info-base.html:15
@@ -43,15 +43,15 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
-#: dmoj/settings.py:108
+#: dmoj/settings.py:110
 msgid "Teacher"
 msgstr ""
 
-#: dmoj/settings.py:668
+#: dmoj/settings.py:670
 msgid "English"
 msgstr ""
 
-#: dmoj/settings.py:669
+#: dmoj/settings.py:671
 msgid "Vietnamese"
 msgstr ""
 

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-01 06:41+0000\n"
+"POT-Creation-Date: 2026-11-12 06:59+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -18,27 +18,27 @@ msgstr ""
 "X-Crowdin-Project: dmoj\n"
 "X-Crowdin-Project-ID: 142963\n"
 
-#: dmoj/settings.py:102
+#: dmoj/settings.py:104
 msgid "Normal User"
 msgstr "Người dùng thông thường"
 
-#: dmoj/settings.py:103
+#: dmoj/settings.py:105
 msgid "Problem Setter"
 msgstr "Người ra đề"
 
-#: dmoj/settings.py:104
+#: dmoj/settings.py:106
 msgid "TLOI Team"
 msgstr "TLOI Team"
 
-#: dmoj/settings.py:105
+#: dmoj/settings.py:107
 msgid "Staff"
 msgstr "Nhân viên"
 
-#: dmoj/settings.py:106
+#: dmoj/settings.py:108
 msgid "Banned User"
 msgstr "Người dùng bị cấm"
 
-#: dmoj/settings.py:107 templates/base.html:363
+#: dmoj/settings.py:109 templates/base.html:363
 #: templates/comments/list.html:102 templates/contest/contest-list-tabs.html:34
 #: templates/problem/problem-list-tabs.html:9
 #: templates/submission/info-base.html:15
@@ -48,15 +48,15 @@ msgstr "Người dùng bị cấm"
 msgid "Admin"
 msgstr "Quản trị"
 
-#: dmoj/settings.py:108
+#: dmoj/settings.py:110
 msgid "Teacher"
 msgstr "Giáo viên"
 
-#: dmoj/settings.py:668
+#: dmoj/settings.py:670
 msgid "English"
 msgstr "Tiếng Anh"
 
-#: dmoj/settings.py:669
+#: dmoj/settings.py:671
 msgid "Vietnamese"
 msgstr "Tiếng Việt"
 

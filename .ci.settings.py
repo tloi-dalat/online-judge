@@ -24,6 +24,7 @@ DATABASES = {
 
 DEFAULT_USER_TIME_ZONE = 'Asia/Ho_Chi_Minh'
 VNOJ_ENABLE_SYNC_API = True
+VNOJ_ENABLE_AGENT_API = True
 DMOJ_PROBLEM_DATA_ROOT = os.path.join(BASE_DIR, 'problem_data')
 
 
