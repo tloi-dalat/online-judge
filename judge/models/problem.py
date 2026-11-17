@@ -299,7 +299,7 @@ class Problem(models.Model):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
 
     def is_editor(self, profile):
-        return (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists()
+        return profile.id in self.editor_ids
 
     def is_editable_by(self, user):
         if not user.is_authenticated:
@@ -403,6 +403,7 @@ class Problem(models.Model):
         #       - is_public problems
         #           - not is_organization_private or in organization or `judge.see_organization_problem`
         #           - author or curator or tester
+        #           - is_organization_private and admin of organization
         queryset = (cls.objects if include_deleted else cls.available).defer('description')
 
         edit_own_problem = user.has_perm('judge.edit_own_problem')
@@ -418,8 +419,9 @@ class Problem(models.Model):
                     Profile.organizations.through.objects.filter(profile=user.profile).values('organization_id'),
                 )
 
-            # Authors, curators, and testers should always have access.
+            # Authors, curators, testers, and admins of the problem's organization should always have access.
             q = cls.q_add_author_curator_tester(q, user.profile)
+            q |= cls.q_organization_admin(user.profile)
             queryset = queryset.filter(q)
 
         return queryset
@@ -432,6 +434,12 @@ class Problem(models.Model):
         q |= Exists(Problem.curators.through.objects.filter(problem=OuterRef('pk'), profile=profile))
         q |= Exists(Problem.testers.through.objects.filter(problem=OuterRef('pk'), profile=profile))
         return q
+
+    @classmethod
+    def q_organization_admin(cls, profile):
+        return Q(is_organization_private=True) & Exists(
+            Organization.admins.through.objects.filter(organization_id=OuterRef('organization_id'), profile=profile),
+        )
 
     @classmethod
     def organization_filter_q(cls, queryset):
@@ -452,7 +460,7 @@ class Problem(models.Model):
         if user.has_perm('judge.edit_all_problem'):
             return cls.objects.all()
 
-        q = Q(authors=user.profile) | Q(curators=user.profile)
+        q = Q(authors=user.profile) | Q(curators=user.profile) | cls.q_organization_admin(user.profile)
 
         if user.has_perm('judge.edit_public_problem'):
             q |= Q(is_public=True)
@@ -470,9 +478,18 @@ class Problem(models.Model):
         return Problem.authors.through.objects.filter(problem=self).values_list('profile_id', flat=True)
 
     @cached_property
+    def organization_admin_ids(self):
+        if not self.is_organization_private or self.organization_id is None:
+            return Organization.admins.through.objects.none().values_list('profile_id', flat=True)
+        return Organization.admins.through.objects.filter(organization_id=self.organization_id) \
+            .values_list('profile_id', flat=True)
+
+    @cached_property
     def editor_ids(self):
         editors = self.author_ids.union(
-            Problem.curators.through.objects.filter(problem=self).values_list('profile_id', flat=True))
+            Problem.curators.through.objects.filter(problem=self).values_list('profile_id', flat=True),
+            self.organization_admin_ids,
+        )
         return editors
 
     @cached_property

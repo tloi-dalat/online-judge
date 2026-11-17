@@ -671,8 +671,7 @@ class OrganizationHome(TitleMixin, PublicOrganizationMixin, PostListBase):
                     # if they are not in the org
                     # even if the org is public
                     return BlogPost.objects.none()
-            else:
-                # Org admin can view public posts & their own posts
+            elif not self.organization.is_admin(self.request.profile):
                 queryset = queryset.filter(Q(visible=True) | Q(authors=self.request.profile))
 
         if self.request.user.is_authenticated:
@@ -738,18 +737,17 @@ def get_organization_problem_filter(organization, user, profile):
         can view all org's problem (including private problems)
         - Otherwise, they can view all public problems and
         problems that they are authors/curators/testers
-
-    With that logic, Organization admins cannot view private
-    problems of other admins unless they are authors/curators/testers
+        - Organization admins can view all problems private to their organization
     """
     if user.has_perm('judge.see_private_problem'):
         return Q(organization=organization)
 
     _filter = Q(is_public=True)
 
-    # Authors, curators, and testers should always have access, so OR at the very end.
+    # Authors, curators, testers, and organization admins should always have access, so OR at the very end.
     if profile is not None:
         _filter = Problem.q_add_author_curator_tester(_filter, profile)
+        _filter |= Problem.q_organization_admin(profile)
 
     return _filter & Q(organization=organization)
 
@@ -891,7 +889,10 @@ class BulkDeleteOrganizationProblems(LoginRequiredMixin, AdminOrganizationMixin,
 
         if not request.user.is_superuser:
             all_count = problems.count()
-            problems = problems.filter(Q(authors=request.profile) | Q(curators=request.profile))
+            editable = Q(authors=request.profile) | Q(curators=request.profile)
+            if org.is_admin(request.profile):
+                editable |= Q(is_organization_private=True)
+            problems = problems.filter(id__in=Problem.objects.filter(editable).values('id'))
             skipped = all_count - problems.count()
             if skipped > 0:
                 messages.error(request, ngettext(

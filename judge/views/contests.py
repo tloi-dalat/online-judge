@@ -122,6 +122,7 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
                 has_author=Exists(authors_exists),
                 has_curator=Exists(curators_exists),
                 has_tester=Exists(testers_exists),
+                has_organization_admin=Contest.q_organization_admin(user_id),
             )
         return queryset
 

@@ -1,14 +1,11 @@
-from operator import attrgetter
-
 from django.utils import timezone
 
 from judge.models import Problem, Submission, SubmissionSourceAccess
 from . import registry
 
 
-# TODO: maybe refactor this?
 def get_editor_ids(contest):
-    return set(map(attrgetter('id'), contest.authors.all())) | set(map(attrgetter('id'), contest.curators.all()))
+    return contest.editor_ids
 
 
 @registry.function

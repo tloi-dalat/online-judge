@@ -16,7 +16,7 @@ from django.views.decorators.http import require_POST
 from reversion.admin import VersionAdmin
 
 from judge.admin.utils import AdminFastPaginationMixin
-from judge.models import ContestParticipation, ContestProblem, ContestSubmission, Profile, Submission, \
+from judge.models import ContestParticipation, ContestProblem, ContestSubmission, Problem, Profile, Submission, \
     SubmissionSource, SubmissionTestCase
 from judge.utils.raw_sql import use_straight_join
 from judge.widgets import AdminAceWidget
@@ -149,7 +149,10 @@ class SubmissionAdmin(AdminFastPaginationMixin, VersionAdmin):
         use_straight_join(queryset)
         if not request.user.has_perm('judge.edit_all_problem'):
             id = request.profile.id
-            queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id)).distinct()
+            queryset = queryset.filter(
+                Q(problem__authors__id=id) | Q(problem__curators__id=id) |
+                Q(problem__in=Problem.objects.filter(Problem.q_organization_admin(request.profile))),
+            ).distinct()
         return queryset
 
     def has_add_permission(self, request):
@@ -179,7 +182,10 @@ class SubmissionAdmin(AdminFastPaginationMixin, VersionAdmin):
             return
         if not request.user.has_perm('judge.edit_all_problem'):
             id = request.profile.id
-            queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id))
+            queryset = queryset.filter(
+                Q(problem__authors__id=id) | Q(problem__curators__id=id) |
+                Q(problem__in=Problem.objects.filter(Problem.q_organization_admin(request.profile))),
+            )
         judged = len(queryset)
         for model in queryset:
             model.judge(rejudge=True, batch_rejudge=True, rejudge_user=request.user)
