@@ -9,7 +9,7 @@ from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
 from django.utils import timezone
 
-from judge.models import Contest, Language, Problem, Submission
+from judge.models import Contest, ContestParticipation, Language, Problem, Submission
 from judge.models.problem import SubmissionSourceAccess
 from judge.models.tests.util import create_blogpost, create_contest, create_contest_problem, create_organization, \
     create_problem, create_user
@@ -122,8 +122,8 @@ class OrganizationAdminAccessTestCase(TestCase):
     def test_problem_querysets(self):
         visible = set(Problem.get_visible_problems(self.co_admin).values_list('code', flat=True))
         editable = set(Problem.get_editable_problems(self.co_admin).values_list('code', flat=True))
-        self.assertTrue({'school_hidden', 'school_shared'} <= visible)
-        self.assertTrue({'school_hidden', 'school_shared'} <= editable)
+        self.assertLessEqual({'school_hidden', 'school_shared'}, visible)
+        self.assertLessEqual({'school_hidden', 'school_shared'}, editable)
         self.assertFalse({'school_not_private', 'other_hidden'} & (visible | editable))
         self.assertIn('school_hidden', Problem.get_visible_problems(self.admin_no_perms).values_list('code', flat=True))
         self.assertFalse(Problem.get_editable_problems(self.admin_no_perms).exists())
@@ -171,6 +171,12 @@ class OrganizationAdminAccessTestCase(TestCase):
                          .should_hide_result(self.co_admin))
         self.assertTrue(Contest.get_visible_contests(self.member).get(key='school_voi')
                         .should_hide_result(self.member))
+
+    def test_co_admin_can_only_spectate(self):
+        self.client.force_login(self.co_admin)
+        self.client.post(reverse('contest_join', args=['school_private']))
+        participation = ContestParticipation.objects.get(contest=self.private_contest, user=self.co_admin.profile)
+        self.assertEqual(participation.virtual, ContestParticipation.SPECTATE)
 
     def test_post_access(self):
         post = self.fresh(self.hidden_post)
