@@ -744,10 +744,9 @@ def get_organization_problem_filter(organization, user, profile):
 
     _filter = Q(is_public=True)
 
-    # Authors, curators, testers, and organization admins should always have access, so OR at the very end.
+    # Authors, curators, and testers should always have access, so OR at the very end.
     if profile is not None:
         _filter = Problem.q_add_author_curator_tester(_filter, profile)
-        _filter |= Problem.q_organization_admin(profile)
 
     return _filter & Q(organization=organization)
 
@@ -890,9 +889,9 @@ class BulkDeleteOrganizationProblems(LoginRequiredMixin, AdminOrganizationMixin,
         if not request.user.is_superuser:
             all_count = problems.count()
             editable = Q(authors=request.profile) | Q(curators=request.profile)
-            if org.is_admin(request.profile):
-                editable |= Q(is_organization_private=True)
-            problems = problems.filter(id__in=Problem.objects.filter(editable).values('id'))
+            if request.user.has_perm('judge.edit_own_problem'):
+                editable |= Problem.q_organization_admin(request.profile)
+            problems = problems.filter(editable).distinct()
             skipped = all_count - problems.count()
             if skipped > 0:
                 messages.error(request, ngettext(
@@ -1067,7 +1066,7 @@ class OrganizationStorageDashboard(LoginRequiredMixin, TitleMixin, AdminOrganiza
         ).annotate(
             data_size=Coalesce(F('data_files__zipfile_size'), Value(0)),
         ).only(
-            'code', 'name',
+            'code', 'name', 'is_organization_private',
         ).prefetch_related('authors__user', 'curators__user')
 
         # Annotate with the latest submission date

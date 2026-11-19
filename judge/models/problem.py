@@ -403,7 +403,6 @@ class Problem(models.Model):
         #       - is_public problems
         #           - not is_organization_private or in organization or `judge.see_organization_problem`
         #           - author or curator or tester
-        #           - is_organization_private and admin of organization
         queryset = (cls.objects if include_deleted else cls.available).defer('description')
 
         edit_own_problem = user.has_perm('judge.edit_own_problem')
@@ -419,9 +418,8 @@ class Problem(models.Model):
                     Profile.organizations.through.objects.filter(profile=user.profile).values('organization_id'),
                 )
 
-            # Authors, curators, testers, and admins of the problem's organization should always have access.
+            # Authors, curators, and testers should always have access.
             q = cls.q_add_author_curator_tester(q, user.profile)
-            q |= cls.q_organization_admin(user.profile)
             queryset = queryset.filter(q)
 
         return queryset
@@ -433,6 +431,7 @@ class Problem(models.Model):
         q |= Exists(Problem.authors.through.objects.filter(problem=OuterRef('pk'), profile=profile))
         q |= Exists(Problem.curators.through.objects.filter(problem=OuterRef('pk'), profile=profile))
         q |= Exists(Problem.testers.through.objects.filter(problem=OuterRef('pk'), profile=profile))
+        q |= cls.q_organization_admin(profile)
         return q
 
     @classmethod
@@ -478,19 +477,12 @@ class Problem(models.Model):
         return Problem.authors.through.objects.filter(problem=self).values_list('profile_id', flat=True)
 
     @cached_property
-    def organization_admin_ids(self):
-        if not self.is_organization_private or self.organization_id is None:
-            return Organization.admins.through.objects.none().values_list('profile_id', flat=True)
-        return Organization.admins.through.objects.filter(organization_id=self.organization_id) \
-            .values_list('profile_id', flat=True)
-
-    @cached_property
     def editor_ids(self):
-        editors = self.author_ids.union(
-            Problem.curators.through.objects.filter(problem=self).values_list('profile_id', flat=True),
-            self.organization_admin_ids,
-        )
-        return editors
+        editors = [Problem.curators.through.objects.filter(problem=self).values_list('profile_id', flat=True)]
+        if self.is_organization_private and self.organization_id:
+            editors.append(Organization.admins.through.objects.filter(organization_id=self.organization_id)
+                           .values_list('profile_id', flat=True))
+        return self.author_ids.union(*editors)
 
     @cached_property
     def tester_ids(self):

@@ -306,8 +306,7 @@ class Contest(models.Model):
             return False
         if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
             return True
-        if getattr(self, 'has_author', False) or getattr(self, 'has_curator', False) or \
-                getattr(self, 'has_organization_admin', False):
+        if getattr(self, 'has_author', False) or getattr(self, 'has_curator', False):
             return True
         if user.profile.id in self.editor_ids:
             return True
@@ -424,14 +423,11 @@ class Contest(models.Model):
         return [profile.id for profile in self.authors.all()]
 
     @cached_property
-    def organization_admin_ids(self):
-        if not self.is_organization_private or self.organization_id is None:
-            return set()
-        return set(profile.id for profile in self.organization.admins.all())
-
-    @cached_property
     def editor_ids(self):
-        return set(self.author_ids) | set(profile.id for profile in self.curators.all()) | self.organization_admin_ids
+        editors = set(self.author_ids) | set(profile.id for profile in self.curators.all())
+        if self.is_organization_private and self.organization_id:
+            editors |= set(profile.id for profile in self.organization.admins.all())
+        return editors
 
     @cached_property
     def tester_ids(self):
@@ -485,8 +481,8 @@ class Contest(models.Model):
             if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
                 return False
 
-            if hasattr(self, 'has_author') and hasattr(self, 'has_curator') and hasattr(self, 'has_organization_admin'):
-                is_editor = self.has_author or self.has_curator or self.has_organization_admin
+            if hasattr(self, 'has_author') and hasattr(self, 'has_curator'):
+                is_editor = self.has_author or self.has_curator
             else:
                 is_editor = user.profile.id in self.editor_ids
 
@@ -636,17 +632,15 @@ class Contest(models.Model):
 
             queryset = queryset.annotate(
                 has_author=Exists(authors_exists),
-                has_curator=Exists(curators_exists),
+                has_curator=Exists(curators_exists) | cls.q_organization_admin(user.profile),
                 has_tester=Exists(testers_exists),
-                has_organization_admin=cls.q_organization_admin(user.profile),
             )
 
             queryset = queryset.filter(
                 q |
                 Q(has_author=True) |
                 Q(has_curator=True) |
-                Q(has_tester=True) |
-                Q(has_organization_admin=True),
+                Q(has_tester=True),
             )
 
         return queryset
