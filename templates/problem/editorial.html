@@ -7,6 +7,9 @@
         {% include "comments/media-js.html" %}
     {% endif %}
     {% include "comments/lazy-load-js.html" %}
+    {% include "graph-core-config.html" %}
+    <script type="text/javascript" src="{{ static('graph-core.js') }}"></script>
+    <script type="text/javascript" src="{{ static('graph-viewer.js') }}"></script>
 {% endblock %}
 
 {% block content_media %}

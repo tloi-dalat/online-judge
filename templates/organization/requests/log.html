@@ -16,7 +16,7 @@
                     <td>{{ link_user(r.user) }}</td>
                     <td>
                         <a href="{{ url('request_organization_detail', object.slug, r.id) }}">
-                            {{- r.time|date(_("N j, Y, H:i")) -}}
+                            {%- set date_format = _("N j, Y, H:i") -%}{{ r.time|date(date_format) -}}
                         </a>
                     </td>
                     <td>{{ r.get_state_display() }}</td>

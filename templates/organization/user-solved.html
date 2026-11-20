@@ -106,8 +106,7 @@
 
 {% block body %}
     <div class="solved-summary">
-        {{ _('%(user)s has solved %(solved)d problems in this organization.',
-             user=link_user(member), solved=solved_count) }}
+        {{ _('%(user)s has solved %(solved)d problems in this organization.', user=link_user(member), solved=solved_count) }}
     </div>
 
     {% for section in tag_sections %}

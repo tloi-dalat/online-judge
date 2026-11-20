@@ -12,7 +12,7 @@ from judge.views.widgets import static_uploader
 _TEXT_KEYS = [
     'meta_keywords', 'meta_description', 'analytics', 'top_notification',
     'announcement', 'footer', 'home_page_top', 'discord_invite_link',
-    'discord_invite_shieldio', 'description_example',
+    'discord_invite_shieldio', 'facebook_link', 'github_link', 'description_example',
 ]
 
 
@@ -76,6 +76,16 @@ class MiscConfigForm(forms.Form):
         required=False,
         label=_('Discord Shield.io badge URL'),
         help_text=_('Shield.io badge URL shown alongside the Discord invite link.'),
+    )
+    facebook_link = forms.CharField(
+        required=False,
+        label=_('Facebook link'),
+        help_text=_('Facebook page URL.'),
+    )
+    github_link = forms.CharField(
+        required=False,
+        label=_('GitHub link'),
+        help_text=_('GitHub page URL.'),
     )
     description_example = forms.CharField(
         required=False,

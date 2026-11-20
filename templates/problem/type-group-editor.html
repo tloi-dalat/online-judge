@@ -7,6 +7,16 @@
     <script src="{{ static('vnoj/jquery.formset.js') }}"></script>
 {% endblock %}
 
+{% block media %}
+    {{ form.media.css }}
+    <link rel="stylesheet" type="text/css" href="{{ static('ui_form.css') }}">
+    <style>
+        #id_types + .select2 {
+            min-width:10em;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
 <div>
     <form action="" method="post" class="form-area" enctype="multipart/form-data" style="display: flex; justify-content: center; flex-direction: column;">

@@ -1,0 +1,22 @@
+name: 'migration'
+on:
+  pull_request:
+    branches: [main]
+  workflow_run:
+    workflows: [release]
+    types: [completed]
+
+concurrency:
+  group: migration-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  atlas:
+    name: atlas
+    if: github.event_name == 'pull_request' || github.event.workflow_run.conclusion == 'success'
+    permissions:
+      contents: read
+    uses: tloi-dalat/reusable-workflow/.github/workflows/atlas-migration.yaml@main
+    secrets:
+      ATLAS_APP_ID: ${{ secrets.ATLAS_APP_ID }}
+      ATLAS_APP_PRIVATE_KEY: ${{ secrets.ATLAS_APP_PRIVATE_KEY }}

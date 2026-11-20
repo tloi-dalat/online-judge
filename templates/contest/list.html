@@ -15,10 +15,6 @@
                 $(this).toggleClass('expanded');
             });
 
-            $('#contest-tag-filter').select2({theme: '{{ DMOJ_SELECT2_THEME }}'}).on('change', function () {
-                $('#search-form').submit();
-            });
-
             {% if not request.official_contest_mode %}
                 $('.join-warning').click(function () {
                     return confirm({{ _('Are you sure you want to join?')|htmltojs }} + '\n' +
@@ -39,6 +35,31 @@
 
             $('.register-warning').click(function () {
                 return confirm({{ _('Are you sure you want to register?')|htmltojs }});
+            });
+
+            var $contestFilterForm = $('form#contest-filter-form');
+            var $contestSearch = $('#contest-search');
+            var $contestTagsFilter = $('#contest-tags-filter');
+
+            function prep_contest_filter_form() {
+                $contestSearch.prop('disabled', !$contestSearch.val());
+                $contestTagsFilter.prop('disabled', !$contestTagsFilter.val() || !$contestTagsFilter.val().length);
+            }
+
+            $contestTagsFilter.select2({
+                theme: '{{ DMOJ_SELECT2_THEME }}',
+                multiple: 1,
+                placeholder: {{ _('Filter by contest tag...')|htmltojs }}
+            }).css({'visibility': 'visible'});
+
+            $contestSearch.keypress(function (e) {
+                if (e.keyCode == 13)
+                    $('#contest-filter-go').click();
+            });
+
+            $('#contest-filter-go').click(function () {
+                prep_contest_filter_form();
+                $contestFilterForm.submit();
             });
 
             {% if hide_private_contests is not none %}
@@ -106,7 +127,7 @@
 {% endmacro %}
 
 {% macro tag_pill(tag) %}
-    <a class="ctag" href="?tag={{ tag.id }}#past-contests"
+    <a class="ctag" href="?tag={{ tag.name|urlencode }}#past-contests"
        style="background: color-mix(in srgb, {{ tag.color }} 13%, transparent); color: {{ tag.color }};">{{ tag.name }}</a>
 {% endmacro %}
 
@@ -162,10 +183,10 @@
 
 {% macro contest_join(contest, request, finished_contests) %}
     {% if request.in_contest and contest.key == request.participation.contest.key %}
-        <td><span>Already joined</span></td>
+        <td><span>{{ _('Already joined') }}</span></td>
     {% else %}
         <td>
-            {% if contest.key in finished_contests or request.profile in contest.authors.all() or request.profile in contest.curators.all() or request.profile in contest.testers.all() %}
+            {% if contest.key in finished_contests or contest.has_author or contest.has_curator or contest.has_tester %}
                 <form action="{{ url('contest_join', contest.key) }}" method="post">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full participate-button spectate-warning"
@@ -184,14 +205,14 @@
 
 {% macro contest_register(contest, request) %}
     <td>
-        {% if request.profile not in contest.authors.all() and request.profile not in contest.curators.all() and request.profile not in contest.testers.all() %}
+        {% if not contest.has_author and not contest.has_curator and not contest.has_tester %}
             {% if request.profile and contest.id in request.profile.registered_contest_ids %}
-                <span style="color: #87ab69"><b>Already registered</b></span>
+                <span style="color: #87ab69"><b>{{ _('Already registered') }}</b></span>
             {% elif not contest.can_register %}
                 {% if contest.time_before_register %}
                     <span class="time">{{ _('Registration opens in %(countdown)s', countdown=as_countdown(contest.time_before_register)) }}</span>
                 {% else %}
-                    <span>Registration closed</span>
+                    <span>{{ _('Registration closed') }}</span>
                 {% endif %}
             {% else %}
                 <form action="{{ url('contest_register', contest.key) }}" method="post">
@@ -203,7 +224,7 @@
         {% endif %}
         {% if not contest.time_before_register %}
             <div style="padding-top: 0.5em">
-                <span style="opacity: 50%">Registered users: </span>
+                <span style="opacity: 50%">{{ _('Registered users:') }} </span>
                 <span>{{ contest.user_count }}</span>
             </div>
         {% endif %}
@@ -214,13 +235,14 @@
     <div class="content-description">
         {% if active_participations %}
             <h4>{{ _('Active contests') }}</h4>
-            <table class="contest-list table striped">
+            <table class="contest-list contest-list-stats table striped">
                 <thead>
                 <tr>
                     <th>{{ _('Contest') }}</th>
                     <th style="width:12em">{{ _('Tags') }}</th>
                     <th>{{ _('Users') }}</th>
-                    <th style="width:20%"></th>
+                    <th>{{ _('Solved') }}</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -245,6 +267,13 @@
                             <td>
                                 {{ user_count(contest, request.user) }}
                             </td>
+                            <td>
+                            {% if contest.total_count is not none %}
+                                <span>
+                                    {{ '?' if contest.solved_count is none else contest.solved_count }} / {{ contest.total_count }}
+                                </span>
+                            {% endif %}
+                            </td>
                             {{ contest_join(contest, request, finished_contests) }}
                         </tr>
                     {% endwith %}
@@ -256,13 +285,16 @@
 
         {% if current_contests %}
             <h4>{{ _('Ongoing contests') }}</h4>
-            <table class="contest-list table striped">
+            <table class="contest-list contest-list-stats table striped">
                 <thead>
                 <tr>
                     <th>{{ _('Contest') }}</th>
                     <th style="width:12em">{{ _('Tags') }}</th>
                     <th>{{ _('Users') }}</th>
-                    <th style="width:15%"></th>
+                    {% if request.user.is_authenticated %}
+                        <th>{{ _('Solved') }}</th>
+                    {% endif %}
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -284,6 +316,15 @@
                         <td>
                             {{ user_count(contest, request.user) }}
                         </td>
+                        {% if request.user.is_authenticated %}
+                            <td>
+                                {% if contest.total_count is not none %}
+                                    <span>
+                                        {{ '?' if contest.solved_count is none else contest.solved_count }} / {{ contest.total_count }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                        {% endif %}
                         {% if not contest.require_registration or contest.can_register %}
                             {{ contest_join(contest, request, finished_contests) }}
                         {% else %}
@@ -338,34 +379,36 @@
         <br>
 
         <h4 id="past-contests">{{ _('Past contests') }}</h4>
-        {% if page_obj or search_query or selected_tag %}
+        {% if page_obj or search_query or selected_tags %}
             <div class="top-pagination-bar">
                 {% include "list-pages.html" %}
-                <div style="display: flex; align-items: center;">
-                    <form id="search-form" name="form" action="" method="get"
-                          style="display: flex; align-items: center; gap: 0.5em; width: auto;">
-                        <select id="contest-tag-filter" name="tag" style="width: 180px;">
-                            <option value="">{{ _('All tags') }}</option>
+                <div style="display: flex; align-items: center; min-width: 0;">
+                    <form id="contest-filter-form" name="form" action="" method="get" style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5em; align-items: center;">
+                        <input id="contest-search" type="text" name="search" value="{{ search_query or '' }}"
+                            placeholder="{{ _('Search contest...') }}">
+                        <select id="contest-tags-filter" name="tag" multiple style="min-width: 14em; visibility: hidden;">
                             {% for tag in contest_tags %}
-                                <option value="{{ tag.id }}" {{ 'selected' if tag.id == selected_tag }}>{{ tag.name }}</option>
+                                <option value="{{ tag.name }}"{% if tag.name in selected_tags %} selected{% endif %}>
+                                    {{ tag.name }}
+                                </option>
                             {% endfor %}
                         </select>
-                        <input id="search" type="text" name="search" value="{{ search_query or '' }}"
-                            placeholder="{{ _('Search contest...') }}" style="width: 225px;">
+                        <a id="contest-filter-go" class="button">{{ _('Go') }}</a>
                     </form>
                 </div>
             </div>
         {% endif %}
         {% if past_contests %}
-            <table class="contest-list table striped">
+            <table class="contest-list contest-list-stats table striped">
                 <thead>
                 <tr>
                     <th>{{ _('Contest') }}</th>
                     <th style="width:12em">{{ _('Tags') }}</th>
                     <th>{{ _('Users') }}</th>
-                    {% if not request.in_contest %}
-                        <th style="width:15%"></th>
+                    {% if request.user.is_authenticated %}
+                        <th>{{ _('Solved') }}</th>
                     {% endif %}
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -381,17 +424,24 @@
                         <td>
                             {{ user_count(contest, request.user) }}
                         </td>
-                        {% if not request.in_contest %}
-                            {% if not contest.disallow_virtual %}
-                                <td><form action="{{ url('contest_join', contest.key) }}" method="post">
+                        {% if request.user.is_authenticated %}
+                            <td>
+                                {% if contest.total_count is not none %}
+                                    <span>
+                                        {{ '?' if contest.solved_count is none else contest.solved_count }} / {{ contest.total_count }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                        <td>
+                            {% if not request.in_contest and not contest.disallow_virtual %}
+                                <form action="{{ url('contest_join', contest.key) }}" method="post">
                                     {% csrf_token %}
                                     <input type="submit" class="unselectable button full participate-button"
                                            value="{{ _('Virtual join') }}">
-                                </form></td>
-                            {% else %}
-                                <td></td>
+                                </form>
                             {% endif %}
-                        {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

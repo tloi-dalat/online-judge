@@ -51,6 +51,13 @@ app.conf.beat_schedule = {
             'expires': 60 * 60 * 24,
         },
     },
+    'delete-expired-chunked-uploads': {
+        'task': 'judge.tasks.problem.delete_expired_chunked_uploads',
+        'schedule': crontab(minute=0, hour=0),
+        'options': {
+            'expires': 60 * 60 * 24,
+        },
+    },
 }
 
 

@@ -6,6 +6,7 @@ from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 
+from judge.contest_format import hidden_result_contest_ids
 from judge.models import Profile, Submission
 from judge.views.submission import ForceContestMixin, ProblemSubmissions, submission_related
 
@@ -26,7 +27,8 @@ class RankedSubmissions(ProblemSubmissions):
     def _base_queryset(self):
         # Rankings are viewer-independent: rank all submissions of the problem,
         # regardless of any contest visibility the viewer has.
-        queryset = Submission.objects.filter(problem_id=self.problem.id)
+        queryset = Submission.objects.filter(problem_id=self.problem.id) \
+            .exclude(contest_object__in=hidden_result_contest_ids())
         if self.is_contest_scoped:
             queryset = queryset.filter(contest_object=self.contest)
         return queryset

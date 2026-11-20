@@ -41,7 +41,8 @@ def submission_related(queryset):
               'memory', 'points', 'result', 'status', 'case_points', 'case_total', 'current_testcase', 'contest_object',
               'locked_after', 'problem__submission_source_visibility_mode', 'problem__testcase_result_visibility_mode',
               'user__username_display_override', 'user__display_badge__name', 'user__display_badge__mini') \
-        .prefetch_related('contest_object__authors', 'contest_object__curators')
+        .prefetch_related('contest_object__authors', 'contest_object__curators',
+                          'contest_object__organization__admins')
 
 
 class SubmissionPermissionDenied(PermissionDenied):
@@ -178,7 +179,10 @@ def make_batch(batch, cases, statuses=None):
     return result
 
 
-TestCase = namedtuple('TestCase', 'id status batch num_combined')
+class TestCase(namedtuple('TestCase', 'id status batch num_combined')):
+    @property
+    def result_class(self):
+        return Submission.result_class_from_code(self.status)
 
 
 def get_statuses(batch, cases):
@@ -240,6 +244,11 @@ class SubmissionStatus(SubmissionDetailBase):
     def get_context_data(self, **kwargs):
         context = super(SubmissionStatus, self).get_context_data(**kwargs)
         submission = self.object
+
+        result_hidden = False
+        if submission.contest_object_id:
+            result_hidden = submission.contest_object.should_hide_result(self.request.user, self.request.participation)
+        context['result_hidden'] = result_hidden
 
         context['batches'], statuses, test_case_count = group_test_cases(submission.test_cases.all())
 
@@ -366,6 +375,11 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
             return {'categories': [], 'total': 0}
         if queryset is None:
             queryset = self.get_queryset()
+        if not (self.request.user.has_perm('judge.see_private_contest') or
+                self.request.user.has_perm('judge.edit_all_contest')):
+            from judge.contest_format import hidden_result_contest_ids
+            profile = self.request.profile if self.request.user.is_authenticated else None
+            queryset = queryset.exclude(contest_object__in=hidden_result_contest_ids(profile))
         return get_result_data(queryset.order_by())
 
     def access_check(self, request):
@@ -402,6 +416,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
                 # Show submissions for any contest you can edit or visible scoreboard
                 contest_queryset = Contest.objects.filter(Q(authors=self.request.profile) |
                                                           Q(curators=self.request.profile) |
+                                                          Contest.q_organization_admin(self.request.profile) |
                                                           Q(scoreboard_visibility=Contest.SCOREBOARD_VISIBLE) |
                                                           Q(end_time__lt=timezone.now())).distinct()
                 queryset = queryset.filter(Q(user=self.request.profile) |
@@ -420,6 +435,11 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
             if self.could_filter_by_status():
                 status_filter |= Q(status__in=self.selected_statuses)
             queryset = queryset.filter(status_filter)
+            if not (self.request.user.has_perm('judge.see_private_contest') or
+                    self.request.user.has_perm('judge.edit_all_contest')):
+                from judge.contest_format import hidden_result_contest_ids
+                profile = self.request.profile if self.request.user.is_authenticated else None
+                queryset = queryset.exclude(contest_object__in=hidden_result_contest_ids(profile))
         if self.selected_organization:
             organization_object = get_object_or_404(Organization, pk=self.selected_organization)
             queryset = queryset.filter(user__organizations=organization_object)
@@ -726,6 +746,9 @@ def single_submission(request):
     if not submission.problem.is_accessible_by(request.user):
         raise Http404()
 
+    result_hidden = False
+    if submission.contest_object_id:
+        result_hidden = submission.contest_object.should_hide_result(request.user, request.participation)
     if authenticated:
         problem_id = submission.problem_id
         profile = request.profile
@@ -747,6 +770,7 @@ def single_submission(request):
         'show_problem': show_problem,
         'problem_name': show_problem and submission.problem.translated_name(request.LANGUAGE_CODE),
         'profile_id': request.profile.id if authenticated else 0,
+        'result_hidden': result_hidden,
     })
 
 
@@ -805,6 +829,11 @@ class ForceContestMixin(object):
 
     def get_problem_label(self, problem):
         return self.contest.get_label_for_problem(self.get_problem_number(problem) - 1)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['result_hidden'] = self.contest.should_hide_result(self.request.user, self.request.participation)
+        return context
 
     def get(self, request, *args, **kwargs):
         if 'contest' not in kwargs:

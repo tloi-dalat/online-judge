@@ -64,7 +64,7 @@
                 {% endwith %}
             </div>
             <div class="post-date">
-                {{ post.publish_on|date(_("F j, Y")) }} · {{ _('%(count)d min read', count=(post.content|length / 1000)|round(0, 'ceil')|int) }}
+                {% set date_format = _("F j, Y") %}{% set read_minutes = (post.content|length / 1000)|round(0, 'ceil')|int %}{{ post.publish_on|date(date_format) }} · {{ _('%(count)d min read', count=read_minutes) }}
             </div>
         </div>
 

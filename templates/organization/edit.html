@@ -77,7 +77,7 @@
                     <form method="post" action="{{ url('organization_quota_delete', organization.slug, q.id) }}" style="display:inline;">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-xs btn-danger"
-                                onclick="return confirm('{{ _('Delete this quota grant?') }}')">
+                                onclick="return confirm({{ _('Delete this quota grant?')|htmltojs }})">
                             <i class="fa fa-trash"></i>
                         </button>
                     </form>

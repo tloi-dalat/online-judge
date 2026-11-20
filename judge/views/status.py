@@ -21,7 +21,7 @@ def get_judges(request):
 def status_all(request):
     see_all, judges = get_judges(request)
     return render(request, 'status/judge-status.html', {
-        'title': _('Status'),
+        'title': _('Judges'),
         'judges': judges,
         'runtime_version_data': Judge.runtime_versions(),
         'see_all_judges': see_all,
@@ -33,7 +33,7 @@ def status_oj(request):
         return HttpResponseBadRequest(_('You must be admin to view this content.'), content_type='text/plain')
 
     return render(request, 'status/oj-status.html', {
-        'title': _('OJ Status'),
+        'title': _('System'),
     })
 
 

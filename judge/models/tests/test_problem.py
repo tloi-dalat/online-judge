@@ -194,7 +194,7 @@ class ProblemTestCase(CommonDataMixin, TestCase):
                 'is_testcase_accessible_by': self.assertTrue,
             },
             'normal': {
-                'is_testcase_accessible_by': self.assertFalse,
+                'is_testcase_accessible_by': self.assertTrue,
             },
             'anonymous': {
                 'is_testcase_accessible_by': self.assertFalse,
@@ -315,8 +315,8 @@ class ProblemTestCase(CommonDataMixin, TestCase):
                 'is_editable_by': self.assertTrue,
             },
             'staff_problem_edit_public': {
-                'is_accessible_by': self.assertFalse,
-                'is_editable_by': self.assertFalse,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertTrue,
             },
             'staff_problem_see_organization': {
                 'is_accessible_by': self.assertFalse,
@@ -327,7 +327,7 @@ class ProblemTestCase(CommonDataMixin, TestCase):
                 'is_editable_by': self.assertFalse,
             },
             'normal': {
-                'is_accessible_by': self.assertFalse,
+                'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertFalse,
             },
             'anonymous': {

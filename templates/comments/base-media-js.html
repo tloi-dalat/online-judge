@@ -106,9 +106,11 @@
         }
 
         function update_math($comment) {
-            if ('MathJax' in window) {
+            if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
                 var $body = $comment.find('.comment-body');
-                MathJax.typesetPromise([$body[0]]).then(function () {
+                MathJax.startup.promise.then(function () {
+                    return MathJax.typesetPromise([$body[0]]);
+                }).then(function () {
                     $body.find('.tex-image').hide();
                     $body.find('.tex-text').show();
                 });
