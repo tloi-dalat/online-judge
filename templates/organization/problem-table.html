@@ -1,7 +1,9 @@
 {# Problem table shared by the organization usage tabs.
    Set `archived` to true before including to render the archived-data variant. #}
 {% macro author_ids(problem) -%}
-{{ (problem.authors.all()|map(attribute='id')|list + problem.curators.all()|map(attribute='id')|list)|tojson }}
+{{ (problem.authors.all()|map(attribute='id')|list + problem.curators.all()|map(attribute='id')|list +
+    (organization.admins.all()|map(attribute='id')|list
+     if problem.is_organization_private and request.user.has_perm('judge.edit_own_problem') else []))|tojson }}
 {%- endmacro %}
 
 <div class="bulk-actions">

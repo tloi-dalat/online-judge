@@ -134,8 +134,7 @@ class BlogPost(models.Model):
             return True
         if self.organization:
             return self.organization.is_admin(user.profile) and \
-                user.has_perm('judge.edit_organization_post') and \
-                self.authors.filter(id=user.profile.id).exists()
+                user.has_perm('judge.edit_organization_post')
         return self.authors.filter(id=user.profile.id).exists()
 
     class Meta:

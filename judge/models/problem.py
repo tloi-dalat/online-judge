@@ -299,7 +299,7 @@ class Problem(models.Model):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
 
     def is_editor(self, profile):
-        return (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists()
+        return profile.id in self.editor_ids
 
     def is_editable_by(self, user):
         if not user.is_authenticated:
@@ -431,7 +431,14 @@ class Problem(models.Model):
         q |= Exists(Problem.authors.through.objects.filter(problem=OuterRef('pk'), profile=profile))
         q |= Exists(Problem.curators.through.objects.filter(problem=OuterRef('pk'), profile=profile))
         q |= Exists(Problem.testers.through.objects.filter(problem=OuterRef('pk'), profile=profile))
+        q |= cls.q_organization_admin(profile)
         return q
+
+    @classmethod
+    def q_organization_admin(cls, profile):
+        return Q(is_organization_private=True) & Exists(
+            Organization.admins.through.objects.filter(organization_id=OuterRef('organization_id'), profile=profile),
+        )
 
     @classmethod
     def organization_filter_q(cls, queryset):
@@ -452,7 +459,7 @@ class Problem(models.Model):
         if user.has_perm('judge.edit_all_problem'):
             return cls.objects.all()
 
-        q = Q(authors=user.profile) | Q(curators=user.profile)
+        q = Q(authors=user.profile) | Q(curators=user.profile) | cls.q_organization_admin(user.profile)
 
         if user.has_perm('judge.edit_public_problem'):
             q |= Q(is_public=True)
@@ -471,9 +478,11 @@ class Problem(models.Model):
 
     @cached_property
     def editor_ids(self):
-        editors = self.author_ids.union(
-            Problem.curators.through.objects.filter(problem=self).values_list('profile_id', flat=True))
-        return editors
+        editors = [Problem.curators.through.objects.filter(problem=self).values_list('profile_id', flat=True)]
+        if self.is_organization_private and self.organization_id:
+            editors.append(Organization.admins.through.objects.filter(organization_id=self.organization_id)
+                           .values_list('profile_id', flat=True))
+        return self.author_ids.union(*editors)
 
     @cached_property
     def tester_ids(self):

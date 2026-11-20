@@ -424,7 +424,10 @@ class Contest(models.Model):
 
     @cached_property
     def editor_ids(self):
-        return set(self.author_ids) | set(profile.id for profile in self.curators.all())
+        editors = set(self.author_ids) | set(profile.id for profile in self.curators.all())
+        if self.is_organization_private and self.organization_id:
+            editors |= set(profile.id for profile in self.organization.admins.all())
+        return editors
 
     @cached_property
     def tester_ids(self):
@@ -575,6 +578,12 @@ class Contest(models.Model):
         return False
 
     @classmethod
+    def q_organization_admin(cls, profile):
+        return Q(is_organization_private=True) & Exists(
+            Organization.admins.through.objects.filter(organization_id=OuterRef('organization_id'), profile=profile),
+        )
+
+    @classmethod
     def get_public_contests(cls):
         return cls.objects.filter(is_visible=True, is_organization_private=False, is_private=False) \
                           .defer('description').distinct()
@@ -623,7 +632,7 @@ class Contest(models.Model):
 
             queryset = queryset.annotate(
                 has_author=Exists(authors_exists),
-                has_curator=Exists(curators_exists),
+                has_curator=Exists(curators_exists) | cls.q_organization_admin(user.profile),
                 has_tester=Exists(testers_exists),
             )
 

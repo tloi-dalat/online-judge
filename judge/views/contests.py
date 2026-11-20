@@ -120,7 +120,7 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
             testers_exists = Contest.testers.through.objects.filter(contest_id=OuterRef('pk'), profile_id=user_id)
             queryset = queryset.annotate(
                 has_author=Exists(authors_exists),
-                has_curator=Exists(curators_exists),
+                has_curator=Exists(curators_exists) | Contest.q_organization_admin(user_id),
                 has_tester=Exists(testers_exists),
             )
         return queryset
