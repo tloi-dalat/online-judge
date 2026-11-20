@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-20 06:46+0000\n"
+"POT-Creation-Date: 2026-11-20 17:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -130,7 +130,7 @@ msgid "Problem"
 msgstr ""
 
 #: judge/admin/contest.py:69 templates/contest/contest.html:192
-#: templates/contest/edit.html:428 templates/contest/edit.html:434
+#: templates/contest/edit.html:445 templates/contest/edit.html:451
 #: templates/organization/tags.html:120 templates/problem/problem.html:446
 msgid "Problems"
 msgstr ""
@@ -365,9 +365,9 @@ msgid "Taxonomy"
 msgstr ""
 
 #: judge/admin/problem.py:149 templates/contest/contest.html:223
-#: templates/contest/edit.html:435
+#: templates/contest/edit.html:452
 #: templates/contest/official-ranking-table.html:12
-#: templates/organization/list.html:31 templates/problem/data.html:1145
+#: templates/organization/list.html:31 templates/problem/data.html:1153
 #: templates/problem/list.html:188 templates/user/base-users-table.html:12
 #: templates/user/user-problems.html:60
 msgid "Points"
@@ -377,7 +377,7 @@ msgstr ""
 msgid "Limits"
 msgstr ""
 
-#: judge/admin/problem.py:151 templates/problem/editor.html:249
+#: judge/admin/problem.py:151 templates/problem/editor.html:251
 #: templates/problem/submission-diff.html:114
 #: templates/submission/list.html:337
 msgid "Language"
@@ -908,13 +908,13 @@ msgid "Statement file"
 msgstr ""
 
 #: judge/forms.py:191 templates/admin/judge/app_index.html:23
-#: templates/blog/edit.html:55 templates/contest/edit.html:446
+#: templates/blog/edit.html:55 templates/contest/edit.html:463
 #: templates/organization/problem-table.html:35
 #: templates/organization/problem-table.html:115
 #: templates/organization/tag-confirm-delete.html:19
 #: templates/organization/tags.html:142 templates/organization/tags.html:163
 #: templates/organization/tags.html:210
-#: templates/problem/confirm_delete.html:43 templates/problem/editor.html:252
+#: templates/problem/confirm_delete.html:43 templates/problem/editor.html:254
 #: templates/urlshortener/confirm_delete.html:91
 #: templates/urlshortener/detail.html:101 templates/urlshortener/list.html:73
 #: templates/user/edit-profile.html:455
@@ -1000,6 +1000,7 @@ msgid "Append main solution to tutorial"
 msgstr ""
 
 #: judge/forms.py:307
+#, python-brace-format
 msgid "Please share the problem to user <strong>{}</strong> first"
 msgstr ""
 
@@ -1183,9 +1184,19 @@ msgid ""
 "unfreeze and reveal the actual ranking."
 msgstr ""
 
-#: judge/jinja2/datetime.py:29 templates/blog/content.html:63
+#: judge/jinja2/datetime.py:29 templates/blog/content.html:68
 #: templates/submission/info-base.html:6
 msgid "N j, Y, g:i a"
+msgstr ""
+
+#: judge/jinja2/datetime.py:31 templates/ticket/action.html:17
+#, python-brace-format
+msgid "{time}"
+msgstr ""
+
+#: judge/jinja2/datetime.py:32 templates/blog/modern-list.html:91
+#, python-brace-format
+msgid "on {time}"
 msgstr ""
 
 #: judge/jinja2/filesize.py:33
@@ -5341,7 +5352,7 @@ msgstr ""
 msgid "Please upload a package or enter a problem ID."
 msgstr ""
 
-#: judge/views/problem.py:1095 templates/problem/editor.html:230
+#: judge/views/problem.py:1095 templates/problem/editor.html:232
 msgid "Update problem from Codeforces Polygon package"
 msgstr ""
 
@@ -6218,7 +6229,7 @@ msgstr ""
 msgid "o{time}"
 msgstr ""
 
-#: templates/blog/content.html:54 templates/blog/modern-content.html:81
+#: templates/blog/content.html:58 templates/blog/modern-content.html:81
 #: templates/comments/list.html:94 templates/comments/list.html:110
 #: templates/contest/contest-tabs.html:27 templates/contest/tag-title.html:9
 #: templates/flatpages/admin_link.html:3 templates/license.html:10
@@ -6228,12 +6239,12 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: templates/blog/content.html:63
+#: templates/blog/content.html:68
 #, python-format
 msgid "posted on %(time)s"
 msgstr ""
 
-#: templates/blog/content.html:91 templates/blog/modern-content.html:141
+#: templates/blog/content.html:96 templates/blog/modern-content.html:141
 #: templates/comments/lazy-load-js.html:18 templates/contest/contest.html:384
 #: templates/problem/editorial.html:56 templates/problem/problem.html:544
 msgid "Loading..."
@@ -6251,18 +6262,18 @@ msgstr ""
 msgid "Please read the [guidelines][0] before creating a new blog post."
 msgstr ""
 
-#: templates/blog/edit.html:56 templates/contest/edit.html:461
+#: templates/blog/edit.html:56 templates/contest/edit.html:478
 #: templates/misc_config/edit.html:128 templates/organization/edit.html:48
 #: templates/organization/requests/pending.html:53
-#: templates/problem/editor.html:268
+#: templates/problem/editor.html:270
 #: templates/problem/type-group-editor.html:31
 #: templates/ticket/edit-notes.html:4
 msgid "Update"
 msgstr ""
 
-#: templates/blog/edit.html:56 templates/contest/edit.html:463
+#: templates/blog/edit.html:56 templates/contest/edit.html:480
 #: templates/organization/edit.html:46 templates/organization/new.html:10
-#: templates/problem/create.html:27 templates/problem/editor.html:277
+#: templates/problem/create.html:27 templates/problem/editor.html:279
 msgid "Create"
 msgstr ""
 
@@ -6369,11 +6380,6 @@ msgstr ""
 
 #: templates/blog/modern-list.html:70
 msgid "Manage"
-msgstr ""
-
-#: templates/blog/modern-list.html:91
-#, python-brace-format
-msgid "on {time}"
 msgstr ""
 
 #: templates/blog/modern-list.html:138 templates/ticket/ticket.html:353
@@ -6941,7 +6947,7 @@ msgstr ""
 msgid "Editorials"
 msgstr ""
 
-#: templates/contest/contest.html:286 templates/problem/editor.html:263
+#: templates/contest/contest.html:286 templates/problem/editor.html:265
 #: templates/problem/list.html:196
 msgid "Editorial"
 msgstr ""
@@ -6979,61 +6985,61 @@ msgstr ""
 msgid "Announce"
 msgstr ""
 
-#: templates/contest/edit.html:107
+#: templates/contest/edit.html:124
 msgid "Switch to manual order mode"
 msgstr ""
 
-#: templates/contest/edit.html:119 templates/contest/edit.html:429
+#: templates/contest/edit.html:136 templates/contest/edit.html:446
 msgid "Switch to drag and drop mode"
 msgstr ""
 
-#: templates/contest/edit.html:201 templates/problem/editor.html:44
+#: templates/contest/edit.html:218 templates/problem/editor.html:46
 msgid "Press Enter to select multiple users..."
 msgstr ""
 
-#: templates/contest/edit.html:250
+#: templates/contest/edit.html:267
 msgid "Organization problems"
 msgstr ""
 
-#: templates/contest/edit.html:251
+#: templates/contest/edit.html:268
 msgid "Private problems"
 msgstr ""
 
-#: templates/contest/edit.html:252
+#: templates/contest/edit.html:269
 msgid "Public problems"
 msgstr ""
 
-#: templates/contest/edit.html:415
+#: templates/contest/edit.html:432
 msgid "Edit contest in admin panel for more options"
 msgstr ""
 
-#: templates/contest/edit.html:436
+#: templates/contest/edit.html:453
 msgid "Order in contest"
 msgstr ""
 
-#: templates/contest/edit.html:438
+#: templates/contest/edit.html:455
 msgid "Max submission"
 msgstr ""
 
-#: templates/contest/edit.html:441
+#: templates/contest/edit.html:458
 msgid "Maximum number of submissions"
 msgstr ""
 
-#: templates/contest/edit.html:443
+#: templates/contest/edit.html:460
 msgid "or leave blank for no limit."
 msgstr ""
 
-#: templates/contest/edit.html:457
+#: templates/contest/edit.html:474
 msgid "Delete contest"
 msgstr ""
 
-#: templates/contest/edit.html:470
+#: templates/contest/edit.html:487
 msgid ""
 "This will permanently delete the contest with all participations, rankings "
 "and announcements. Type YES to confirm."
 msgstr ""
 
-#: templates/contest/edit.html:473
+#: templates/contest/edit.html:490
 msgid "You did not type YES, so the contest was not deleted."
 msgstr ""
 
@@ -7380,7 +7386,7 @@ msgstr ""
 msgid "Configure in admin panel for more options"
 msgstr ""
 
-#: templates/misc_config/edit.html:39 templates/problem/editor.html:235
+#: templates/misc_config/edit.html:39 templates/problem/editor.html:237
 #: templates/problem/type-group-editor.html:24
 #: templates/urlshortener/form.html:23
 msgid "Please correct the error below."
@@ -7970,7 +7976,7 @@ msgid "There are no requests to approve."
 msgstr ""
 
 #: templates/organization/requests/pending.html:36
-#: templates/problem/data.html:1152
+#: templates/problem/data.html:1160
 msgid "Delete?"
 msgstr ""
 
@@ -8015,7 +8021,7 @@ msgstr ""
 
 #: templates/organization/tag-confirm-delete.html:18
 #: templates/organization/tags.html:162
-#: templates/problem/confirm_delete.html:44 templates/problem/data.html:1232
+#: templates/problem/confirm_delete.html:44 templates/problem/data.html:1240
 #: templates/status/oj-status.html:75
 msgid "Cancel"
 msgstr ""
@@ -8025,8 +8031,8 @@ msgid "Search tags"
 msgstr ""
 
 #: templates/organization/tags.html:112 templates/organization/tags.html:274
-#: templates/problem/editor.html:90 templates/problem/editor.html:91
-#: templates/problem/editor.html:274
+#: templates/problem/editor.html:92 templates/problem/editor.html:93
+#: templates/problem/editor.html:276
 msgid "Create new tag"
 msgstr ""
 
@@ -8047,7 +8053,7 @@ msgid "Tag name"
 msgstr ""
 
 #: templates/organization/tags.html:154 templates/problem/data.html:274
-#: templates/problem/data.html:1200 templates/problem/data.html:1203
+#: templates/problem/data.html:1208 templates/problem/data.html:1211
 #: templates/urlshortener/form.html:31
 msgid "Save"
 msgstr ""
@@ -8056,11 +8062,11 @@ msgstr ""
 msgid "Delete tag"
 msgstr ""
 
-#: templates/organization/tags.html:238 templates/problem/editor.html:110
+#: templates/organization/tags.html:238 templates/problem/editor.html:112
 msgid "Tag name is required."
 msgstr ""
 
-#: templates/organization/tags.html:277 templates/problem/editor.html:130
+#: templates/organization/tags.html:277 templates/problem/editor.html:132
 msgid "Could not create tag."
 msgstr ""
 
@@ -8120,11 +8126,11 @@ msgstr ""
 msgid "Storage limit reached! Please delete some problems to free up space."
 msgstr ""
 
-#: templates/organization/usage.html:196 templates/problem/data.html:1115
+#: templates/organization/usage.html:196 templates/problem/data.html:1123
 msgid "You are approaching the storage limit"
 msgstr ""
 
-#: templates/organization/usage.html:197 templates/problem/data.html:1116
+#: templates/organization/usage.html:197 templates/problem/data.html:1124
 msgid "You will not be able to upload test if the limit is exceeded."
 msgstr ""
 
@@ -8350,7 +8356,7 @@ msgstr ""
 msgid "Test file must be a ZIP file"
 msgstr ""
 
-#: templates/problem/data.html:685 templates/problem/data.html:1229
+#: templates/problem/data.html:685 templates/problem/data.html:1237
 msgid "No files selected"
 msgstr ""
 
@@ -8384,86 +8390,86 @@ msgstr ""
 msgid "Failed to create ZIP file"
 msgstr ""
 
-#: templates/problem/data.html:839 templates/problem/data.html:1233
+#: templates/problem/data.html:839 templates/problem/data.html:1241
 msgid "Build & Upload ZIP"
 msgstr ""
 
-#: templates/problem/data.html:1096
+#: templates/problem/data.html:1104
 msgid "View YAML"
 msgstr ""
 
-#: templates/problem/data.html:1109
+#: templates/problem/data.html:1117
 msgid "Storage limit exceeded!"
 msgstr ""
 
-#: templates/problem/data.html:1110
+#: templates/problem/data.html:1118
 msgid ""
 "This organization has reached its storage quota. Please delete some test "
 "data before uploading more."
 msgstr ""
 
-#: templates/problem/data.html:1128
+#: templates/problem/data.html:1136
 msgid "Test cases have been filled automatically!"
 msgstr ""
 
-#: templates/problem/data.html:1130
+#: templates/problem/data.html:1138
 msgid "Test cases have been filled automatically and **not saved yet**!"
 msgstr ""
 
-#: templates/problem/data.html:1132
+#: templates/problem/data.html:1140
 msgid ""
 "Please modify the table below if needed and press the `Apply` button to save!"
 msgstr ""
 
-#: templates/problem/data.html:1142
+#: templates/problem/data.html:1150
 msgid "Type"
 msgstr ""
 
-#: templates/problem/data.html:1143
+#: templates/problem/data.html:1151
 msgid "Input file"
 msgstr ""
 
-#: templates/problem/data.html:1144
+#: templates/problem/data.html:1152
 msgid "Output file"
 msgstr ""
 
-#: templates/problem/data.html:1147
+#: templates/problem/data.html:1155
 msgid "Pretest?"
 msgstr ""
 
-#: templates/problem/data.html:1149
+#: templates/problem/data.html:1157
 msgid "Batch dependencies"
 msgstr ""
 
-#: templates/problem/data.html:1150
+#: templates/problem/data.html:1158
 msgid "Generator args"
 msgstr ""
 
-#: templates/problem/data.html:1190
+#: templates/problem/data.html:1198
 msgid "Edit generator args"
 msgstr ""
 
-#: templates/problem/data.html:1201
+#: templates/problem/data.html:1209
 msgid "Add new case"
 msgstr ""
 
-#: templates/problem/data.html:1207
+#: templates/problem/data.html:1215
 msgid "Uploading..."
 msgstr ""
 
-#: templates/problem/data.html:1216
+#: templates/problem/data.html:1224
 msgid "Build Test Data"
 msgstr ""
 
-#: templates/problem/data.html:1219
+#: templates/problem/data.html:1227
 msgid "Choose Files"
 msgstr ""
 
-#: templates/problem/data.html:1222
+#: templates/problem/data.html:1230
 msgid "Choose Folder"
 msgstr ""
 
-#: templates/problem/data.html:1227
+#: templates/problem/data.html:1235
 msgid "Drop files or folder here"
 msgstr ""
 
@@ -8471,27 +8477,27 @@ msgstr ""
 msgid "This problem has been deleted."
 msgstr ""
 
-#: templates/problem/editor.html:224
+#: templates/problem/editor.html:226
 msgid "Edit problem in admin panel for more options"
 msgstr ""
 
-#: templates/problem/editor.html:243
+#: templates/problem/editor.html:245
 msgid "Language-specific resource limit"
 msgstr ""
 
-#: templates/problem/editor.html:244
+#: templates/problem/editor.html:246
 msgid "Only use this feature if you really need to!"
 msgstr ""
 
-#: templates/problem/editor.html:250
+#: templates/problem/editor.html:252
 msgid "Time limit (seconds)"
 msgstr ""
 
-#: templates/problem/editor.html:251
+#: templates/problem/editor.html:253
 msgid "Memory limit (KiB)"
 msgstr ""
 
-#: templates/problem/editor.html:275
+#: templates/problem/editor.html:277
 msgid "New tag name"
 msgstr ""
 
@@ -9668,11 +9674,6 @@ msgstr ""
 
 #: templates/ticket/action.html:14
 msgid "reopened this"
-msgstr ""
-
-#: templates/ticket/action.html:17
-#, python-brace-format
-msgid "{time}"
 msgstr ""
 
 #: templates/ticket/list.html:69 templates/ticket/ticket.html:117

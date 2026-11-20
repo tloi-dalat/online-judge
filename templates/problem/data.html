@@ -1081,16 +1081,24 @@
     </style>
 {% endblock %}
 
-{% block header %}
-    {% if problem.is_organization_private and problem.organization %}
-        <span class="organization-tags">
-            <span class="organization-tag">
-                <a href="{{ problem.organization.get_absolute_url() }}">
-                    <i class="fa fa-lock"></i> {{ problem.organization.name }}
-                </a>
+{% block title_row %}
+    <div class="problem-title">
+        <h2 style="display: inline-block">
+            {% if content_title %}{{ content_title }}{% else %}{{ title }}{% endif %}
+        </h2>
+        {% if problem.is_organization_private and problem.organization %}
+            <span class="organization-tags">
+                <span class="organization-tag">
+                    <a href="{{ problem.organization.get_absolute_url() }}">
+                        <i class="fa fa-lock"></i> {{ problem.organization.name }}
+                    </a>
+                </span>
             </span>
-        </span>
-    {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block header %}
     {% if data_form.instance.has_yml() %}
         <div class="title-line-action">
             [<a href="{{ url('problem_data_init', problem.code) }}">{{ _('View YAML') }}</a>]

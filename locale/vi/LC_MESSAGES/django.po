@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-20 06:46+0000\n"
+"POT-Creation-Date: 2026-11-20 17:15+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -135,7 +135,7 @@ msgid "Problem"
 msgstr "Bài"
 
 #: judge/admin/contest.py:69 templates/contest/contest.html:192
-#: templates/contest/edit.html:428 templates/contest/edit.html:434
+#: templates/contest/edit.html:445 templates/contest/edit.html:451
 #: templates/organization/tags.html:120 templates/problem/problem.html:446
 msgid "Problems"
 msgstr "Danh sách bài"
@@ -372,9 +372,9 @@ msgid "Taxonomy"
 msgstr "Phân loại"
 
 #: judge/admin/problem.py:149 templates/contest/contest.html:223
-#: templates/contest/edit.html:435
+#: templates/contest/edit.html:452
 #: templates/contest/official-ranking-table.html:12
-#: templates/organization/list.html:31 templates/problem/data.html:1145
+#: templates/organization/list.html:31 templates/problem/data.html:1153
 #: templates/problem/list.html:188 templates/user/base-users-table.html:12
 #: templates/user/user-problems.html:60
 msgid "Points"
@@ -384,7 +384,7 @@ msgstr "Điểm"
 msgid "Limits"
 msgstr "Giới hạn"
 
-#: judge/admin/problem.py:151 templates/problem/editor.html:249
+#: judge/admin/problem.py:151 templates/problem/editor.html:251
 #: templates/problem/submission-diff.html:114
 #: templates/submission/list.html:337
 msgid "Language"
@@ -951,13 +951,13 @@ msgid "Statement file"
 msgstr "File đề bài"
 
 #: judge/forms.py:191 templates/admin/judge/app_index.html:23
-#: templates/blog/edit.html:55 templates/contest/edit.html:446
+#: templates/blog/edit.html:55 templates/contest/edit.html:463
 #: templates/organization/problem-table.html:35
 #: templates/organization/problem-table.html:115
 #: templates/organization/tag-confirm-delete.html:19
 #: templates/organization/tags.html:142 templates/organization/tags.html:163
 #: templates/organization/tags.html:210
-#: templates/problem/confirm_delete.html:43 templates/problem/editor.html:252
+#: templates/problem/confirm_delete.html:43 templates/problem/editor.html:254
 #: templates/urlshortener/confirm_delete.html:91
 #: templates/urlshortener/detail.html:101 templates/urlshortener/list.html:73
 #: templates/user/edit-profile.html:455
@@ -1056,6 +1056,7 @@ msgid "Append main solution to tutorial"
 msgstr "Thêm lời giải vào hướng dẫn"
 
 #: judge/forms.py:307
+#, python-brace-format
 msgid "Please share the problem to user <strong>{}</strong> first"
 msgstr "Vui lòng chia sẻ bài cho người dùng <strong>{}</strong> trước"
 
@@ -1249,10 +1250,20 @@ msgstr ""
 "Nếu được thiết lập, bảng xếp hạng sẽ được đóng băng trong X phút cuối. Đặt "
 "về 0 để mở đóng băng và hiển thị bảng xếp hạng thực tế."
 
-#: judge/jinja2/datetime.py:29 templates/blog/content.html:63
+#: judge/jinja2/datetime.py:29 templates/blog/content.html:68
 #: templates/submission/info-base.html:6
 msgid "N j, Y, g:i a"
 msgstr "j, M, Y, G:i"
+
+#: judge/jinja2/datetime.py:31 templates/ticket/action.html:17
+#, python-brace-format
+msgid "{time}"
+msgstr "{time}"
+
+#: judge/jinja2/datetime.py:32 templates/blog/modern-list.html:91
+#, python-brace-format
+msgid "on {time}"
+msgstr "vào lúc {time}"
 
 #: judge/jinja2/filesize.py:33
 #, python-format
@@ -5477,7 +5488,7 @@ msgstr "Đang nhập bài %s..."
 msgid "Please upload a package or enter a problem ID."
 msgstr "Vui lòng tải lên một gói hoặc nhập ID của bài"
 
-#: judge/views/problem.py:1095 templates/problem/editor.html:230
+#: judge/views/problem.py:1095 templates/problem/editor.html:232
 msgid "Update problem from Codeforces Polygon package"
 msgstr "Cập nhật bài từ gói Codeforces Polygon"
 
@@ -6367,7 +6378,7 @@ msgstr "Đọc tiếp..."
 msgid "o{time}"
 msgstr "o{time}"
 
-#: templates/blog/content.html:54 templates/blog/modern-content.html:81
+#: templates/blog/content.html:58 templates/blog/modern-content.html:81
 #: templates/comments/list.html:94 templates/comments/list.html:110
 #: templates/contest/contest-tabs.html:27 templates/contest/tag-title.html:9
 #: templates/flatpages/admin_link.html:3 templates/license.html:10
@@ -6377,12 +6388,12 @@ msgstr "o{time}"
 msgid "Edit"
 msgstr "Chỉnh sửa"
 
-#: templates/blog/content.html:63
+#: templates/blog/content.html:68
 #, python-format
 msgid "posted on %(time)s"
 msgstr "đã đăng vào %(time)s"
 
-#: templates/blog/content.html:91 templates/blog/modern-content.html:141
+#: templates/blog/content.html:96 templates/blog/modern-content.html:141
 #: templates/comments/lazy-load-js.html:18 templates/contest/contest.html:384
 #: templates/problem/editorial.html:56 templates/problem/problem.html:544
 msgid "Loading..."
@@ -6400,18 +6411,18 @@ msgstr "Sửa blog này ở admin panel để có nhiều tùy chỉnh hơn"
 msgid "Please read the [guidelines][0] before creating a new blog post."
 msgstr "Hãy đọc [nội quy blog][0] trước khi tạo blog mới."
 
-#: templates/blog/edit.html:56 templates/contest/edit.html:461
+#: templates/blog/edit.html:56 templates/contest/edit.html:478
 #: templates/misc_config/edit.html:128 templates/organization/edit.html:48
 #: templates/organization/requests/pending.html:53
-#: templates/problem/editor.html:268
+#: templates/problem/editor.html:270
 #: templates/problem/type-group-editor.html:31
 #: templates/ticket/edit-notes.html:4
 msgid "Update"
 msgstr "Cập nhật"
 
-#: templates/blog/edit.html:56 templates/contest/edit.html:463
+#: templates/blog/edit.html:56 templates/contest/edit.html:480
 #: templates/organization/edit.html:46 templates/organization/new.html:10
-#: templates/problem/create.html:27 templates/problem/editor.html:277
+#: templates/problem/create.html:27 templates/problem/editor.html:279
 msgid "Create"
 msgstr "Tạo"
 
@@ -6519,11 +6530,6 @@ msgstr "Viết"
 #: templates/blog/modern-list.html:70
 msgid "Manage"
 msgstr "Quản lý"
-
-#: templates/blog/modern-list.html:91
-#, python-brace-format
-msgid "on {time}"
-msgstr "vào lúc {time}"
 
 #: templates/blog/modern-list.html:138 templates/ticket/ticket.html:353
 msgid "Upvote"
@@ -7124,7 +7130,7 @@ msgstr "Giới hạn bộ nhớ"
 msgid "Editorials"
 msgstr "Lời giải"
 
-#: templates/contest/contest.html:286 templates/problem/editor.html:263
+#: templates/contest/contest.html:286 templates/problem/editor.html:265
 #: templates/problem/list.html:196
 msgid "Editorial"
 msgstr "Lời giải"
@@ -7162,55 +7168,55 @@ msgstr "Làm rõ"
 msgid "Announce"
 msgstr "Thông báo"
 
-#: templates/contest/edit.html:107
+#: templates/contest/edit.html:124
 msgid "Switch to manual order mode"
 msgstr "Chuyển sang chế độ sắp xếp thủ công"
 
-#: templates/contest/edit.html:119 templates/contest/edit.html:429
+#: templates/contest/edit.html:136 templates/contest/edit.html:446
 msgid "Switch to drag and drop mode"
 msgstr "Chuyển sang chế độ kéo thả"
 
-#: templates/contest/edit.html:201 templates/problem/editor.html:44
+#: templates/contest/edit.html:218 templates/problem/editor.html:46
 msgid "Press Enter to select multiple users..."
 msgstr "Nhấn Enter để chọn nhiều thành viên..."
 
-#: templates/contest/edit.html:250
+#: templates/contest/edit.html:267
 msgid "Organization problems"
 msgstr "Bài tập của tổ chức"
 
-#: templates/contest/edit.html:251
+#: templates/contest/edit.html:268
 msgid "Private problems"
 msgstr "Bài tập riêng tư"
 
-#: templates/contest/edit.html:252
+#: templates/contest/edit.html:269
 msgid "Public problems"
 msgstr "Bài tập công khai"
 
-#: templates/contest/edit.html:415
+#: templates/contest/edit.html:432
 msgid "Edit contest in admin panel for more options"
 msgstr "Sửa kỳ thi này ở admin panel để có nhiều tùy chỉnh hơn"
 
-#: templates/contest/edit.html:436
+#: templates/contest/edit.html:453
 msgid "Order in contest"
 msgstr "Thứ tự của bài tập trong kỳ thi"
 
-#: templates/contest/edit.html:438
+#: templates/contest/edit.html:455
 msgid "Max submission"
 msgstr "Số lần nộp tối đa"
 
-#: templates/contest/edit.html:441
+#: templates/contest/edit.html:458
 msgid "Maximum number of submissions"
 msgstr "Số lần nộp bài tối đa"
 
-#: templates/contest/edit.html:443
+#: templates/contest/edit.html:460
 msgid "or leave blank for no limit."
 msgstr "hoặc để trống để không giới hạn."
 
-#: templates/contest/edit.html:457
+#: templates/contest/edit.html:474
 msgid "Delete contest"
 msgstr "Xóa kỳ thi"
 
-#: templates/contest/edit.html:470
+#: templates/contest/edit.html:487
 msgid ""
 "This will permanently delete the contest with all participations, rankings "
 "and announcements. Type YES to confirm."
@@ -7218,7 +7224,7 @@ msgstr ""
 "Thao tác này sẽ xóa vĩnh viễn kỳ thi cùng toàn bộ lượt tham gia, bảng xếp "
 "hạng và thông báo. Nhập YES để xác nhận."
 
-#: templates/contest/edit.html:473
+#: templates/contest/edit.html:490
 msgid "You did not type YES, so the contest was not deleted."
 msgstr "Bạn chưa nhập YES nên kỳ thi chưa bị xóa."
 
@@ -7580,7 +7586,7 @@ msgstr "Xem nguồn"
 msgid "Configure in admin panel for more options"
 msgstr "Cấu hình trong trang quản trị để có thêm tùy chỉnh"
 
-#: templates/misc_config/edit.html:39 templates/problem/editor.html:235
+#: templates/misc_config/edit.html:39 templates/problem/editor.html:237
 #: templates/problem/type-group-editor.html:24
 #: templates/urlshortener/form.html:23
 msgid "Please correct the error below."
@@ -8194,7 +8200,7 @@ msgid "There are no requests to approve."
 msgstr "Không có yêu cầu để chấp nhận."
 
 #: templates/organization/requests/pending.html:36
-#: templates/problem/data.html:1152
+#: templates/problem/data.html:1160
 msgid "Delete?"
 msgstr "Xoá?"
 
@@ -8239,7 +8245,7 @@ msgstr "Nó sẽ bị gỡ khỏi %(count)d bài tập."
 
 #: templates/organization/tag-confirm-delete.html:18
 #: templates/organization/tags.html:162
-#: templates/problem/confirm_delete.html:44 templates/problem/data.html:1232
+#: templates/problem/confirm_delete.html:44 templates/problem/data.html:1240
 #: templates/status/oj-status.html:75
 msgid "Cancel"
 msgstr "Huỷ"
@@ -8249,8 +8255,8 @@ msgid "Search tags"
 msgstr "Tìm dạng bài..."
 
 #: templates/organization/tags.html:112 templates/organization/tags.html:274
-#: templates/problem/editor.html:90 templates/problem/editor.html:91
-#: templates/problem/editor.html:274
+#: templates/problem/editor.html:92 templates/problem/editor.html:93
+#: templates/problem/editor.html:276
 msgid "Create new tag"
 msgstr "Tạo dạng bài mới"
 
@@ -8271,7 +8277,7 @@ msgid "Tag name"
 msgstr "Tên nhãn"
 
 #: templates/organization/tags.html:154 templates/problem/data.html:274
-#: templates/problem/data.html:1200 templates/problem/data.html:1203
+#: templates/problem/data.html:1208 templates/problem/data.html:1211
 #: templates/urlshortener/form.html:31
 msgid "Save"
 msgstr "Lưu"
@@ -8280,11 +8286,11 @@ msgstr "Lưu"
 msgid "Delete tag"
 msgstr "Xoá dạng bài"
 
-#: templates/organization/tags.html:238 templates/problem/editor.html:110
+#: templates/organization/tags.html:238 templates/problem/editor.html:112
 msgid "Tag name is required."
 msgstr "Cần nhập tên dạng bài."
 
-#: templates/organization/tags.html:277 templates/problem/editor.html:130
+#: templates/organization/tags.html:277 templates/problem/editor.html:132
 msgid "Could not create tag."
 msgstr "Không thể tạo dạng bài."
 
@@ -8346,11 +8352,11 @@ msgstr ""
 "Đã đạt giới hạn lưu trữ! Vui lòng xóa một số bài tập để giải phóng dung "
 "lượng."
 
-#: templates/organization/usage.html:196 templates/problem/data.html:1115
+#: templates/organization/usage.html:196 templates/problem/data.html:1123
 msgid "You are approaching the storage limit"
 msgstr "Bạn đang sắp đạt giới hạn dung lượng lưu trữ"
 
-#: templates/organization/usage.html:197 templates/problem/data.html:1116
+#: templates/organization/usage.html:197 templates/problem/data.html:1124
 msgid "You will not be able to upload test if the limit is exceeded."
 msgstr "Bạn sẽ không thể tải lên dữ liệu test nếu vượt quá giới hạn."
 
@@ -8580,7 +8586,7 @@ msgstr "Do đó, chỉ ${window.testcase_limit} test đầu tiên sẽ được 
 msgid "Test file must be a ZIP file"
 msgstr "Tập tin dữ liệu phải có định dạng ZIP"
 
-#: templates/problem/data.html:685 templates/problem/data.html:1229
+#: templates/problem/data.html:685 templates/problem/data.html:1237
 msgid "No files selected"
 msgstr "Chưa chọn tập tin nào"
 
@@ -8615,19 +8621,19 @@ msgstr ""
 msgid "Failed to create ZIP file"
 msgstr "Tạo file ZIP thất bại"
 
-#: templates/problem/data.html:839 templates/problem/data.html:1233
+#: templates/problem/data.html:839 templates/problem/data.html:1241
 msgid "Build & Upload ZIP"
 msgstr "Tạo & Tải lên ZIP"
 
-#: templates/problem/data.html:1096
+#: templates/problem/data.html:1104
 msgid "View YAML"
 msgstr "Xem YAML"
 
-#: templates/problem/data.html:1109
+#: templates/problem/data.html:1117
 msgid "Storage limit exceeded!"
 msgstr "Vượt giới hạn lưu trữ!"
 
-#: templates/problem/data.html:1110
+#: templates/problem/data.html:1118
 msgid ""
 "This organization has reached its storage quota. Please delete some test "
 "data before uploading more."
@@ -8635,68 +8641,68 @@ msgstr ""
 "Tổ chức đã đạt hạn mức lưu trữ. Vui lòng xóa một số dữ liệu test trước khi "
 "tải lên thêm."
 
-#: templates/problem/data.html:1128
+#: templates/problem/data.html:1136
 msgid "Test cases have been filled automatically!"
 msgstr "Các test đã được điền tự động!"
 
-#: templates/problem/data.html:1130
+#: templates/problem/data.html:1138
 msgid "Test cases have been filled automatically and **not saved yet**!"
 msgstr "Các test dưới đây được điền tự động và **chưa được lưu lại**!"
 
-#: templates/problem/data.html:1132
+#: templates/problem/data.html:1140
 msgid ""
 "Please modify the table below if needed and press the `Apply` button to save!"
 msgstr "Hãy chỉnh sửa bảng dưới đây nếu cần thiết, và nhấn nút `Lưu` để lưu!"
 
-#: templates/problem/data.html:1142
+#: templates/problem/data.html:1150
 msgid "Type"
 msgstr "Kiểu"
 
-#: templates/problem/data.html:1143
+#: templates/problem/data.html:1151
 msgid "Input file"
 msgstr "Tập tin đầu vào"
 
-#: templates/problem/data.html:1144
+#: templates/problem/data.html:1152
 msgid "Output file"
 msgstr "Tập tin đầu ra"
 
-#: templates/problem/data.html:1147
+#: templates/problem/data.html:1155
 msgid "Pretest?"
 msgstr "Pretest?"
 
-#: templates/problem/data.html:1149
+#: templates/problem/data.html:1157
 msgid "Batch dependencies"
 msgstr "Phụ thuộc nhóm test"
 
-#: templates/problem/data.html:1150
+#: templates/problem/data.html:1158
 msgid "Generator args"
 msgstr "Tham số trình sinh test"
 
-#: templates/problem/data.html:1190
+#: templates/problem/data.html:1198
 msgid "Edit generator args"
 msgstr "Sửa tham số trình sinh test"
 
-#: templates/problem/data.html:1201
+#: templates/problem/data.html:1209
 msgid "Add new case"
 msgstr "Thêm test mới"
 
-#: templates/problem/data.html:1207
+#: templates/problem/data.html:1215
 msgid "Uploading..."
 msgstr "Đang tải lên..."
 
-#: templates/problem/data.html:1216
+#: templates/problem/data.html:1224
 msgid "Build Test Data"
 msgstr "Tạo dữ liệu test"
 
-#: templates/problem/data.html:1219
+#: templates/problem/data.html:1227
 msgid "Choose Files"
 msgstr "Chọn tập tin"
 
-#: templates/problem/data.html:1222
+#: templates/problem/data.html:1230
 msgid "Choose Folder"
 msgstr "Chọn thư mục"
 
-#: templates/problem/data.html:1227
+#: templates/problem/data.html:1235
 msgid "Drop files or folder here"
 msgstr "Kéo thả tập tin hoặc thư mục vào đây"
 
@@ -8704,27 +8710,27 @@ msgstr "Kéo thả tập tin hoặc thư mục vào đây"
 msgid "This problem has been deleted."
 msgstr "Bài này đã bị xóa."
 
-#: templates/problem/editor.html:224
+#: templates/problem/editor.html:226
 msgid "Edit problem in admin panel for more options"
 msgstr "Sửa bài tập này ở trang quản trị để có nhiều tùy chỉnh hơn"
 
-#: templates/problem/editor.html:243
+#: templates/problem/editor.html:245
 msgid "Language-specific resource limit"
 msgstr "Giới hạn tài nguyên theo ngôn ngữ"
 
-#: templates/problem/editor.html:244
+#: templates/problem/editor.html:246
 msgid "Only use this feature if you really need to!"
 msgstr "Chỉ sử dụng tính năng này nếu thật sự cần thiết!"
 
-#: templates/problem/editor.html:250
+#: templates/problem/editor.html:252
 msgid "Time limit (seconds)"
 msgstr "Giới hạn thời gian (giây)"
 
-#: templates/problem/editor.html:251
+#: templates/problem/editor.html:253
 msgid "Memory limit (KiB)"
 msgstr "Giới hạn bộ nhớ (KiB)"
 
-#: templates/problem/editor.html:275
+#: templates/problem/editor.html:277
 msgid "New tag name"
 msgstr "Tên dạng bài mới"
 
@@ -9197,8 +9203,8 @@ msgstr "Nhấn để chọn file hoặc kéo thả file vào đây"
 msgid ""
 "`Only accept \"${file_ext}\". Maximum file size is ${file_size_limit}MB.`"
 msgstr ""
-"`Chỉ chấp nhận file có đuôi \"${file_ext}\". Độ lớn tối đa của file là "
-"${file_size_limit}MB.`"
+"`Chỉ chấp nhận file có đuôi \"${file_ext}\". Độ lớn tối đa của file là $"
+"{file_size_limit}MB.`"
 
 #: templates/problem/submit-js.html:251
 msgid "File name"
@@ -9955,11 +9961,6 @@ msgstr "đã đóng báo cáo này"
 #: templates/ticket/action.html:14
 msgid "reopened this"
 msgstr "đã mở lại báo cáo này"
-
-#: templates/ticket/action.html:17
-#, python-brace-format
-msgid "{time}"
-msgstr "{time}"
 
 #: templates/ticket/list.html:69 templates/ticket/ticket.html:117
 msgid "Reopened: "
