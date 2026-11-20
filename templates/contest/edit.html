@@ -1,5 +1,16 @@
 {% extends "base.html" %}
 
+{% block title_row %}
+    <div class="title-row">
+        <h2 style="display: inline-block">
+            {% if content_title %}{{ content_title }}{% else %}{{ title }}{% endif %}
+        </h2>
+        {% if contest.is_organization_private and contest.organization %}
+            {% with organization=contest.organization %}{% include "organization-badge.html" %}{% endwith %}
+        {% endif %}
+    </div>
+{% endblock %}
+
 {% block js_media %}
     {% include "leave-warning.html" %}
     <script src="/static/vnoj/flatpickr/flatpickr.js"></script>
