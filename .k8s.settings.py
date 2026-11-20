@@ -4,8 +4,7 @@
 from urllib.parse import urlsplit
 
 _DISCORD_EVENTS = ('default', 'on_new_ticket', 'on_new_comment', 'on_new_problem', 'on_new_suggested_problem',
-                   'on_new_tag_problem', 'on_new_tag', 'on_new_blogpost', 'on_error', 'on_long_queue',
-                   'queue_time_stats')
+                   'on_new_blogpost', 'on_error', 'on_long_queue', 'queue_time_stats')
 
 
 def _env(key, default=None, required=False, cast=str):

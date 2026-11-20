@@ -168,17 +168,14 @@ table "judge_problem" {
   index "judge_problem_source_8a196bf6" {
     columns = [column.source]
   }
-  index "judge_probl_is_publ_b00d80_idx" {
-    on {
-      column = column.is_public
-    }
-    on {
-      column = column.is_organization_private
-    }
-    on {
-      desc   = true
-      column = column.date
-    }
+  index "judge_probl_is_publ_735a10_idx" {
+    columns = [column.is_public, column.is_organization_private, column.deleted_at, column.points]
+  }
+  index "judge_probl_is_publ_7ded85_idx" {
+    columns = [column.is_public, column.is_organization_private, column.deleted_at, column.user_count]
+  }
+  index "judge_probl_is_publ_f72cb6_idx" {
+    columns = [column.is_public, column.is_organization_private, column.date]
   }
   index "judge_probl_organiz_0d1c92_idx" {
     on {
@@ -191,6 +188,9 @@ table "judge_problem" {
   }
   index "judge_probl_organiz_61d146_idx" {
     columns = [column.organization_id, column.date]
+  }
+  index "judge_probl_organiz_f1caf4_idx" {
+    columns = [column.organization_id, column.is_public, column.deleted_at, column.date]
   }
   check "judge_problem_memory_limit_a129f739_check" {
     expr = "`memory_limit` >= 0"

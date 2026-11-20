@@ -105,10 +105,6 @@ table "judge_profile" {
     null = false
     type = int
   }
-  column "allow_tagging" {
-    null = false
-    type = bool
-  }
   column "last_totp_timecode" {
     null = false
     type = int
