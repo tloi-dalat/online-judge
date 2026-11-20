@@ -38,20 +38,14 @@
         {% endif %}
     </div>
     <div style="width: 100%;">
-        <div class="problem-title">
+        <div class="title-row">
             <h2 style="display: inline-block">
                 {% block content_title %}
                     {% if content_title %}{{ content_title }}{% else %}{{ title }}{% endif %}
                 {% endblock %}
             </h2>
             {% if post.organization %}
-                <span class="organization-tags">
-                    <span class="organization-tag">
-                        <a href="{{ post.organization.get_absolute_url() }}">
-                            <i class="fa fa-lock"></i> {{ post.organization.name }}
-                        </a>
-                    </span>
-                </span>
+                {% with organization=post.organization %}{% include "organization-badge.html" %}{% endwith %}
             {% endif %}
             <span class="spacer"></span>
             {% if post.is_editable_by(request.user) %}

@@ -164,6 +164,16 @@ ul.problem-list {
 .organization-tags {
     padding-left: 0.75em;
     vertical-align: middle;
+
+    &.own-line {
+        display: block;
+        margin: 10px 0 15px 0;
+
+        .organization-tag {
+            transform: none;
+            margin: 0;
+        }
+    }
 }
 
 .organization-tag {
