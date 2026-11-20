@@ -1,18 +1,14 @@
 {% extends "base.html" %}
 
 {% block title_row %}
-    <h2 style="display: inline-block">
-        {% if content_title %}{{ content_title }}{% else %}{{ title }}{% endif %}
-    </h2>
-    {% if organization %}
-        <span class="organization-tags">
-            <span class="organization-tag">
-                <a href="{{ organization.get_absolute_url() }}">
-                    <i class="fa fa-lock"></i> {{ organization.name }}
-                </a>
-            </span>
-        </span>
-    {% endif %}
+    <div class="title-row">
+        <h2 style="display: inline-block">
+            {% if content_title %}{{ content_title }}{% else %}{{ title }}{% endif %}
+        </h2>
+        {% if organization %}
+            {% include "organization-badge.html" %}
+        {% endif %}
+    </div>
 {% endblock %}
 
 {% block js_media %}
@@ -164,6 +160,10 @@
     <style>
         .hidden {
             display: none;
+        }
+
+        #id_types + .select2 {
+            min-width:10em;
         }
 
         .related-widget-wrapper-link {

@@ -159,7 +159,7 @@
 {% endblock %}
 
 {% block title_row %}
-    <div class="problem-title">
+    <div class="title-row">
         {% if request.user.is_authenticated %}
             {% if problem.id in hidden_contest_problem_ids(request.user) %}
                 <a href="{{ url('user_submissions', problem.code, request.user.username) }}">
@@ -185,13 +185,7 @@
         {% endif %}
         <h2 style="display: inline-block">{{ title }}</h2>
         {% if problem.is_organization_private and problem.organization %}
-            <span class="organization-tags">
-                <span class="organization-tag">
-                    <a href="{{ problem.organization.get_absolute_url() }}">
-                        <i class="fa fa-lock"></i> {{ problem.organization.name }}
-                    </a>
-                </span>
-            </span>
+            {% with organization=problem.organization %}{% include "organization-badge.html" %}{% endwith %}
         {% endif %}
         <span class="spacer"></span>
         {% if has_pdf_render %}

@@ -210,7 +210,8 @@ class Problem(models.Model):
     points = models.FloatField(verbose_name=_('points'),
                                help_text=_('Points awarded for problem completion. '
                                            "Points are displayed with a 'p' suffix if partial."),
-                               validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_PROBLEM_POINTS)])
+                               validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_PROBLEM_POINTS),
+                                           MaxValueValidator(settings.DMOJ_PROBLEM_MAX_PROBLEM_POINTS)])
     partial = models.BooleanField(verbose_name=_('allows partial points'), default=False)
     allowed_languages = models.ManyToManyField(Language, verbose_name=_('allowed languages'),
                                                help_text=_('List of allowed submission languages.'))
@@ -299,7 +300,7 @@ class Problem(models.Model):
         return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
 
     def is_editor(self, profile):
-        return (self.authors.filter(id=profile.id) | self.curators.filter(id=profile.id)).exists()
+        return profile.id in self.editor_ids
 
     def is_editable_by(self, user):
         if not user.is_authenticated:
@@ -426,12 +427,28 @@ class Problem(models.Model):
 
     @classmethod
     def q_add_author_curator_tester(cls, q, profile):
+        q |= cls.q_organization_admin(profile)
+        if not profile.has_problem_role:
+            return q
+
         # This is way faster than the obvious |= Q(authors=profile) et al. because we are not doing
         # joins and forcing the user to clean it up with .distinct().
         q |= Exists(Problem.authors.through.objects.filter(problem=OuterRef('pk'), profile=profile))
         q |= Exists(Problem.curators.through.objects.filter(problem=OuterRef('pk'), profile=profile))
         q |= Exists(Problem.testers.through.objects.filter(problem=OuterRef('pk'), profile=profile))
         return q
+
+    @classmethod
+    def author_curator_tester_ids(cls, profile):
+        querysets = [field.through.objects.filter(profile=profile).values_list('problem_id', flat=True)
+                     for field in (cls.authors, cls.curators, cls.testers)]
+        return list(querysets[0].union(*querysets[1:]))
+
+    @classmethod
+    def q_organization_admin(cls, profile):
+        return Q(is_organization_private=True) & Exists(
+            Organization.admins.through.objects.filter(organization_id=OuterRef('organization_id'), profile=profile),
+        )
 
     @classmethod
     def organization_filter_q(cls, queryset):
@@ -452,7 +469,7 @@ class Problem(models.Model):
         if user.has_perm('judge.edit_all_problem'):
             return cls.objects.all()
 
-        q = Q(authors=user.profile) | Q(curators=user.profile)
+        q = Q(authors=user.profile) | Q(curators=user.profile) | cls.q_organization_admin(user.profile)
 
         if user.has_perm('judge.edit_public_problem'):
             q |= Q(is_public=True)
@@ -471,9 +488,11 @@ class Problem(models.Model):
 
     @cached_property
     def editor_ids(self):
-        editors = self.author_ids.union(
-            Problem.curators.through.objects.filter(problem=self).values_list('profile_id', flat=True))
-        return editors
+        editors = [Problem.curators.through.objects.filter(problem=self).values_list('profile_id', flat=True)]
+        if self.is_organization_private and self.organization_id:
+            editors.append(Organization.admins.through.objects.filter(organization_id=self.organization_id)
+                           .values_list('profile_id', flat=True))
+        return self.author_ids.union(*editors)
 
     @cached_property
     def tester_ids(self):
@@ -682,11 +701,17 @@ class Problem(models.Model):
             ('edit_type_group_all_problem', _('Edit type and group for all problems')),
         )
         indexes = [
-            models.Index(fields=['is_public', 'is_organization_private', '-date']),
+            # Ascending date on purpose: InnoDB appends the id ascending
+            models.Index(fields=['is_public', 'is_organization_private', 'date']),
             # The archived problem list is always scoped to one organization.
             models.Index(fields=['organization', '-archived_at']),
-            # Org problem list view
+            # Org problem list view for org admin
             models.Index(fields=['organization', 'date']),
+            # Org problem list view for users
+            models.Index(fields=['organization', 'is_public', 'deleted_at', 'date']),
+            # Problem list sorted by points or # AC
+            models.Index(fields=['is_public', 'is_organization_private', 'deleted_at', 'points']),
+            models.Index(fields=['is_public', 'is_organization_private', 'deleted_at', 'user_count']),
         ]
         verbose_name = _('problem')
         verbose_name_plural = _('problems')

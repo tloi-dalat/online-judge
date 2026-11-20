@@ -424,7 +424,10 @@ class Contest(models.Model):
 
     @cached_property
     def editor_ids(self):
-        return set(self.author_ids) | set(profile.id for profile in self.curators.all())
+        editors = set(self.author_ids) | set(profile.id for profile in self.curators.all())
+        if self.is_organization_private and self.organization_id:
+            editors |= set(profile.id for profile in self.organization.admins.all())
+        return editors
 
     @cached_property
     def tester_ids(self):
@@ -514,6 +517,10 @@ class Contest(models.Model):
                 raise self.PrivateContest()
             return
 
+        # Public contests are accessible to everyone; skip the permission queries below.
+        if self.is_public_contest():
+            return
+
         # If the user can view or edit all contests
         if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
             return
@@ -575,9 +582,18 @@ class Contest(models.Model):
         return False
 
     @classmethod
+    def q_organization_admin(cls, profile):
+        return Q(is_organization_private=True) & Exists(
+            Organization.admins.through.objects.filter(organization_id=OuterRef('organization_id'), profile=profile),
+        )
+
+    @classmethod
     def get_public_contests(cls):
         return cls.objects.filter(is_visible=True, is_organization_private=False, is_private=False) \
                           .defer('description').distinct()
+
+    def is_public_contest(self):
+        return self.is_visible and not self.is_private and not self.is_organization_private
 
     @classmethod
     def get_visible_contests(cls, user):
@@ -623,7 +639,7 @@ class Contest(models.Model):
 
             queryset = queryset.annotate(
                 has_author=Exists(authors_exists),
-                has_curator=Exists(curators_exists),
+                has_curator=Exists(curators_exists) | cls.q_organization_admin(user.profile),
                 has_tester=Exists(testers_exists),
             )
 

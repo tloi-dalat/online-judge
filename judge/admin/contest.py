@@ -202,7 +202,10 @@ class ContestAdmin(AdminFastPaginationMixin, NoBatchDeleteMixin, SortableAdminBa
         if request.user.has_perm('judge.edit_all_contest'):
             return queryset
         else:
-            return queryset.filter(Q(authors=request.profile) | Q(curators=request.profile)).distinct()
+            return queryset.filter(
+                Q(authors=request.profile) | Q(curators=request.profile) |
+                Contest.q_organization_admin(request.profile),
+            ).distinct()
 
     def get_readonly_fields(self, request, obj=None):
         readonly = []

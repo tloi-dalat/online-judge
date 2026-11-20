@@ -4,8 +4,7 @@
 from urllib.parse import urlsplit
 
 _DISCORD_EVENTS = ('default', 'on_new_ticket', 'on_new_comment', 'on_new_problem', 'on_new_suggested_problem',
-                   'on_new_tag_problem', 'on_new_tag', 'on_new_blogpost', 'on_error', 'on_long_queue',
-                   'queue_time_stats')
+                   'on_new_blogpost', 'on_error', 'on_long_queue', 'queue_time_stats')
 
 
 def _env(key, default=None, required=False, cast=str):
@@ -231,6 +230,14 @@ TIMEZONE_MAP = 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Blue_M
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = _env('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY', '')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = _env('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET', '')
 
+# OAuth provider at /o/: the django-oauth-toolkit models it uses.
+OAUTH2_PROVIDER_APPLICATION_MODEL = 'oauth2_provider.Application'
+OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = 'oauth2_provider.AccessToken'
+OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'oauth2_provider.RefreshToken'
+OAUTH2_PROVIDER_ID_TOKEN_MODEL = 'oauth2_provider.IDToken'
+OAUTH2_PROVIDER_GRANT_MODEL = 'oauth2_provider.Grant'
+OAUTH2_PROVIDER_DEVICE_GRANT_MODEL = 'oauth2_provider.DeviceGrant'
+
 
 ########################################
 ########## Custom configuration ########
@@ -262,3 +269,14 @@ if DISCORD_WEBHOOK['on_error']:
 
 # Hide passwords in URLs and webhooks from error reports.
 DEFAULT_EXCEPTION_REPORTER_FILTER = 'dmoj.safe_exception_reporter.SafeURLExceptionReporterFilter'
+
+
+class _NoMigrations(dict):
+    def __contains__(self, item):
+        return True
+
+    def __getitem__(self, item):
+        return None
+
+
+MIGRATION_MODULES = _NoMigrations()

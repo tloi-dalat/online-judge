@@ -41,7 +41,8 @@ def submission_related(queryset):
               'memory', 'points', 'result', 'status', 'case_points', 'case_total', 'current_testcase', 'contest_object',
               'locked_after', 'problem__submission_source_visibility_mode', 'problem__testcase_result_visibility_mode',
               'user__username_display_override', 'user__display_badge__name', 'user__display_badge__mini') \
-        .prefetch_related('contest_object__authors', 'contest_object__curators')
+        .prefetch_related('contest_object__authors', 'contest_object__curators',
+                          'contest_object__organization__admins')
 
 
 class SubmissionPermissionDenied(PermissionDenied):
@@ -415,6 +416,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
                 # Show submissions for any contest you can edit or visible scoreboard
                 contest_queryset = Contest.objects.filter(Q(authors=self.request.profile) |
                                                           Q(curators=self.request.profile) |
+                                                          Contest.q_organization_admin(self.request.profile) |
                                                           Q(scoreboard_visibility=Contest.SCOREBOARD_VISIBLE) |
                                                           Q(end_time__lt=timezone.now())).distinct()
                 queryset = queryset.filter(Q(user=self.request.profile) |

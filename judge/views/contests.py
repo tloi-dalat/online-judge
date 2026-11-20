@@ -120,7 +120,7 @@ class ContestList(InfinitePaginationMixin, TitleMixin, ContestListMixin, ListVie
             testers_exists = Contest.testers.through.objects.filter(contest_id=OuterRef('pk'), profile_id=user_id)
             queryset = queryset.annotate(
                 has_author=Exists(authors_exists),
-                has_curator=Exists(curators_exists),
+                has_curator=Exists(curators_exists) | Contest.q_organization_admin(user_id),
                 has_tester=Exists(testers_exists),
             )
         return queryset
@@ -1788,6 +1788,7 @@ class EditContest(ContestMixin, LoginRequiredMixin, TitleMixin, UpdateView):
         data = super().get_context_data(**kwargs)
         data['contest_problem_formset'] = self.get_contest_problem_formset()
         data['contest_org'] = self.object.organization
+        data['cross_org_problem_selection'] = settings.CROSS_ORGANIZATION_PROBLEM_SELECTION
         return data
 
     def post(self, request, *args, **kwargs):

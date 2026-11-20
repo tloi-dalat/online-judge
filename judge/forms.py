@@ -24,11 +24,10 @@ from django.utils.translation import gettext_lazy as _, ngettext_lazy
 
 from judge.contest_format import formats as contest_formats
 from judge.models import BlogPost, Contest, ContestAnnouncement, ContestParticipation, ContestProblem, Language, \
-    LanguageLimit, Organization, OrganizationProblemTag, Problem, Profile, Solution, Submission, Tag, \
-    WebAuthnCredential
+    LanguageLimit, Organization, OrganizationProblemTag, Problem, Profile, Solution, Submission, WebAuthnCredential
 from judge.utils.subscription import newsletter_id
-from judge.widgets import AceWidget, ChunkedFileUploadWidget, HeavySelect2MultipleWidget, HeavySelect2Widget, \
-    MartorWidget, Select2MultipleWidget, Select2Widget
+from judge.widgets import AceWidget, ChunkedFileUploadWidget, HeavySelect2MultipleWidget, MartorWidget, \
+    Select2MultipleWidget, Select2Widget
 
 TOTP_CODE_LENGTH = 6
 
@@ -269,7 +268,7 @@ class ProblemEditForm(ModelForm):
             'code': _('Problem code, e.g: voi19_post'),
             'name': _('The full name of the problem, '
                       'as shown in the problem list. For example: VOI19 - A cong B'),
-            'points': _('Points awarded for problem completion. From 0 to 2. '
+            'points': _('Points awarded for problem completion. From 0.01 to 2. '
                         'You can approximate: 0.5 is as hard as Problem 1 of VOI; 1 = Problem 2 of VOI; '
                         '1.5 = Problem 3 of VOI.'),
         }
@@ -454,30 +453,6 @@ class ProblemSubmitForm(ModelForm):
     class Meta:
         model = Submission
         fields = ['language']
-
-
-class TagProblemCreateForm(Form):
-    problem_url = forms.URLField(max_length=200,
-                                 label=_('Problem URL'),
-                                 help_text=format_lazy(_('Full URL to the problem, e.g. {url}'),
-                                                       url='https://oj.tloi.vn/problem/post'),
-                                 widget=forms.TextInput(attrs={'style': 'width:100%'}))
-
-    def __init__(self, problem_url=None, *args, **kwargs):
-        super(TagProblemCreateForm, self).__init__(*args, **kwargs)
-        if problem_url is not None:
-            self.fields['problem_url'].required = True
-            self.fields['problem_url'].initial = problem_url
-
-
-class TagProblemAssignForm(Form):
-    def get_choices():
-        return list(map(attrgetter('code', 'name'), Tag.objects.all()))
-
-    tags = MultipleChoiceField(
-        required=True,
-        choices=get_choices,
-    )
 
 
 class OrganizationForm(ModelForm):
@@ -758,10 +733,6 @@ class ProposeContestProblemForm(ModelForm):
         fields = (
             'problem', 'points', 'order', 'max_submissions',
         )
-
-        widgets = {
-            'problem': HeavySelect2Widget(data_view='problem_select2', attrs={'style': 'width: 100%'}),
-        }
 
         error_messages = {
             'problem': {'invalid_choice': _('No such problem.')},
