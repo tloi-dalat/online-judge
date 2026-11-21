@@ -40,7 +40,7 @@
                 return false;
             })
 
-            document.getElementById('search-form').action = "{{ url('org_user_ranking_redirect', organization.slug) }}"
+            $('#search-form').attr('action', "{{ url('org_user_ranking_redirect', organization.slug) }}");
         });
     </script>
 {% endblock %}
