@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-20 17:32+0000\n"
+"POT-Creation-Date: 2026-11-21 07:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,7 +86,7 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: judge/admin/comments.py:25 judge/admin/interface.py:87
+#: judge/admin/comments.py:25 judge/admin/interface.py:88
 #: templates/misc_config/edit.html:88
 msgid "Content"
 msgstr ""
@@ -272,17 +272,17 @@ msgstr ""
 msgid "link path"
 msgstr ""
 
-#: judge/admin/interface.py:88
+#: judge/admin/interface.py:89
 msgid "Summary"
 msgstr ""
 
-#: judge/admin/interface.py:106 judge/admin/problem.py:190
+#: judge/admin/interface.py:107 judge/admin/problem.py:190
 #: judge/models/contest.py:80 judge/models/interface.py:82
 #: judge/models/problem.py:773
 msgid "authors"
 msgstr ""
 
-#: judge/admin/interface.py:136 judge/admin/profile.py:112
+#: judge/admin/interface.py:137 judge/admin/profile.py:112
 #: judge/admin/submission.py:233 judge/models/contest.py:710
 #: judge/models/contest.py:886 judge/models/profile.py:573
 #: judge/models/profile.py:604 judge/models/submission.py:75
@@ -290,7 +290,7 @@ msgstr ""
 msgid "user"
 msgstr ""
 
-#: judge/admin/interface.py:165
+#: judge/admin/interface.py:166
 msgid "object"
 msgstr ""
 
@@ -4559,7 +4559,7 @@ msgstr ""
 msgid "Updating blog post"
 msgstr ""
 
-#: judge/views/blog.py:427 judge/views/comment.py:142
+#: judge/views/blog.py:427 judge/views/comment.py:149
 #: judge/views/contests.py:1811 judge/views/organization.py:521
 #: judge/views/problem.py:1178
 msgid "Edited from site"
@@ -4585,7 +4585,7 @@ msgstr ""
 msgid "You cannot vote on your own comments."
 msgstr ""
 
-#: judge/views/comment.py:167
+#: judge/views/comment.py:175
 msgid "Editing comment"
 msgstr ""
 

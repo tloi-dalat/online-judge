@@ -50,7 +50,7 @@
                 }
             }).trigger('hashchange');
 
-            document.getElementById('search-form').action = "{{ url('user_contributor_redirect') }}"
+            $('#search-form').attr('action', "{{ url('user_contributor_redirect') }}");
         });
     </script>
 {% endblock %}

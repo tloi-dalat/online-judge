@@ -5,7 +5,7 @@
         <h2 style="display: inline-block">
             {% if content_title %}{{ content_title }}{% else %}{{ title }}{% endif %}
         </h2>
-        {% if contest.is_organization_private and contest.organization %}
+        {% if contest is defined and contest.is_organization_private and contest.organization %}
             {% with organization=contest.organization %}{% include "organization-badge.html" %}{% endwith %}
         {% endif %}
     </div>
