@@ -28,7 +28,7 @@ from judge.models import Contest, Language, Organization, Problem, ProblemTransl
 from judge.models.problem import ProblemTestcaseResultAccess, SubmissionSourceAccess
 from judge.utils.infinite_paginator import InfinitePaginationMixin
 from judge.utils.lazy import memo_lazy
-from judge.utils.problem_data import get_problem_testcases_data
+from judge.utils.problem_data import get_problem_metadata, order_judge_cases
 from judge.utils.problems import get_result_data, user_completed_ids, user_editable_ids, user_tester_ids
 from judge.utils.raw_sql import join_sql_subquery, use_straight_join
 from judge.utils.views import DiggPaginatorMixin, TitleMixin, add_file_response, generic_message
@@ -235,6 +235,25 @@ def group_test_cases(cases):
     return result, status, test_case_count
 
 
+def get_test_data_by_position(submission, can_view_test):
+    problem = submission.problem
+    if problem.is_manually_managed:
+        return {}, set(), {}
+    cases = list(problem.cases.filter(type='C').order_by('order').only('id', 'type', 'is_pretest', 'is_example'))
+    if not can_view_test and not any(case.is_example for case in cases):
+        return {}, set(), {}
+    metadata = get_problem_metadata(problem)
+    testcases = metadata['testcases']
+    ordered = order_judge_cases(cases, submission.is_pretested, metadata.get('pretests_in_test_cases', False))
+    positions = dict(enumerate(ordered, 1))
+    example_positions = {position for position, case in positions.items() if case.is_example}
+    cases_data = {position: testcases[case.id] for position, case in positions.items()
+                  if can_view_test and case.id in testcases}
+    examples_data = {position: testcases[positions[position].id]
+                     for position in example_positions if positions[position].id in testcases}
+    return cases_data, example_positions, examples_data
+
+
 class SubmissionStatus(SubmissionDetailBase):
     template_name = 'submission/status.html'
 
@@ -264,10 +283,10 @@ class SubmissionStatus(SubmissionDetailBase):
 
         context['statuses'] = combine_statuses(statuses, submission)
         context['can_view_test'] = submission.problem.is_testcase_accessible_by(self.request.user)
-        if context['can_view_test']:
-            context['cases_data'] = get_problem_testcases_data(submission.problem)
-        else:
-            context['cases_data'] = {}
+        context['cases_data'], context['example_positions'], context['examples_data'] = \
+            get_test_data_by_position(submission, context['can_view_test'])
+        context['can_view_example_answer'] = context['can_view_test'] or \
+            not (submission.contest_object and not submission.contest_object.ended)
 
         context['can_view_testcase_status'] = self.request.user.is_superuser or \
             submission.problem.testcase_result_visibility_mode == ProblemTestcaseResultAccess.ALL_TEST_CASE

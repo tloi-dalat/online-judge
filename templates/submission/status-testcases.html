@@ -86,13 +86,16 @@
         {% if can_view_testcase_status %}
         <table class="submissions-status-table">{% for case in batch.cases %}
             {% set current_test_case_count = test_case_counter() %}
-            {% set print_case_output = can_view_test and case.output %}
+            {% set is_example = case.case in example_positions %}
+            {% set example_data = examples_data.get(case.case) if is_example else None %}
+            {% set print_case_output = (can_view_test or is_example) and case.output %}
             {% set print_case_ext_feedback = case.extended_feedback
                                              and
                                              ((not request.in_contest and current_test_case_count <= feedback_limit)
-                                              or can_view_test or can_view_feedback) %}
+                                              or can_view_test or can_view_feedback or is_example) %}
             {% set curr_data = cases_data.get(case.case, None) %}
-            {% set has_extended_data = print_case_output or print_case_ext_feedback or (can_view_test and curr_data) %}
+            {% set print_test_data = can_view_test and curr_data and not example_data %}
+            {% set has_extended_data = print_case_output or print_case_ext_feedback or print_test_data or example_data %}
 
             <tr id="{{ case.id }}" class="case-row toggle closed">
                 <td>
@@ -106,6 +109,7 @@
                     {%- else -%}
                         <b>{{ _('Test case #%(id)d:', id=test_case_id()) }}</b>
                     {%- endif -%}
+                    {%- if is_example %} <i class="case-example">{{ _('(example)') }}</i>{% endif -%}
                 </td>
 
                 <td>
@@ -134,7 +138,14 @@
                 <tr id="{{ case.id }}-output" style="display:none" class="case-feedback toggled">
                     <td colspan="5" class="case-output">
                         <div class="case-info">
-                            {% if can_view_test and curr_data %}
+                            {% if example_data %}
+                                <strong>{{ _('Input:') }}</strong>
+                                <pre class="case-output">{{ example_data['input']|linebreaksbr }}</pre>
+                                {% if can_view_example_answer %}
+                                    <strong>{{ _('Answer:') }}</strong>
+                                    <pre class="case-output">{{ example_data['answer']|linebreaksbr }}</pre>
+                                {% endif %}
+                            {% elif print_test_data %}
                                 <strong>{{ _('Input:') }}</strong>
                                 <pre class="case-output">{{ curr_data['input']|linebreaksbr }}</pre>
                                 <strong>{{ _('Answer:') }}</strong>
