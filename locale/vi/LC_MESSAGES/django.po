@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-21 07:49+0000\n"
+"POT-Creation-Date: 2026-11-21 17:03+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -374,7 +374,7 @@ msgstr "Phân loại"
 #: judge/admin/problem.py:149 templates/contest/contest.html:217
 #: templates/contest/edit.html:446
 #: templates/contest/official-ranking-table.html:12
-#: templates/organization/list.html:31 templates/problem/data.html:1147
+#: templates/organization/list.html:31 templates/problem/data.html:1178
 #: templates/problem/list.html:188 templates/user/base-users-table.html:12
 #: templates/user/user-problems.html:60
 msgid "Points"
@@ -4472,67 +4472,67 @@ msgstr ""
 msgid "Page {page_number} of {total_pages}"
 msgstr "Trang {page_number} / {total_pages}"
 
-#: judge/utils/problem_data.py:54
+#: judge/utils/problem_data.py:63
 msgid "Empty batches not allowed."
 msgstr "Không được để nhóm test rỗng."
 
-#: judge/utils/problem_data.py:61
+#: judge/utils/problem_data.py:70
 msgid "How did you corrupt the custom checker path?"
 msgstr "Phá kiểu gì mà mất tiêu checker rồi?"
 
-#: judge/utils/problem_data.py:68
+#: judge/utils/problem_data.py:77
 msgid "Only C++, Pascal, or Java checkers are supported."
 msgstr "Chỉ hỗ trợ checker viết bằng C++, Pascal hoặc Java."
 
-#: judge/utils/problem_data.py:70
+#: judge/utils/problem_data.py:79
 msgid "How did you corrupt the checker arguments?"
 msgstr "Phá kiểu gì mà mất tiêu checker arguments rồi?"
 
-#: judge/utils/problem_data.py:82
+#: judge/utils/problem_data.py:91
 msgid "How did you corrupt the custom grader path?"
 msgstr "Phá kiểu gì mà mất tiêu grader rồi?"
 
-#: judge/utils/problem_data.py:101
+#: judge/utils/problem_data.py:110
 msgid "You must specify both input and output files."
 msgstr "Bạn phải chỉ định cả file dữ liệu đầu vào và file kết quả đầu ra."
 
-#: judge/utils/problem_data.py:105
+#: judge/utils/problem_data.py:114
 msgid "Input/Output file must be a string."
 msgstr "Tên file dữ liệu đầu vào/kết quả đầu ra phải là xâu."
 
-#: judge/utils/problem_data.py:116
+#: judge/utils/problem_data.py:125
 msgid "Only accept `.cpp` interactor"
 msgstr "Chỉ chấp nhận `.cpp` interactor"
 
-#: judge/utils/problem_data.py:128
+#: judge/utils/problem_data.py:137
 msgid "Only accept `.cpp` entry"
 msgstr "Chỉ chấp nhận file entry `.cpp`"
 
-#: judge/utils/problem_data.py:131
+#: judge/utils/problem_data.py:140
 msgid "Only accept `.h` header"
 msgstr "Chỉ chấp nhận file header `.h`"
 
-#: judge/utils/problem_data.py:153
+#: judge/utils/problem_data.py:160
 #, python-format
 msgid "Points must be defined for non-batch case #%d."
 msgstr "Test #%d phải được set điểm vì không nằm trong nhóm nào."
 
-#: judge/utils/problem_data.py:158
+#: judge/utils/problem_data.py:166
 #, python-format
 msgid "Input file for case %(case)d does not exist: %(file)s"
 msgstr "Không tìm thấy file dữ liệu đầu vào của case %(case)d: %(file)s"
 
-#: judge/utils/problem_data.py:161
+#: judge/utils/problem_data.py:169
 #, python-format
 msgid "Output file for case %(case)d does not exist: %(file)s"
 msgstr "Không tìm thấy file kết quả đầu ra của case %(case)d: %(file)s"
 
-#: judge/utils/problem_data.py:188
+#: judge/utils/problem_data.py:198
 #, python-format
 msgid "Batch start case #%d requires points."
 msgstr "Test #%d bắt đầu nhóm phải có điểm."
 
-#: judge/utils/problem_data.py:195
+#: judge/utils/problem_data.py:205
 #, python-format
 msgid ""
 "Dependencies must be a comma-separated list of integers for batch start case "
@@ -4541,34 +4541,30 @@ msgstr ""
 "Phụ thuộc phải là danh sách số nguyên cách nhau bởi dấu phẩy ở test bắt đầu "
 "nhóm #%d."
 
-#: judge/utils/problem_data.py:200
+#: judge/utils/problem_data.py:210
 #, python-format
 msgid "Dependencies must depend on previous batches for batch start case #%d."
 msgstr "Phụ thuộc chỉ được là các nhóm test trước đó ở test bắt đầu nhóm #%d."
 
-#: judge/utils/problem_data.py:203
+#: judge/utils/problem_data.py:213
 #, python-format
 msgid "Dependencies must be positive for batch start case #%d."
 msgstr "Phụ thuộc phải là số dương ở test bắt đầu nhóm #%d."
 
-#: judge/utils/problem_data.py:226
+#: judge/utils/problem_data.py:237
 #, python-format
 msgid "Attempt to end batch outside of one in case #%d."
 msgstr "Kết thúc nhóm nhưng không có bắt đầu ở case #%d"
 
-#: judge/utils/problem_data.py:237
+#: judge/utils/problem_data.py:249
 msgid "Total points must be greater than 0."
 msgstr "Tổng điểm của các test phải lớn hơn 0."
 
-#: judge/utils/problem_data.py:245
-msgid "Batch dependencies are not supported for problems with pretest batches."
-msgstr "Không hỗ trợ phụ thuộc nhóm test cho bài có nhóm pretest."
-
-#: judge/utils/problem_data.py:255
+#: judge/utils/problem_data.py:263
 msgid "How did you corrupt the zip path?"
 msgstr "Bạn đã làm hỏng đường dẫn zip như thế nào?"
 
-#: judge/utils/problem_data.py:261
+#: judge/utils/problem_data.py:269
 msgid "How did you corrupt the generator path?"
 msgstr "Bạn đã làm hỏng đường dẫn generator như thế nào?"
 
@@ -5761,61 +5757,61 @@ msgstr "Bài nộp %(problem)s của %(user)s"
 msgid "Comparing submission %(first)s with %(second)s"
 msgstr "So sánh bài nộp %(first)s và %(second)s"
 
-#: judge/views/submission.py:360 judge/views/submission.py:361
+#: judge/views/submission.py:379 judge/views/submission.py:380
 #: templates/problem/problem.html:238 templates/problem/problem.html:249
 msgid "All submissions"
 msgstr "Danh sách bài nộp"
 
-#: judge/views/submission.py:590 judge/views/submission.py:595
+#: judge/views/submission.py:609 judge/views/submission.py:614
 msgid "All my submissions"
 msgstr "Danh sách bài nộp của tôi"
 
-#: judge/views/submission.py:591 judge/views/submission.py:596
+#: judge/views/submission.py:610 judge/views/submission.py:615
 #, python-format
 msgid "All submissions by %s"
 msgstr "Danh sách bài nộp bởi %s"
 
-#: judge/views/submission.py:632 judge/views/submission.py:635
+#: judge/views/submission.py:651 judge/views/submission.py:654
 #, python-format
 msgid "All submissions for %s"
 msgstr "Danh sách bài nộp cho %s"
 
-#: judge/views/submission.py:708 judge/views/submission.py:715
+#: judge/views/submission.py:727 judge/views/submission.py:734
 #, python-format
 msgid "My submissions for %(problem)s"
 msgstr "Danh sách bài nộp của tôi cho %(problem)s"
 
-#: judge/views/submission.py:709 judge/views/submission.py:719
+#: judge/views/submission.py:728 judge/views/submission.py:738
 #, python-format
 msgid "%(user)s's submissions for %(problem)s"
 msgstr "Danh sách bài nộp của %(user)s cho %(problem)s"
 
-#: judge/views/submission.py:850
+#: judge/views/submission.py:869
 #, python-brace-format
 msgid "All submissions in <a href=\"{1}\">{0}</a>"
 msgstr "Danh sách các bài nộp trong <a href=\"{1}\">{0}</a>"
 
-#: judge/views/submission.py:865 judge/views/submission.py:883
+#: judge/views/submission.py:884 judge/views/submission.py:902
 #, python-format
 msgid "My submissions in %(contest)s"
 msgstr "Danh sách bài nộp của tôi trong %(contest)s"
 
-#: judge/views/submission.py:866 judge/views/submission.py:887
+#: judge/views/submission.py:885 judge/views/submission.py:906
 #, python-format
 msgid "%(user)s's submissions in %(contest)s"
 msgstr "Danh sách bài nộp của %(user)s trong %(contest)s"
 
-#: judge/views/submission.py:898 judge/views/submission.py:916
+#: judge/views/submission.py:917 judge/views/submission.py:935
 #, python-brace-format
 msgid "{user}'s submissions for {problem} in {contest}"
 msgstr "Danh sách bài nộp của {user} cho {problem} trong {contest}"
 
-#: judge/views/submission.py:903
+#: judge/views/submission.py:922
 #, python-brace-format
 msgid "{user}'s submissions for problem {number} in {contest}"
 msgstr "Danh sách bài nộp của {user} cho bài {number} trong {contest}"
 
-#: judge/views/submission.py:924
+#: judge/views/submission.py:943
 #, python-brace-format
 msgid "{user}'s submissions for problem {label} in {contest}"
 msgstr "Danh sách bài nộp của {user} cho bài {label} trong {contest}"
@@ -8200,7 +8196,7 @@ msgid "There are no requests to approve."
 msgstr "Không có yêu cầu để chấp nhận."
 
 #: templates/organization/requests/pending.html:36
-#: templates/problem/data.html:1154
+#: templates/problem/data.html:1186
 msgid "Delete?"
 msgstr "Xoá?"
 
@@ -8245,7 +8241,7 @@ msgstr "Nó sẽ bị gỡ khỏi %(count)d bài tập."
 
 #: templates/organization/tag-confirm-delete.html:18
 #: templates/organization/tags.html:162
-#: templates/problem/confirm_delete.html:44 templates/problem/data.html:1234
+#: templates/problem/confirm_delete.html:44 templates/problem/data.html:1267
 #: templates/status/oj-status.html:75
 msgid "Cancel"
 msgstr "Huỷ"
@@ -8276,8 +8272,8 @@ msgstr "chưa dùng"
 msgid "Tag name"
 msgstr "Tên nhãn"
 
-#: templates/organization/tags.html:154 templates/problem/data.html:274
-#: templates/problem/data.html:1202 templates/problem/data.html:1205
+#: templates/organization/tags.html:154 templates/problem/data.html:293
+#: templates/problem/data.html:1235 templates/problem/data.html:1238
 #: templates/urlshortener/form.html:31
 msgid "Save"
 msgstr "Lưu"
@@ -8352,11 +8348,11 @@ msgstr ""
 "Đã đạt giới hạn lưu trữ! Vui lòng xóa một số bài tập để giải phóng dung "
 "lượng."
 
-#: templates/organization/usage.html:196 templates/problem/data.html:1117
+#: templates/organization/usage.html:196 templates/problem/data.html:1148
 msgid "You are approaching the storage limit"
 msgstr "Bạn đang sắp đạt giới hạn dung lượng lưu trữ"
 
-#: templates/organization/usage.html:197 templates/problem/data.html:1118
+#: templates/organization/usage.html:197 templates/problem/data.html:1149
 msgid "You will not be able to upload test if the limit is exceeded."
 msgstr "Bạn sẽ không thể tải lên dữ liệu test nếu vượt quá giới hạn."
 
@@ -8508,57 +8504,57 @@ msgstr "Tải lên thất bại:"
 msgid "This package exceeds the maximum upload size."
 msgstr "Gói này vượt quá kích thước tải lên tối đa."
 
-#: templates/problem/data.html:110
+#: templates/problem/data.html:129
 msgid "precision (decimal digits)"
 msgstr "độ chính xác (chữ số thập phân)"
 
-#: templates/problem/data.html:122
+#: templates/problem/data.html:141
 msgid "Treat checker points as percentage"
 msgstr "Coi điểm trình chấm là phần trăm"
 
-#: templates/problem/data.html:146
+#: templates/problem/data.html:165
 msgid "Expected checker's extension must be in [cpp, pas, java], found "
 msgstr "Trình chấm ngoài phải có đuôi file là cpp, pas hoặc java, không phải "
 
-#: templates/problem/data.html:264
+#: templates/problem/data.html:283
 msgid "Instruction"
 msgstr "Hướng dẫn"
 
-#: templates/problem/data.html:284
+#: templates/problem/data.html:303
 msgid "or click here to build zip file"
 msgstr "hoặc nhấn vào đây để tạo file zip"
 
-#: templates/problem/data.html:419
+#: templates/problem/data.html:450
 msgid "Processing..."
 msgstr "Đang xử lý..."
 
-#: templates/problem/data.html:435
+#: templates/problem/data.html:466
 msgid "Upload failed. Please try again."
 msgstr "Tải lên thất bại. Vui lòng thử lại."
 
-#: templates/problem/data.html:448
+#: templates/problem/data.html:479
 #, python-brace-format
 msgid "You are about to create more than ${testcase_soft_limit} testcases."
 msgstr "Bạn sắp tạo nhiều hơn ${testcase_soft_limit} testcase."
 
-#: templates/problem/data.html:449
+#: templates/problem/data.html:480
 msgid "Please do not create too many testcases if not really necessary."
 msgstr "Xin đừng tạo quá nhiều testcase nếu không thật sự cần thiết."
 
-#: templates/problem/data.html:455 templates/problem/data.html:595
+#: templates/problem/data.html:486 templates/problem/data.html:626
 msgid "Too many testcases"
 msgstr "Quá nhiều testcase"
 
-#: templates/problem/data.html:457 templates/problem/data.html:597
+#: templates/problem/data.html:488 templates/problem/data.html:628
 #, python-brace-format
 msgid "Number of testcases must not exceed ${window.testcase_limit}"
 msgstr "Số lượng testcase không được vượt quá ${window.testcase_limit}"
 
-#: templates/problem/data.html:542 templates/problem/data.html:555
+#: templates/problem/data.html:573 templates/problem/data.html:586
 msgid "Files are not in the same format!"
 msgstr "Các file không cùng định dạng!"
 
-#: templates/problem/data.html:568
+#: templates/problem/data.html:599
 msgid ""
 "No input/output files. Make sure your files are following themis/polygon/cms "
 "test format"
@@ -8566,7 +8562,7 @@ msgstr ""
 "Không tìm thấy file dữ liệu đầu vào/kết quả đầu ra. Hãy chắc chắn rằng file "
 "test sử dụng format của themis, polygon hoặc cms"
 
-#: templates/problem/data.html:572
+#: templates/problem/data.html:603
 #, python-brace-format
 msgid ""
 "The number of input files (${inFiles.length}) do not match the number of "
@@ -8575,65 +8571,65 @@ msgstr ""
 "Số lượng file dữ liệu đầu vào (${inFiles.length}) không khớp với số lượng "
 "file kết quả đầu ra (${outFiles.length})!"
 
-#: templates/problem/data.html:599
+#: templates/problem/data.html:630
 #, python-brace-format
 msgid ""
 "Because of that, only the first ${window.testcase_limit} testcases will be "
 "saved!"
 msgstr "Do đó, chỉ ${window.testcase_limit} test đầu tiên sẽ được lưu lại!"
 
-#: templates/problem/data.html:662
+#: templates/problem/data.html:693
 msgid "Test file must be a ZIP file"
 msgstr "Tập tin dữ liệu phải có định dạng ZIP"
 
-#: templates/problem/data.html:685 templates/problem/data.html:1231
+#: templates/problem/data.html:716 templates/problem/data.html:1264
 msgid "No files selected"
 msgstr "Chưa chọn tập tin nào"
 
-#: templates/problem/data.html:689
+#: templates/problem/data.html:720
 msgid "files selected"
 msgstr "tập tin đã chọn"
 
-#: templates/problem/data.html:696
+#: templates/problem/data.html:727
 msgid "and"
 msgstr "và"
 
-#: templates/problem/data.html:696
+#: templates/problem/data.html:727
 msgid "more files"
 msgstr "tập tin khác"
 
-#: templates/problem/data.html:814
+#: templates/problem/data.html:845
 msgid "Adding files..."
 msgstr "Đang thêm tập tin..."
 
-#: templates/problem/data.html:820
+#: templates/problem/data.html:851
 msgid "Compressing..."
 msgstr "Đang nén..."
 
-#: templates/problem/data.html:827
+#: templates/problem/data.html:858
 msgid ""
 "Automatic zipping is not supported in this browser. Please upload a ZIP file "
 "manually."
 msgstr ""
 "Trình duyệt này không hỗ trợ nén tự động. Vui lòng tải lên file ZIP thủ công."
 
-#: templates/problem/data.html:837
+#: templates/problem/data.html:868
 msgid "Failed to create ZIP file"
 msgstr "Tạo file ZIP thất bại"
 
-#: templates/problem/data.html:839 templates/problem/data.html:1235
+#: templates/problem/data.html:870 templates/problem/data.html:1268
 msgid "Build & Upload ZIP"
 msgstr "Tạo & Tải lên ZIP"
 
-#: templates/problem/data.html:1098
+#: templates/problem/data.html:1129
 msgid "View YAML"
 msgstr "Xem YAML"
 
-#: templates/problem/data.html:1111
+#: templates/problem/data.html:1142
 msgid "Storage limit exceeded!"
 msgstr "Vượt giới hạn lưu trữ!"
 
-#: templates/problem/data.html:1112
+#: templates/problem/data.html:1143
 msgid ""
 "This organization has reached its storage quota. Please delete some test "
 "data before uploading more."
@@ -8641,68 +8637,72 @@ msgstr ""
 "Tổ chức đã đạt hạn mức lưu trữ. Vui lòng xóa một số dữ liệu test trước khi "
 "tải lên thêm."
 
-#: templates/problem/data.html:1130
+#: templates/problem/data.html:1161
 msgid "Test cases have been filled automatically!"
 msgstr "Các test đã được điền tự động!"
 
-#: templates/problem/data.html:1132
+#: templates/problem/data.html:1163
 msgid "Test cases have been filled automatically and **not saved yet**!"
 msgstr "Các test dưới đây được điền tự động và **chưa được lưu lại**!"
 
-#: templates/problem/data.html:1134
+#: templates/problem/data.html:1165
 msgid ""
 "Please modify the table below if needed and press the `Apply` button to save!"
 msgstr "Hãy chỉnh sửa bảng dưới đây nếu cần thiết, và nhấn nút `Lưu` để lưu!"
 
-#: templates/problem/data.html:1144
+#: templates/problem/data.html:1175
 msgid "Type"
 msgstr "Kiểu"
 
-#: templates/problem/data.html:1145
+#: templates/problem/data.html:1176
 msgid "Input file"
 msgstr "Tập tin đầu vào"
 
-#: templates/problem/data.html:1146
+#: templates/problem/data.html:1177
 msgid "Output file"
 msgstr "Tập tin đầu ra"
 
-#: templates/problem/data.html:1149
+#: templates/problem/data.html:1180
 msgid "Pretest?"
 msgstr "Pretest?"
 
-#: templates/problem/data.html:1151
+#: templates/problem/data.html:1182
+msgid "Example?"
+msgstr "Ví dụ?"
+
+#: templates/problem/data.html:1183
 msgid "Batch dependencies"
 msgstr "Phụ thuộc nhóm test"
 
-#: templates/problem/data.html:1152
+#: templates/problem/data.html:1184
 msgid "Generator args"
 msgstr "Tham số trình sinh test"
 
-#: templates/problem/data.html:1192
+#: templates/problem/data.html:1225
 msgid "Edit generator args"
 msgstr "Sửa tham số trình sinh test"
 
-#: templates/problem/data.html:1203
+#: templates/problem/data.html:1236
 msgid "Add new case"
 msgstr "Thêm test mới"
 
-#: templates/problem/data.html:1209
+#: templates/problem/data.html:1242
 msgid "Uploading..."
 msgstr "Đang tải lên..."
 
-#: templates/problem/data.html:1218
+#: templates/problem/data.html:1251
 msgid "Build Test Data"
 msgstr "Tạo dữ liệu test"
 
-#: templates/problem/data.html:1221
+#: templates/problem/data.html:1254
 msgid "Choose Files"
 msgstr "Chọn tập tin"
 
-#: templates/problem/data.html:1224
+#: templates/problem/data.html:1257
 msgid "Choose Folder"
 msgstr "Chọn thư mục"
 
-#: templates/problem/data.html:1229
+#: templates/problem/data.html:1262
 msgid "Drop files or folder here"
 msgstr "Kéo thả tập tin hoặc thư mục vào đây"
 
@@ -9001,7 +9001,8 @@ msgid "(partial)"
 msgstr "(OI)"
 
 #: templates/problem/problem.html:333 templates/problem/problem.html:342
-#: templates/submission/status-testcases.html:138
+#: templates/submission/status-testcases.html:142
+#: templates/submission/status-testcases.html:149
 msgid "Input:"
 msgstr "Dữ liệu đầu vào:"
 
@@ -9863,57 +9864,62 @@ msgstr ""
 "Bài nộp của bạn đã được lưu thành công. Hiện tại chưa có test nào hoặc đây "
 "là bài offline, vui lòng chờ đánh giá thêm."
 
-#: templates/submission/status-testcases.html:103
+#: templates/submission/status-testcases.html:106
 #, python-format
 msgid "Case #%(id)d:"
 msgstr "Test #%(id)d:"
 
-#: templates/submission/status-testcases.html:105
+#: templates/submission/status-testcases.html:108
 #, python-format
 msgid "Pretest #%(id)d:"
 msgstr "Pretest #%(id)d:"
 
-#: templates/submission/status-testcases.html:107
+#: templates/submission/status-testcases.html:110
 #, python-format
 msgid "Test case #%(id)d:"
 msgstr "Test case #%(id)d:"
 
-#: templates/submission/status-testcases.html:140
+#: templates/submission/status-testcases.html:112
+msgid "(example)"
+msgstr "(ví dụ)"
+
+#: templates/submission/status-testcases.html:145
+#: templates/submission/status-testcases.html:151
 msgid "Answer:"
 msgstr "Đáp án:"
 
-#: templates/submission/status-testcases.html:145
+#: templates/submission/status-testcases.html:156
 msgid "Your output (clipped)"
 msgstr "Kết quả đầu ra của bạn (đã bị cắt bớt)"
 
-#: templates/submission/status-testcases.html:153
+#: templates/submission/status-testcases.html:164
 msgid "Judge feedback"
 msgstr "Phản hồi từ trình chấm"
 
-#: templates/submission/status-testcases.html:171
+#: templates/submission/status-testcases.html:182
 msgid "Resources:"
 msgstr "Tài nguyên:"
 
-#: templates/submission/status-testcases.html:181
+#: templates/submission/status-testcases.html:192
 msgid "Final pretest score:"
 msgstr "Điểm pretest:"
 
-#: templates/submission/status-testcases.html:183
+#: templates/submission/status-testcases.html:194
 msgid "Final score:"
 msgstr "Điểm cuối cùng:"
 
-#: templates/submission/status-testcases.html:190
-#: templates/submission/status-testcases.html:194
+#: templates/submission/status-testcases.html:201
+#: templates/submission/status-testcases.html:205
 #, python-format
 msgid "%(points)s/%(total)s points"
 msgstr "%(points)s/%(total)s điểm"
 
-#: templates/submission/status-testcases.html:199
+#: templates/submission/status-testcases.html:210
 msgid "Passing pretests does not guarantee a full score on system tests."
 msgstr ""
 "Đúng các pretest sẽ không đảm bảo được việc đúng toàn bộ test hệ thống."
 
-#: templates/submission/status-testcases.html:202
+#: templates/submission/status-testcases.html:213
 msgid "Submission aborted!"
 msgstr "Bài nộp đã bị huỷ!"
 
