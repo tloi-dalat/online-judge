@@ -101,6 +101,21 @@ class OrganizationAdminAccessTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateNotUsed(response, 'generic-message.html')
 
+    def test_contest_create_and_edit_pages(self):
+        self.client.force_login(self.co_admin)
+        self.assert_allowed(self.client.get(reverse('contest_create_organization', args=['school'])))
+        response = self.client.get(reverse('contest_edit', args=['school_hidden']))
+        self.assert_allowed(response)
+        self.assertContains(response, 'organization-tag')
+
+        self.client.force_login(create_user(username='superuser', is_superuser=True, is_staff=True))
+        self.assert_allowed(self.client.get(reverse('contest_new')))
+
+    def test_admin_blogpost_read_only(self):
+        post = create_blogpost('site_post', visible=True, authors=('member',))
+        self.client.force_login(self.co_admin)
+        self.assertEqual(self.client.get(reverse('admin:judge_blogpost_change', args=[post.id])).status_code, 200)
+
     def test_problem_access(self):
         problem = self.private_problem
         self.assertTrue(self.fresh(problem).is_accessible_by(self.co_admin))

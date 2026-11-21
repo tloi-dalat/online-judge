@@ -133,6 +133,13 @@ class CommentEditForm(ModelForm):
         }
 
 
+class CommentEditPageForm(CommentEditForm):
+    class Meta(CommentEditForm.Meta):
+        widgets = {
+            'body': MartorWidget(attrs={'data-markdownfy-url': reverse_lazy('comment_preview')}),
+        }
+
+
 class CommentEditAjax(LoginRequiredMixin, CommentMixin, UpdateView):
     template_name = 'comments/edit-ajax.html'
     form_class = CommentEditForm
@@ -162,6 +169,7 @@ class CommentEditAjax(LoginRequiredMixin, CommentMixin, UpdateView):
 
 class CommentEdit(TitleMixin, CommentEditAjax):
     template_name = 'comments/edit.html'
+    form_class = CommentEditPageForm
 
     def get_title(self):
         return _('Editing comment')

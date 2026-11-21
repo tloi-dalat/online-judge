@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-20 17:32+0000\n"
+"POT-Creation-Date: 2026-11-21 07:49+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -91,7 +91,7 @@ msgstr "Đã gửi email đặt lại mật khẩu"
 msgid "Home"
 msgstr "Trang chủ"
 
-#: judge/admin/comments.py:25 judge/admin/interface.py:87
+#: judge/admin/comments.py:25 judge/admin/interface.py:88
 #: templates/misc_config/edit.html:88
 msgid "Content"
 msgstr "Nội dung"
@@ -277,17 +277,17 @@ msgstr "ảo"
 msgid "link path"
 msgstr "đường dẫn liên kết"
 
-#: judge/admin/interface.py:88
+#: judge/admin/interface.py:89
 msgid "Summary"
 msgstr "Tóm tắt"
 
-#: judge/admin/interface.py:106 judge/admin/problem.py:190
+#: judge/admin/interface.py:107 judge/admin/problem.py:190
 #: judge/models/contest.py:80 judge/models/interface.py:82
 #: judge/models/problem.py:773
 msgid "authors"
 msgstr "tác giả"
 
-#: judge/admin/interface.py:136 judge/admin/profile.py:112
+#: judge/admin/interface.py:137 judge/admin/profile.py:112
 #: judge/admin/submission.py:233 judge/models/contest.py:710
 #: judge/models/contest.py:886 judge/models/profile.py:573
 #: judge/models/profile.py:604 judge/models/submission.py:75
@@ -295,7 +295,7 @@ msgstr "tác giả"
 msgid "user"
 msgstr "thành viên"
 
-#: judge/admin/interface.py:165
+#: judge/admin/interface.py:166
 msgid "object"
 msgstr "đối tượng"
 
@@ -4685,7 +4685,7 @@ msgstr ""
 msgid "Updating blog post"
 msgstr "Cập nhật blog"
 
-#: judge/views/blog.py:427 judge/views/comment.py:142
+#: judge/views/blog.py:427 judge/views/comment.py:149
 #: judge/views/contests.py:1811 judge/views/organization.py:521
 #: judge/views/problem.py:1178
 msgid "Edited from site"
@@ -4711,7 +4711,7 @@ msgstr "Không tìm thấy bình luận."
 msgid "You cannot vote on your own comments."
 msgstr "Bạn không thể tự đánh giá bình luận của mình."
 
-#: judge/views/comment.py:167
+#: judge/views/comment.py:175
 msgid "Editing comment"
 msgstr "Đang chỉnh sửa bình luận"
 

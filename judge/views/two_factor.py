@@ -94,7 +94,7 @@ class TOTPEnableView(TOTPView):
     @classmethod
     def render_qr_code(cls, username, key):
         totp = pyotp.TOTP(key)
-        uri = totp.provisioning_uri(username, settings.SITE_NAME)
+        uri = totp.provisioning_uri(name=username, issuer_name=settings.SITE_NAME)
 
         qr = qrcode.QRCode(box_size=1)
         qr.add_data(uri)
