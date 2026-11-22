@@ -2,8 +2,8 @@ import bisect
 from datetime import datetime, timedelta
 from io import BytesIO
 from typing import Dict
+from zoneinfo import ZoneInfo
 
-import pytz
 from celery import shared_task
 from discord_webhook import DiscordEmbed, DiscordWebhook
 from django.conf import settings
@@ -143,7 +143,7 @@ def on_new_contest(contest_key):
     url = settings.SITE_FULL_URL + contest.get_absolute_url()
     title = f'New contest {url}'
 
-    tz = pytz.timezone(settings.DEFAULT_USER_TIME_ZONE)
+    tz = ZoneInfo(settings.DEFAULT_USER_TIME_ZONE)
 
     description = [
         ('Title', contest.name),
@@ -197,7 +197,7 @@ def queue_time_stats():
     if webhook_config is None:
         return
 
-    end_time = (datetime.now(pytz.timezone(settings.CELERY_TIMEZONE))
+    end_time = (datetime.now(ZoneInfo(settings.CELERY_TIMEZONE))
                 .replace(hour=0, minute=0, second=0, microsecond=0))
     start_time = end_time - timedelta(days=1)
 

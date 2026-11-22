@@ -4,7 +4,6 @@ import json
 import os
 from operator import attrgetter, itemgetter
 
-import pytz
 from django.conf import settings
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -204,10 +203,7 @@ class UserAboutPage(UserPage):
             'height': '%.3fem' % rating_progress(rating.rating),
         } for rating in ratings]))
 
-        user_timezone = settings.DEFAULT_USER_TIME_ZONE
-        if self.request is not None and self.request.profile is not None:
-            user_timezone = user_timezone or self.request.profile.timezone
-        timezone_offset = pytz.timezone(user_timezone).utcoffset(datetime.datetime.utcnow()).seconds
+        timezone_offset = timezone.localtime().utcoffset()
 
         submissions_count = self.object.submission_set.count()
         if settings.VNOJ_LOW_POWER_MODE and submissions_count > settings.VNOJ_LOW_POWER_MODE_CONFIG['heat_map_limit']:
@@ -215,7 +211,7 @@ class UserAboutPage(UserPage):
         else:
             submissions = (
                 self.object.submission_set
-                .annotate(date_only=Cast(F('date') + datetime.timedelta(seconds=timezone_offset), DateField()))
+                .annotate(date_only=Cast(F('date') + timezone_offset, DateField()))
                 .values('date_only').annotate(cnt=Count('id'))
             )
 
