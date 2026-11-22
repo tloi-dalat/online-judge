@@ -111,7 +111,6 @@ CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 LANGUAGE_CODE = 'vi'
 DEFAULT_USER_TIME_ZONE = 'Asia/Ho_Chi_Minh'
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 
@@ -121,7 +120,10 @@ USE_TZ = True
 
 STATIC_ROOT = _env('STATIC_ROOT', os.path.join(BASE_DIR, 'static'))
 STATIC_URL = '/static/'
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+STORAGES = {
+    'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+    'staticfiles': {'BACKEND': 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'},
+}
 
 # Files served at the site root (robots.txt, favicon.ico, ...).
 WHITENOISE_ROOT = os.path.join(BASE_DIR, 'rootfiles')
