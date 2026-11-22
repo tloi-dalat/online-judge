@@ -1,6 +1,5 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
-import pytz
 from celery import shared_task
 
 from judge.models import Organization, OrganizationMonthlyUsage
@@ -35,7 +34,7 @@ def restore_organization_archived_problems(self, organization_id):
 @shared_task
 def organization_monthly_reset():
     # Get first day of last month
-    current_time = datetime.now(pytz.utc)
+    current_time = datetime.now(timezone.utc)
     month_start = (current_time.replace(day=1, hour=0, minute=0, second=0, microsecond=0) -
                    timedelta(days=1)).replace(day=1)
 

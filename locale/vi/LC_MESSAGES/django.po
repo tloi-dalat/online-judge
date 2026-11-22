@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-22 03:08+0000\n"
+"POT-Creation-Date: 2026-11-22 05:01+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -593,11 +593,11 @@ msgid " Reason: "
 msgstr " Lý do: "
 
 #: judge/comments.py:64 judge/views/blog.py:50 judge/views/comment.py:45
-#: judge/views/ticket.py:55 judge/views/user.py:512
+#: judge/views/ticket.py:55 judge/views/user.py:508
 msgid "Your part is silent, little toad."
 msgstr "Im lặng đi, bạn không có quyền nói ở đây."
 
-#: judge/comments.py:67 judge/comments.py:196 judge/views/user.py:306
+#: judge/comments.py:67 judge/comments.py:196 judge/views/user.py:302
 #, python-format
 msgid ""
 "You need to have solved at least %d problems before your voice can be heard."
@@ -5924,100 +5924,100 @@ msgstr "Nhân viên không được tắt 2FA"
 msgid "Perform Two-factor Authentication"
 msgstr "Thực hiện Xác thực Hai yếu tố"
 
-#: judge/views/user.py:104
+#: judge/views/user.py:103
 msgid "No such user"
 msgstr "Không có người dùng"
 
-#: judge/views/user.py:104
+#: judge/views/user.py:103
 #, python-format
 msgid "No user handle \"%s\"."
 msgstr "Không có người dùng \"%s\"."
 
-#: judge/views/user.py:108
+#: judge/views/user.py:107
 msgid "My account"
 msgstr "Tài khoản của tôi"
 
-#: judge/views/user.py:109
+#: judge/views/user.py:108
 #, python-format
 msgid "User %s"
 msgstr "Người dùng %s"
 
-#: judge/views/user.py:156
+#: judge/views/user.py:155
 msgid "Login"
 msgstr "Đăng nhập"
 
-#: judge/views/user.py:202
+#: judge/views/user.py:201
 msgid "M j, Y, G:i"
 msgstr "j M, Y, G:i"
 
-#: judge/views/user.py:233
+#: judge/views/user.py:229
 #, python-brace-format
 msgid "Ban {0}"
 msgstr "Cấm {0}"
 
-#: judge/views/user.py:240
+#: judge/views/user.py:236
 #, python-format
 msgid "Banned by %s"
 msgstr "Bị cấm bởi %s"
 
-#: judge/views/user.py:255
+#: judge/views/user.py:251
 #, python-brace-format
 msgid "Unban {0}"
 msgstr "Bỏ cấm {0}"
 
-#: judge/views/user.py:262
+#: judge/views/user.py:258
 #, python-format
 msgid "Unbanned by %s"
 msgstr "Bỏ cấm bởi %s"
 
-#: judge/views/user.py:300
+#: judge/views/user.py:296
 #, python-format
 msgid "Page %d of Comments"
 msgstr "Bình luận - Trang %d"
 
-#: judge/views/user.py:459
+#: judge/views/user.py:455
 msgid "Preparing your data..."
 msgstr "Đang chuẩn bị dữ liệu của bạn..."
 
-#: judge/views/user.py:463 templates/user/edit-profile.html:395
+#: judge/views/user.py:459 templates/user/edit-profile.html:395
 msgid "Download your data"
 msgstr "Tải xuống dữ liệu của bạn"
 
-#: judge/views/user.py:512
+#: judge/views/user.py:508
 msgid "Can't edit profile"
 msgstr "Không thể sửa hồ sơ"
 
-#: judge/views/user.py:521
+#: judge/views/user.py:517
 msgid "Updated on site"
 msgstr "Cập nhật trên trang web"
 
-#: judge/views/user.py:554 templates/admin/auth/user/change_form.html:14
+#: judge/views/user.py:550 templates/admin/auth/user/change_form.html:14
 #: templates/admin/auth/user/change_form.html:17 templates/base.html:365
 #: templates/user/user-tabs.html:32
 msgid "Edit profile"
 msgstr "Chỉnh sửa hồ sơ"
 
-#: judge/views/user.py:588
+#: judge/views/user.py:584
 msgid "Generated scratch codes for user"
 msgstr "Đã tạo mã dự phòng cho người dùng"
 
-#: judge/views/user.py:594 templates/user/user-list-tabs.html:4
+#: judge/views/user.py:590 templates/user/user-list-tabs.html:4
 msgid "Leaderboard"
 msgstr "Bảng xếp hạng"
 
-#: judge/views/user.py:629 templates/user/user-list-tabs.html:5
+#: judge/views/user.py:625 templates/user/user-list-tabs.html:5
 msgid "Contributors"
 msgstr "Người đóng góp"
 
-#: judge/views/user.py:708
+#: judge/views/user.py:704
 msgid "You have been successfully logged out."
 msgstr "Bạn đã đăng xuất thành công."
 
-#: judge/views/user.py:716
+#: judge/views/user.py:712
 msgid "Password reset"
 msgstr "Đặt lại mật khẩu"
 
-#: judge/views/user.py:726
+#: judge/views/user.py:722
 msgid "You have sent too many password reset requests. Please try again later."
 msgstr "Bạn đã gửi quá nhiều yêu cầu đặt lại mật khẩu. Vui lòng thử lại sau."
 
