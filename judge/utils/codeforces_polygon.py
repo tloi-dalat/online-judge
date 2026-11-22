@@ -514,6 +514,7 @@ class PolygonImporter:
                     'input_file': input_file,
                     'output_file': output_file,
                     'points': points,
+                    'is_example': test.get('sample') == 'true',
                 })
 
                 group = test.get('group', '')
@@ -940,6 +941,7 @@ class PolygonImporter:
                     input_file=case_data['input_file'],
                     output_file=case_data['output_file'],
                     is_pretest=False,
+                    is_example=case_data['is_example'],
                 )
                 case.save()
 
@@ -958,6 +960,7 @@ class PolygonImporter:
                 output_file=case_data['output_file'],
                 points=case_data['points'],
                 is_pretest=False,
+                is_example=case_data['is_example'],
             )
             case.save()
 
