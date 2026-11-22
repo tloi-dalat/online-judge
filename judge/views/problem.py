@@ -37,8 +37,8 @@ from judge.utils.celery import redirect_to_task_status
 from judge.utils.infinite_paginator import InfinitePaginationMixin
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.pdfoid import PDF_RENDERING_ENABLED, render_pdf
-from judge.utils.problems import hot_problems, user_attempted_ids, \
-    user_completed_ids
+from judge.utils.problems import blocked_editorial_problem_ids, hot_problems, is_editorial_blocked_by_contest, \
+    user_attempted_ids, user_completed_ids
 from judge.utils.strings import safe_float_or_none, safe_int_or_none
 from judge.utils.tickets import own_ticket_filter
 from judge.utils.views import QueryStringSortMixin, SingleObjectFormView, TitleMixin, add_file_response, generic_message
@@ -60,14 +60,21 @@ def get_contest_submission_count(problem, profile, virtual):
                   .filter(problem__problem=problem, participation__virtual=virtual).count()
 
 
+class ContestEditorialBlocked(Http404):
+    pass
+
+
 def get_accessible_solution(problem, request):
     """Fetch the editorial for `problem`, or 404 if the requesting user can't see it.
 
     Shared by ProblemSolution and ProblemSolutionComments so the comments AJAX
     endpoint can't leak editorial comments to someone who can't see the editorial.
     """
+    profile = request.profile if request.user.is_authenticated else None
+    if is_editorial_blocked_by_contest(problem, profile):
+        raise ContestEditorialBlocked()
     solution = get_object_or_404(Solution, problem=problem)
-    if not solution.is_accessible_by(request.user) or request.in_contest:
+    if not solution.is_accessible_by(request.user):
         raise Http404()
     return solution
 
@@ -156,6 +163,30 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
         code = self.kwargs.get(self.slug_url_kwarg, None)
         return generic_message(self.request, _('No such editorial'),
                                _('Could not find an editorial with the code "%s".') % code, status=404)
+
+    def contest_editorial_blocked(self):
+        return generic_message(self.request, _('Editorial unavailable'),
+                               _('You cannot view the editorial because you are currently '
+                                 'participating in a contest containing this problem. '
+                                 'Please attempt the problem on your own.'), status=403)
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super(ProblemMixin, self).get(request, *args, **kwargs)
+        except ContestEditorialBlocked:
+            return self.contest_editorial_blocked()
+        except Http404:
+            return self.no_such_problem()
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        try:
+            get_accessible_solution(self.object, request)
+        except ContestEditorialBlocked:
+            return self.contest_editorial_blocked()
+        except Http404:
+            return self.no_such_problem()
+        return super(ProblemSolution, self).post(request, *args, **kwargs)
 
 
 class ProblemSolutionComments(ProblemMixin, CommentedDetailView):
@@ -506,9 +537,15 @@ class ProblemDetail(ProblemMixin, ProblemClarificationsMixin, SolvedProblemMixin
             context['num_open_tickets'] = tickets.filter(is_open=True).values('id').distinct().count()
 
         try:
-            context['editorial'] = Solution.objects.get(problem=self.object)
+            editorial = Solution.objects.get(problem=self.object)
         except ObjectDoesNotExist:
             pass
+        else:
+            context['editorial'] = editorial
+            context['editorial_blocked'] = (
+                bool(contest_problem) or is_editorial_blocked_by_contest(self.object, user.profile)
+                if authed and editorial.is_accessible_by(user) else False
+            )
         try:
             translation = self.object.translations.get(language=self.request.LANGUAGE_CODE)
         except ProblemTranslation.DoesNotExist:
@@ -756,6 +793,9 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, Infinite
 
     def get_context_data(self, **kwargs):
         context = super(ProblemList, self).get_context_data(**kwargs)
+        context['blocked_editorial_problem_ids'] = blocked_editorial_problem_ids(
+            self.request.profile if self.request.user.is_authenticated else None,
+        )
         context['hide_solved'] = int(self.hide_solved)
         context['show_types'] = int(self.show_types)
         context['has_public_editorial'] = int(self.has_public_editorial)

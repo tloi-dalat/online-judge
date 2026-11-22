@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-21 07:49+0000\n"
+"POT-Creation-Date: 2026-11-22 02:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3605,7 +3605,7 @@ msgid "judge"
 msgstr ""
 
 #: judge/models/submission.py:22 judge/models/submission.py:57
-#: judge/utils/problems.py:68
+#: judge/utils/problems.py:105
 msgid "Accepted"
 msgstr ""
 
@@ -3639,7 +3639,7 @@ msgid "Runtime Error"
 msgstr ""
 
 #: judge/models/submission.py:30 judge/models/submission.py:42
-#: judge/models/submission.py:66 judge/utils/problems.py:71
+#: judge/models/submission.py:66 judge/utils/problems.py:108
 msgid "Compile Error"
 msgstr ""
 
@@ -4448,19 +4448,19 @@ msgstr ""
 msgid "How did you corrupt the generator path?"
 msgstr ""
 
-#: judge/utils/problems.py:69
+#: judge/utils/problems.py:106
 msgid "Partial"
 msgstr ""
 
-#: judge/utils/problems.py:70
+#: judge/utils/problems.py:107
 msgid "Wrong"
 msgstr ""
 
-#: judge/utils/problems.py:72
+#: judge/utils/problems.py:109
 msgid "Timeout"
 msgstr ""
 
-#: judge/utils/problems.py:73
+#: judge/utils/problems.py:110
 msgid "Error"
 msgstr ""
 
@@ -4537,14 +4537,14 @@ msgstr ""
 msgid "Creating new blog post"
 msgstr ""
 
-#: judge/views/blog.py:380 judge/views/contests.py:1740
+#: judge/views/blog.py:380 judge/views/contests.py:1747
 #: judge/views/organization.py:472 judge/views/organization.py:996
-#: judge/views/organization.py:1020 judge/views/problem.py:992
+#: judge/views/organization.py:1020 judge/views/problem.py:1032
 msgid "Created on site"
 msgstr ""
 
-#: judge/views/blog.py:394 judge/views/blog.py:433 judge/views/contests.py:357
-#: judge/views/contests.py:1751
+#: judge/views/blog.py:394 judge/views/blog.py:433 judge/views/contests.py:358
+#: judge/views/contests.py:1758
 msgid "Permission denied"
 msgstr ""
 
@@ -4560,8 +4560,8 @@ msgid "Updating blog post"
 msgstr ""
 
 #: judge/views/blog.py:427 judge/views/comment.py:149
-#: judge/views/contests.py:1811 judge/views/organization.py:521
-#: judge/views/problem.py:1178
+#: judge/views/contests.py:1818 judge/views/organization.py:521
+#: judge/views/problem.py:1218
 msgid "Edited from site"
 msgstr ""
 
@@ -4589,234 +4589,234 @@ msgstr ""
 msgid "Editing comment"
 msgstr ""
 
-#: judge/views/contests.py:75 judge/views/contests.py:347
-#: judge/views/contests.py:350 judge/views/contests.py:819
+#: judge/views/contests.py:76 judge/views/contests.py:348
+#: judge/views/contests.py:351 judge/views/contests.py:826
 msgid "No such contest"
 msgstr ""
 
-#: judge/views/contests.py:76 judge/views/contests.py:348
+#: judge/views/contests.py:77 judge/views/contests.py:349
 #, python-format
 msgid "Could not find a contest with the key \"%s\"."
 msgstr ""
 
-#: judge/views/contests.py:107 templates/base.html:292
+#: judge/views/contests.py:108 templates/base.html:292
 #: templates/problem/problem.html:423
 msgid "Contests"
 msgstr ""
 
-#: judge/views/contests.py:351
+#: judge/views/contests.py:352
 msgid "Could not find such contest."
 msgstr ""
 
-#: judge/views/contests.py:354
+#: judge/views/contests.py:355
 #, python-format
 msgid "Access to contest \"%s\" denied"
 msgstr ""
 
-#: judge/views/contests.py:375
+#: judge/views/contests.py:376
 msgid "You must agree to the terms to continue."
 msgstr ""
 
-#: judge/views/contests.py:379
+#: judge/views/contests.py:380
 msgid "Wrong access code."
 msgstr ""
 
-#: judge/views/contests.py:593
+#: judge/views/contests.py:600
 msgid "Clone Contest"
 msgstr ""
 
-#: judge/views/contests.py:597
+#: judge/views/contests.py:604
 msgid "You are not allowed to clone contests."
 msgstr ""
 
-#: judge/views/contests.py:602 judge/views/contests.py:649
-#: judge/views/contests.py:1762 judge/views/contests.py:1843
+#: judge/views/contests.py:609 judge/views/contests.py:656
+#: judge/views/contests.py:1769 judge/views/contests.py:1850
 msgid "You are not allowed to edit this contest."
 msgstr ""
 
-#: judge/views/contests.py:636
+#: judge/views/contests.py:643
 #, python-format
 msgid "Cloned contest from %s"
 msgstr ""
 
-#: judge/views/contests.py:642
+#: judge/views/contests.py:649
 msgid "Create contest announcement"
 msgstr ""
 
-#: judge/views/contests.py:663
+#: judge/views/contests.py:670
 msgid "I agree to the terms and conditions"
 msgstr ""
 
-#: judge/views/contests.py:682 judge/views/contests.py:693
-#: judge/views/contests.py:697
+#: judge/views/contests.py:689 judge/views/contests.py:700
+#: judge/views/contests.py:704
 msgid "Cannot register"
 msgstr ""
 
-#: judge/views/contests.py:683
+#: judge/views/contests.py:690
 msgid "You cannot register for this contest."
 msgstr ""
 
-#: judge/views/contests.py:688 judge/views/contests.py:742
+#: judge/views/contests.py:695 judge/views/contests.py:749
 msgid "Banned from joining"
 msgstr ""
 
-#: judge/views/contests.py:689 judge/views/contests.py:743
+#: judge/views/contests.py:696 judge/views/contests.py:750
 msgid ""
 "You have been declared persona non grata for this contest. You are "
 "permanently barred from joining this contest."
 msgstr ""
 
-#: judge/views/contests.py:694
+#: judge/views/contests.py:701
 msgid "Registration is not required for this contest."
 msgstr ""
 
-#: judge/views/contests.py:698
+#: judge/views/contests.py:705
 msgid "You cannot register for this contest now."
 msgstr ""
 
-#: judge/views/contests.py:701
+#: judge/views/contests.py:708
 msgid "Contest has ended"
 msgstr ""
 
-#: judge/views/contests.py:702
+#: judge/views/contests.py:709
 #, python-format
 msgid "\"%s\" has ended."
 msgstr ""
 
-#: judge/views/contests.py:714 templates/contest/list.html:206
+#: judge/views/contests.py:721 templates/contest/list.html:206
 msgid "Already registered"
 msgstr ""
 
-#: judge/views/contests.py:715
+#: judge/views/contests.py:722
 msgid "You have already registered for this contest."
 msgstr ""
 
-#: judge/views/contests.py:736
+#: judge/views/contests.py:743
 msgid "Contest not ongoing"
 msgstr ""
 
-#: judge/views/contests.py:737
+#: judge/views/contests.py:744
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr ""
 
-#: judge/views/contests.py:756
+#: judge/views/contests.py:763
 msgid "Virtual joining not allowed"
 msgstr ""
 
-#: judge/views/contests.py:757
+#: judge/views/contests.py:764
 msgid "Virtual joining is not allowed for this contest."
 msgstr ""
 
-#: judge/views/contests.py:781
+#: judge/views/contests.py:788
 msgid "Not registered"
 msgstr ""
 
-#: judge/views/contests.py:782
+#: judge/views/contests.py:789
 msgid "You are not registered for this contest."
 msgstr ""
 
-#: judge/views/contests.py:820
+#: judge/views/contests.py:827
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr ""
 
-#: judge/views/contests.py:878
+#: judge/views/contests.py:885
 #, python-format
 msgid "Contests in %(month)s"
 msgstr ""
 
-#: judge/views/contests.py:878
+#: judge/views/contests.py:885
 msgid "F Y"
 msgstr ""
 
-#: judge/views/contests.py:936
+#: judge/views/contests.py:943
 #, python-format
 msgid "%s Statistics"
 msgstr ""
 
-#: judge/views/contests.py:1214
+#: judge/views/contests.py:1221
 #, python-format
 msgid "%s Rankings"
 msgstr ""
 
-#: judge/views/contests.py:1414
+#: judge/views/contests.py:1421
 msgid "Ranking access code required"
 msgstr ""
 
-#: judge/views/contests.py:1415
+#: judge/views/contests.py:1422
 msgid "You need to provide a valid ranking access code to access this page."
 msgstr ""
 
-#: judge/views/contests.py:1426
+#: judge/views/contests.py:1433
 #, python-format
 msgid "%s Official Rankings"
 msgstr ""
 
-#: judge/views/contests.py:1628
+#: judge/views/contests.py:1635
 msgid "You are not allowed to run MOSS."
 msgstr ""
 
-#: judge/views/contests.py:1641
+#: judge/views/contests.py:1648
 #, python-format
 msgid "%s MOSS Results"
 msgstr ""
 
-#: judge/views/contests.py:1668
+#: judge/views/contests.py:1675
 #, python-format
 msgid "Running MOSS for %s..."
 msgstr ""
 
-#: judge/views/contests.py:1690
+#: judge/views/contests.py:1697
 #, python-format
 msgid "Contest tag: %s"
 msgstr ""
 
-#: judge/views/contests.py:1698
+#: judge/views/contests.py:1705
 msgid "You are not allowed to create contests."
 msgstr ""
 
-#: judge/views/contests.py:1706 judge/views/contests.py:1709
+#: judge/views/contests.py:1713 judge/views/contests.py:1716
 #: templates/organization/tabs.html:32
 msgid "Create new contest"
 msgstr ""
 
-#: judge/views/contests.py:1774
+#: judge/views/contests.py:1781
 #, python-brace-format
 msgid "Editing contest {0}"
 msgstr ""
 
-#: judge/views/contests.py:1777
+#: judge/views/contests.py:1784
 #, python-format
 msgid "Editing contest %s"
 msgstr ""
 
-#: judge/views/contests.py:1826
+#: judge/views/contests.py:1833
 msgid "You are not allowed to delete this contest."
 msgstr ""
 
-#: judge/views/contests.py:1828
+#: judge/views/contests.py:1835
 msgid "Rated contests cannot be deleted."
 msgstr ""
 
-#: judge/views/contests.py:1845
+#: judge/views/contests.py:1852
 msgid "Please wait until the contest has ended to download data."
 msgstr ""
 
-#: judge/views/contests.py:1850
+#: judge/views/contests.py:1857
 msgid "Download contest data"
 msgstr ""
 
-#: judge/views/contests.py:1883
+#: judge/views/contests.py:1890
 #, python-format
 msgid "Preparing data for %s..."
 msgstr ""
 
-#: judge/views/contests.py:1949
+#: judge/views/contests.py:1956
 msgid "You do not have permission to edit this contest."
 msgstr ""
 
-#: judge/views/contests.py:1963
+#: judge/views/contests.py:1970
 msgid "You do not have permission to edit this problem."
 msgstr ""
 
@@ -5257,141 +5257,151 @@ msgstr ""
 msgid "Could not restore %s from the archive. Please try again later."
 msgstr ""
 
-#: judge/views/problem.py:95
+#: judge/views/problem.py:102
 msgid "No such problem"
 msgstr ""
 
-#: judge/views/problem.py:96
+#: judge/views/problem.py:103
 #, python-format
 msgid "Could not find a problem with the code \"%s\"."
 msgstr ""
 
-#: judge/views/problem.py:138 judge/views/problem.py:141
+#: judge/views/problem.py:145 judge/views/problem.py:148
 #, python-brace-format
 msgid "Editorial for {0}"
 msgstr ""
 
-#: judge/views/problem.py:157
+#: judge/views/problem.py:164
 msgid "No such editorial"
 msgstr ""
 
-#: judge/views/problem.py:158
+#: judge/views/problem.py:165
 #, python-format
 msgid "Could not find an editorial with the code \"%s\"."
 msgstr ""
 
-#: judge/views/problem.py:367
+#: judge/views/problem.py:168
+msgid "Editorial unavailable"
+msgstr ""
+
+#: judge/views/problem.py:169
+msgid ""
+"You cannot view the editorial because you are currently participating in a "
+"contest containing this problem. Please attempt the problem on your own."
+msgstr ""
+
+#: judge/views/problem.py:398
 msgid "You submitted too many submissions."
 msgstr ""
 
-#: judge/views/problem.py:373
+#: judge/views/problem.py:404
 msgid "Banned from submitting"
 msgstr ""
 
-#: judge/views/problem.py:374
+#: judge/views/problem.py:405
 msgid ""
 "You have been declared persona non grata for this problem. You are "
 "permanently barred from submitting to this problem."
 msgstr ""
 
-#: judge/views/problem.py:379
+#: judge/views/problem.py:410
 msgid "Too many submissions"
 msgstr ""
 
-#: judge/views/problem.py:380
+#: judge/views/problem.py:411
 msgid "You have exceeded the submission limit for this problem."
 msgstr ""
 
-#: judge/views/problem.py:403
+#: judge/views/problem.py:434
 msgid "No credit"
 msgstr ""
 
-#: judge/views/problem.py:405
+#: judge/views/problem.py:436
 #, python-format
 msgid ""
 "The organization %s has no credit left to execute this submission. Ask the "
 "organization to buy more credit."
 msgstr ""
 
-#: judge/views/problem.py:638
+#: judge/views/problem.py:675
 msgid "Problem list"
 msgstr ""
 
-#: judge/views/problem.py:861 judge/views/problem.py:869
+#: judge/views/problem.py:901 judge/views/problem.py:909
 #, python-format
 msgid "Submit to %s"
 msgstr ""
 
-#: judge/views/problem.py:901
+#: judge/views/problem.py:941
 msgid "You are not allowed to submit to this problem."
 msgstr ""
 
-#: judge/views/problem.py:922
+#: judge/views/problem.py:962
 msgid "Clone Problem"
 msgstr ""
 
-#: judge/views/problem.py:950
+#: judge/views/problem.py:990
 #, python-format
 msgid "Cloned problem from %s"
 msgstr ""
 
-#: judge/views/problem.py:973 judge/views/problem.py:976
+#: judge/views/problem.py:1013 judge/views/problem.py:1016
 msgid "Creating new problem"
 msgstr ""
 
-#: judge/views/problem.py:1015 templates/problem/create.html:20
+#: judge/views/problem.py:1055 templates/problem/create.html:20
 msgid "Import problem from Codeforces Polygon package"
 msgstr ""
 
-#: judge/views/problem.py:1056 judge/views/problem.py:1087
+#: judge/views/problem.py:1096 judge/views/problem.py:1127
 #, python-format
 msgid "Importing problem %s..."
 msgstr ""
 
-#: judge/views/problem.py:1064
+#: judge/views/problem.py:1104
 msgid "Please upload a package or enter a problem ID."
 msgstr ""
 
-#: judge/views/problem.py:1095 templates/problem/editor.html:226
+#: judge/views/problem.py:1135 templates/problem/editor.html:226
 msgid "Update problem from Codeforces Polygon package"
 msgstr ""
 
-#: judge/views/problem.py:1119 judge/views/problem.py:1200
+#: judge/views/problem.py:1159 judge/views/problem.py:1240
 #, python-brace-format
 msgid "Editing problem {0}"
 msgstr ""
 
-#: judge/views/problem.py:1122
+#: judge/views/problem.py:1162
 #, python-format
 msgid "Editing problem %s"
 msgstr ""
 
-#: judge/views/problem.py:1189
+#: judge/views/problem.py:1229
 msgid "Can't edit problem"
 msgstr ""
 
-#: judge/views/problem.py:1190
+#: judge/views/problem.py:1230
 msgid "You are not allowed to edit this problem."
 msgstr ""
 
-#: judge/views/problem.py:1210
+#: judge/views/problem.py:1250
 msgid "Edited types/group from site"
 msgstr ""
 
-#: judge/views/problem.py:1228
+#: judge/views/problem.py:1268
 #, python-format
 msgid "Delete problem %s"
 msgstr ""
 
-#: judge/views/problem.py:1243
+#: judge/views/problem.py:1283
 msgid "Marked as deleted"
 msgstr ""
 
-#: judge/views/problem.py:1251
+#: judge/views/problem.py:1291
 msgid "Can't delete problem"
 msgstr ""
 
-#: judge/views/problem.py:1252
+#: judge/views/problem.py:1292
 msgid "You are not allowed to delete this problem."
 msgstr ""
 

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-21 07:49+0000\n"
+"POT-Creation-Date: 2026-11-22 02:57+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -3721,7 +3721,7 @@ msgid "judge"
 msgstr "máy chấm"
 
 #: judge/models/submission.py:22 judge/models/submission.py:57
-#: judge/utils/problems.py:68
+#: judge/utils/problems.py:105
 msgid "Accepted"
 msgstr "Kết quả đúng (AC)"
 
@@ -3755,7 +3755,7 @@ msgid "Runtime Error"
 msgstr "Lỗi Runtime (RE)"
 
 #: judge/models/submission.py:30 judge/models/submission.py:42
-#: judge/models/submission.py:66 judge/utils/problems.py:71
+#: judge/models/submission.py:66 judge/utils/problems.py:108
 msgid "Compile Error"
 msgstr "Lỗi dịch (CE)"
 
@@ -4572,19 +4572,19 @@ msgstr "Bạn đã làm hỏng đường dẫn zip như thế nào?"
 msgid "How did you corrupt the generator path?"
 msgstr "Bạn đã làm hỏng đường dẫn generator như thế nào?"
 
-#: judge/utils/problems.py:69
+#: judge/utils/problems.py:106
 msgid "Partial"
 msgstr "Một phần"
 
-#: judge/utils/problems.py:70
+#: judge/utils/problems.py:107
 msgid "Wrong"
 msgstr "Sai"
 
-#: judge/utils/problems.py:72
+#: judge/utils/problems.py:109
 msgid "Timeout"
 msgstr "Quá thời gian"
 
-#: judge/utils/problems.py:73
+#: judge/utils/problems.py:110
 msgid "Error"
 msgstr "Lỗi"
 
@@ -4661,14 +4661,14 @@ msgstr "Blog"
 msgid "Creating new blog post"
 msgstr "Tạo blog mới"
 
-#: judge/views/blog.py:380 judge/views/contests.py:1740
+#: judge/views/blog.py:380 judge/views/contests.py:1747
 #: judge/views/organization.py:472 judge/views/organization.py:996
-#: judge/views/organization.py:1020 judge/views/problem.py:992
+#: judge/views/organization.py:1020 judge/views/problem.py:1032
 msgid "Created on site"
 msgstr "Tạo trên trang web"
 
-#: judge/views/blog.py:394 judge/views/blog.py:433 judge/views/contests.py:357
-#: judge/views/contests.py:1751
+#: judge/views/blog.py:394 judge/views/blog.py:433 judge/views/contests.py:358
+#: judge/views/contests.py:1758
 msgid "Permission denied"
 msgstr "Từ chối quyền"
 
@@ -4686,8 +4686,8 @@ msgid "Updating blog post"
 msgstr "Cập nhật blog"
 
 #: judge/views/blog.py:427 judge/views/comment.py:149
-#: judge/views/contests.py:1811 judge/views/organization.py:521
-#: judge/views/problem.py:1178
+#: judge/views/contests.py:1818 judge/views/organization.py:521
+#: judge/views/problem.py:1218
 msgid "Edited from site"
 msgstr "Chỉnh sửa từ trang web"
 
@@ -4715,78 +4715,78 @@ msgstr "Bạn không thể tự đánh giá bình luận của mình."
 msgid "Editing comment"
 msgstr "Đang chỉnh sửa bình luận"
 
-#: judge/views/contests.py:75 judge/views/contests.py:347
-#: judge/views/contests.py:350 judge/views/contests.py:819
+#: judge/views/contests.py:76 judge/views/contests.py:348
+#: judge/views/contests.py:351 judge/views/contests.py:826
 msgid "No such contest"
 msgstr "Kỳ thi không tồn tại"
 
-#: judge/views/contests.py:76 judge/views/contests.py:348
+#: judge/views/contests.py:77 judge/views/contests.py:349
 #, python-format
 msgid "Could not find a contest with the key \"%s\"."
 msgstr "Không thể tìm thấy kỳ thi với khóa \"%s\"."
 
-#: judge/views/contests.py:107 templates/base.html:292
+#: judge/views/contests.py:108 templates/base.html:292
 #: templates/problem/problem.html:423
 msgid "Contests"
 msgstr "Các kỳ thi"
 
-#: judge/views/contests.py:351
+#: judge/views/contests.py:352
 msgid "Could not find such contest."
 msgstr "Không thể tìm thấy kỳ thi nào."
 
-#: judge/views/contests.py:354
+#: judge/views/contests.py:355
 #, python-format
 msgid "Access to contest \"%s\" denied"
 msgstr "Bị từ chối truy cập vào kỳ thi \"%s\""
 
-#: judge/views/contests.py:375
+#: judge/views/contests.py:376
 msgid "You must agree to the terms to continue."
 msgstr "Bạn phải đồng ý với điều khoản để tiếp tục."
 
-#: judge/views/contests.py:379
+#: judge/views/contests.py:380
 msgid "Wrong access code."
 msgstr "Mã truy cập không đúng."
 
-#: judge/views/contests.py:593
+#: judge/views/contests.py:600
 msgid "Clone Contest"
 msgstr "Nhân bản kỳ thi"
 
-#: judge/views/contests.py:597
+#: judge/views/contests.py:604
 msgid "You are not allowed to clone contests."
 msgstr "Bạn không có quyền nhân bản kỳ thi."
 
-#: judge/views/contests.py:602 judge/views/contests.py:649
-#: judge/views/contests.py:1762 judge/views/contests.py:1843
+#: judge/views/contests.py:609 judge/views/contests.py:656
+#: judge/views/contests.py:1769 judge/views/contests.py:1850
 msgid "You are not allowed to edit this contest."
 msgstr "Bạn không có quyền chỉnh sửa kỳ thi này."
 
-#: judge/views/contests.py:636
+#: judge/views/contests.py:643
 #, python-format
 msgid "Cloned contest from %s"
 msgstr "Nhân bản từ kỳ thi %s"
 
-#: judge/views/contests.py:642
+#: judge/views/contests.py:649
 msgid "Create contest announcement"
 msgstr "Tạo thông báo kỳ thi"
 
-#: judge/views/contests.py:663
+#: judge/views/contests.py:670
 msgid "I agree to the terms and conditions"
 msgstr "Tôi đồng ý với các điều khoản và điều kiện"
 
-#: judge/views/contests.py:682 judge/views/contests.py:693
-#: judge/views/contests.py:697
+#: judge/views/contests.py:689 judge/views/contests.py:700
+#: judge/views/contests.py:704
 msgid "Cannot register"
 msgstr "Không thể đăng ký"
 
-#: judge/views/contests.py:683
+#: judge/views/contests.py:690
 msgid "You cannot register for this contest."
 msgstr "Bạn không thể đăng ký kỳ thi này."
 
-#: judge/views/contests.py:688 judge/views/contests.py:742
+#: judge/views/contests.py:695 judge/views/contests.py:749
 msgid "Banned from joining"
 msgstr "Bị cấm tham gia"
 
-#: judge/views/contests.py:689 judge/views/contests.py:743
+#: judge/views/contests.py:696 judge/views/contests.py:750
 msgid ""
 "You have been declared persona non grata for this contest. You are "
 "permanently barred from joining this contest."
@@ -4794,158 +4794,158 @@ msgstr ""
 "Bạn đã bị cấm tham gia kỳ thi này. Bạn vĩnh viễn không thể tham gia kỳ thi "
 "này."
 
-#: judge/views/contests.py:694
+#: judge/views/contests.py:701
 msgid "Registration is not required for this contest."
 msgstr "Kỳ thi này không yêu cầu đăng ký."
 
-#: judge/views/contests.py:698
+#: judge/views/contests.py:705
 msgid "You cannot register for this contest now."
 msgstr "Bạn không thể đăng ký kỳ thi này lúc này."
 
-#: judge/views/contests.py:701
+#: judge/views/contests.py:708
 msgid "Contest has ended"
 msgstr "Kỳ thi đã kết thúc"
 
-#: judge/views/contests.py:702
+#: judge/views/contests.py:709
 #, python-format
 msgid "\"%s\" has ended."
 msgstr "\"%s\" đã kết thúc."
 
-#: judge/views/contests.py:714 templates/contest/list.html:206
+#: judge/views/contests.py:721 templates/contest/list.html:206
 msgid "Already registered"
 msgstr "Đã đăng ký"
 
-#: judge/views/contests.py:715
+#: judge/views/contests.py:722
 msgid "You have already registered for this contest."
 msgstr "Bạn đã đăng ký kỳ thi này rồi."
 
-#: judge/views/contests.py:736
+#: judge/views/contests.py:743
 msgid "Contest not ongoing"
 msgstr "Kỳ thi đang không diễn ra"
 
-#: judge/views/contests.py:737
+#: judge/views/contests.py:744
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr "\"%s\" đang không diễn ra."
 
-#: judge/views/contests.py:756
+#: judge/views/contests.py:763
 msgid "Virtual joining not allowed"
 msgstr "Không được phép tham gia ảo"
 
-#: judge/views/contests.py:757
+#: judge/views/contests.py:764
 msgid "Virtual joining is not allowed for this contest."
 msgstr "Kỳ thi này không cho phép tham gia ảo."
 
-#: judge/views/contests.py:781
+#: judge/views/contests.py:788
 msgid "Not registered"
 msgstr "Chưa đăng ký"
 
-#: judge/views/contests.py:782
+#: judge/views/contests.py:789
 msgid "You are not registered for this contest."
 msgstr "Bạn chưa đăng ký kỳ thi này."
 
-#: judge/views/contests.py:820
+#: judge/views/contests.py:827
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr "Bạn đang không tham gia kỳ thi \"%s\"."
 
-#: judge/views/contests.py:878
+#: judge/views/contests.py:885
 #, python-format
 msgid "Contests in %(month)s"
 msgstr "Các kỳ thi trong %(month)s"
 
-#: judge/views/contests.py:878
+#: judge/views/contests.py:885
 msgid "F Y"
 msgstr "F Y"
 
-#: judge/views/contests.py:936
+#: judge/views/contests.py:943
 #, python-format
 msgid "%s Statistics"
 msgstr "Thống kê %s"
 
-#: judge/views/contests.py:1214
+#: judge/views/contests.py:1221
 #, python-format
 msgid "%s Rankings"
 msgstr "Bảng xếp hạng của %s"
 
-#: judge/views/contests.py:1414
+#: judge/views/contests.py:1421
 msgid "Ranking access code required"
 msgstr "Cần mã truy cập bảng xếp hạng"
 
-#: judge/views/contests.py:1415
+#: judge/views/contests.py:1422
 msgid "You need to provide a valid ranking access code to access this page."
 msgstr ""
 "Bạn cần cung cấp mã truy cập bảng xếp hạng hợp lệ để truy cập trang này."
 
-#: judge/views/contests.py:1426
+#: judge/views/contests.py:1433
 #, python-format
 msgid "%s Official Rankings"
 msgstr "Bảng xếp hạng chính thức của %s"
 
-#: judge/views/contests.py:1628
+#: judge/views/contests.py:1635
 msgid "You are not allowed to run MOSS."
 msgstr "Bạn không có quyền chạy MOSS."
 
-#: judge/views/contests.py:1641
+#: judge/views/contests.py:1648
 #, python-format
 msgid "%s MOSS Results"
 msgstr "Kết quả MOSS %s"
 
-#: judge/views/contests.py:1668
+#: judge/views/contests.py:1675
 #, python-format
 msgid "Running MOSS for %s..."
 msgstr "Đang chạy MOSS cho %s..."
 
-#: judge/views/contests.py:1690
+#: judge/views/contests.py:1697
 #, python-format
 msgid "Contest tag: %s"
 msgstr "Thẻ kỳ thi %s"
 
-#: judge/views/contests.py:1698
+#: judge/views/contests.py:1705
 msgid "You are not allowed to create contests."
 msgstr "Bạn không có quyền tạo kỳ thi mới."
 
-#: judge/views/contests.py:1706 judge/views/contests.py:1709
+#: judge/views/contests.py:1713 judge/views/contests.py:1716
 #: templates/organization/tabs.html:32
 msgid "Create new contest"
 msgstr "Tạo kỳ thi mới"
 
-#: judge/views/contests.py:1774
+#: judge/views/contests.py:1781
 #, python-brace-format
 msgid "Editing contest {0}"
 msgstr "Sửa kỳ thi {0}"
 
-#: judge/views/contests.py:1777
+#: judge/views/contests.py:1784
 #, python-format
 msgid "Editing contest %s"
 msgstr "Sửa kỳ thi %s"
 
-#: judge/views/contests.py:1826
+#: judge/views/contests.py:1833
 msgid "You are not allowed to delete this contest."
 msgstr "Bạn không có quyền xóa kỳ thi này."
 
-#: judge/views/contests.py:1828
+#: judge/views/contests.py:1835
 msgid "Rated contests cannot be deleted."
 msgstr "Không thể xóa kỳ thi đã tính rating."
 
-#: judge/views/contests.py:1845
+#: judge/views/contests.py:1852
 msgid "Please wait until the contest has ended to download data."
 msgstr "Vui lòng đợi sau khi kỳ thi kết thúc để tải dữ liệu."
 
-#: judge/views/contests.py:1850
+#: judge/views/contests.py:1857
 msgid "Download contest data"
 msgstr "Tải dữ liệu kỳ thi"
 
-#: judge/views/contests.py:1883
+#: judge/views/contests.py:1890
 #, python-format
 msgid "Preparing data for %s..."
 msgstr "Chuẩn bị dữ liệu cho %s..."
 
-#: judge/views/contests.py:1949
+#: judge/views/contests.py:1956
 msgid "You do not have permission to edit this contest."
 msgstr "Bạn không có quyền chỉnh sửa kỳ thi này."
 
-#: judge/views/contests.py:1963
+#: judge/views/contests.py:1970
 msgid "You do not have permission to edit this problem."
 msgstr "Bạn không có quyền chỉnh sửa bài tập này."
 
@@ -5389,38 +5389,50 @@ msgstr "%s đã được khôi phục từ kho lưu trữ."
 msgid "Could not restore %s from the archive. Please try again later."
 msgstr "Không thể khôi phục %s từ kho lưu trữ. Vui lòng thử lại sau."
 
-#: judge/views/problem.py:95
+#: judge/views/problem.py:102
 msgid "No such problem"
 msgstr "Không có bài"
 
-#: judge/views/problem.py:96
+#: judge/views/problem.py:103
 #, python-format
 msgid "Could not find a problem with the code \"%s\"."
 msgstr "Không thể tìm thấy bài với mã đề \"%s\"."
 
-#: judge/views/problem.py:138 judge/views/problem.py:141
+#: judge/views/problem.py:145 judge/views/problem.py:148
 #, python-brace-format
 msgid "Editorial for {0}"
 msgstr "Hướng dẫn giải của {0}"
 
-#: judge/views/problem.py:157
+#: judge/views/problem.py:164
 msgid "No such editorial"
 msgstr "Không có lời giải"
 
-#: judge/views/problem.py:158
+#: judge/views/problem.py:165
 #, python-format
 msgid "Could not find an editorial with the code \"%s\"."
 msgstr "Không thể tìm thấy lời giải của bài tập \"%s\"."
 
-#: judge/views/problem.py:367
+#: judge/views/problem.py:168
+msgid "Editorial unavailable"
+msgstr "Không thể xem lời giải"
+
+#: judge/views/problem.py:169
+msgid ""
+"You cannot view the editorial because you are currently participating in a "
+"contest containing this problem. Please attempt the problem on your own."
+msgstr ""
+"Bạn không thể xem lời giải vì đang tham gia kỳ thi chứa bài tập này. Vui "
+"lòng tự hoàn thành bài làm."
+
+#: judge/views/problem.py:398
 msgid "You submitted too many submissions."
 msgstr "Bạn đã nộp bài quá nhiều lần."
 
-#: judge/views/problem.py:373
+#: judge/views/problem.py:404
 msgid "Banned from submitting"
 msgstr "Bị cấm nộp bài"
 
-#: judge/views/problem.py:374
+#: judge/views/problem.py:405
 msgid ""
 "You have been declared persona non grata for this problem. You are "
 "permanently barred from submitting to this problem."
@@ -5428,19 +5440,19 @@ msgstr ""
 "Bạn đã bị cấm nộp bài tập này. Bạn vĩnh viễn không thể nộp bài cho bài tập "
 "này."
 
-#: judge/views/problem.py:379
+#: judge/views/problem.py:410
 msgid "Too many submissions"
 msgstr "Quá nhiều bài nộp"
 
-#: judge/views/problem.py:380
+#: judge/views/problem.py:411
 msgid "You have exceeded the submission limit for this problem."
 msgstr "Bạn đã vượt quá giới hạn lần nộp của bài này."
 
-#: judge/views/problem.py:403
+#: judge/views/problem.py:434
 msgid "No credit"
 msgstr "Không có credit"
 
-#: judge/views/problem.py:405
+#: judge/views/problem.py:436
 #, python-format
 msgid ""
 "The organization %s has no credit left to execute this submission. Ask the "
@@ -5449,85 +5461,85 @@ msgstr ""
 "Tổ chức %s không còn credit để thực hiện bài nộp này. Hãy yêu cầu tổ chức "
 "mua thêm credit."
 
-#: judge/views/problem.py:638
+#: judge/views/problem.py:675
 msgid "Problem list"
 msgstr "Danh sách bài"
 
-#: judge/views/problem.py:861 judge/views/problem.py:869
+#: judge/views/problem.py:901 judge/views/problem.py:909
 #, python-format
 msgid "Submit to %s"
 msgstr "Nộp bài %s"
 
-#: judge/views/problem.py:901
+#: judge/views/problem.py:941
 msgid "You are not allowed to submit to this problem."
 msgstr "Bạn không có quyền nộp bài này."
 
-#: judge/views/problem.py:922
+#: judge/views/problem.py:962
 msgid "Clone Problem"
 msgstr "Nhân bản bài tập"
 
-#: judge/views/problem.py:950
+#: judge/views/problem.py:990
 #, python-format
 msgid "Cloned problem from %s"
 msgstr "Nhân bản từ bài %s"
 
-#: judge/views/problem.py:973 judge/views/problem.py:976
+#: judge/views/problem.py:1013 judge/views/problem.py:1016
 msgid "Creating new problem"
 msgstr "Tạo bài tập mới"
 
-#: judge/views/problem.py:1015 templates/problem/create.html:20
+#: judge/views/problem.py:1055 templates/problem/create.html:20
 msgid "Import problem from Codeforces Polygon package"
 msgstr "Nhập bài từ gói Codeforces Polygon"
 
-#: judge/views/problem.py:1056 judge/views/problem.py:1087
+#: judge/views/problem.py:1096 judge/views/problem.py:1127
 #, python-format
 msgid "Importing problem %s..."
 msgstr "Đang nhập bài %s..."
 
-#: judge/views/problem.py:1064
+#: judge/views/problem.py:1104
 msgid "Please upload a package or enter a problem ID."
 msgstr "Vui lòng tải lên một gói hoặc nhập ID của bài"
 
-#: judge/views/problem.py:1095 templates/problem/editor.html:226
+#: judge/views/problem.py:1135 templates/problem/editor.html:226
 msgid "Update problem from Codeforces Polygon package"
 msgstr "Cập nhật bài từ gói Codeforces Polygon"
 
-#: judge/views/problem.py:1119 judge/views/problem.py:1200
+#: judge/views/problem.py:1159 judge/views/problem.py:1240
 #, python-brace-format
 msgid "Editing problem {0}"
 msgstr "Sửa đề bài {0}"
 
-#: judge/views/problem.py:1122
+#: judge/views/problem.py:1162
 #, python-format
 msgid "Editing problem %s"
 msgstr "Sửa đề bài %s"
 
-#: judge/views/problem.py:1189
+#: judge/views/problem.py:1229
 msgid "Can't edit problem"
 msgstr "Không thể sửa bài"
 
-#: judge/views/problem.py:1190
+#: judge/views/problem.py:1230
 msgid "You are not allowed to edit this problem."
 msgstr "Bạn không có quyền chỉnh sửa bài tập này."
 
-#: judge/views/problem.py:1210
+#: judge/views/problem.py:1250
 msgid "Edited types/group from site"
 msgstr "Đã chỉnh sửa loại/nhóm từ trang web"
 
-#: judge/views/problem.py:1228
+#: judge/views/problem.py:1268
 #, python-format
 msgid "Delete problem %s"
 msgstr "Xoá bài %s"
 
-#: judge/views/problem.py:1243
+#: judge/views/problem.py:1283
 msgid "Marked as deleted"
 msgstr "Đã đánh dấu là đã xóa"
 
-#: judge/views/problem.py:1251
+#: judge/views/problem.py:1291
 msgid "Can't delete problem"
 msgstr "Không thể xoá bài"
 
-#: judge/views/problem.py:1252
+#: judge/views/problem.py:1292
 msgid "You are not allowed to delete this problem."
 msgstr "Bạn không được phép xoá bài tập này."
 

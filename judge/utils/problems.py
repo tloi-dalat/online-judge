@@ -8,9 +8,46 @@ from django.db.models.fields import FloatField
 from django.utils import timezone
 from django.utils.translation import gettext_noop
 
-from judge.models import ContestSubmission, Problem, Submission, SubmissionTestCase
+from judge.models import ContestParticipation, ContestProblem, ContestSubmission, Problem, Submission, \
+    SubmissionTestCase
 
-__all__ = ['contest_completed_ids', 'get_result_data', 'user_completed_ids', 'user_editable_ids', 'user_tester_ids']
+__all__ = [
+    'blocked_editorial_problem_ids', 'contest_completed_ids', 'get_result_data', 'is_editorial_blocked_by_contest',
+    'user_completed_ids', 'user_editable_ids', 'user_tester_ids',
+]
+
+
+def blocked_editorial_contest_ids(profile):
+    if profile is None:
+        return ()
+    now = timezone.now()
+    contest_ids = {
+        participation.contest_id
+        for participation in ContestParticipation.objects.filter(
+            user=profile,
+            virtual=ContestParticipation.LIVE,
+            contest__start_time__lte=now,
+            contest__end_time__gte=now,
+        ).select_related('contest')
+        if not participation.pre_registered and not participation.ended
+    }
+    if profile.current_contest is not None:
+        contest_ids.add(profile.current_contest.contest_id)
+    return contest_ids
+
+
+def blocked_editorial_problem_ids(profile):
+    contest_ids = blocked_editorial_contest_ids(profile)
+    if not contest_ids:
+        return ()
+    return set(ContestProblem.objects.filter(contest_id__in=contest_ids).values_list('problem_id', flat=True))
+
+
+def is_editorial_blocked_by_contest(problem, profile):
+    contest_ids = blocked_editorial_contest_ids(profile)
+    if not contest_ids:
+        return False
+    return ContestProblem.objects.filter(problem=problem, contest_id__in=contest_ids).exists()
 
 
 def user_tester_ids(profile, problem_ids):

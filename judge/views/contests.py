@@ -53,7 +53,8 @@ from judge.utils.cms import parse_csv_ranking
 from judge.utils.infinite_paginator import InfinitePaginationMixin
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.pdfoid import PDF_RENDERING_ENABLED, get_contest_pdf_basename, render_pdf
-from judge.utils.problems import _get_result_data, user_attempted_ids, user_completed_ids
+from judge.utils.problems import _get_result_data, blocked_editorial_problem_ids, user_attempted_ids, \
+    user_completed_ids
 from judge.utils.raw_sql import use_straight_join
 from judge.utils.stats import get_bar_chart, get_pie_chart, get_stacked_bar_chart
 from judge.utils.views import SingleObjectFormView, TitleMixin, \
@@ -415,10 +416,16 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         for idx, p in enumerate(context['contest_problems']):
             p.points = points_list[idx][0]
 
+        blocked_problem_ids = blocked_editorial_problem_ids(
+            self.request.profile if self.request.user.is_authenticated else None,
+        )
+        context['blocked_editorial_problem_ids'] = blocked_problem_ids
+
         context['metadata'] = {
             'has_public_editorials': any(
-                problem.is_public and problem.has_public_editorial for problem in context['contest_problems']
-            ) if self.object.ended else False,
+                problem.is_public and problem.has_public_editorial and problem.id not in blocked_problem_ids
+                for problem in context['contest_problems']
+            ) if self.object.ended and not self.is_in_contest else False,
         }
         context['metadata'].update(
             **self.object.contest_problems

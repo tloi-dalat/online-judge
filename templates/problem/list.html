@@ -271,7 +271,7 @@
                             </td>
                         {% endif %}
                         <td>
-                            {% if problem.has_public_editorial %}
+                            {% if problem.has_public_editorial and problem.id not in blocked_editorial_problem_ids %}
                                 <a href="{{ url('problem_editorial', problem.code) }}">
                                     <i class="has-editorial-color fa fa-check-circle"></i>
                                 </a>
