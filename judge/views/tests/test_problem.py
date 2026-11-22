@@ -1,8 +1,17 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from judge.models import Judge, Language, Submission, SubmissionSource
-from judge.models.tests.util import CommonDataMixin, create_problem
+from judge.models.tests.util import (
+    CommonDataMixin,
+    create_contest,
+    create_contest_participation,
+    create_contest_problem,
+    create_problem,
+    create_solution,
+    create_user,
+)
 
 
 class ProblemSubmitLanguageMemoryTestCase(CommonDataMixin, TestCase):
@@ -146,3 +155,88 @@ class ProblemSubmitLanguageMemoryTestCase(CommonDataMixin, TestCase):
         # in problem_b.usable_languages
         self.assertContains(response, 'alert-warning')
         self.assertContains(response, '<b>Python 3</b>')
+
+
+class ProblemEditorialInContestTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        now = timezone.now()
+        cls.user = create_user(username='contestant')
+
+        cls.contest = create_contest(
+            key='contest_in',
+            start_time=now - timezone.timedelta(hours=1),
+            end_time=now + timezone.timedelta(hours=2),
+            is_visible=True,
+        )
+
+        cls.problem_in = create_problem(
+            code='prob_in',
+            is_public=True,
+        )
+        create_solution(
+            problem=cls.problem_in,
+            is_public=True,
+            publish_on=now - timezone.timedelta(days=1),
+            content='Editorial in contest',
+        )
+        create_contest_problem(
+            contest=cls.contest,
+            problem=cls.problem_in,
+            order=1,
+        )
+
+        cls.problem_in_no_sol = create_problem(
+            code='prob_in_no_sol',
+            is_public=True,
+        )
+        create_contest_problem(
+            contest=cls.contest,
+            problem=cls.problem_in_no_sol,
+            order=2,
+        )
+
+        cls.problem_out = create_problem(
+            code='prob_out',
+            is_public=True,
+        )
+        create_solution(
+            problem=cls.problem_out,
+            is_public=True,
+            publish_on=now - timezone.timedelta(days=1),
+            content='Editorial outside contest',
+        )
+
+        cls.participation = create_contest_participation(
+            contest=cls.contest,
+            user=cls.user.profile,
+            real_start=now - timezone.timedelta(minutes=30),
+        )
+        cls.user.profile.current_contest = cls.participation
+        cls.user.profile.save()
+
+    def test_user_in_contest_cannot_view_current_contest_editorial(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('problem_editorial', args=[self.problem_in.code]))
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.post(reverse('problem_editorial', args=[self.problem_in.code]), {'comment': 'test'})
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.get(reverse('problem_editorial', args=[self.problem_in_no_sol.code]))
+        self.assertEqual(response.status_code, 404)
+
+    def test_user_in_contest_can_view_outside_contest_editorial(self):
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('problem_editorial', args=[self.problem_out.code]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Editorial outside contest')
+
+    def test_user_leaving_live_contest_cannot_view_editorial(self):
+        self.client.force_login(self.user)
+        self.client.post(reverse('contest_leave', args=[self.contest.key]))
+        response = self.client.get(reverse('problem_editorial', args=[self.problem_in.code]))
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.get(reverse('problem_detail', args=[self.problem_in.code]))
+        self.assertNotContains(response, reverse('problem_editorial', args=[self.problem_in.code]))

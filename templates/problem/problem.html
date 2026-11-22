@@ -251,7 +251,7 @@
             <div><a href="{{ url('ranked_submissions', problem.code) }}">{{ _('Best submissions') }}</a></div>
         {% endif %}
     {% endif %}
-    {% if (editorial and editorial.is_accessible_by(request.user)) and not request.in_contest %}
+    {% if (editorial and editorial.is_accessible_by(request.user)) and not editorial_blocked %}
         <hr>
         <div><a href="{{ url('problem_editorial', problem.code) }}">{{ _('Read editorial') }}</a></div>
     {% endif %}
