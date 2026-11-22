@@ -108,22 +108,16 @@ def get_testcase_data(archive, case):
     }
 
 
+METADATA_VERSION = 2
+
+
 def _read_testcases_data(problem, archive):
     testcases_data = {}
-
-    # TODO:
-    # - Support manually managed problems
-    # - Support pretest
-    order = 0
-    for case in problem.cases.all().order_by('order'):
+    for case in problem.cases.filter(type='C').exclude(input_file=''):
         try:
-            if not case.input_file:
-                continue
-            order += 1
-            testcases_data[order] = get_testcase_data(archive, case)
+            testcases_data[case.id] = get_testcase_data(archive, case)
         except Exception:
             return {}
-
     return testcases_data
 
 
@@ -189,7 +183,8 @@ class ProblemDataStorage(Storage):
     def _build_metadata(self, problem):
         from judge.models import ProblemData
 
-        metadata = {'files': [], 'testcases': {}}
+        metadata = {'version': METADATA_VERSION, 'files': [], 'testcases': {},
+                    'pretests_in_test_cases': self._pretests_in_test_cases(problem)}
         try:
             data = problem.data_files
         except ProblemData.DoesNotExist:
@@ -205,6 +200,13 @@ class ProblemDataStorage(Storage):
             pass
         return metadata
 
+    def _pretests_in_test_cases(self, problem):
+        try:
+            with self.open(f'{problem.code}/init.yml') as f:
+                return bool((yaml.safe_load(f) or {}).get('pretests_in_test_cases'))
+        except Exception:
+            return False
+
     def _get_metadata_path(self, problem):
         metadata_dir = StorageManager.get_instance().metadata_dir
         if not metadata_dir:
@@ -219,6 +221,8 @@ class ProblemDataStorage(Storage):
         try:
             with open(path) as f:
                 metadata = json.load(f)
+            if metadata.get('version') != METADATA_VERSION:
+                raise ValueError('outdated metadata')
             # we expect integers as testcase keys
             metadata['testcases'] = {int(k): v for k, v in metadata['testcases'].items()}
             return metadata

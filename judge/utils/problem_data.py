@@ -1,6 +1,8 @@
+import copy
 import json
 
 import yaml
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.utils.translation import gettext as _
 
@@ -15,15 +17,22 @@ class ProblemDataError(Exception):
         self.message = message
 
 
-def get_problem_testcases_data(problem):
-    """ Read test data of a problem and store
-    result in a dictionary.
-
-    If an error occurs, this method will return an empty dict.
-    """
+def get_problem_metadata(problem):
     from judge.models import problem_data_storage
 
-    return problem_data_storage.get_problem_metadata(problem)['testcases']
+    return problem_data_storage.get_problem_metadata(problem)
+
+
+def order_judge_cases(cases, pretests_only, pretests_in_test_cases=False):
+    cases = [case for case in cases if case.type == 'C']
+    pretests = [case for case in cases if case.is_pretest]
+    if not pretests:
+        return cases
+    if pretests_only:
+        return pretests
+    if pretests_in_test_cases:
+        return cases
+    return pretests + [case for case in cases if not case.is_pretest]
 
 
 class ProblemDataCompiler(object):
@@ -147,11 +156,10 @@ class ProblemDataCompiler(object):
                 data = {}
                 if batch:
                     case.points = None
-                    case.is_pretest = batch['is_pretest']
-                else:
-                    if case.points is None:
-                        raise ProblemDataError(_('Points must be defined for non-batch case #%d.') % i)
-                    data['is_pretest'] = case.is_pretest
+                elif case.points is None:
+                    raise ProblemDataError(_('Points must be defined for non-batch case #%d.') % i)
+                if case.is_pretest:
+                    data['pretest'] = True
 
                 if not self.generator:
                     if case.input_file not in self.files:
@@ -174,11 +182,13 @@ class ProblemDataCompiler(object):
                     data['output_limit_length'] = case.output_limit
                 if case.output_prefix is not None:
                     data['output_prefix_length'] = case.output_prefix
+                elif case.is_example and not (batch and 'output_prefix_length' in batch):
+                    data['output_prefix_length'] = settings.VNOJ_TESTCASE_VISIBLE_LENGTH
                 if case.checker:
                     data['checker'] = make_checker(case)
                 else:
                     case.checker_args = ''
-                case.save(update_fields=('checker_args', 'is_pretest'))
+                case.save(update_fields=('checker_args',))
                 (batch['batched'] if batch else cases).append(data)
             elif case.type == 'S':
                 batch_count += 1
@@ -205,7 +215,6 @@ class ProblemDataCompiler(object):
                 batch = {
                     'points': case.points,
                     'batched': [],
-                    'is_pretest': case.is_pretest,
                     'dependencies': dependencies,
                 }
                 if case.generator_args:
@@ -220,11 +229,14 @@ class ProblemDataCompiler(object):
                     case.checker_args = ''
                 case.input_file = ''
                 case.output_file = ''
-                case.save(update_fields=('checker_args', 'input_file', 'output_file'))
+                case.is_pretest = False
+                case.is_example = False
+                case.save(update_fields=('checker_args', 'input_file', 'output_file', 'is_pretest', 'is_example'))
             elif case.type == 'E':
                 if not batch:
                     raise ProblemDataError(_('Attempt to end batch outside of one in case #%d.') % i)
-                case.is_pretest = batch['is_pretest']
+                case.is_pretest = False
+                case.is_example = False
                 case.input_file = ''
                 case.output_file = ''
                 case.generator_args = ''
@@ -238,11 +250,7 @@ class ProblemDataCompiler(object):
         if batch:
             end_batch()
 
-        # The judge numbers pretest batches differently when validating and when grading,
-        # so dependencies can only be resolved correctly when there are no pretest batches.
         batches = [case for case in cases if 'batched' in case]
-        if any(batch['dependencies'] for batch in batches) and any(batch['is_pretest'] for batch in batches):
-            raise ProblemDataError(_('Batch dependencies are not supported for problems with pretest batches.'))
         for batch in batches:
             if not batch['dependencies']:
                 del batch['dependencies']
@@ -261,22 +269,37 @@ class ProblemDataCompiler(object):
                 raise ProblemDataError(_('How did you corrupt the generator path?'))
             init['generator'] = generator_path[1]
 
-        pretest_test_cases = []
-        test_cases = []
         hints = []
 
-        for case in cases:
-            if case['is_pretest']:
-                pretest_test_cases.append(case)
-            else:
-                test_cases.append(case)
+        def without_pretest(case):
+            case = {key: copy.deepcopy(value) for key, value in case.items() if key != 'pretest'}
+            if 'batched' in case:
+                case['batched'] = [without_pretest(batched) for batched in case['batched']]
+            return case
 
-            del case['is_pretest']
+        pretest_test_cases = []
+        pretest_batch_numbers = {}
+        batch_number = 0
+        for case in cases:
+            if 'batched' in case:
+                batch_number += 1
+                pretests = [batched for batched in case['batched'] if batched.get('pretest')]
+                if pretests:
+                    pretest_batch_numbers[batch_number] = len(pretest_batch_numbers) + 1
+                    batch = without_pretest({**case, 'batched': pretests})
+                    dependencies = [pretest_batch_numbers[number] for number in case.get('dependencies', [])
+                                    if number in pretest_batch_numbers]
+                    batch.pop('dependencies', None)
+                    if dependencies:
+                        batch['dependencies'] = dependencies
+                    pretest_test_cases.append(batch)
+            elif case.get('pretest'):
+                pretest_test_cases.append(without_pretest(case))
 
         if pretest_test_cases:
+            init['pretests_in_test_cases'] = True
             init['pretest_test_cases'] = pretest_test_cases
-        if test_cases:
-            init['test_cases'] = test_cases
+        init['test_cases'] = [without_pretest(case) for case in cases]
         if self.data.output_limit is not None:
             init['output_limit_length'] = self.data.output_limit
         if self.data.output_prefix is not None:
