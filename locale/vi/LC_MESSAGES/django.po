@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-22 05:01+0000\n"
+"POT-Creation-Date: 2026-11-22 07:37+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -3721,7 +3721,7 @@ msgid "judge"
 msgstr "máy chấm"
 
 #: judge/models/submission.py:22 judge/models/submission.py:57
-#: judge/utils/problems.py:105
+#: judge/utils/problems.py:106
 msgid "Accepted"
 msgstr "Kết quả đúng (AC)"
 
@@ -3755,7 +3755,7 @@ msgid "Runtime Error"
 msgstr "Lỗi Runtime (RE)"
 
 #: judge/models/submission.py:30 judge/models/submission.py:42
-#: judge/models/submission.py:66 judge/utils/problems.py:108
+#: judge/models/submission.py:66 judge/utils/problems.py:109
 msgid "Compile Error"
 msgstr "Lỗi dịch (CE)"
 
@@ -4568,19 +4568,19 @@ msgstr "Bạn đã làm hỏng đường dẫn zip như thế nào?"
 msgid "How did you corrupt the generator path?"
 msgstr "Bạn đã làm hỏng đường dẫn generator như thế nào?"
 
-#: judge/utils/problems.py:106
+#: judge/utils/problems.py:107
 msgid "Partial"
 msgstr "Một phần"
 
-#: judge/utils/problems.py:107
+#: judge/utils/problems.py:108
 msgid "Wrong"
 msgstr "Sai"
 
-#: judge/utils/problems.py:109
+#: judge/utils/problems.py:110
 msgid "Timeout"
 msgstr "Quá thời gian"
 
-#: judge/utils/problems.py:110
+#: judge/utils/problems.py:111
 msgid "Error"
 msgstr "Lỗi"
 
@@ -4659,7 +4659,7 @@ msgstr "Tạo blog mới"
 
 #: judge/views/blog.py:380 judge/views/contests.py:1747
 #: judge/views/organization.py:472 judge/views/organization.py:996
-#: judge/views/organization.py:1020 judge/views/problem.py:1029
+#: judge/views/organization.py:1020 judge/views/problem.py:1026
 msgid "Created on site"
 msgstr "Tạo trên trang web"
 
@@ -4683,7 +4683,7 @@ msgstr "Cập nhật blog"
 
 #: judge/views/blog.py:427 judge/views/comment.py:149
 #: judge/views/contests.py:1818 judge/views/organization.py:521
-#: judge/views/problem.py:1215
+#: judge/views/problem.py:1212
 msgid "Edited from site"
 msgstr "Chỉnh sửa từ trang web"
 
@@ -5414,21 +5414,20 @@ msgstr "Không thể xem lời giải"
 
 #: judge/views/problem.py:174
 msgid ""
-"You cannot view the editorial because you are currently participating in a "
-"contest containing this problem. Please attempt the problem on your own."
+"This editorial is hidden while a contest containing this problem is in "
+"progress."
 msgstr ""
-"Bạn không thể xem lời giải vì đang tham gia kỳ thi chứa bài tập này. Vui "
-"lòng tự hoàn thành bài làm."
+"Lời giải tạm ẩn vì bài tập này đang nằm trong một kỳ thi chưa kết thúc."
 
-#: judge/views/problem.py:395
+#: judge/views/problem.py:394
 msgid "You submitted too many submissions."
 msgstr "Bạn đã nộp bài quá nhiều lần."
 
-#: judge/views/problem.py:401
+#: judge/views/problem.py:400
 msgid "Banned from submitting"
 msgstr "Bị cấm nộp bài"
 
-#: judge/views/problem.py:402
+#: judge/views/problem.py:401
 msgid ""
 "You have been declared persona non grata for this problem. You are "
 "permanently barred from submitting to this problem."
@@ -5436,19 +5435,19 @@ msgstr ""
 "Bạn đã bị cấm nộp bài tập này. Bạn vĩnh viễn không thể nộp bài cho bài tập "
 "này."
 
-#: judge/views/problem.py:407
+#: judge/views/problem.py:406
 msgid "Too many submissions"
 msgstr "Quá nhiều bài nộp"
 
-#: judge/views/problem.py:408
+#: judge/views/problem.py:407
 msgid "You have exceeded the submission limit for this problem."
 msgstr "Bạn đã vượt quá giới hạn lần nộp của bài này."
 
-#: judge/views/problem.py:431
+#: judge/views/problem.py:430
 msgid "No credit"
 msgstr "Không có credit"
 
-#: judge/views/problem.py:433
+#: judge/views/problem.py:432
 #, python-format
 msgid ""
 "The organization %s has no credit left to execute this submission. Ask the "
@@ -5457,85 +5456,85 @@ msgstr ""
 "Tổ chức %s không còn credit để thực hiện bài nộp này. Hãy yêu cầu tổ chức "
 "mua thêm credit."
 
-#: judge/views/problem.py:672
+#: judge/views/problem.py:669
 msgid "Problem list"
 msgstr "Danh sách bài"
 
-#: judge/views/problem.py:898 judge/views/problem.py:906
+#: judge/views/problem.py:895 judge/views/problem.py:903
 #, python-format
 msgid "Submit to %s"
 msgstr "Nộp bài %s"
 
-#: judge/views/problem.py:938
+#: judge/views/problem.py:935
 msgid "You are not allowed to submit to this problem."
 msgstr "Bạn không có quyền nộp bài này."
 
-#: judge/views/problem.py:959
+#: judge/views/problem.py:956
 msgid "Clone Problem"
 msgstr "Nhân bản bài tập"
 
-#: judge/views/problem.py:987
+#: judge/views/problem.py:984
 #, python-format
 msgid "Cloned problem from %s"
 msgstr "Nhân bản từ bài %s"
 
-#: judge/views/problem.py:1010 judge/views/problem.py:1013
+#: judge/views/problem.py:1007 judge/views/problem.py:1010
 msgid "Creating new problem"
 msgstr "Tạo bài tập mới"
 
-#: judge/views/problem.py:1052 templates/problem/create.html:20
+#: judge/views/problem.py:1049 templates/problem/create.html:20
 msgid "Import problem from Codeforces Polygon package"
 msgstr "Nhập bài từ gói Codeforces Polygon"
 
-#: judge/views/problem.py:1093 judge/views/problem.py:1124
+#: judge/views/problem.py:1090 judge/views/problem.py:1121
 #, python-format
 msgid "Importing problem %s..."
 msgstr "Đang nhập bài %s..."
 
-#: judge/views/problem.py:1101
+#: judge/views/problem.py:1098
 msgid "Please upload a package or enter a problem ID."
 msgstr "Vui lòng tải lên một gói hoặc nhập ID của bài"
 
-#: judge/views/problem.py:1132 templates/problem/editor.html:226
+#: judge/views/problem.py:1129 templates/problem/editor.html:226
 msgid "Update problem from Codeforces Polygon package"
 msgstr "Cập nhật bài từ gói Codeforces Polygon"
 
-#: judge/views/problem.py:1156 judge/views/problem.py:1237
+#: judge/views/problem.py:1153 judge/views/problem.py:1234
 #, python-brace-format
 msgid "Editing problem {0}"
 msgstr "Sửa đề bài {0}"
 
-#: judge/views/problem.py:1159
+#: judge/views/problem.py:1156
 #, python-format
 msgid "Editing problem %s"
 msgstr "Sửa đề bài %s"
 
-#: judge/views/problem.py:1226
+#: judge/views/problem.py:1223
 msgid "Can't edit problem"
 msgstr "Không thể sửa bài"
 
-#: judge/views/problem.py:1227
+#: judge/views/problem.py:1224
 msgid "You are not allowed to edit this problem."
 msgstr "Bạn không có quyền chỉnh sửa bài tập này."
 
-#: judge/views/problem.py:1247
+#: judge/views/problem.py:1244
 msgid "Edited types/group from site"
 msgstr "Đã chỉnh sửa loại/nhóm từ trang web"
 
-#: judge/views/problem.py:1265
+#: judge/views/problem.py:1262
 #, python-format
 msgid "Delete problem %s"
 msgstr "Xoá bài %s"
 
-#: judge/views/problem.py:1280
+#: judge/views/problem.py:1277
 msgid "Marked as deleted"
 msgstr "Đã đánh dấu là đã xóa"
 
-#: judge/views/problem.py:1288
+#: judge/views/problem.py:1285
 msgid "Can't delete problem"
 msgstr "Không thể xoá bài"
 
-#: judge/views/problem.py:1289
+#: judge/views/problem.py:1286
 msgid "You are not allowed to delete this problem."
 msgstr "Bạn không được phép xoá bài tập này."
 

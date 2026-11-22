@@ -19,33 +19,34 @@ __all__ = [
 
 def blocked_editorial_contest_ids(profile):
     if profile is None:
-        return ()
+        return set()
     now = timezone.now()
-    contest_ids = {
-        participation.contest_id
+    contests = {
+        participation.contest_id: participation.contest
         for participation in ContestParticipation.objects.filter(
             user=profile,
             virtual=ContestParticipation.LIVE,
             contest__start_time__lte=now,
             contest__end_time__gte=now,
         ).select_related('contest')
-        if not participation.pre_registered and not participation.ended
+        if not participation.pre_registered
     }
     if profile.current_contest is not None:
-        contest_ids.add(profile.current_contest.contest_id)
-    return contest_ids
+        contests[profile.current_contest.contest_id] = profile.current_contest.contest
+    return {contest_id for contest_id, contest in contests.items() if not contest.is_editable_by(profile.user)}
 
 
 def blocked_editorial_problem_ids(profile):
     contest_ids = blocked_editorial_contest_ids(profile)
     if not contest_ids:
-        return ()
-    return set(ContestProblem.objects.filter(contest_id__in=contest_ids).values_list('problem_id', flat=True))
+        return set()
+    problem_ids = set(ContestProblem.objects.filter(contest_id__in=contest_ids).values_list('problem_id', flat=True))
+    return problem_ids - user_editable_ids(profile, problem_ids)
 
 
 def is_editorial_blocked_by_contest(problem, profile):
     contest_ids = blocked_editorial_contest_ids(profile)
-    if not contest_ids:
+    if not contest_ids or problem.is_editable_by(profile.user):
         return False
     return ContestProblem.objects.filter(problem=problem, contest_id__in=contest_ids).exists()
 

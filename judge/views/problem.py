@@ -70,12 +70,12 @@ def get_accessible_solution(problem, request):
     Shared by ProblemSolution and ProblemSolutionComments so the comments AJAX
     endpoint can't leak editorial comments to someone who can't see the editorial.
     """
-    profile = request.profile if request.user.is_authenticated else None
-    if is_editorial_blocked_by_contest(problem, profile):
-        raise ContestEditorialBlocked()
     solution = get_object_or_404(Solution, problem=problem)
     if not solution.is_accessible_by(request.user):
         raise Http404()
+    profile = request.profile if request.user.is_authenticated else None
+    if is_editorial_blocked_by_contest(problem, profile):
+        raise ContestEditorialBlocked()
     return solution
 
 
@@ -171,9 +171,8 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
 
     def editorial_blocked(self):
         return generic_message(self.request, _('Editorial unavailable'),
-                               _('You cannot view the editorial because you are currently '
-                                 'participating in a contest containing this problem. '
-                                 'Please attempt the problem on your own.'), status=403)
+                               _('This editorial is hidden while a contest containing this problem '
+                                 'is in progress.'), status=403)
 
     def post(self, request, *args, **kwargs):
         try:
@@ -539,10 +538,8 @@ class ProblemDetail(ProblemMixin, ProblemClarificationsMixin, SolvedProblemMixin
             pass
         else:
             context['editorial'] = editorial
-            context['editorial_blocked'] = (
-                bool(contest_problem) or is_editorial_blocked_by_contest(self.object, user.profile)
-                if authed and editorial.is_accessible_by(user) else False
-            )
+            context['editorial_blocked'] = editorial.is_accessible_by(user) and is_editorial_blocked_by_contest(
+                self.object, user.profile if authed else None)
         try:
             translation = self.object.translations.get(language=self.request.LANGUAGE_CODE)
         except ProblemTranslation.DoesNotExist:

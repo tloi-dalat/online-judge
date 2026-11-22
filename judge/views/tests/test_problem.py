@@ -224,7 +224,7 @@ class ProblemEditorialInContestTestCase(TestCase):
         self.assertEqual(response.status_code, 403)
 
         response = self.client.get(reverse('problem_editorial', args=[self.problem_in_no_sol.code]))
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 404)
 
     def test_user_in_contest_can_view_outside_contest_editorial(self):
         self.client.force_login(self.user)
