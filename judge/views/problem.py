@@ -102,9 +102,14 @@ class ProblemMixin(object):
         return generic_message(self.request, _('No such problem'),
                                _('Could not find a problem with the code "%s".') % code, status=404)
 
+    def editorial_blocked(self):
+        return self.no_such_problem()
+
     def get(self, request, *args, **kwargs):
         try:
             return super(ProblemMixin, self).get(request, *args, **kwargs)
+        except ContestEditorialBlocked:
+            return self.editorial_blocked()
         except Http404:
             return self.no_such_problem()
 
@@ -164,26 +169,18 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
         return generic_message(self.request, _('No such editorial'),
                                _('Could not find an editorial with the code "%s".') % code, status=404)
 
-    def contest_editorial_blocked(self):
+    def editorial_blocked(self):
         return generic_message(self.request, _('Editorial unavailable'),
                                _('You cannot view the editorial because you are currently '
                                  'participating in a contest containing this problem. '
                                  'Please attempt the problem on your own.'), status=403)
 
-    def get(self, request, *args, **kwargs):
-        try:
-            return super(ProblemMixin, self).get(request, *args, **kwargs)
-        except ContestEditorialBlocked:
-            return self.contest_editorial_blocked()
-        except Http404:
-            return self.no_such_problem()
-
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
         try:
+            self.object = self.get_object()
             get_accessible_solution(self.object, request)
         except ContestEditorialBlocked:
-            return self.contest_editorial_blocked()
+            return self.editorial_blocked()
         except Http404:
             return self.no_such_problem()
         return super(ProblemSolution, self).post(request, *args, **kwargs)
