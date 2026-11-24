@@ -54,7 +54,11 @@
             $('input[name=import_method]').change(function () {
                 applyImportMethod(this.value);
             });
-            applyImportMethod($('input[name=import_method]:checked').val());
+            function syncImportMethod() {
+                applyImportMethod($('input[name=import_method]:checked').val());
+            }
+            syncImportMethod();
+            $(window).on('pageshow', syncImportMethod);
 
             $("#id_package").change(function (event) {
                 let fileInput = event.target.files[0];
@@ -177,12 +181,13 @@
         {% endif %}
         {% csrf_token %}
         {{ formset.management_form }}
+        {% set polygon_method = request.POST.get('import_method') == 'polygon' %}
         <span id="import-method-selector" style="display: none;">
             <label>
-                <input type="radio" name="import_method" value="package" checked> {{ _('Upload package') }}
+                <input type="radio" name="import_method" value="package"{% if not polygon_method %} checked{% endif %}> {{ _('Upload package') }}
             </label>
             <label>
-                <input type="radio" name="import_method" value="polygon"> {{ _('Enter problem ID') }}
+                <input type="radio" name="import_method" value="polygon"{% if polygon_method %} checked{% endif %}> {{ _('Enter problem ID') }}
             </label>
         </span>
         <table class="django-as-table">{{ form.as_table() }}</table>
