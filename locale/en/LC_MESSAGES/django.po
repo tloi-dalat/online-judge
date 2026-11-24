@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-22 07:37+0000\n"
+"POT-Creation-Date: 2026-11-24 20:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -882,7 +882,7 @@ msgstr ""
 msgid "You must solve at least %d problems before you can update your profile."
 msgstr ""
 
-#: judge/forms.py:94 judge/views/organization.py:289 judge/views/register.py:61
+#: judge/forms.py:94 judge/views/organization.py:289 judge/views/register.py:62
 #, python-brace-format
 msgid "You may not be part of more than {count} public organization."
 msgid_plural "You may not be part of more than {count} public organizations."
@@ -1073,7 +1073,7 @@ msgstr ""
 msgid "End date must be after start date."
 msgstr ""
 
-#: judge/forms.py:562 judge/views/register.py:27
+#: judge/forms.py:562 judge/views/register.py:28
 #: templates/blog/top-contrib.html:8 templates/blog/top-rating.html:8
 #: templates/contest/official-ranking-table.html:5
 #: templates/contest/ranking.html:475
@@ -4557,7 +4557,7 @@ msgstr ""
 
 #: judge/views/blog.py:427 judge/views/comment.py:149
 #: judge/views/contests.py:1818 judge/views/organization.py:521
-#: judge/views/problem.py:1212
+#: judge/views/problem.py:1213
 msgid "Edited from site"
 msgstr ""
 
@@ -5013,7 +5013,7 @@ msgstr ""
 msgid "You are not allowed to edit this organization."
 msgstr ""
 
-#: judge/views/organization.py:167 judge/views/register.py:36
+#: judge/views/organization.py:167 judge/views/register.py:37
 #: templates/blog/top-rating.html:32 templates/user/user-list-tabs.html:6
 msgid "Organizations"
 msgstr ""
@@ -5349,55 +5349,55 @@ msgstr ""
 msgid "Import problem from Codeforces Polygon package"
 msgstr ""
 
-#: judge/views/problem.py:1090 judge/views/problem.py:1121
+#: judge/views/problem.py:1090 judge/views/problem.py:1122
 #, python-format
 msgid "Importing problem %s..."
 msgstr ""
 
-#: judge/views/problem.py:1098
+#: judge/views/problem.py:1099
 msgid "Please upload a package or enter a problem ID."
 msgstr ""
 
-#: judge/views/problem.py:1129 templates/problem/editor.html:226
+#: judge/views/problem.py:1130 templates/problem/editor.html:226
 msgid "Update problem from Codeforces Polygon package"
 msgstr ""
 
-#: judge/views/problem.py:1153 judge/views/problem.py:1234
+#: judge/views/problem.py:1154 judge/views/problem.py:1235
 #, python-brace-format
 msgid "Editing problem {0}"
 msgstr ""
 
-#: judge/views/problem.py:1156
+#: judge/views/problem.py:1157
 #, python-format
 msgid "Editing problem %s"
 msgstr ""
 
-#: judge/views/problem.py:1223
+#: judge/views/problem.py:1224
 msgid "Can't edit problem"
 msgstr ""
 
-#: judge/views/problem.py:1224
+#: judge/views/problem.py:1225
 msgid "You are not allowed to edit this problem."
 msgstr ""
 
-#: judge/views/problem.py:1244
+#: judge/views/problem.py:1245
 msgid "Edited types/group from site"
 msgstr ""
 
-#: judge/views/problem.py:1262
+#: judge/views/problem.py:1263
 #, python-format
 msgid "Delete problem %s"
 msgstr ""
 
-#: judge/views/problem.py:1277
+#: judge/views/problem.py:1278
 msgid "Marked as deleted"
 msgstr ""
 
-#: judge/views/problem.py:1285
+#: judge/views/problem.py:1286
 msgid "Can't delete problem"
 msgstr ""
 
-#: judge/views/problem.py:1286
+#: judge/views/problem.py:1287
 msgid "You are not allowed to delete this problem."
 msgstr ""
 
@@ -5532,50 +5532,50 @@ msgstr ""
 msgid "Best solutions for problem %(number)s in %(contest)s"
 msgstr ""
 
-#: judge/views/register.py:28
+#: judge/views/register.py:29
 msgid "A username must contain letters, numbers, or underscores."
 msgstr ""
 
-#: judge/views/register.py:30 templates/registration/registration_form.html:162
+#: judge/views/register.py:31 templates/registration/registration_form.html:162
 #: templates/user/edit-profile.html:305
 msgid "Full name"
 msgstr ""
 
-#: judge/views/register.py:31 templates/registration/registration_form.html:203
+#: judge/views/register.py:32 templates/registration/registration_form.html:203
 msgid "Timezone"
 msgstr ""
 
-#: judge/views/register.py:33
+#: judge/views/register.py:34
 msgid "Preferred language"
 msgstr ""
 
-#: judge/views/register.py:40
+#: judge/views/register.py:41
 msgid "Subscribe to newsletter?"
 msgstr ""
 
-#: judge/views/register.py:47
+#: judge/views/register.py:48
 #, python-format
 msgid ""
 "The email address \"%s\" is already taken. Only one registration is allowed "
 "per address."
 msgstr ""
 
-#: judge/views/register.py:53
+#: judge/views/register.py:54
 msgid ""
 "Your email provider is not allowed due to history of abuse. Please use a "
 "reputable email provider."
 msgstr ""
 
-#: judge/views/register.py:68 templates/contest/contest-tabs.html:85
+#: judge/views/register.py:69 templates/contest/contest-tabs.html:85
 #: templates/contest/list.html:217
 msgid "Register"
 msgstr ""
 
-#: judge/views/register.py:117
+#: judge/views/register.py:123
 msgid "Activation Key Invalid"
 msgstr ""
 
-#: judge/views/register.py:128
+#: judge/views/register.py:134
 msgid "Authentication failure"
 msgstr ""
 
@@ -8545,27 +8545,27 @@ msgstr ""
 msgid "Import type:"
 msgstr ""
 
-#: templates/problem/import-polygon.html:137
+#: templates/problem/import-polygon.html:141
 msgid "Not valid Polygon package"
 msgstr ""
 
-#: templates/problem/import-polygon.html:182
+#: templates/problem/import-polygon.html:187
 msgid "Upload package"
 msgstr ""
 
-#: templates/problem/import-polygon.html:185
+#: templates/problem/import-polygon.html:190
 msgid "Enter problem ID"
 msgstr ""
 
-#: templates/problem/import-polygon.html:192
+#: templates/problem/import-polygon.html:197
 msgid "Statement language"
 msgstr ""
 
-#: templates/problem/import-polygon.html:193
+#: templates/problem/import-polygon.html:198
 msgid "Corresponding site language"
 msgstr ""
 
-#: templates/problem/import-polygon.html:207
+#: templates/problem/import-polygon.html:212
 msgid "Import"
 msgstr ""
 
