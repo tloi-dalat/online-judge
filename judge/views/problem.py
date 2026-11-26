@@ -1095,7 +1095,8 @@ class ProblemImportPolygon(PermissionRequiredMixin, TitleMixin, FormView):
                 upload_id=form.cleaned_data['upload_id'], user=request.user, status=COMPLETE,
             ).first()
             if upload is None:
-                form.add_error('package', _('Please upload a package or enter a problem ID.'))
+                field = 'problem_id' if request.POST.get('import_method') == 'polygon' else 'package'
+                form.add_error(field, _('Please upload a package or enter a problem ID.'))
                 return self.render_to_response(self.get_context_data(form=form))
 
             config = {

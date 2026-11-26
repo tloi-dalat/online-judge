@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-22 07:37+0000\n"
+"POT-Creation-Date: 2026-11-24 20:13+0000\n"
 "PO-Revision-Date: 2020-08-23 18:59\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
@@ -923,7 +923,7 @@ msgid "You must solve at least %d problems before you can update your profile."
 msgstr ""
 "Bạn phải giải ít nhất %d bài trước khi có thể thay đổi thông tin người dùng"
 
-#: judge/forms.py:94 judge/views/organization.py:289 judge/views/register.py:61
+#: judge/forms.py:94 judge/views/organization.py:289 judge/views/register.py:62
 #, python-brace-format
 msgid "You may not be part of more than {count} public organization."
 msgid_plural "You may not be part of more than {count} public organizations."
@@ -1131,7 +1131,7 @@ msgstr "Ngày kết thúc"
 msgid "End date must be after start date."
 msgstr "Ngày kết thúc phải sau ngày bắt đầu."
 
-#: judge/forms.py:562 judge/views/register.py:27
+#: judge/forms.py:562 judge/views/register.py:28
 #: templates/blog/top-contrib.html:8 templates/blog/top-rating.html:8
 #: templates/contest/official-ranking-table.html:5
 #: templates/contest/ranking.html:475
@@ -4683,7 +4683,7 @@ msgstr "Cập nhật blog"
 
 #: judge/views/blog.py:427 judge/views/comment.py:149
 #: judge/views/contests.py:1818 judge/views/organization.py:521
-#: judge/views/problem.py:1212
+#: judge/views/problem.py:1213
 msgid "Edited from site"
 msgstr "Chỉnh sửa từ trang web"
 
@@ -5144,7 +5144,7 @@ msgstr "Không thể chỉnh sửa tổ chức"
 msgid "You are not allowed to edit this organization."
 msgstr "Bạn không có quyền chỉnh sửa tổ chức này."
 
-#: judge/views/organization.py:167 judge/views/register.py:36
+#: judge/views/organization.py:167 judge/views/register.py:37
 #: templates/blog/top-rating.html:32 templates/user/user-list-tabs.html:6
 msgid "Organizations"
 msgstr "Tổ chức"
@@ -5486,55 +5486,55 @@ msgstr "Tạo bài tập mới"
 msgid "Import problem from Codeforces Polygon package"
 msgstr "Nhập bài từ gói Codeforces Polygon"
 
-#: judge/views/problem.py:1090 judge/views/problem.py:1121
+#: judge/views/problem.py:1090 judge/views/problem.py:1122
 #, python-format
 msgid "Importing problem %s..."
 msgstr "Đang nhập bài %s..."
 
-#: judge/views/problem.py:1098
+#: judge/views/problem.py:1099
 msgid "Please upload a package or enter a problem ID."
 msgstr "Vui lòng tải lên một gói hoặc nhập ID của bài"
 
-#: judge/views/problem.py:1129 templates/problem/editor.html:226
+#: judge/views/problem.py:1130 templates/problem/editor.html:226
 msgid "Update problem from Codeforces Polygon package"
 msgstr "Cập nhật bài từ gói Codeforces Polygon"
 
-#: judge/views/problem.py:1153 judge/views/problem.py:1234
+#: judge/views/problem.py:1154 judge/views/problem.py:1235
 #, python-brace-format
 msgid "Editing problem {0}"
 msgstr "Sửa đề bài {0}"
 
-#: judge/views/problem.py:1156
+#: judge/views/problem.py:1157
 #, python-format
 msgid "Editing problem %s"
 msgstr "Sửa đề bài %s"
 
-#: judge/views/problem.py:1223
+#: judge/views/problem.py:1224
 msgid "Can't edit problem"
 msgstr "Không thể sửa bài"
 
-#: judge/views/problem.py:1224
+#: judge/views/problem.py:1225
 msgid "You are not allowed to edit this problem."
 msgstr "Bạn không có quyền chỉnh sửa bài tập này."
 
-#: judge/views/problem.py:1244
+#: judge/views/problem.py:1245
 msgid "Edited types/group from site"
 msgstr "Đã chỉnh sửa loại/nhóm từ trang web"
 
-#: judge/views/problem.py:1262
+#: judge/views/problem.py:1263
 #, python-format
 msgid "Delete problem %s"
 msgstr "Xoá bài %s"
 
-#: judge/views/problem.py:1277
+#: judge/views/problem.py:1278
 msgid "Marked as deleted"
 msgstr "Đã đánh dấu là đã xóa"
 
-#: judge/views/problem.py:1285
+#: judge/views/problem.py:1286
 msgid "Can't delete problem"
 msgstr "Không thể xoá bài"
 
-#: judge/views/problem.py:1286
+#: judge/views/problem.py:1287
 msgid "You are not allowed to delete this problem."
 msgstr "Bạn không được phép xoá bài tập này."
 
@@ -5674,28 +5674,28 @@ msgstr "Các bài giải tốt nhất cho %(problem)s trong %(contest)s"
 msgid "Best solutions for problem %(number)s in %(contest)s"
 msgstr "Các bài giải tốt nhất cho bài %(number)s trong %(contest)s"
 
-#: judge/views/register.py:28
+#: judge/views/register.py:29
 msgid "A username must contain letters, numbers, or underscores."
 msgstr "Tên người dùng phải chứa chữ cái, số hoặc dấu gạch chân"
 
-#: judge/views/register.py:30 templates/registration/registration_form.html:162
+#: judge/views/register.py:31 templates/registration/registration_form.html:162
 #: templates/user/edit-profile.html:305
 msgid "Full name"
 msgstr "Họ và tên"
 
-#: judge/views/register.py:31 templates/registration/registration_form.html:203
+#: judge/views/register.py:32 templates/registration/registration_form.html:203
 msgid "Timezone"
 msgstr "Múi giờ"
 
-#: judge/views/register.py:33
+#: judge/views/register.py:34
 msgid "Preferred language"
 msgstr "Ngôn ngữ ưa thích"
 
-#: judge/views/register.py:40
+#: judge/views/register.py:41
 msgid "Subscribe to newsletter?"
 msgstr "Đăng ký nhận bản tin?"
 
-#: judge/views/register.py:47
+#: judge/views/register.py:48
 #, python-format
 msgid ""
 "The email address \"%s\" is already taken. Only one registration is allowed "
@@ -5704,7 +5704,7 @@ msgstr ""
 "Địa chỉ email \"%s\" đã được sử dụng. Chỉ có một đăng ký được cho phép cho "
 "mỗi địa chỉ mail."
 
-#: judge/views/register.py:53
+#: judge/views/register.py:54
 msgid ""
 "Your email provider is not allowed due to history of abuse. Please use a "
 "reputable email provider."
@@ -5712,16 +5712,16 @@ msgstr ""
 "Nhà cung cấp email của bạn không được phép do phát tán thư rác. Xin vui lòng "
 "sử dụng một nhà cung cấp email có uy tín."
 
-#: judge/views/register.py:68 templates/contest/contest-tabs.html:85
+#: judge/views/register.py:69 templates/contest/contest-tabs.html:85
 #: templates/contest/list.html:217
 msgid "Register"
 msgstr "Đăng ký"
 
-#: judge/views/register.py:117
+#: judge/views/register.py:123
 msgid "Activation Key Invalid"
 msgstr "Mã kích hoạt không hợp lệ"
 
-#: judge/views/register.py:128
+#: judge/views/register.py:134
 msgid "Authentication failure"
 msgstr "Xác thực không thành công"
 
@@ -8782,27 +8782,27 @@ msgstr "Đã tải lên gói, đang bắt đầu nhập..."
 msgid "Import type:"
 msgstr "Kiểu nhập:"
 
-#: templates/problem/import-polygon.html:137
+#: templates/problem/import-polygon.html:141
 msgid "Not valid Polygon package"
 msgstr "Gói Polygon không hợp lệ"
 
-#: templates/problem/import-polygon.html:182
+#: templates/problem/import-polygon.html:187
 msgid "Upload package"
 msgstr "Tải lên gói"
 
-#: templates/problem/import-polygon.html:185
+#: templates/problem/import-polygon.html:190
 msgid "Enter problem ID"
 msgstr "Nhập ID của bài"
 
-#: templates/problem/import-polygon.html:192
+#: templates/problem/import-polygon.html:197
 msgid "Statement language"
 msgstr "Ngôn ngữ đề bài"
 
-#: templates/problem/import-polygon.html:193
+#: templates/problem/import-polygon.html:198
 msgid "Corresponding site language"
 msgstr "Ngôn ngữ trang web tương ứng"
 
-#: templates/problem/import-polygon.html:207
+#: templates/problem/import-polygon.html:212
 msgid "Import"
 msgstr "Nhập"
 
