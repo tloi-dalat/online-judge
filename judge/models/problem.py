@@ -297,7 +297,8 @@ class Problem(models.Model):
         return list(map(user_gettext, map(attrgetter('full_name'), self.types.all())))
 
     def languages_list(self):
-        return self.allowed_languages.values_list('common_name', flat=True).distinct().order_by('common_name')
+        return (self.allowed_languages.filter(is_disabled=False).values_list('common_name', flat=True)
+                .distinct().order_by('common_name'))
 
     def is_editor(self, profile):
         return profile.id in self.editor_ids
@@ -506,6 +507,7 @@ class Problem(models.Model):
     def usable_languages(self):
         from judge.models.runtime import Judge
         return self.allowed_languages.filter(
+            is_disabled=False,
             judges__in=Judge.objects.filter(online=True, storages__contains=[self.effective_storage]),
         ).distinct()
 
