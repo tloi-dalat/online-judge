@@ -167,6 +167,8 @@ DMOJ_CANONICAL = _env('DMOJ_CANONICAL', _DOMAIN)
 
 DMOJ_PROBLEM_DATA_ROOT = _env('DMOJ_PROBLEM_DATA_ROOT', '/problems')
 
+VNOJ_ORGANIZATION_DEFAULT_MAX_STORAGE = _env('VNOJ_ORGANIZATION_DEFAULT_MAX_STORAGE', 10 * 1024 * 1024 * 1024, cast=int)
+
 ## Bridge: host:port, several separated by commas.
 BRIDGED_JUDGE_ADDRESS = [_address(a) for a in _env('BRIDGED_JUDGE_ADDRESS', ['0.0.0.0:9999'], cast=list)]
 BRIDGED_DJANGO_ADDRESS = [_address(a) for a in _env('BRIDGED_DJANGO_ADDRESS', ['0.0.0.0:9998'], cast=list)]
