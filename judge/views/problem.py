@@ -451,6 +451,7 @@ class ProblemSubmitMixin:
 
 class ProblemDetail(ProblemMixin, ProblemClarificationsMixin, SolvedProblemMixin, ProblemSubmitMixin,
                     CommentedDetailView):
+    contest_problem = ProblemSubmitMixin.contest_problem
     context_object_name = 'problem'
     template_name = 'problem/problem.html'
 
